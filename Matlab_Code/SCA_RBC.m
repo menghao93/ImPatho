@@ -22,7 +22,7 @@ function varargout = SCA_RBC(varargin)
 
 % Edit the above text to modify the response to help SCA_RBC
 
-% Last Modified by GUIDE v2.5 03-Dec-2013 11:06:39
+% Last Modified by GUIDE v2.5 03-Dec-2013 23:39:16
 
 % Begin initialization code - DO NOT EDIT
 
@@ -87,7 +87,11 @@ function edit1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit1 as text
 %        str2double(get(hObject,'String')) returns contents of edit1 as a double
-handles.path = get(hObject,'String');
+
+if isfield(handles, 'filePath')
+    set(handles.edit1 , 'String' , handles.filePath );
+end
+
 guidata(hObject,handles); %save data to handles
 
 % --- Executes during object creation, after setting all properties.
@@ -103,13 +107,20 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton1.
+% --- Executes on button press in pushbutton1 - Run Test.
 function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-display(handles.path);
-I = imread(handles.path{1});
+
+if isfield(handles, 'filePath')
+    filePathVar = handles.filePath;
+else
+    display('Choose file');
+    return;
+end
+
+I = imread(filePathVar);
 J = rgb2gray(I);
 K = imadjust(J);
 %figure, imshow(K), title('Original');
@@ -186,7 +197,7 @@ display(length(stats));
         display('No');
     end
 
-title(['Values closer to 1 indicate',...
+title(['Values closer to 1 indicate ',...
        'sickel cell']);
 
 
@@ -307,3 +318,17 @@ function popupmenu4_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton3 - Browse.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[FileEx,PathEx] = uigetfile('*.jpg','Select the Emission Correction File');
+ExPath = [PathEx FileEx];
+handles.filePath = ExPath;
+guidata(hObject,handles); %save data to handles
+edit1_Callback(hObject, eventdata, handles);
+
