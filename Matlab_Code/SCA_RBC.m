@@ -22,13 +22,13 @@ function varargout = SCA_RBC(varargin)
 
 % Edit the above text to modify the response to help SCA_RBC
 
-% Last Modified by GUIDE v2.5 03-Dec-2013 23:39:16
+% Last Modified by GUIDE v2.5 04-Dec-2013 09:34:20
 
 % Begin initialization code - DO NOT EDIT
 
 handles.path = 'rbc_1.jpg';
-handles.eThreshold = 0.55 ;
-handles.minimumRBC = 30;
+handles.eThreshold = 0.80 ;
+handles.minimumRBC = 25;
 
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -114,91 +114,115 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if isfield(handles, 'filePath')
-    filePathVar = handles.filePath;
+    filesDir = handles.filePath;
 else
     display('Choose file');
     return;
 end
 
-I = imread(filePathVar);
-J = rgb2gray(I);
-K = imadjust(J);
-%figure, imshow(K), title('Original');
+srcFiles = dir(strcat(filesDir,'\','*jpg'));  % the folder in which ur images exists
 
-%reversing color for better view of objects
-K = imcomplement(K);
-%figure, imshow(K);
+% arrays to store result of test of each image
+imageFilesNames = [];
+countArray = [];
+totalArray = [];
+testResults = [];
 
-threshold = graythresh(K);
-bw = im2bw(K,threshold);
-%figure, imshow(bw);
-
-%fill the holes 
-bwFill = imfill(bw, 'holes');
-%figure, imshow(bwFill), title('binary image with filled holes');
-
-%remove border objects
-bwNObord = imclearborder(bwFill, 4);
-%figure, imshow(bwNObord), title('cleared border image');
-
-% remove all object containing fewer than rmPixs pixels
-rmPixs = 100; % depends on original image size
-bw = bwareaopen(bwNObord,rmPixs);
-%figure, imshow(bw), title('removed small objects');
-
-if isfield(handles,'eThreshold')
-    eMin = handles.eThreshold;
-else
-    eMin = 0.55; %default value of eThreshold
-end
+for i = 1 : length(srcFiles)
     
-if isfield(handles,'minimumRBC')
-    rbcMin = handles.minimumRBC;
-else
-    rbcMin = 30; %default value of minimumRBC
-end
-
-count = 0; % Sickel Cell count
-
-% Find the Boundaries, B =  no of separate objects 
-[B,L] = bwboundaries(bw,'noholes');
-
-% Display the label matrix and draw each boundary
-
-imshow(label2rgb(L, @jet, [.5 .5 .5]))
-
-hold on
-
-stats = regionprops(L,'Eccentricity');
-
-for k = 1: length(stats)
+    fileName = strcat(filesDir,'\',srcFiles(i).name);
+    imageFilesNames = [imageFilesNames {srcFiles(i).name}];
     
-    % obtain (X,Y) boundary coordinates corresponding to label 'k'
-    boundary = B{k};
-    
-    e = stats(k).Eccentricity;
-    
-    if e > eMin
-        count = count + 1;
+    I = imread(fileName);
+    J = rgb2gray(I);
+    K = imadjust(J);
+    %figure, imshow(K), title('Original');
+
+    %reversing color for better view of objects
+    K = imcomplement(K);
+    %figure, imshow(K);
+
+    threshold = graythresh(K);
+    bw = im2bw(K,threshold);
+    %figure, imshow(bw);
+
+    %fill the holes 
+    bwFill = imfill(bw, 'holes');
+    %figure, imshow(bwFill), title('binary image with filled holes');
+
+    %remove border objects
+    bwNObord = imclearborder(bwFill, 4);
+    %figure, imshow(bwNObord), title('cleared border image');
+
+    % remove all object containing fewer than rmPixs pixels
+    rmPixs = 100; % depends on original image size
+    bw = bwareaopen(bwNObord,rmPixs);
+    %figure, imshow(bw), title('removed small objects');
+
+    if isfield(handles,'eThreshold')
+        eMin = handles.eThreshold;
+    else
+        eMin = .80; %default value of eThreshold
     end
-        
-    metric_string = sprintf('%2.2f',e);
     
-    text(boundary(1,2)-1,boundary(1,1)+1,metric_string,'Color','black',...
-       'FontSize',14,'FontWeight','bold');
-end
+    if isfield(handles,'minimumRBC')
+        rbcMin = handles.minimumRBC;
+    else
+        rbcMin = 25; %default value of minimumRBC
+    end
 
-display(count);
-display(length(stats));
+    count = 0; % Sickel Cell count
+
+    % Find the Boundaries, B =  no of separate objects 
+    [B,L] = bwboundaries(bw,'noholes');
+
+    % Display the label matrix and draw each boundary
+
+    %imshow(label2rgb(L, @jet, [.5 .5 .5]))
+    label2rgb(L, @jet, [.5 .5 .5]);
+
+    hold on
+
+    stats = regionprops(L,'Eccentricity');
+
+    for k = 1: length(stats)
+    
+        % obtain (X,Y) boundary coordinates corresponding to label 'k'
+        boundary = B{k};
+    
+        e = stats(k).Eccentricity;
+    
+        if e > eMin
+            count = count + 1;
+        end
+        
+        %metric_string = sprintf('%2.2f',e);
+        
+        %text(boundary(1,2)-1,boundary(1,1)+1,metric_string,'Color','black',...
+        %'FontSize',14,'FontWeight','bold');
+    end
+
+    countArray(length(countArray)+1) = count;
+    totalArray(length(totalArray)+1) = length(stats);
 
     if count > (rbcMin*length(stats))/100
-        display('Yes');
+        testResults(length(testResults)+1) = 1; % 1 indicates test positive
     else
-        display('No');
+        testResults(length(testResults)+1) = 0; % 0 indicates test negative
     end
 
-title(['Values closer to 1 indicate ',...
+    title(['Values closer to 1 indicate ',...
        'sickel cell']);
+
+end
+
+stem(totalArray,countArray);
+display(countArray);
+display(totalArray);
+display(testResults);
+display(imageFilesNames);
+
+return;
 
 
 % --- Executes on selection change in popupmenu1.
@@ -231,25 +255,27 @@ contents = get(hObject,'Value');
 
 switch contents
     case 1
-        handles.eThreshold = 0.40;
+        handles.eThreshold = 0.50;
     case 2
-        handles.eThreshold = 0.45;
-    case 3
-        handles.eThreshold = 0.50;
-    case 4
         handles.eThreshold = 0.55;
-    case 5
+    case 3
         handles.eThreshold = 0.60;
-    case 6
+    case 4
         handles.eThreshold = 0.65;
-    case 7
+    case 5
         handles.eThreshold = 0.70;
-    case 8
+    case 6
         handles.eThreshold = 0.75;
-    case 9
+    case 7
         handles.eThreshold = 0.80;
+    case 8
+        handles.eThreshold = 0.85;
+    case 9
+        handles.eThreshold = 0.90;
+    case 10
+        handles.eThreshold = 0.95;
     otherwise
-        handles.eThreshold = 0.50;
+        handles.eThreshold = 0.80;
 end
 
 guidata(hObject,handles); %save data to handles
@@ -301,7 +327,7 @@ switch contents
     case 13
         handles.minimumRBC = 70;
     otherwise
-        handles.minimumRBC = 30;
+        handles.minimumRBC = 25;
 end
 
 guidata(hObject,handles); %save data to handles
@@ -326,9 +352,12 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[FileEx,PathEx] = uigetfile('*.jpg','Select the Emission Correction File');
-ExPath = [PathEx FileEx];
+% to read perticular .jpg file 
+%[FileEx,PathEx] = uigetfile('*.jpg','Select the Emission Correction File'); t
+%ExPath = [PathEx FileEx];
+
+% to read directory 
+ExPath = uigetdir;
 handles.filePath = ExPath;
 guidata(hObject,handles); %save data to handles
 edit1_Callback(hObject, eventdata, handles);
-
