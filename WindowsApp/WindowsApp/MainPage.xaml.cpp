@@ -4,6 +4,7 @@
 //
 
 #include "pch.h"
+#include "MainMenu.xaml.h"
 #include "MainPage.xaml.h"
 
 using namespace WindowsApp;
@@ -112,7 +113,10 @@ void MainPage::SaveState(Object^ sender, Common::SaveStateEventArgs^ e){
 }
 
 
-void WindowsApp::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void WindowsApp::MainPage::Button_Click_1(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	greetingOutput->Text = "Hello " + nameInput->Text + " !";
+	if (this->Frame != nullptr)
+	{
+		this->Frame->Navigate(TypeName(MainMenu::typeid));
+	}
 }

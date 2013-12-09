@@ -23,6 +23,9 @@
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Common\ReadMe.txt">
       <PackagePath>Common\ReadMe.txt</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\disease.png">
+      <PackagePath>Assets\disease.png</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\Logo.scale-100.png">
       <PackagePath>Assets\Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
@@ -37,13 +40,27 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\SplashScreen.scale-100.png">
       <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
-      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\App.xbf">
       <PackagePath>App.xbf</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\AnalysisPage.xbf">
+      <PackagePath>AnalysisPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\DiseaseTestPage.xbf">
+      <PackagePath>DiseaseTestPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\DocKitPage.xbf">
+      <PackagePath>DocKitPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\MainMenu.xbf">
+      <PackagePath>MainMenu.xbf</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\RecordPage.xbf">
+      <PackagePath>RecordPage.xbf</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\resources.pri">
       <PackagePath>resources.pri</PackagePath>

@@ -23,7 +23,7 @@
   <Applications>
     <Application Id="App" Executable="WindowsApp.exe" EntryPoint="WindowsApp.App">
       <m2:VisualElements DisplayName="WindowsApp" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="WindowsApp" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" />
+        <m2:SplashScreen Image="Assets\SplashScreen.jpg" />
       </m2:VisualElements>
     </Application>
   </Applications>

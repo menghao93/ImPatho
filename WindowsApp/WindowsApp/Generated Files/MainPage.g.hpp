@@ -22,14 +22,6 @@ void ::WindowsApp::MainPage::InitializeComponent()
     // Call LoadComponent on ms-appx:///MainPage.xaml
     ::Windows::UI::Xaml::Application::LoadComponent(this, ref new ::Windows::Foundation::Uri(L"ms-appx:///MainPage.xaml"), ::Windows::UI::Xaml::Controls::Primitives::ComponentResourceLocation::Application);
 
-    // Get the TextBlock named 'greetingOutput'
-    greetingOutput = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"greetingOutput"));
-    // Get the TextBox named 'nameInput'
-    nameInput = safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"nameInput"));
-    // Get the Button named 'backButton'
-    backButton = safe_cast<::Windows::UI::Xaml::Controls::Button^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"backButton"));
-    // Get the TextBlock named 'pageTitle'
-    pageTitle = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"pageTitle"));
 }
 
 void ::WindowsApp::MainPage::Connect(int connectionId, Platform::Object^ target)
@@ -38,7 +30,7 @@ void ::WindowsApp::MainPage::Connect(int connectionId, Platform::Object^ target)
     {
     case 1:
         (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
-            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::WindowsApp::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::Button_Click);
+            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::WindowsApp::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::Button_Click_1);
         break;
     }
     (void)connectionId; // Unused parameter

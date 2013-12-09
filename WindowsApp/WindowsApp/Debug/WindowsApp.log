@@ -1,27 +1,42 @@
-﻿Build started 09/12/2013 09:35:10.
+﻿Build started 09/12/2013 02:47:23 PM.
      1>Project "C:\backup\IC2014\WindowsApp\WindowsApp\WindowsApp.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\backup\IC2014\WindowsApp\WindowsApp\ /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\WindowsApp.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /wd4453 /wd28204 /FU"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.VCLibs\12.0\References\CommonConfiguration\neutral\platform.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /analyze- /errorReport:prompt /bigobj App.xaml.cpp MainPage.xaml.cpp
-         App.xaml.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\backup\IC2014\WindowsApp\WindowsApp\ /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\WindowsApp.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /wd4453 /wd28204 /FU"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.VCLibs\12.0\References\CommonConfiguration\neutral\platform.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /analyze- /errorReport:prompt /bigobj AnalysisPage.xaml.cpp DiseaseTestPage.xaml.cpp MainMenu.xaml.cpp MainPage.xaml.cpp RecordPage.xaml.cpp
+         AnalysisPage.xaml.cpp
+         DiseaseTestPage.xaml.cpp
+         MainMenu.xaml.cpp
          MainPage.xaml.cpp
+         RecordPage.xaml.cpp
        CreateWinMD:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exe" /INCREMENTAL /NOLOGO kernel32.lib /MANIFEST:NO /DEBUG /PDB:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD:ONLY /WINMDFILE:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\App.xaml.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exe" /INCREMENTAL /NOLOGO kernel32.lib /MANIFEST:NO /DEBUG /PDB:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD:ONLY /WINMDFILE:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\WindowsApp.res
+         Debug\AnalysisPage.xaml.obj
+         Debug\App.xaml.obj
          Debug\NavigationHelper.obj
          Debug\RelayCommand.obj
          Debug\SuspensionManager.obj
+         Debug\DiseaseTestPage.xaml.obj
+         Debug\DocKitPage.xaml.obj
+         Debug\MainMenu.xaml.obj
          Debug\MainPage.xaml.obj
          Debug\pch.obj
+         Debug\RecordPage.xaml.obj
          Debug\XamlTypeInfo.Impl.g.obj
        CompileXamlGeneratedFiles:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\backup\IC2014\WindowsApp\WindowsApp\ /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\WindowsApp.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /wd4453 /wd28204 /FU"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.VCLibs\12.0\References\CommonConfiguration\neutral\platform.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /analyze- /errorReport:prompt /bigobj "Generated Files\XamlTypeInfo.g.cpp"
          XamlTypeInfo.g.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exe" /INCREMENTAL /NOLOGO kernel32.lib /MANIFEST:NO /DEBUG /PDB:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD:NO /WINMDFILE:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\App.xaml.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exe" /INCREMENTAL /NOLOGO kernel32.lib /MANIFEST:NO /DEBUG /PDB:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD:NO /WINMDFILE:"C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\WindowsApp.res
+         Debug\AnalysisPage.xaml.obj
+         Debug\App.xaml.obj
          Debug\NavigationHelper.obj
          Debug\RelayCommand.obj
          Debug\SuspensionManager.obj
+         Debug\DiseaseTestPage.xaml.obj
+         Debug\DocKitPage.xaml.obj
+         Debug\MainMenu.xaml.obj
          Debug\MainPage.xaml.obj
          Debug\pch.obj
+         Debug\RecordPage.xaml.obj
          Debug\XamlTypeInfo.Impl.g.obj
          Debug\XamlTypeInfo.g.obj
             Creating library C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.lib and object C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exp
@@ -30,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:15.25
+Time Elapsed 00:00:28.11

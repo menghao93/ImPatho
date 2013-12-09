@@ -9,11 +9,21 @@
 #include "pch.h"
 #include "XamlTypeInfo.g.h"
 
+#include "AnalysisPage.xaml.h"
+#include "DiseaseTestPage.xaml.h"
+#include "DocKitPage.xaml.h"
+#include "MainMenu.xaml.h"
 #include "MainPage.xaml.h"
 #include "App.xaml.h"
+#include "RecordPage.xaml.h"
 
+#include "AnalysisPage.g.hpp"
+#include "DiseaseTestPage.g.hpp"
+#include "DocKitPage.g.hpp"
+#include "MainMenu.g.hpp"
 #include "MainPage.g.hpp"
 #include "App.g.hpp"
+#include "RecordPage.g.hpp"
 
 ::Platform::Collections::Vector<::Windows::UI::Xaml::Markup::IXamlMetadataProvider^>^ ::XamlTypeInfo::InfoProvider::XamlTypeInfoProvider::OtherProviders::get()
 {
@@ -82,14 +92,14 @@
         return ref new XamlSystemBaseType(typeName);
     }
 
-    if (typeName == L"WindowsApp.MainPage")
+    if (typeName == L"WindowsApp.AnalysisPage")
     {
         ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
         userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
         userType->Activator =
             []() -> Platform::Object^ 
             {
-                return ref new ::WindowsApp::MainPage(); 
+                return ref new ::WindowsApp::AnalysisPage(); 
             };
         userType->AddMemberName(L"NavigationHelper");
         userType->AddMemberName(L"DefaultViewModel");
@@ -122,6 +132,76 @@
         return userType;
     }
 
+    if (typeName == L"WindowsApp.DiseaseTestPage")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::WindowsApp::DiseaseTestPage(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        return userType;
+    }
+
+    if (typeName == L"WindowsApp.DocKitPage")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::WindowsApp::DocKitPage(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        return userType;
+    }
+
+    if (typeName == L"WindowsApp.MainMenu")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::WindowsApp::MainMenu(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        return userType;
+    }
+
+    if (typeName == L"WindowsApp.MainPage")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::WindowsApp::MainPage(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        return userType;
+    }
+
+    if (typeName == L"WindowsApp.RecordPage")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::WindowsApp::RecordPage(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        return userType;
+    }
+
     if (typeName == L"WindowsApp.Common.RelayCommand")
     {
         ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Object"));
@@ -135,6 +215,118 @@
 
 ::Windows::UI::Xaml::Markup::IXamlMember^ ::XamlTypeInfo::InfoProvider::XamlTypeInfoProvider::CreateXamlMember(::Platform::String^ longMemberName)
 {
+    if (longMemberName == L"WindowsApp.AnalysisPage.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::AnalysisPage^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.AnalysisPage.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::AnalysisPage^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.DiseaseTestPage.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::DiseaseTestPage^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.DiseaseTestPage.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::DiseaseTestPage^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.DocKitPage.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::DocKitPage^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.DocKitPage.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::DocKitPage^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.MainMenu.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::MainMenu^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.MainMenu.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::MainMenu^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
     if (longMemberName == L"WindowsApp.MainPage.NavigationHelper")
     {
         ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
@@ -156,6 +348,34 @@
             [](Object^ instance) -> Object^
             {
                 auto that = (::WindowsApp::MainPage^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.RecordPage.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"WindowsApp.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::RecordPage^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"WindowsApp.RecordPage.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::WindowsApp::RecordPage^)instance;
                 return that->DefaultViewModel;
             };
 

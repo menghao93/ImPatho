@@ -11,48 +11,24 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">My Application</x:String>
     </Page.Resources>
 
-    <!--
-        This grid acts as a root panel for the page that defines two rows:
-        * Row 0 contains the back button and page title
-        * Row 1 contains the rest of the page layout
-    -->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Back button and page title -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-        </Grid>
-        <StackPanel Grid.Row="1" Margin="120,30,0,0">
-            <TextBlock Text="What's your name?"/>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
-                <TextBox x:Name="nameInput" Width="300" HorizontalAlignment="Left"/>
-                <Button Content="Say &quot;Hello&quot;" Click="Button_Click"/>
-            </StackPanel>
-            <TextBlock x:Name="greetingOutput"/>
+    <StackPanel Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0">
+        <TextBlock TextWrapping="Wrap" Text="Welcome to HEALTH ORGANIZER!" TextAlignment="Center" FontSize="80" Padding="100"/>
+        <TextBox Width="500" Text="Please Enter the name of your Organization/NGO" TextAlignment="Center" HorizontalAlignment="Center"/>
+        <Border Padding="25">
+            <Button Content="Start!" HorizontalAlignment="Center" Width="200" Click="Button_Click_1" />
+        </Border>
+        <!--<StackPanel Width="384" Height="90" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <Button Content="Test Disease" HorizontalAlignment="Left"/>
+            <Button Content="Doctor's Kit" HorizontalAlignment="Right"/>
         </StackPanel>
-    </Grid>
+        <StackPanel Width="384" Height="90" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="197,0">
+            <Button Content="Sign In your Organization"/>
+            <Button Content="Analytical Information"/>
+        </StackPanel>-->
+    </StackPanel>
+
+
 </Page>

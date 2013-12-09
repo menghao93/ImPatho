@@ -51,6 +51,7 @@
     <ClInclude Include="Common\SuspensionManager.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
@@ -65,5 +66,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml" />
+    <Page Include="MainMenu.xaml" />
+    <Page Include="DiseaseTestPage.xaml" />
+    <Page Include="AnalysisPage.xaml" />
+    <Page Include="RecordPage.xaml" />
+    <Page Include="DocKitPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\disease.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WindowsApp.rc" />
   </ItemGroup>
 </Project>

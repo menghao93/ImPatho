@@ -6,7 +6,7 @@
     <SolutionConfiguration>Debug|Win32</SolutionConfiguration>
     <PackageArchitecture>x86</PackageArchitecture>
     <PackageIdentityName>96501564-5961-402c-afe4-4636f816bcef</PackageIdentityName>
-    <RegisteredManifestChecksum>A6619F4D941B4D26EC8D0418083773ED39E624FE03E8DD10DCA1BC329075FC53</RegisteredManifestChecksum>
+    <RegisteredManifestChecksum>B46FD0154618174B4C82F9108BD8B995F4BAAA30EA5476D25D6D6382F0BB1AA6</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>96501564-5961-402c-afe4-4636f816bcef_1.0.0.0_x86__ze5qpfd9d86qw</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>96501564-5961-402c-afe4-4636f816bcef_ze5qpfd9d86qw!App</RegisteredUserModeAppID>
     <RegisteredPackageID>96501564-5961-402c-afe4-4636f816bcef</RegisteredPackageID>
@@ -17,53 +17,76 @@
     <AppXManifest Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-12-09T02:53:57.750</Modified>
+      <Modified>2013-12-09T09:12:24.997</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.exe">
       <PackagePath>WindowsApp.exe</PackagePath>
-      <Modified>2013-12-09T04:05:23.160</Modified>
+      <Modified>2013-12-09T09:17:51.306</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\WindowsApp.winmd">
       <PackagePath>WindowsApp.winmd</PackagePath>
-      <Modified>2013-12-09T02:53:49.403</Modified>
+      <Modified>2013-12-09T08:44:26.663</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Common\ReadMe.txt">
       <PackagePath>Common\ReadMe.txt</PackagePath>
-      <Modified>2013-09-18T15:48:52.000</Modified>
+      <Modified>2013-12-09T04:45:13.785</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\disease.png">
+      <PackagePath>Assets\disease.png</PackagePath>
+      <Modified>2013-12-09T08:03:34.688</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\Logo.scale-100.png">
       <PackagePath>Assets\Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T00:31:02.000</Modified>
+      <Modified>2013-12-09T04:45:13.776</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\SmallLogo.scale-100.png">
       <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T00:31:02.000</Modified>
+      <Modified>2013-12-09T04:45:13.777</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\StoreLogo.scale-100.png">
       <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T00:31:02.000</Modified>
+      <Modified>2013-12-09T04:45:13.779</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\WindowsApp\Assets\SplashScreen.scale-100.png">
       <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
-      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T00:31:02.000</Modified>
+      <Modified>2013-12-09T04:45:13.778</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2013-12-09T02:53:49.833</Modified>
+      <Modified>2013-12-09T08:44:28.033</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\AnalysisPage.xbf">
+      <PackagePath>AnalysisPage.xbf</PackagePath>
+      <Modified>2013-12-09T09:17:39.022</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\DiseaseTestPage.xbf">
+      <PackagePath>DiseaseTestPage.xbf</PackagePath>
+      <Modified>2013-12-09T09:17:39.028</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\DocKitPage.xbf">
+      <PackagePath>DocKitPage.xbf</PackagePath>
+      <Modified>2013-12-09T08:52:54.779</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\MainMenu.xbf">
+      <PackagePath>MainMenu.xbf</PackagePath>
+      <Modified>2013-12-09T09:17:39.033</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2013-12-09T04:05:17.390</Modified>
+      <Modified>2013-12-09T08:44:28.061</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\RecordPage.xbf">
+      <PackagePath>RecordPage.xbf</PackagePath>
+      <Modified>2013-12-09T09:17:39.039</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\backup\IC2014\WindowsApp\Debug\WindowsApp\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2013-12-09T02:53:57.009</Modified>
+      <Modified>2013-12-09T09:12:23.882</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
