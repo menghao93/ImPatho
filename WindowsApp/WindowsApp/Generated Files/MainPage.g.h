@@ -8,6 +8,17 @@
 //     the code is regenerated.
 //------------------------------------------------------------------------------
 
+namespace Windows {
+    namespace UI {
+        namespace Xaml {
+            namespace Controls {
+                ref class TextBlock;
+                ref class TextBox;
+                ref class Button;
+            }
+        }
+    }
+}
 
 namespace WindowsApp
 {
@@ -21,6 +32,10 @@ namespace WindowsApp
     private:
         bool _contentLoaded;
     
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ greetingOutput;
+        private: ::Windows::UI::Xaml::Controls::TextBox^ nameInput;
+        private: ::Windows::UI::Xaml::Controls::Button^ backButton;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ pageTitle;
     };
 }
 

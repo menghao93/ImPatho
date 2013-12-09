@@ -5,9 +5,11 @@
 
 #include "pch.h"
 #include "MainPage.xaml.h"
+#include "Common\SuspensionManager.h"
+#include <ppltasks.h>
 
 using namespace WindowsApp;
-
+using namespace concurrency;
 using namespace Platform;
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Activation;
@@ -60,7 +62,7 @@ void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEvent
 		// Create a Frame to act as the navigation context and associate it with
 		// a SuspensionManager key
 		rootFrame = ref new Frame();
-
+		WindowsApp::Common::SuspensionManager::RegisterFrame(rootFrame, "appFrame");
 		// Set the default language
 		rootFrame->Language = Windows::Globalization::ApplicationLanguages::Languages->GetAt(0);
 
@@ -70,7 +72,7 @@ void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEvent
 		{
 			// TODO: Restore the saved session state only when appropriate, scheduling the
 			// final launch steps after the restore is complete
-
+			WindowsApp::Common::SuspensionManager::RestoreAsync();
 		}
 
 		if (rootFrame->Content == nullptr)
@@ -112,6 +114,9 @@ void App::OnSuspending(Object^ sender, SuspendingEventArgs^ e)
 	(void) e;	// Unused parameter
 
 	//TODO: Save application state and stop any background activity
+	auto deferral = e->SuspendingOperation->GetDeferral();
+	create_task(WindowsApp::Common::SuspensionManager::SaveAsync()).then([deferral]() {deferral->Complete(); });
+
 }
 
 /// <summary>
