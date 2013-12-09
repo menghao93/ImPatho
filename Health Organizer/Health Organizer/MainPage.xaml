@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="Health_Organizer.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Health_Organizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" Background="Black">
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Welcome to HEALTH ORGANIZER!" TextAlignment="Center" FontSize="80" Padding="100"/>
+        <Border Padding="10">
+            <StackPanel Orientation="Horizontal" Width="1200" Height="50" Margin="73,0">
+                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
+                <TextBox Margin="50,0,0,0" Width="500" Text="Please Enter your user name" TextAlignment="Center" HorizontalAlignment="Center" />
+            </StackPanel>
+        </Border>
+        <Border Padding="10">
+            <StackPanel Orientation="Horizontal" Width="1200" Height="50" Margin="73,0">
+                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="30" Margin="310,0,0,0"/>
+                <TextBox Margin="50,0,0,0" Width="500" Text="Please Enter the password" TextAlignment="Center" HorizontalAlignment="Center" />
+            </StackPanel>
+        </Border>
+        <!--<Border Padding="10">
+            <StackPanel Orientation="Horizontal" Width="1200" Height="100" Margin="73,0">
+                <Button Content="Sign Up" Width="200" Margin="300,0,0,0" Padding="10" Click="sign_up_click"/>
+                <Button  Content="Sign In" Width="200" Margin="300,0,0,0" Padding="10" Click="sign_in_click"/>
+            </StackPanel>
+        </Border>-->
+        <Border Padding="10">
+            <Button  Background="#38ACEC" Content="Sign In" Width="200" Margin="847,0,0,0" Padding="10" Click="sign_in_click"/>
+        </Border>
+    </StackPanel>
+</Page>
