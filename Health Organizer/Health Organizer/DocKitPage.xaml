@@ -11,10 +11,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- Collection of items displayed by this page -->
-        <CollectionViewSource
-        x:Name="itemsViewSource"
-        Source="{Binding Items}"/>
+        <x:String x:Key="docKitTitle">Disease List</x:String>
     </Page.Resources>
 
     <!--
@@ -22,6 +19,68 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
+
+    <Grid Background="Black">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="510"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="#00A2E8"/>
+            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        VerticalAlignment="Top"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/>
+
+            <TextBlock x:Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="120,0,0,40" />
+
+            <SearchBox Name="docKitSearchBox" Visibility="Collapsed" Grid.Column="1" BorderBrush="#38ACEC" Height="40" Margin="69,50,366,50"/>
+            <AppBarButton HorizontalAlignment="Right" Label="Help"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,82,17" Icon="Help"/>
+            <AppBarButton HorizontalAlignment="Right" Label="Settings"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,230,17" Icon="Setting"/>
+            <AppBarButton HorizontalAlignment="Right" Icon="Find" Margin="0,47,0,-44" Height="137" Width="120" Click="docKitSearchBut"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="510"/>
+                <ColumnDefinition Width="600"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Width="510" Background="#00A2E8"/>
+            <ComboBox Name="selectOption" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="400" Grid.Column="0" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark">
+                <ComboBoxItem>Common Diseases</ComboBoxItem>
+                <ComboBoxItem>Simple First Aid</ComboBoxItem>
+            </ComboBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="510" />
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"  Background="#00A2E8"/>
+            <ListView HorizontalAlignment="Left" Width="510" Margin="0,36,0,0"/>
+        </Grid>
+    </Grid>
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <!--
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -37,7 +96,9 @@
             <ColumnDefinition x:Name="secondaryColumn" Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Back button and page title -->
+        -->
+    <!-- Back button and page title -->
+    <!--
         <Grid x:Name="titlePanel">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
@@ -49,11 +110,15 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{Binding Title}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,0,40"/>
+            <ComboBox Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,25" FontFamily="Segoe UI Light">
+                <ComboBoxItem Content="Basic First Aid" />
+                <ComboBoxItem Content="Common Disease" />
+            </ComboBox>
         </Grid>
 
-        <!-- Vertical scrolling item list -->
+        -->
+    <!-- Vertical scrolling item list -->
+    <!--
         <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemsListView"
@@ -90,7 +155,9 @@
         </ListView>
 
 
-        <!-- Details for selected item -->
+        -->
+    <!-- Details for selected item -->
+    <!--
         <ScrollViewer
             x:Name="itemDetail"
             AutomationProperties.AutomationId="ItemDetailScrollViewer"
@@ -124,7 +191,9 @@
 
         <VisualStateManager.VisualStateGroups>
 
-            <!-- Visual states reflect the application's view state -->
+            -->
+    <!-- Visual states reflect the application's view state -->
+    <!--
             <VisualStateGroup x:Name="ViewStates">
                 <VisualState x:Name="PrimaryView" />
                 <VisualState x:Name="SinglePane">
@@ -143,13 +212,15 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
-                <!--
+                -->
+    <!--
                     When an item is selected and only one pane is shown the details display requires more extensive changes:
                      * Hide the master list and the column it was in
                      * Move item details down a row to make room for the title
                      * Move the title directly above the details
                      * Adjust padding for details
                  -->
+    <!--
                 <VisualState x:Name="SinglePane_Detail">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
@@ -177,5 +248,5 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-    </Grid>
+    </Grid>-->
 </Page>

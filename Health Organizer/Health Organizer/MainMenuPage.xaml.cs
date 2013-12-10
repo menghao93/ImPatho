@@ -12,7 +12,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -57,10 +56,10 @@ namespace Health_Organizer
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
-            this.loadStrings();
+            this.loadDescriptionStrings();
         }
 
-        private void loadStrings()
+        private void loadDescriptionStrings()
         {
             //outputBlock.Text += String.Format("\nThe current culture is {0}.\n", CultureInfo.CurrentCulture.Name);
             ResourceLoader rm = new ResourceLoader();
