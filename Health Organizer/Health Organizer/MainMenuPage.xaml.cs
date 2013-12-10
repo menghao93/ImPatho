@@ -1,5 +1,10 @@
 ﻿using Health_Organizer.Common;
-using System;
+using System.Globalization;
+using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Resources.Core;
+using Windows.UI.Xaml.Controls;
+using System.Resources;
+using System.Threading;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,6 +56,22 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            this.loadStrings();
+        }
+
+        private void loadStrings()
+        {
+            //outputBlock.Text += String.Format("\nThe current culture is {0}.\n", CultureInfo.CurrentCulture.Name);
+            ResourceLoader rm = new ResourceLoader();
+            string description = rm.GetString("DESCRIPTION_TEST");
+            bloodTestDes.Text = description;
+            description = rm.GetString("DESCRIPTION_DOC_KIT");
+            docKitDes.Text = description;
+            description = rm.GetString("DESCRIPTION_SURVEY");
+            recordSurveyDes.Text = description;
+            description = rm.GetString("DESCRIPTION_ANALYSIS");
+            analysisDes.Text = description;
         }
 
         /// <summary>
