@@ -12,8 +12,8 @@
         <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Welcome to HEALTH ORGANIZER!" TextAlignment="Center" FontSize="80" Padding="100"/>
         <Border Padding="10">
             <StackPanel Orientation="Horizontal" Width="1200" Height="50" Margin="73,0">
-                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
-                <TextBox Margin="50,0,0,0" Width="500" Text="Please Enter your user name" TextAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock ToolTipService.ToolTip="Eg: You need your password to Enter" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
+                <TextBox ToolTipService.ToolTip="Eg: John is username in John@abc.com"  Margin="50,0,0,0" Width="500" Text="Please Enter your user name" TextAlignment="Center" HorizontalAlignment="Center" />
             </StackPanel>
         </Border>
         <Border Padding="10">
@@ -22,14 +22,8 @@
                 <TextBox Margin="50,0,0,0" Width="500" Text="Please Enter the password" TextAlignment="Center" HorizontalAlignment="Center" />
             </StackPanel>
         </Border>
-        <!--<Border Padding="10">
-            <StackPanel Orientation="Horizontal" Width="1200" Height="100" Margin="73,0">
-                <Button Content="Sign Up" Width="200" Margin="300,0,0,0" Padding="10" Click="sign_up_click"/>
-                <Button  Content="Sign In" Width="200" Margin="300,0,0,0" Padding="10" Click="sign_in_click"/>
-            </StackPanel>
-        </Border>-->
         <Border Padding="10">
-            <Button  Background="#38ACEC" Content="Sign In" Width="200" Margin="847,0,0,0" Padding="10" Click="sign_in_click"/>
+            <Button  Background="#00A2E8" Content="Sign In" Width="200" Margin="847,0,0,0" Padding="10" Click="sign_in_click"/>
         </Border>
     </StackPanel>
 </Page>

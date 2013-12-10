@@ -4,4 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Health_Organizer">
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="ComboBoxItemSelectedBackgroundThemeBrush">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="ComboBoxItemSelectedPointerOverBackgroundThemeBrush">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="SearchBoxButtonPointerOverBackgroundThemeBrush">#00A2E8</SolidColorBrush>
+                    <SolidColorBrush x:Key="SearchBoxButtonBackgroundThemeBrush">#00A2E8</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    
+    
 </Application>
