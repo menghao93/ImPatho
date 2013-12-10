@@ -6,6 +6,28 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <!--ListBox Properties are set here in the ThemeDictionary while others would be set in MergedDictionary(I don't know why..SHALIN)-->
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="ListBoxFocusBackgroundThemeBrush" Color="#00A2E8"/>
+                    <SolidColorBrush x:Key="ListBoxBackgroundThemeBrush" Color="#00A2E8"/>
+                    <SolidColorBrush x:Key="ListBoxBorderThemeBrush" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundThemeBrush" Color="#0089C4"/>
+                    <SolidColorBrush x:Key="ListBoxItemPressedBackgroundThemeBrush" Color="#0076A8"/>
+                    <SolidColorBrush x:Key="ListBoxItemSelectedPointerOverBackgroundThemeBrush" Color="#0076A8"/>
+                    <!--Setting Foreground(text) Colours here, above are all background colors-->
+                    <SolidColorBrush x:Key="ListBoxForegroundThemeBrush" Color="White"/>
+                    <SolidColorBrush x:Key="ListBoxItemPressedForegroundThemeBrush" Color="White"/>
+                    <SolidColorBrush x:Key="ListBoxItemSelectedForegroundThemeBrush" Color="White"/>
+                    <SolidColorBrush x:Key="ListBoxItemPointerOverForegroundThemeBrush" Color="White"/>
+                    <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="60"/>
+                        <Setter Property="Padding" Value="50,0,0,0"/>
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <SolidColorBrush x:Key="ComboBoxItemSelectedBackgroundThemeBrush">Gray</SolidColorBrush>
@@ -15,7 +37,5 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Application.Resources>
-    
-    
+    </Application.Resources>    
 </Application>
