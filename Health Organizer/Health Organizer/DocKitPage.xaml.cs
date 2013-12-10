@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System;
+using System.Diagnostics;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -81,37 +81,27 @@ namespace Health_Organizer
         {
         }
 
-        #region NavigationHelper registration
-
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// 
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="GridCS.Common.NavigationHelper.LoadState"/>
-        /// and <see cref="GridCS.Common.NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedTo(e);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedFrom(e);
-        }
-
-        #endregion
-
         private void docKitSearchBut(object sender, RoutedEventArgs e)
         {
             if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
             {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
-            else {
+            else
+            {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+        }
+
+        private void docKitComboBox(object sender, SelectionChangedEventArgs e)
+        {
+            //Debug.WriteLine(docKitCombo.SelectedIndex + "--------------------------------");
+            if (docKitCombo.SelectedIndex == 0){
+                pageTitle.Text = "Disease List";
+            }
+            else if (docKitCombo.SelectedIndex == 1)
+            {
+                pageTitle.Text = "First Aid List";
             }
         }
     }

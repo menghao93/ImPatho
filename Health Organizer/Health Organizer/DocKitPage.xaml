@@ -26,53 +26,51 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Grid Margin="0,0,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="510"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border Background="#00A2E8"/>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="510"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Background="#00A2E8"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="backButton" Margin="31,38,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
 
-            <TextBlock x:Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="120,0,0,40" />
-
-            <SearchBox Name="docKitSearchBox" Visibility="Collapsed" Grid.Column="1" BorderBrush="#38ACEC" Height="40" Margin="69,50,366,50"/>
-            <AppBarButton HorizontalAlignment="Right" Label="Help"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,82,17" Icon="Help"/>
-            <AppBarButton HorizontalAlignment="Right" Label="Settings"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,230,17" Icon="Setting"/>
-            <AppBarButton HorizontalAlignment="Right" Icon="Find" Margin="0,47,0,-44" Height="137" Width="120" Click="docKitSearchBut"/>
-        </Grid>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="510"/>
-                <ColumnDefinition Width="600"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border Width="510" Background="#00A2E8"/>
-            <ComboBox Name="selectOption" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="400" Grid.Column="0" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark">
-                <ComboBoxItem>Common Diseases</ComboBoxItem>
-                <ComboBoxItem>Simple First Aid</ComboBoxItem>
+            <TextBlock Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="116,0,94,71"/>
+            <AppBarButton HorizontalAlignment="Right" Icon="Find" Click="docKitSearchBut" VerticalAlignment="Center"/>
+            <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="400" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
+                <ComboBoxItem Content="Common Diseases" />
+                <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
+            <ListBox Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Center" Width="510">
+                <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck You Asshole</ListBoxItem>
+                <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck!!! You Bastard</ListBoxItem>
+            </ListBox>
         </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="510" />
-                <ColumnDefinition Width="190"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0"  Background="#00A2E8"/>
-            <ListView HorizontalAlignment="Left" Width="510" Margin="0,36,0,0"/>
+        <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <SearchBox VerticalAlignment="Center" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
+                <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Grid.ColumnSpan="2" Margin="100,0,0,0"/>
+                <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
+            </Grid>
         </Grid>
     </Grid>
     <!--
