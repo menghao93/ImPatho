@@ -4,3 +4,11 @@ Our Winwdows App for IC2014
 
 ASSETS - All the Images would reside here
 COMMON - Some of the dependencies would be here while others would be in EXTERNAL DEPENDENCIES.
+
+
+STEPS to Add SQLite Support:- 
+
+ - Follow steps given on this blogPost http://syncwinrt.codeplex.com/wikipage?title=w81temp
+ - Now, go to References in Solution Explorer and then right click and select MANAGE NUGET PACKAGES.
+ - Now in search box type sqlite-net install it.
+ - Clean the Solution and you are good to go. :) 
