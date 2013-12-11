@@ -140,15 +140,43 @@
     <PRIResource Include="Resources.resw" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\African.jpg" />
+    <Content Include="Assets\AIDS.jpeg" />
     <Content Include="Assets\Blood_Test.png" />
+    <Content Include="Assets\Chickenpox.jpg" />
+    <Content Include="Assets\Cholera.jpg" />
+    <Content Include="Assets\Dengue_Fever.jpg" />
+    <Content Include="Assets\Diabetes.jpeg" />
+    <Content Include="Assets\Diabetes_Type_1.jpeg" />
+    <Content Include="Assets\Diabetes_Type_2.jpeg" />
+    <Content Include="Assets\Diarrhea.jpg" />
     <Content Include="Assets\Doctors_Kit.png" />
+    <Content Include="Assets\Food_Poisoning.jpg" />
+    <Content Include="Assets\Gonorrhea.jpg" />
+    <Content Include="Assets\Hepatitis_A.jpg" />
+    <Content Include="Assets\Hepatitis_B.jpg" />
+    <Content Include="Assets\Influenza.jpeg" />
+    <Content Include="Assets\Lepto.jpg" />
     <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\Malaria.jpg" />
+    <Content Include="Assets\Measles.jpg" />
     <Content Include="Assets\On_Survey.png" />
+    <Content Include="Assets\Pneumonia.jpeg" />
+    <Content Include="Assets\Rotavirus.jpg" />
+    <Content Include="Assets\Salmonellosis.jpg" />
+    <Content Include="Assets\Shigellosis.jpg" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\Analysis.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\Strep_Throat.jpg" />
+    <Content Include="Assets\Syphilis.jpg" />
+    <Content Include="Assets\Tetanus.jpg" />
+    <Content Include="Assets\Tuberculosis.jpeg" />
+    <Content Include="Assets\Typhoid_Fever.jpg" />
+    <Content Include="Assets\Yellow_Fever.jpg" />
     <Content Include="Common\ReadMe.txt" />
+    <Content Include="Assets\Rabies.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

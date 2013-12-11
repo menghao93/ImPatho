@@ -51,16 +51,17 @@
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <ListBox Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Center" Width="510">
+            <ListBox Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500">
                 <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck You Asshole</ListBoxItem>
                 <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck!!! You Bastard</ListBoxItem>
             </ListBox>
         </Grid>
         <Grid Grid.Column="1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="150"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="500"/>
@@ -71,6 +72,58 @@
                 <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Grid.ColumnSpan="2" Margin="100,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
+            <TextBlock Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Padding="40,0,0,0" FontSize="40"></TextBlock>
+            <ScrollViewer Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="500"/>
+                        <ColumnDefinition Width="620"/>
+                        <ColumnDefinition Width="700"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/Rabies.jpg" Margin="60,0,0,0"/>
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
+                        <RichTextBlock LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" Style="{StaticResource BodyRichTextBlockStyle}">
+                        <Paragraph>
+                                Malaria is a disease caused by a parasite, transmitted by the bite of infected mosquitoes. Malaria produces recurrent attacks of chills and fever. Malaria kills an estimated 1 million people each year worldwide.
+                                <LineBreak/>
+                        </Paragraph>
+                            <Paragraph>
+                                While the disease is uncommon in temperate climates, malaria is still prevalent in tropical and subtropical countries. World health officials are trying to reduce the incidence of malaria by distributing bed nets to help protect people from mosquito bites as they sleep. Scientists around the world are working to develop a vaccine to prevent malaria.
+                                <LineBreak/>
+                            </Paragraph>
+                            <Paragraph>
+                                If you're traveling to locations where malaria is common, take preventive medicine before, during and after your trip. Many malaria parasites are now immune to the most common drugs used to treat the disease.
+                            </Paragraph>
+                        </RichTextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
+                        <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
+                        <RichTextBlock LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" Style="{StaticResource BodyRichTextBlockStyle}">
+                            <Paragraph>
+                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
+                                <LineBreak/>
+                                &#8226; Headache
+                                <LineBreak/>
+                                &#8226; Either diarrhea or severe constipation
+                                <LineBreak/>
+                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
+                                <LineBreak/>
+                                &#8226; Headache
+                                <LineBreak/>
+                                &#8226; Either diarrhea or severe constipation
+                                <LineBreak/>
+                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
+                                <LineBreak/>
+                                &#8226; Headache
+                                <LineBreak/>
+                                &#8226; Either diarrhea or severe constipation
+                                <LineBreak/>
+                            </Paragraph>
+                        </RichTextBlock>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </Grid>
     </Grid>
     <!--
