@@ -14,6 +14,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
+using Health_Organizer.Data_Model_Classes;
+using Health_Organizer.Database_Connet_Classes;
+using Health_Organizer.DML_Method_Classes;
+using System.Threading.Tasks;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -24,7 +28,8 @@ namespace Health_Organizer
     /// </summary>
     public sealed partial class DocKitPage : Page
     {
-
+        DiseasesTable diseaseMethods;
+        DBConnect connect;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
@@ -81,7 +86,21 @@ namespace Health_Organizer
         {
         }
 
-        private void docKitSearchBut(object sender, RoutedEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            await this.InitializeDB();
+            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            docKitProgress.IsActive = false;
+        }
+
+        private async Task InitializeDB()
+        {
+            connect = new DBConnect();
+            await connect.InitializeDatabase();
+            diseaseMethods = new DiseasesTable(connect);
+        }
+
+        private async void docKitSearchBut(object sender, RoutedEventArgs e)
         {
             if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
             {
@@ -91,9 +110,11 @@ namespace Health_Organizer
             {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
+            //await diseaseMethods.InsertDisease(new BasicDiseases() {Name = "test 3", Description = "Fucking Awesome!", Symptoms = "dasfasfas"});
+            //await diseaseMethods.InsertDisease(new BasicDiseases() { Name = "test 2", Description = "Fucking Awesome!2", Symptoms = "afdasds" });
         }
 
-        private void docKitComboBox(object sender, SelectionChangedEventArgs e)
+        private async void docKitComboBox(object sender, SelectionChangedEventArgs e)
         {
             //Debug.WriteLine(docKitCombo.SelectedIndex + "--------------------------------");
             if (docKitCombo.SelectedIndex == 0){
@@ -103,6 +124,11 @@ namespace Health_Organizer
             {
                 pageTitle.Text = "First Aid List";
             }
+            //List<BasicDiseases> result = await diseaseMethods.SelectAllDisease();
+            //foreach (var item in result)
+            //{
+            //    Debug.WriteLine(item.Name);   
+            //}
         }
     }
 }

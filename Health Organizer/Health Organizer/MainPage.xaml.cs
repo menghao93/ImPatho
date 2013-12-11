@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Health_Organizer
 {
     /// <summary>
@@ -22,9 +20,11 @@ namespace Health_Organizer
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        
         public MainPage()
         {
             this.InitializeComponent();
+            //await this.InitializeDB();
         }
 
         private void sign_in_click(object sender, RoutedEventArgs e)
