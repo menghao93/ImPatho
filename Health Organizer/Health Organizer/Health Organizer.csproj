@@ -115,6 +115,7 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Data Model Classes\BasicDiseases.cs" />
     <Compile Include="Database Connet Classes\DBConnect.cs" />
+    <Compile Include="Database Connet Classes\ImageMethods.cs" />
     <Compile Include="Database Connet Classes\InterfaceDBConnect.cs" />
     <Compile Include="DiseaseTestPage.xaml.cs">
       <DependentUpon>DiseaseTestPage.xaml</DependentUpon>
@@ -226,6 +227,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Callisto">
+      <HintPath>..\packages\Callisto.1.4.0\lib\netcore451\Callisto.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Synchronization.ClientServices.Win8">
       <HintPath>..\packages\SyncClient.SQLite.3.8.0.3\lib\netcore45\Microsoft.Synchronization.ClientServices.Win8.dll</HintPath>
     </Reference>

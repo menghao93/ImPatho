@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Health_Organizer"
+    xmlns:callisto="using:Callisto.Controls"
     xmlns:common="using:Health_Organizer.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -30,11 +31,11 @@
             <ColumnDefinition Width="510"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Background="#00A2E8"/>
-        <ProgressRing IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="150" Height="150"/>
+        <Border Background="#00A2E8"/>        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="150"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -52,10 +53,8 @@
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500">
-                <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck You Asshole</ListBoxItem>
-                <ListBoxItem Style="{ThemeResource ListBoxItemStyle}">Fuck!!! You Bastard</ListBoxItem>
-            </ListBox>
+            <AppBarButton Grid.Row="2" Icon="Add" Click="docKitAddItem"></AppBarButton>
+            <ListBox Name="docKitListBox" Grid.Row="3" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -125,7 +124,28 @@
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
+            <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="250" Height="250"/>
         </Grid>
+        <!-- This is an inbuilt Library used to make CustomDialog Box-->
+        <callisto:CustomDialog Name="docKitDialog" 
+                                Title="Add Common Disease" 
+                                Background="#00A2E8" >
+            <StackPanel>
+                <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
+                <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True"/>
+                <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
+                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
+                    <TextBox Name="docKitDImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <TextBlock Text="*Please fill all the fields." Visibility="Collapsed" Name="docKitErrorDescription" Margin="0,0,40,0" FontSize="15"></TextBlock>
+                    <Button Name="docKitDSaveBut" Content="Save" Width="90" Margin="0,0,20,0" Click="docKitDialogSave"/>
+                    <Button Name="docKitDCancelBut" Content="Cancel" Width="90" Click="docKitDialogCancel"/>
+                </StackPanel>
+            </StackPanel>
+        </callisto:CustomDialog>
+
     </Grid>
     <!--
         This grid acts as a root panel for the page that defines two rows:

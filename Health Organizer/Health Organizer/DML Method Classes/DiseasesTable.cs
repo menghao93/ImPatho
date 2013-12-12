@@ -17,7 +17,8 @@ namespace Health_Organizer.DML_Method_Classes
             conn = connection.GetAsyncConnection();
         }
 
-        public async Task InsertDisease(BasicDiseases disease) {
+        public async Task InsertDisease(BasicDiseases disease) 
+        {
             await conn.InsertAsync(disease);
         }
 
