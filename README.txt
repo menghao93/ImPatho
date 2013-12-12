@@ -12,3 +12,7 @@ STEPS to Add SQLite Support:-
  - Now, go to References in Solution Explorer and then right click and select MANAGE NUGET PACKAGES.
  - Now in search box type sqlite-net install it.
  - Clean the Solution and you are good to go. :) 
+
+ARM/x86/x64 Error :-
+ 
+ - Go to Build and then Configration manager. Select x64 architecture. QED! :)
