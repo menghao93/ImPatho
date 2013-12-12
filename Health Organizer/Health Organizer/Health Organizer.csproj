@@ -114,6 +114,7 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Data Model Classes\BasicDiseases.cs" />
+    <Compile Include="Data Model Classes\BasicFirstAid.cs" />
     <Compile Include="Database Connet Classes\DBConnect.cs" />
     <Compile Include="Database Connet Classes\ImageMethods.cs" />
     <Compile Include="Database Connet Classes\InterfaceDBConnect.cs" />
@@ -121,8 +122,9 @@
       <DependentUpon>DiseaseTestPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DML Method Classes\DiseasesTable.cs" />
+    <Compile Include="DML Method Classes\FirstAidTable.cs" />
     <Compile Include="DML Method Classes\InterfaceDiseasesTable.cs" />
-    <Compile Include="DML Method Classes\var.cs" />
+    <Compile Include="DML Method Classes\InterfaceFirstAidTable.cs" />
     <Compile Include="DocKitPage.xaml.cs">
       <DependentUpon>DocKitPage.xaml</DependentUpon>
     </Compile>

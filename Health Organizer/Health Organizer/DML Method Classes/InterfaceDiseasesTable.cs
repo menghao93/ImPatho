@@ -14,5 +14,6 @@ namespace Health_Organizer.DML_Method_Classes
         Task DeleteDisease(BasicDiseases employee);
         Task<List<BasicDiseases>> SelectAllDisease();
         Task<List<BasicDiseases>> SelectDisease(string query);
+        Task<BasicDiseases> FindSingleDisease(string name);
     }
 }

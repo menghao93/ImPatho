@@ -28,7 +28,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="510"/>
+            <ColumnDefinition Width="490"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Background="#00A2E8"/>        
@@ -41,16 +41,16 @@
             <!-- This is an inbuilt Library used to make CustomDialog Box-->
             <callisto:CustomDialog Name="docKitDialog" 
                                 Title="Add Common Disease" 
-                                Background="#00A2E8" >
+                                Background="#0064A0" >
                 <StackPanel>
-                    <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
-                    <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True"/>
-                    <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
+                    <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
+                    <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5,0,5"/>
+                    <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
                         <TextBox Name="docKitDImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
                     </StackPanel>
-                    <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <StackPanel Margin="0,25,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <TextBlock Text="*Please fill all the fields." Visibility="Collapsed" Name="docKitErrorDescription" Margin="0,0,40,0" FontSize="15"></TextBlock>
                         <Button Name="docKitDSaveBut" Content="Save" Width="90" Margin="0,0,20,0" Click="docKitDialogSave"/>
                         <Button Name="docKitDCancelBut" Content="Cancel" Width="90" Click="docKitDialogCancel"/>
