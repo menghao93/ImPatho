@@ -19,6 +19,7 @@ using Health_Organizer.Database_Connet_Classes;
 using Health_Organizer.DML_Method_Classes;
 using System.Threading.Tasks;
 using SQLite;
+using Windows.UI.Popups;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -156,17 +157,25 @@ namespace Health_Organizer
 
         private async void docKitDelItem(object sender, RoutedEventArgs e)
         {
+            docKitCmdbar.IsOpen = false;
+
             //Find the instance of the item which is selected from the DB, then delete it using that instance.
             ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
             if (xItem != null)
             {
-                BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
-                await diseaseMethods.DeleteDisease(tempDisease);
+                var messageDialog = new MessageDialog("Are you sure you want to delete details for this disease?", "Confirmation");
+                messageDialog.Commands.Add(new  Windows.UI.Popups.UICommand("Yes",null));
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
+                var dialogResult = await messageDialog.ShowAsync();
 
-                this.UpdateListBox();
+                if (dialogResult.Label.Equals("Yes"))
+                {
+                    BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                    await diseaseMethods.DeleteDisease(tempDisease);
+
+                    this.UpdateListBox();
+                }
             }
-
-            docKitCmdbar.IsOpen = false;
         }
 
 ////////////////////////This methods are for Updating the View after changes in FB

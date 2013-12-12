@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="DML Method Classes\DiseasesTable.cs" />
     <Compile Include="DML Method Classes\InterfaceDiseasesTable.cs" />
+    <Compile Include="DML Method Classes\var.cs" />
     <Compile Include="DocKitPage.xaml.cs">
       <DependentUpon>DocKitPage.xaml</DependentUpon>
     </Compile>
