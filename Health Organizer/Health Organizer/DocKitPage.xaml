@@ -38,7 +38,8 @@
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <!-- This is an inbuilt Library used to make CustomDialog Box-->
+            
+            <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR COMMON DISEASES-->
             <callisto:CustomDialog Name="docKitDialog" 
                                 Title="Add Common Disease" 
                                 Background="#0064A0" >
@@ -57,6 +58,27 @@
                     </StackPanel>
                 </StackPanel>
             </callisto:CustomDialog>
+
+            <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR COMMON DISEASES-->
+            <callisto:CustomDialog Name="docKitDialogFirstAid" 
+                                Title="Add common First Aid" 
+                                Background="#0064A0" >
+                <StackPanel>
+                    <TextBox Name="docKitFAName" Header="Situation" PlaceholderText="Describe in a word or two. Eg. Burning" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
+                    <TextBox Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5,0,5"/>
+                    <TextBox Name="docKitFASymptoms" Header="Do Not" PlaceholderText="Eg. Donot Move Patient, Donot rub Ice" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5" AcceptsReturn="True" Height="150"/>
+                    <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Name="docKitFABrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
+                        <TextBox Name="docKitFAImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,25,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <TextBlock Text="*Please fill all the fields." Visibility="Collapsed" Name="docKitFAErrorDescription" Margin="0,0,40,0" FontSize="15"></TextBlock>
+                        <Button Name="docKitFASaveBut" Content="Save" Width="90" Margin="0,0,20,0" Click="docKitDialogSave"/>
+                        <Button Name="docKitFACancelBut" Content="Cancel" Width="90" Click="docKitDialogCancel"/>
+                    </StackPanel>
+                </StackPanel>
+            </callisto:CustomDialog>
+            
             <Button x:Name="backButton" Margin="31,38,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
@@ -90,8 +112,10 @@
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
             <TextBlock Name="docKitName" Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40"></TextBlock>
-            <ScrollViewer Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
-                <Grid Grid.Row="2">
+
+            <!-- This is the Grid for Disease and their Description and Symptoms -->
+            <ScrollViewer Name="docKitScrollerDisease" Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="500"/>
                         <ColumnDefinition Width="620"/>
@@ -99,15 +123,44 @@
                     </Grid.ColumnDefinitions>
                     <Image Name="docKitImage" Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
-                        <TextBlock Name="docKitDescription" LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
+                        <TextBlock Name="docKitD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
+                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                            <TextBlock Name="docKitDescription" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
+                        </ScrollViewer>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
-                        <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
-                        <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" FontWeight="SemiLight"/>
+                        <TextBlock Name="docKitS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
+                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                            <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight"/>
+                        </ScrollViewer>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
+
+            <!-- This is the Grid for FirstAid Steps and Donot's -->
+            <ScrollViewer Name="docKitScrollerFirstAid" Visibility="Collapsed" Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="500"/>
+                        <ColumnDefinition Width="620"/>
+                        <ColumnDefinition Width="700"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Name="docKitFirstAidImage" Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <TextBlock Name="docKitFirstAidD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="First Aid Procedure"/>
+                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                            <TextBlock Name="docKitFirstAidDescription" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
+                        <TextBlock Name="docKitFirstAidS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Do Not"/>
+                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                            <TextBlock Name="docKitFirstAidSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+
             <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="250" Height="250"/>
         </Grid>
     </Grid>
