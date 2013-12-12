@@ -36,9 +36,27 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="150"/>
                 <RowDefinition Height="80"/>
-                <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <!-- This is an inbuilt Library used to make CustomDialog Box-->
+            <callisto:CustomDialog Name="docKitDialog" 
+                                Title="Add Common Disease" 
+                                Background="#00A2E8" >
+                <StackPanel>
+                    <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
+                    <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
+                    <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
+                        <TextBox Name="docKitDImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <TextBlock Text="*Please fill all the fields." Visibility="Collapsed" Name="docKitErrorDescription" Margin="0,0,40,0" FontSize="15"></TextBlock>
+                        <Button Name="docKitDSaveBut" Content="Save" Width="90" Margin="0,0,20,0" Click="docKitDialogSave"/>
+                        <Button Name="docKitDCancelBut" Content="Cancel" Width="90" Click="docKitDialogCancel"/>
+                    </StackPanel>
+                </StackPanel>
+            </callisto:CustomDialog>
             <Button x:Name="backButton" Margin="31,38,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
@@ -53,8 +71,7 @@
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <AppBarButton Grid.Row="2" Icon="Add" Click="docKitAddItem"></AppBarButton>
-            <ListBox Name="docKitListBox" Grid.Row="3" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500"/>
+            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500" SelectionChanged="docKitListItemSelected" Padding="0,0,0,0"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -72,7 +89,7 @@
                 <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Grid.ColumnSpan="2" Margin="100,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
-            <TextBlock Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Padding="40,0,0,0" FontSize="40"></TextBlock>
+            <TextBlock Name="docKitName" Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40"></TextBlock>
             <ScrollViewer Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -80,73 +97,28 @@
                         <ColumnDefinition Width="620"/>
                         <ColumnDefinition Width="700"/>
                     </Grid.ColumnDefinitions>
-                    <Image Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/Rabies.jpg" Margin="60,0,0,0"/>
+                    <Image Name="docKitImage" Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
-                        <RichTextBlock LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" Style="{StaticResource BodyRichTextBlockStyle}">
-                        <Paragraph>
-                                Malaria is a disease caused by a parasite, transmitted by the bite of infected mosquitoes. Malaria produces recurrent attacks of chills and fever. Malaria kills an estimated 1 million people each year worldwide.
-                                <LineBreak/>
-                        </Paragraph>
-                            <Paragraph>
-                                While the disease is uncommon in temperate climates, malaria is still prevalent in tropical and subtropical countries. World health officials are trying to reduce the incidence of malaria by distributing bed nets to help protect people from mosquito bites as they sleep. Scientists around the world are working to develop a vaccine to prevent malaria.
-                                <LineBreak/>
-                            </Paragraph>
-                            <Paragraph>
-                                If you're traveling to locations where malaria is common, take preventive medicine before, during and after your trip. Many malaria parasites are now immune to the most common drugs used to treat the disease.
-                            </Paragraph>
-                        </RichTextBlock>
+                        <TextBlock Name="docKitDescription" LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
                         <TextBlock Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
-                        <RichTextBlock LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" Style="{StaticResource BodyRichTextBlockStyle}">
-                            <Paragraph>
-                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
-                                <LineBreak/>
-                                &#8226; Headache
-                                <LineBreak/>
-                                &#8226; Either diarrhea or severe constipation
-                                <LineBreak/>
-                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
-                                <LineBreak/>
-                                &#8226; Headache
-                                <LineBreak/>
-                                &#8226; Either diarrhea or severe constipation
-                                <LineBreak/>
-                                &#8226; Fever, that starts low and increases daily, often to as high as 103 or 104 F (39.4 or 40 C)
-                                <LineBreak/>
-                                &#8226; Headache
-                                <LineBreak/>
-                                &#8226; Either diarrhea or severe constipation
-                                <LineBreak/>
-                            </Paragraph>
-                        </RichTextBlock>
+                        <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" Height="485" FontSize="20" FontWeight="SemiLight"/>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
             <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="250" Height="250"/>
         </Grid>
-        <!-- This is an inbuilt Library used to make CustomDialog Box-->
-        <callisto:CustomDialog Name="docKitDialog" 
-                                Title="Add Common Disease" 
-                                Background="#00A2E8" >
-            <StackPanel>
-                <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
-                <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True"/>
-                <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True"/>
-                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
-                    <TextBox Name="docKitDImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
-                </StackPanel>
-                <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <TextBlock Text="*Please fill all the fields." Visibility="Collapsed" Name="docKitErrorDescription" Margin="0,0,40,0" FontSize="15"></TextBlock>
-                    <Button Name="docKitDSaveBut" Content="Save" Width="90" Margin="0,0,20,0" Click="docKitDialogSave"/>
-                    <Button Name="docKitDCancelBut" Content="Cancel" Width="90" Click="docKitDialogCancel"/>
-                </StackPanel>
-            </StackPanel>
-        </callisto:CustomDialog>
-
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Name="docKitCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
+            <AppBarButton Label="Add Diseases" Icon="Add" Click="docKitAddItem"></AppBarButton>
+            <AppBarButton Name="docKitDelBut" Label="Edit Disease" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
+            <AppBarButton Name="docKitEditBut" Label="Remove Disease" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title

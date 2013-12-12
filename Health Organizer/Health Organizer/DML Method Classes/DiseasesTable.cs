@@ -41,5 +41,10 @@ namespace Health_Organizer.DML_Method_Classes
         {
             return await conn.QueryAsync<BasicDiseases>(query);
         }
+
+        public async Task<BasicDiseases> FindSingleDisease(string name)
+        {
+            return await conn.FindAsync<BasicDiseases>(name);
+        }
     }
 }

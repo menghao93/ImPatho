@@ -31,6 +31,7 @@ namespace Health_Organizer
     {
         DiseasesTable diseaseMethods;
         DBConnect connect;
+        private bool isUpdating = false;
         private string decodedImage = null;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -113,8 +114,6 @@ namespace Health_Organizer
             {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
-            //await diseaseMethods.InsertDisease(new BasicDiseases() {Name = "test 3", Description = "Fucking Awesome!", Symptoms = "dasfasfas"});
-            //await diseaseMethods.InsertDisease(new BasicDiseases() { Name = "test 2", Description = "Fucking Awesome!2", Symptoms = "afdasds" });
         }
 
         private void docKitComboBox(object sender, SelectionChangedEventArgs e)
@@ -126,54 +125,73 @@ namespace Health_Organizer
             {
                 pageTitle.Text = "First Aid List";
             }
-            //List<BasicDiseases> result = await diseaseMethods.SelectAllDisease();
-            //foreach (var item in result)
-            //{
-            //    Debug.WriteLine(item.Name);   
-            //}
         }
 
+/////////////////////This methods are for Buttons in CommandBar at the bottom
         private void docKitAddItem(object sender, RoutedEventArgs e)
         {
+            docKitCmdbar.IsOpen = false;
             docKitDialog.IsOpen = true;
         }
 
-        private async void docKitDialogSave(object sender, RoutedEventArgs e)
-        {                
-            if (docKitDName.Text.Equals("") ||  docKitDSymptoms.Text.Equals("") || docKitDDescription.Text.Equals("") || docKitDImage.Text.Equals(""))
-            {
-                docKitErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }else{
-                if (decodedImage != null)
-                {
-                    try
-                    {
-                        await diseaseMethods.InsertDisease(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = docKitDSymptoms.Text, Image = decodedImage });
+        private async void docKitEditItem(object sender, RoutedEventArgs e)
+        {
+            docKitCmdbar.IsOpen = false;
 
-                        //After everything is stored in database we need to reset all the fields.
-                        docKitDialog.IsOpen = false;
-                        docKitDName.Text = "";
-                        docKitDDescription.Text = "";
-                        docKitDSymptoms.Text = "";
-                        docKitDImage.Text = "";
-                        decodedImage = null;
-                        this.UpdateListBox();
-                    }
-                    catch (SQLite.SQLiteException ex)
-                    {
-                        docKitErrorDescription.Text = "Please Select unique name for diseases.";
-                        docKitErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    }
-                }
+            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+            if (xItem != null)
+            {
+                //Load all the values from the DB. Assertion: Value exist in DB since loaded from list.Also set PK to ReadOnly.
+                docKitDialog.IsOpen = true;
+                BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                docKitDName.Text = tempDisease.Name;
+                docKitDDescription.Text = tempDisease.Description;
+                docKitDSymptoms.Text = tempDisease.Symptoms;
+                docKitDImage.Text = tempDisease.Name + ".jpg";
+                decodedImage = tempDisease.Image;
+                isUpdating = true;
+                docKitDName.IsReadOnly = true;
             }
         }
 
+        private async void docKitDelItem(object sender, RoutedEventArgs e)
+        {
+            //Find the instance of the item which is selected from the DB, then delete it using that instance.
+            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+            if (xItem != null)
+            {
+                BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                await diseaseMethods.DeleteDisease(tempDisease);
+
+                this.UpdateListBox();
+            }
+
+            docKitCmdbar.IsOpen = false;
+        }
+
+////////////////////////This methods are for Updating the View after changes in FB
         private async void UpdateListBox()
         {
 
             docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitProgress.IsActive = true;
             List<BasicDiseases> result = await diseaseMethods.SelectAllDisease();
+
+            //Disable Edit/Delete Buttons if there are no items in the List.
+            if (result.Count() <= 0)
+            {
+                docKitDelBut.IsEnabled = false;
+                docKitEditBut.IsEnabled = false;
+            }
+            else {
+                docKitDelBut.IsEnabled = true;
+                docKitEditBut.IsEnabled = true;
+            }
+
+            //This is used to sort the list on the basis of Name value pairs. Also note first we need to clear previous list.
+            result.Sort(delegate(BasicDiseases c1, BasicDiseases c2) { 
+                return c1.Name.CompareTo(c2.Name); 
+            });
             docKitListBox.Items.Clear();
 
             //Load the Resource Style from themed dictionary for listboxItems
@@ -188,9 +206,66 @@ namespace Health_Organizer
                 docKitListBox.Items.Add(xItem);
             }
 
-
             docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitProgress.IsActive = false;
+        }
+
+        private async void UpdateDiseaseData(BasicDiseases tempDisease)
+        {
+            docKitName.Text = tempDisease.Name;
+            docKitDescription.Text = "\n" + tempDisease.Description;
+            docKitImage.Source = await ImageMethods.Base64StringToBitmap(tempDisease.Image);
+
+            string tempSymptoms = "";
+            foreach (var i in tempDisease.Symptoms.Split(','))
+            {
+                tempSymptoms += "\n• " + i;
+            }
+            docKitSymptoms.Text = tempSymptoms;
+        }
+
+//////////////////////This methods are for Buttons click events in Dialog Box opened.
+        private async void docKitDialogSave(object sender, RoutedEventArgs e)
+        {
+            if (docKitDName.Text.Equals("") || docKitDSymptoms.Text.Equals("") || docKitDDescription.Text.Equals("") || docKitDImage.Text.Equals(""))
+            {
+                docKitErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                if (decodedImage != null)
+                {
+                    if (isUpdating == true)
+                    {
+                        //Find that object's instance and change its values
+                        ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+                        BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                        tempDisease.Name = docKitDName.Text;
+                        tempDisease.Description = docKitDDescription.Text;
+                        tempDisease.Image = decodedImage;
+                        tempDisease.Symptoms = docKitDSymptoms.Text;
+
+                        await diseaseMethods.UpdateDisease(tempDisease);
+                        isUpdating = false;
+                        docKitDName.IsReadOnly = false;
+                        this.UpdateDiseaseData(tempDisease);
+                    }
+                    else
+                    {
+
+                        await diseaseMethods.InsertDisease(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = docKitDSymptoms.Text, Image = decodedImage });
+                    }
+                    //After everything is stored/Updated in database we need to reset all the fields.
+                    docKitDialog.IsOpen = false;
+                    docKitDName.Text = "";
+                    docKitDDescription.Text = "";
+                    docKitDSymptoms.Text = "";
+                    docKitDImage.Text = "";
+                    decodedImage = null;
+
+                    this.UpdateListBox();
+                }
+            }
         }
 
         private void docKitDialogCancel(object sender, RoutedEventArgs e)
@@ -207,8 +282,20 @@ namespace Health_Organizer
             var file = await picker.PickSingleFileAsync();
 
             decodedImage = await ImageMethods.ConvertStorageFileToBase64String(file);
-            Debug.WriteLine(decodedImage);
+            //Debug.WriteLine(decodedImage);
             docKitDImage.Text = file.Name;
         }
+
+//////////////////////This method is for the click event in the List Box.
+        private async void docKitListItemSelected(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count <= 0)
+                return;
+            
+            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+            BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+            //Debug.WriteLine(tempDisease.Symptoms.Split(',').Count());
+            this.UpdateDiseaseData(tempDisease);     
+        }       
     }
 }
