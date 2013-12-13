@@ -28,7 +28,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="490"/>
+            <ColumnDefinition Width="480"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Background="#00A2E8"/>        
@@ -91,12 +91,12 @@
 
             <TextBlock Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="116,0,94,71"/>
-            <AppBarButton Name="docKitSearchBut" HorizontalAlignment="Right" Icon="Find" Click="docKitSearchClick" VerticalAlignment="Center"/>
+            
             <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="400" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="485" SelectionChanged="docKitListItemSelected" Padding="0,0,0,0" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" />
+            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="480" SelectionChanged="docKitListItemSelected" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsScrollInertiaEnabled="True" />
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -110,8 +110,9 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <SearchBox VerticalAlignment="Center" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Right" Grid.ColumnSpan="2" QueryChanged="docKitSearchBoxQueryChnaged" />
-                <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Grid.ColumnSpan="2" Margin="100,0,0,0"/>
+                <SearchBox VerticalAlignment="Top" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Left" QueryChanged="docKitSearchBoxQueryChnaged" Margin="40,45,0,0"/>
+                <AppBarButton Name="docKitSearchBut" HorizontalAlignment="Center" Icon="Find" Click="docKitSearchClick" VerticalAlignment="Center" Label="Search" Grid.Column="2" Margin="-300,0,0,0"/>
+                <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Margin="100,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
             <TextBlock Name="docKitName" Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40"></TextBlock>
