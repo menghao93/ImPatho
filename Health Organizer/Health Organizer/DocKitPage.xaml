@@ -96,7 +96,7 @@
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-           <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500" SelectionChanged="docKitListItemSelected" Padding="0,0,0,0"  />
+            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="485" SelectionChanged="docKitListItemSelected" Padding="0,0,0,0" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" />
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
