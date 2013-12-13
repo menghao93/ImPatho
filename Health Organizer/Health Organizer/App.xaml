@@ -31,6 +31,13 @@
                         <Setter Property="TextAlignment" Value="Center"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                     </Style>
+                    <Style x:Key="TextBoxDocKitForm" TargetType="TextBox">
+                        <Setter Property="SelectionHighlightColor" Value="#00A2E8"/>
+                        <Setter Property="IsSpellCheckEnabled" Value="True"/>
+                        <Setter Property="Margin" Value="0,5,0,5"/>
+                        <Setter Property="Width" Value="400"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <ResourceDictionary.MergedDictionaries>

@@ -44,9 +44,9 @@
                                 Title="Add Common Disease" 
                                 Background="#0064A0" >
                 <StackPanel>
-                    <TextBox Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
-                    <TextBox Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5,0,5"/>
-                    <TextBox Name="docKitDSymptoms" Header="Symptoms" PlaceholderText="Eg. Burning Sensation, Headache" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" />
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." Height="200" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDSymptoms" Header="Symptoms (separated by comma) " PlaceholderText="Eg. Burning Sensation, Headache" />
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
                         <TextBox Name="docKitDImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
@@ -59,14 +59,14 @@
                 </StackPanel>
             </callisto:CustomDialog>
 
-            <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR COMMON DISEASES-->
+            <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR FIRST AID-->
             <callisto:CustomDialog Name="docKitDialogFirstAid" 
                                 Title="Add common First Aid" 
                                 Background="#0064A0" >
                 <StackPanel>
-                    <TextBox Name="docKitFAName" Header="Situation" PlaceholderText="Describe in a word or two. Eg. Burning" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5"/>
-                    <TextBox Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." HorizontalAlignment="Stretch" Height="200" Width="400" IsSpellCheckEnabled="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5,0,5"/>
-                    <TextBox Name="docKitFASymptoms" Header="Do Not" PlaceholderText="Eg. Donot Move Patient, Donot rub Ice" HorizontalAlignment="Stretch" Width="400" IsSpellCheckEnabled="True" Margin="0,5,0,5" AcceptsReturn="True" Height="150"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFAName" Header="Situation" PlaceholderText="Describe in a word or two. Eg. Burning" />
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." Height="200" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFASymptoms" Header="Do Not" PlaceholderText="Eg. Donot Move Patient, Donot rub Ice" HorizontalAlignment="Stretch" AcceptsReturn="True" Height="150"/>
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Name="docKitFABrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
                         <TextBox Name="docKitFAImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
@@ -93,7 +93,7 @@
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500" SelectionChanged="docKitListItemSelected" Padding="0,0,0,0"/>
+            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="500" SelectionChanged="docKitListItemSelected" ScrollViewer.VerticalScrollBarVisibility="Hidden" Padding="0,0,0,0"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
