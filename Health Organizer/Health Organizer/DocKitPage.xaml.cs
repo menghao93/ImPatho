@@ -20,6 +20,7 @@ using Health_Organizer.DML_Method_Classes;
 using System.Threading.Tasks;
 using SQLite;
 using Windows.UI.Popups;
+using System.Collections.ObjectModel;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -36,8 +37,10 @@ namespace Health_Organizer
         private bool isUpdating = false, isDiseaseSelected = true;
         private string decodedImage = null;
         private NavigationHelper navigationHelper;
+        private ObservableCollection<string> ocStrings, ocSearchList;
+        private List<string> searchList;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        
+
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -60,10 +63,17 @@ namespace Health_Organizer
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
+
+            //Registering the Methods to be triggered for state change
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            //Registering the Methods to be triggered for state change in Collections of ListBox
+            this.ocStrings = new ObservableCollection<string>();
+            this.ocStrings.CollectionChanged += ocStrings_CollectionChanged;
+            docKitListBox.ItemsSource = this.ocStrings;
         }
-        
+
         /// <summary>
         /// Populates the page with content passed during navigation. Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -107,21 +117,32 @@ namespace Health_Organizer
             firstAidMethods = new FirstAidTable(connect);
         }
 
-        private void docKitSearchBut(object sender, RoutedEventArgs e)
+        void ocStrings_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        private void docKitSearchClick(object sender, RoutedEventArgs e)
         {
             if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
             {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                this.searchList = this.ocStrings.ToList();
+                this.ocSearchList = new ObservableCollection<string>(this.searchList);
+                docKitListBox.ItemsSource = this.ocSearchList;
             }
             else
             {
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                docKitListBox.ItemsSource = this.ocStrings;
             }
         }
 
         private void docKitComboBox(object sender, SelectionChangedEventArgs e)
         {
-            if (docKitCombo.SelectedIndex == 0){
+            this.ocStrings.Clear();
+            if (docKitCombo.SelectedIndex == 0)
+            {
                 pageTitle.Text = "Disease List";
                 docKitScrollerFirstAid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 docKitScrollerDisease.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -138,14 +159,14 @@ namespace Health_Organizer
             }
         }
 
-/////////////////////This methods are for Buttons in CommandBar at the bottom
+        /////////////////////This methods are for Buttons in CommandBar at the bottom
         private void docKitAddItem(object sender, RoutedEventArgs e)
         {
             if (isDiseaseSelected)
             {
                 docKitDialog.IsOpen = true;
             }
-            else 
+            else
             {
                 docKitDialogFirstAid.IsOpen = true;
             }
@@ -156,14 +177,13 @@ namespace Health_Organizer
         {
             docKitCmdbar.IsOpen = false;
 
-            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
-            if (xItem != null)
+            if (docKitListBox.SelectedItem != null)
             {
                 //Load all the values from the DB. Assertion: Value exist in DB since loaded from list.Also set PK to ReadOnly.
                 if (isDiseaseSelected)
                 {
                     docKitDialog.IsOpen = true;
-                    BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                    BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                     docKitDName.Text = tempDisease.Name;
                     docKitDDescription.Text = tempDisease.Description;
                     docKitDSymptoms.Text = tempDisease.Symptoms;
@@ -172,10 +192,10 @@ namespace Health_Organizer
                     isUpdating = true;
                     docKitDName.IsReadOnly = true;
                 }
-                else 
+                else
                 {
                     docKitDialogFirstAid.IsOpen = true;
-                    BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(xItem.Content.ToString());
+                    BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                     docKitFAName.Text = tempFirstAid.Name;
                     docKitFADescription.Text = tempFirstAid.FirstAid;
                     docKitFASymptoms.Text = tempFirstAid.DoNot;
@@ -192,11 +212,11 @@ namespace Health_Organizer
             docKitCmdbar.IsOpen = false;
 
             //Find the instance of the item which is selected from the DB, then delete it using that instance.
-            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
-            if (xItem != null)
+            //ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+            if (docKitListBox.SelectedItem != null)
             {
                 var messageDialog = new MessageDialog("Are you sure you want to delete details for this disease?", "Confirmation");
-                messageDialog.Commands.Add(new  Windows.UI.Popups.UICommand("Yes",null));
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
                 var dialogResult = await messageDialog.ShowAsync();
 
@@ -204,65 +224,70 @@ namespace Health_Organizer
                 {
                     if (isDiseaseSelected)
                     {
-                        BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
+                        BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                         await diseaseMethods.DeleteDisease(tempDisease);
-                        this.UpdateDiseaseListBox();
+                        //this.UpdateDiseaseListBox();
                     }
-                    else 
+                    else
                     {
-                        BasicFirstAid tempDisease = await firstAidMethods.FindSingleFirstAid(xItem.Content.ToString());
+                        BasicFirstAid tempDisease = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                         await firstAidMethods.DeleteFirstAid(tempDisease);
-                        this.UpdateFirstAidListBox();
+                        //this.UpdateFirstAidListBox();
                     }
+                    this.ocStrings.RemoveAt(docKitListBox.SelectedIndex);
+                    if (this.ocStrings.Count() > 0)
+                        docKitListBox.SelectedIndex = 0;
                 }
             }
         }
 
-////////////////////////This methods are for Updating the View after changes in FB
+        ////////////////////////This methods are for Updating the View after changes in FB
         private async void UpdateDiseaseListBox()
         {
             docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitProgress.IsActive = true;
 
             List<BasicDiseases> result = await diseaseMethods.SelectAllDisease();
-                
+
             //This is used to sort the list on the basis of Name value pairs. Also note first we need to clear previous list.
             result.Sort(delegate(BasicDiseases c1, BasicDiseases c2)
             {
                 return c1.Name.CompareTo(c2.Name);
             });
-            docKitListBox.Items.Clear();
 
             //Load the Resource Style from themed dictionary for listboxItems
             ResourceDictionary rd = Application.Current.Resources.ThemeDictionaries["Default"] as ResourceDictionary;
 
-            foreach(var i in result)
+            foreach (var i in result)
             {
                 //Load A New Item Programatically every time set its style to one required and then display it.
-                ListBoxItem xItem = new ListBoxItem();
-                xItem.Content = i.Name;
-                xItem.Style = rd["ListBoxItemStyle"] as Style;
-                docKitListBox.Items.Add(xItem);
+                //ListBoxItem xItem = new ListBoxItem();
+                ///xItem.Content = i.Name;
+                //xItem.Style = rd["ListBoxItemStyle"] as Style;
+                //docKitListBox.Items.Add(xItem);
+                this.ocStrings.Add(i.Name);
             }
 
             //Disable Edit/Delete Buttons if there are no items in the List.
-            if (result.Count() > 0)
+            if (this.ocStrings.Count() > 0)
             {
-                if (docKitListBox.SelectedIndex == -1)
-                {
+                //if (docKitListBox.SelectedIndex == -1)
+                //{
+                //    docKitListBox.SelectedIndex = 0;
+                //}
+                if (docKitListBox.SelectedItem == null)
                     docKitListBox.SelectedIndex = 0;
-                }
 
                 this.showDiseaseItems();
-                docKitDelBut.IsEnabled = true;
-                docKitEditBut.IsEnabled = true;
+                //docKitDelBut.IsEnabled = true;
+                //docKitEditBut.IsEnabled = true;
             }
-            else 
+            else
             {
                 this.hideDiseaseItems();
-                 docKitDelBut.IsEnabled = false;
-                docKitEditBut.IsEnabled = false;
-            }        
+                //docKitDelBut.IsEnabled = false;
+                //docKitEditBut.IsEnabled = false;
+            }
 
             docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitProgress.IsActive = false;
@@ -280,32 +305,31 @@ namespace Health_Organizer
                 return c1.Name.CompareTo(c2.Name);
             });
 
-            docKitListBox.Items.Clear();
+            //docKitListBox.Items.Clear();
             ResourceDictionary rd = Application.Current.Resources.ThemeDictionaries["Default"] as ResourceDictionary;
 
             foreach (var i in result)
             {
-                ListBoxItem xItem = new ListBoxItem();
-                xItem.Content = i.Name;
-                xItem.Style = rd["ListBoxItemStyle"] as Style;
-                docKitListBox.Items.Add(xItem);
+                //ListBoxItem xItem = new ListBoxItem();
+                //xItem.Content = i.Name;
+                //xItem.Style = rd["ListBoxItemStyle"] as Style;
+                //docKitListBox.Items.Add(xItem);
+                this.ocStrings.Add(i.Name);
             }
 
             if (result.Count() > 0)
             {
-                if (docKitListBox.SelectedIndex == -1) 
-                {
+                if (docKitListBox.SelectedItem == null)
                     docKitListBox.SelectedIndex = 0;
-                }
                 this.showFirstAidItems();
-                docKitDelBut.IsEnabled = true;
-                docKitEditBut.IsEnabled = true;
+                //docKitDelBut.IsEnabled = true;
+                //docKitEditBut.IsEnabled = true;
             }
             else
             {
                 this.hideFirstAidItems();
-                docKitDelBut.IsEnabled = false;
-                docKitEditBut.IsEnabled = false;
+                //docKitDelBut.IsEnabled = false;
+                //docKitEditBut.IsEnabled = false;
             }
 
             docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -352,7 +376,7 @@ namespace Health_Organizer
             docKitFirstAidS.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-///////////////////This are the methods used to update the display immideately after updating
+        ///////////////////This are the methods used to update the display immideately after updating
         private async void UpdateDiseaseData(BasicDiseases tempDisease)
         {
             docKitName.Text = tempDisease.Name;
@@ -381,10 +405,10 @@ namespace Health_Organizer
             docKitFirstAidSymptoms.Text = tempFirstAidString;
         }
 
-//////////////////////This methods are for Buttons click events in Dialog Box opened.
+        //////////////////////This methods are for Buttons click events in Dialog Box opened.
         private async void docKitDialogSave(object sender, RoutedEventArgs e)
         {
-            if(isDiseaseSelected)
+            if (isDiseaseSelected)
             {
                 if (docKitDName.Text.Equals("") || docKitDSymptoms.Text.Equals("") || docKitDDescription.Text.Equals("") || docKitDImage.Text.Equals(""))
                 {
@@ -397,38 +421,36 @@ namespace Health_Organizer
                         if (isUpdating == true)
                         {
                             //Find that object's instance and change its values
-                            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
-                            BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
-                            tempDisease.Name = docKitDName.Text;
-                            tempDisease.Description = docKitDDescription.Text;
-                            tempDisease.Image = decodedImage;
-                            tempDisease.Symptoms = docKitDSymptoms.Text;
+                            if (docKitListBox.SelectedItem != null)
+                            {
+                                BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
 
-                            await diseaseMethods.UpdateDisease(tempDisease);
-                            isUpdating = false;
-                            docKitDName.IsReadOnly = false;
-                            this.UpdateDiseaseData(tempDisease);
+                                tempDisease.Name = docKitDName.Text;
+                                tempDisease.Description = docKitDDescription.Text;
+                                tempDisease.Image = decodedImage;
+                                tempDisease.Symptoms = docKitDSymptoms.Text;
+
+                                await diseaseMethods.UpdateDisease(tempDisease);
+                                isUpdating = false;
+                                docKitDName.IsReadOnly = false;
+                                this.UpdateDiseaseData(tempDisease);
+                            }
                         }
                         else
                         {
                             await diseaseMethods.InsertDisease(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = docKitDSymptoms.Text, Image = decodedImage });
+                            this.ocStrings.Add(docKitDName.Text);
+                            docKitListBox.SelectedIndex = this.ocStrings.IndexOf(docKitDName.Text);
+                            if (ocStrings.Count() == 1)
+                            {
+                                this.showDiseaseItems();
+                                this.UpdateDiseaseData(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = docKitDSymptoms.Text, Image = decodedImage });
+                            }
                         }
-
-                        this.UpdateDiseaseListBox();
-                        ////Find the Item in the List
-                        //for (int i = 0; i < docKitListBox.Items.Count(); i++)
-                        //{
-                        //    ListBoxItem xItem = docKitListBox.Items[i] as ListBoxItem;
-                        //    if (xItem.Content.Equals(docKitDName.Text))
-                        //    {
-                        //        //docKitListBox.SelectedIndex = i;
-                        //        docKitListBox.SelectedItem = xItem;
-                        //    }
-                        //}
-                  }
+                    }
                 }
             }
-            else 
+            else
             {
                 if (docKitFAName.Text.Equals("") || docKitFASymptoms.Text.Equals("") || docKitFADescription.Text.Equals("") || docKitFAImage.Text.Equals(""))
                 {
@@ -438,25 +460,34 @@ namespace Health_Organizer
                 {
                     if (isUpdating == true)
                     {
-                        //Find that object's instance and change its values
-                        ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
-                        BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(xItem.Content.ToString());
-                        tempFirstAid.Name = docKitFAName.Text;
-                        tempFirstAid.FirstAid = docKitFADescription.Text;
-                        tempFirstAid.Image = decodedImage;
-                        tempFirstAid.DoNot = docKitFASymptoms.Text;
+                        if (docKitListBox.SelectedItem != null)
+                        {
+                            //Find that object's instance and change its values
+                            BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                            tempFirstAid.Name = docKitFAName.Text;
+                            tempFirstAid.FirstAid = docKitFADescription.Text;
+                            tempFirstAid.Image = decodedImage;
+                            tempFirstAid.DoNot = docKitFASymptoms.Text;
 
-                        await firstAidMethods.UpdateFirstAid(tempFirstAid);
-                        isUpdating = false;
-                        docKitFAName.IsReadOnly = false;
-                        this.UpdateFirstAidData(tempFirstAid);
+                            await firstAidMethods.UpdateFirstAid(tempFirstAid);
+                            isUpdating = false;
+                            docKitFAName.IsReadOnly = false;
+                            this.UpdateFirstAidData(tempFirstAid);
+                        }
                     }
                     else
                     {
 
                         await firstAidMethods.InsertFirstAid(new BasicFirstAid() { Name = docKitFAName.Text, FirstAid = docKitFADescription.Text, DoNot = docKitFASymptoms.Text, Image = decodedImage });
+                        this.ocStrings.Add(docKitFAName.Text);
+                        docKitListBox.SelectedIndex = this.ocStrings.IndexOf(docKitFAName.Text);
+                        if (ocStrings.Count() == 1)
+                        {
+                            this.showFirstAidItems();
+                            this.UpdateFirstAidData(new BasicFirstAid() { Name = docKitFAName.Text, FirstAid = docKitFADescription.Text, DoNot = docKitFASymptoms.Text, Image = decodedImage });
+                        }
                     }
-                    this.UpdateFirstAidListBox();
+                    //this.UpdateFirstAidListBox();
                 }
             }
             //After everything is stored/Updated in database we need to reset all the fields.
@@ -469,7 +500,7 @@ namespace Health_Organizer
             {
                 docKitErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
-            else 
+            else
             {
                 docKitFAErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
@@ -484,34 +515,36 @@ namespace Health_Organizer
             var file = await picker.PickSingleFileAsync();
 
             decodedImage = await ImageMethods.ConvertStorageFileToBase64String(file);
-            if(isDiseaseSelected)
+            if (isDiseaseSelected)
                 docKitDImage.Text = file.Name;
             else
                 docKitFAImage.Text = file.Name;
         }
 
-//////////////////////////This method is for the click event in the List Box.
+        //////////////////////////This method is for the click event in the List Box.
         private async void docKitListItemSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count <= 0)
-               return;
-            
-            ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
-            
-            //Check whether diseases or firstaid and then display selected Item's details
-            if (isDiseaseSelected)
+                return;
+
+            //ListBoxItem xItem = docKitListBox.SelectedItem as ListBoxItem;
+            if (docKitListBox.SelectedItem != null)
             {
-                BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(xItem.Content.ToString());
-                this.UpdateDiseaseData(tempDisease);     
-            }
-            else 
-            {
-                BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(xItem.Content.ToString());
-                this.UpdateFirstAidData(tempFirstAid);     
+                //Check whether diseases or firstaid and then display selected Item's details
+                if (isDiseaseSelected)
+                {
+                    BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                    this.UpdateDiseaseData(tempDisease);
+                }
+                else
+                {
+                    BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                    this.UpdateFirstAidData(tempFirstAid);
+                }
             }
         }
-       
-/////////////////////////This is used to clear all the Dialog Fields
+
+        /////////////////////////This is used to clear all the Dialog Fields
         private void ClearFormFields()
         {
             if (docKitDialog.IsOpen == true)
@@ -522,7 +555,7 @@ namespace Health_Organizer
             docKitDImage.Text = "";
             docKitDName.IsReadOnly = false;
 
-            if(docKitDialogFirstAid.IsOpen == true)
+            if (docKitDialogFirstAid.IsOpen == true)
                 docKitDialogFirstAid.IsOpen = false;
             docKitFAName.Text = "";
             docKitFADescription.Text = "";
@@ -530,6 +563,22 @@ namespace Health_Organizer
             docKitFAImage.Text = "";
             decodedImage = null;
             docKitFAName.IsReadOnly = false;
+        }
+
+        private void docKitSearchBoxQueryChnaged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
+        {
+            if (this.ocStrings.Count() < 0)
+                return;
+
+            this.searchList = this.ocStrings.Where(x => x.ToLower().Contains(args.QueryText.ToLower())).ToList();
+            if(ocSearchList.Count() > 0)
+                this.ocSearchList.Clear();
+            //this.ocSearchList.Add(this.searchList);
+            foreach (string i in searchList)
+            {
+                Debug.WriteLine(i);
+                this.ocSearchList.Add(i);
+            }
         }
     }
 }
