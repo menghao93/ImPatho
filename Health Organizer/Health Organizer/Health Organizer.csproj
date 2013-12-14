@@ -113,6 +113,9 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="CreateProfileForm.xaml.cs">
+      <DependentUpon>CreateProfileForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data Model Classes\BasicDiseases.cs" />
     <Compile Include="Data Model Classes\BasicFirstAid.cs" />
     <Compile Include="Database Connet Classes\DBConnect.cs" />
@@ -145,7 +148,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Health Organizer_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <PRIResource Include="Resources.resw" />
   </ItemGroup>
@@ -155,6 +157,7 @@
     <Content Include="Assets\Blood_Test.png" />
     <Content Include="Assets\Chickenpox.jpg" />
     <Content Include="Assets\Cholera.jpg" />
+    <Content Include="Assets\DefaultProfilePic.jpg" />
     <Content Include="Assets\Dengue_Fever.jpg" />
     <Content Include="Assets\Diabetes.jpeg" />
     <Content Include="Assets\Diabetes_Type_1.jpeg" />
@@ -194,6 +197,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AnalysisPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateProfileForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
