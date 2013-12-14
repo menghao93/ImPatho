@@ -9,7 +9,7 @@ using Health_Organizer.Database_Connet_Classes;
 
 namespace Health_Organizer.DML_Method_Classes
 {
-    class DiseasesTable : InterfaceDiseasesTable
+    class DiseasesTable
     {
         SQLiteAsyncConnection conn;
 
