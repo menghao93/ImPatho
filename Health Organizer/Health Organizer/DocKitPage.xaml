@@ -13,6 +13,66 @@
 
     <Page.Resources>
         <x:String x:Key="docKitTitle">Disease List</x:String>
+        <Storyboard x:Name="searchBoxInAnimation">
+
+            <DoubleAnimationUsingKeyFrames Duration="0:0:10"
+             Storyboard.TargetProperty="(Canvas.Left)"
+             Storyboard.TargetName="docKitSearchBox">
+
+                <!-- This keyframe animates the ellipse up to the crest 
+                     where it slows down and stops. -->
+            <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.5">
+                <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+
+            <!-- This keyframe animates the ellipse back down and makes
+                     it bounce. -->
+           
+        </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="searchBoxOutAnimation">
+            <DoubleAnimation Duration="0:0:0.15"
+             Storyboard.TargetProperty="(Opacity)"
+             Storyboard.TargetName="docKitSearchBox"
+             Completed="OutAnimationCompleted" From="1" To="0">
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="TitleTextBlockAnimation">
+
+           
+                <DoubleAnimation Storyboard.TargetName="textTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="200"
+                                Duration="0:0:0.5" To="0" >
+                    <DoubleAnimation.EasingFunction>
+                        <ExponentialEase EasingMode="EaseOut" />
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+
+        
+        </Storyboard>
+        <Storyboard x:Name="DiseaseGridAnimation">
+            <DoubleAnimation Storyboard.TargetName="gridTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="200"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="FirstAidGridAnimation">
+            <DoubleAnimation Storyboard.TargetName="gridTransFA" 
+                                Storyboard.TargetProperty="X"
+                                From="200"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
 
     <!--
@@ -110,22 +170,32 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <SearchBox VerticalAlignment="Top" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Left" QueryChanged="docKitSearchBoxQueryChnaged" Margin="40,45,0,0"/>
+                <Canvas Width="500" Height="100" Grid.Row="0">
+                    <SearchBox Canvas.Top="20" Canvas.Left="100" VerticalAlignment="Center" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Right" Grid.ColumnSpan="2" QueryChanged="docKitSearchBoxQueryChnaged" />
+                </Canvas>
                 <AppBarButton Name="docKitSearchBut" HorizontalAlignment="Center" Icon="Find" Click="docKitSearchClick" VerticalAlignment="Center" Label="Search" Grid.Column="2" Margin="-300,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Margin="100,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
-            <TextBlock Name="docKitName" Grid.Row="1" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40"></TextBlock>
-
+             <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
+            <TextBlock.RenderTransform>
+                <TranslateTransform x:Name="textTrans"></TranslateTransform>
+            </TextBlock.RenderTransform>
+            </TextBlock>
             <!-- This is the Grid for Disease and their Description and Symptoms -->
-            <ScrollViewer Name="docKitScrollerDisease" Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
+            
+            <ScrollViewer Grid.Row="2" Name="docKitScrollerDisease"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" Height="538" >
+               
                 <Grid>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="gridTrans"></TranslateTransform>
+                    </Grid.RenderTransform>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="500"/>
                         <ColumnDefinition Width="620"/>
                         <ColumnDefinition Width="700"/>
                     </Grid.ColumnDefinitions>
-                    <Image Name="docKitImage" Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
+                    <Image Name="docKitImage" Height="500" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Name="docKitD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
                         <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
@@ -135,15 +205,18 @@
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
                         <TextBlock Name="docKitS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
                         <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
-                            <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight"/>
+                            <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
-
+           
             <!-- This is the Grid for FirstAid Steps and Donot's -->
             <ScrollViewer Name="docKitScrollerFirstAid" Visibility="Collapsed" Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
                 <Grid>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="gridTransFA"></TranslateTransform>
+                    </Grid.RenderTransform>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="500"/>
                         <ColumnDefinition Width="620"/>
@@ -159,7 +232,7 @@
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
                         <TextBlock Name="docKitFirstAidS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Do Not"/>
                         <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
-                            <TextBlock Name="docKitFirstAidSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight"/>
+                            <TextBlock Name="docKitFirstAidSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </StackPanel>
                 </Grid>

@@ -121,18 +121,26 @@ namespace Health_Organizer
         {
             if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
             {
+                searchBoxOutAnimation.Stop();
+                Canvas.SetLeft(docKitSearchBox, 100);
                 docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                searchBoxInAnimation.Begin();
                 this.searchList = this.ocStrings.ToList();
                 this.ocSearchList = new ObservableCollection<string>(this.searchList);
                 docKitListBox.ItemsSource = this.ocSearchList;
             }
             else
             {
-                docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                Canvas.SetLeft(docKitSearchBox, 30);
+                searchBoxInAnimation.Stop();
+                searchBoxOutAnimation.Begin();
                 docKitListBox.ItemsSource = this.ocStrings;
             }
         }
-
+        private void OutAnimationCompleted(object sender, object e)
+        {
+            docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
         private void docKitComboBox(object sender, SelectionChangedEventArgs e)
         {
             this.ocStrings.Clear();
@@ -262,7 +270,7 @@ namespace Health_Organizer
             //Disable Edit/Delete Buttons if there are no items in the List.
             if (this.ocStrings.Count() > 0)
             {
-               if (docKitListBox.SelectedItem == null)
+                if (docKitListBox.SelectedItem == null)
                     docKitListBox.SelectedIndex = 0;
 
                 this.showDiseaseItems();
@@ -292,7 +300,7 @@ namespace Health_Organizer
 
             foreach (var i in result)
             {
-               this.ocStrings.Add(i.Name);
+                this.ocStrings.Add(i.Name);
             }
 
             if (result.Count() > 0)
@@ -497,21 +505,29 @@ namespace Health_Organizer
         //////////////////////////This method is for the click event in the List Box.
         private async void docKitListItemSelected(object sender, SelectionChangedEventArgs e)
         {
+            TitleTextBlockAnimation.Stop();
+            DiseaseGridAnimation.Stop();
+            FirstAidGridAnimation.Stop();
             if (e.AddedItems.Count <= 0)
                 return;
 
-           if (docKitListBox.SelectedItem != null)
+            if (docKitListBox.SelectedItem != null)
             {
                 //Check whether diseases or firstaid and then display selected Item's details
                 if (isDiseaseSelected)
                 {
                     BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                     this.UpdateDiseaseData(tempDisease);
+                    TitleTextBlockAnimation.Begin();
+                    DiseaseGridAnimation.Begin();
+
                 }
                 else
                 {
                     BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
                     this.UpdateFirstAidData(tempFirstAid);
+                    TitleTextBlockAnimation.Begin();
+                    FirstAidGridAnimation.Begin();
                 }
             }
         }
@@ -543,7 +559,7 @@ namespace Health_Organizer
                 return;
 
             this.searchList = this.ocStrings.Where(x => x.ToLower().Contains(args.QueryText.ToLower())).ToList();
-            if(ocSearchList.Count() > 0)
+            if (ocSearchList.Count() > 0)
                 this.ocSearchList.Clear();
             foreach (string i in searchList)
             {
@@ -551,5 +567,12 @@ namespace Health_Organizer
                 this.ocSearchList.Add(i);
             }
         }
+
+        //private void stopAnimation(object sender, object e)
+        //{
+        //    myStoryboard3.Stop();
+        //}
+
+
     }
 }
