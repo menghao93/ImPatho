@@ -507,6 +507,7 @@ namespace Health_Organizer
                     this.UpdateDiseaseData(tempDisease);
                     TitleTextBlockAnimation.Begin();
                     DiseaseGridAnimation.Begin();
+                    docKitScrollerDisease.ChangeView(0, 0, 1);
                 }
                 else
                 {
@@ -520,7 +521,7 @@ namespace Health_Organizer
                        tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
 
                     }
-                    
+                    docKitScrollerFirstAid.ChangeView(0, 0, 1);
                     this.UpdateFirstAidData(tempFirstAid);
                     TitleTextBlockAnimation.Begin();
                     FirstAidGridAnimation.Begin();

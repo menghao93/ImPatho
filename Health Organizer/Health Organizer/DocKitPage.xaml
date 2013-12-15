@@ -84,7 +84,7 @@
     <Grid Background="Black">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <ContentThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.ColumnDefinitions>
