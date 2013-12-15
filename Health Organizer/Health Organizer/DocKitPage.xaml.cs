@@ -29,7 +29,7 @@ namespace Health_Organizer
         DiseasesTable diseaseMethods;
         FirstAidTable firstAidMethods;
         DBConnect connect;
-        private bool isUpdating = false, isDiseaseSelected = true;
+        private bool isUpdating = false, isDiseaseSelected = true,isSearching=false;
         private string decodedImage = null;
         private NavigationHelper navigationHelper;
         private ObservableCollection<string> ocStrings, ocSearchList;
@@ -109,13 +109,19 @@ namespace Health_Organizer
                 docKitListBox.ItemsSource = this.ocStrings;
             }
         }
-        private void OutAnimationCompleted(object sender, object e)
-        {
-            docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-        }
+
         private void docKitComboBox(object sender, SelectionChangedEventArgs e)
         {
             this.ocStrings.Clear();
+            if (isSearching == true)
+            {
+                searchBoxOutAnimation.Stop();
+                this.isSearching = false;
+                searchBoxOutAnimation.Begin();
+            }
+            if(docKitListBox.ItemsSource != this.ocStrings)
+                docKitListBox.ItemsSource = this.ocStrings;
+            
             if (docKitCombo.SelectedIndex == 0)
             {
                 pageTitle.Text = "Disease List";
@@ -488,15 +494,33 @@ namespace Health_Organizer
                 //Check whether diseases or firstaid and then display selected Item's details
                 if (isDiseaseSelected)
                 {
-                    BasicDiseases tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                    BasicDiseases tempDisease;
+                    if (isSearching)
+                    {
+                        tempDisease = await diseaseMethods.FindSingleDisease(this.ocSearchList[docKitListBox.SelectedIndex].ToString());
+                    }
+                    else
+                    {
+                        tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                      
+                    }
                     this.UpdateDiseaseData(tempDisease);
                     TitleTextBlockAnimation.Begin();
                     DiseaseGridAnimation.Begin();
-
                 }
                 else
                 {
-                    BasicFirstAid tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                    BasicFirstAid tempFirstAid;
+                    if (isSearching)
+                    {
+                       tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocSearchList[docKitListBox.SelectedIndex].ToString());
+                    }
+                    else
+                    {
+                       tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+
+                    }
+                    
                     this.UpdateFirstAidData(tempFirstAid);
                     TitleTextBlockAnimation.Begin();
                     FirstAidGridAnimation.Begin();
@@ -504,7 +528,7 @@ namespace Health_Organizer
             }
         }
 
-        /////////////////////////This is used to clear all the Dialog Fields
+/////////////////////////This is used to clear all the Dialog Fields
         private void ClearFormFields()
         {
             if (docKitDialog.IsOpen == true)
@@ -525,6 +549,7 @@ namespace Health_Organizer
             docKitFAName.IsReadOnly = false;
         }
 
+///////////////////////This module is used to filter the list box when we enter query in search box.
         private void docKitSearchBoxQueryChnaged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
         {
             if (this.ocStrings.Count() < 0)
@@ -538,13 +563,13 @@ namespace Health_Organizer
                 Debug.WriteLine(i);
                 this.ocSearchList.Add(i);
             }
+            isSearching = true;
         }
 
-        //private void stopAnimation(object sender, object e)
-        //{
-        //    myStoryboard3.Stop();
-        //}
-
-
+/////////////////////This module is used hide elements after animations complete. Used to hiding search box.
+        private void OutAnimationCompleted(object sender, object e)
+        {
+            docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
     }
 }

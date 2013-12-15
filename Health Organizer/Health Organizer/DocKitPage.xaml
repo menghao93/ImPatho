@@ -21,16 +21,16 @@
 
                 <!-- This keyframe animates the ellipse up to the crest 
                      where it slows down and stops. -->
-            <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.5">
-                <EasingDoubleKeyFrame.EasingFunction>
+                <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.5">
+                    <EasingDoubleKeyFrame.EasingFunction>
                         <ExponentialEase/>
                     </EasingDoubleKeyFrame.EasingFunction>
-            </EasingDoubleKeyFrame>
+                </EasingDoubleKeyFrame>
 
-            <!-- This keyframe animates the ellipse back down and makes
+                <!-- This keyframe animates the ellipse back down and makes
                      it bounce. -->
-           
-        </DoubleAnimationUsingKeyFrames>
+
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Name="searchBoxOutAnimation">
             <DoubleAnimation Duration="0:0:0.15"
@@ -41,22 +41,22 @@
         </Storyboard>
         <Storyboard x:Name="TitleTextBlockAnimation">
 
-           
-                <DoubleAnimation Storyboard.TargetName="textTrans" 
-                                Storyboard.TargetProperty="X"
-                                From="200"
-                                Duration="0:0:0.5" To="0" >
-                    <DoubleAnimation.EasingFunction>
-                        <ExponentialEase EasingMode="EaseOut" />
-                    </DoubleAnimation.EasingFunction>
-                </DoubleAnimation>
 
-        
+            <DoubleAnimation Storyboard.TargetName="textTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+
         </Storyboard>
         <Storyboard x:Name="DiseaseGridAnimation">
             <DoubleAnimation Storyboard.TargetName="gridTrans" 
                                 Storyboard.TargetProperty="X"
-                                From="200"
+                                From="100"
                                 Duration="0:0:0.5" To="0" >
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
@@ -66,7 +66,7 @@
         <Storyboard x:Name="FirstAidGridAnimation">
             <DoubleAnimation Storyboard.TargetName="gridTransFA" 
                                 Storyboard.TargetProperty="X"
-                                From="200"
+                                From="100"
                                 Duration="0:0:0.5" To="0" >
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
@@ -80,7 +80,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    
+
     <Grid Background="Black">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -91,7 +91,7 @@
             <ColumnDefinition Width="480"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Background="#00A2E8"/>        
+        <Border Background="#00A2E8"/>
         <Grid>
             <Grid.Resources>
                 <CollectionViewSource x:Name="docKitDiseaseFirstAidListData"/>
@@ -101,7 +101,7 @@
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR COMMON DISEASES-->
             <callisto:CustomDialog Name="docKitDialog" 
                                 Title="Add Common Disease" 
@@ -141,7 +141,7 @@
                     </StackPanel>
                 </StackPanel>
             </callisto:CustomDialog>
-            
+
             <Button x:Name="backButton" Margin="31,38,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
@@ -151,7 +151,7 @@
 
             <TextBlock Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="116,0,94,71"/>
-            
+
             <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="400" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
@@ -177,15 +177,15 @@
                 <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Margin="100,0,0,0"/>
                 <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
             </Grid>
-             <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
-            <TextBlock.RenderTransform>
-                <TranslateTransform x:Name="textTrans"></TranslateTransform>
-            </TextBlock.RenderTransform>
+            <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
+                <TextBlock.RenderTransform>
+                    <TranslateTransform x:Name="textTrans"></TranslateTransform>
+                </TextBlock.RenderTransform>
             </TextBlock>
             <!-- This is the Grid for Disease and their Description and Symptoms -->
-            
-            <ScrollViewer Grid.Row="2" Name="docKitScrollerDisease"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" Height="538" >
-               
+
+            <ScrollViewer Grid.Row="2" Name="docKitScrollerDisease"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
+
                 <Grid>
                     <Grid.RenderTransform>
                         <TranslateTransform x:Name="gridTrans"></TranslateTransform>
@@ -210,7 +210,7 @@
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
-           
+
             <!-- This is the Grid for FirstAid Steps and Donot's -->
             <ScrollViewer Name="docKitScrollerFirstAid" Visibility="Collapsed" Grid.Row="2" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.BringIntoViewOnFocusChange="True" ScrollViewer.IsHorizontalRailEnabled="True" ScrollViewer.ZoomMode="Enabled" >
                 <Grid>
@@ -248,7 +248,7 @@
             <AppBarButton Name="docKitEditBut" Label="Remove Disease" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
-    
+
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
