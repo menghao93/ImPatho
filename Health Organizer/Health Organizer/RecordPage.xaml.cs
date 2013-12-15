@@ -112,5 +112,14 @@ namespace Health_Organizer
                 this.Frame.Navigate(typeof(CreateProfileForm));
             }
         }
+
+        private void CreateNewVisit(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                Debug.WriteLine("Okay clicked");
+                this.Frame.Navigate(typeof(CreateNewVisit));
+            }
+        }
     }
 }

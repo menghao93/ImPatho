@@ -21,7 +21,7 @@ namespace Health_Organizer
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class CreateProfileForm : Page
+    public sealed partial class CreateNewVisit : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -45,24 +45,31 @@ namespace Health_Organizer
         }
 
 
-        public CreateProfileForm()
+        public CreateNewVisit()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
+            //Clear all the text field in form before displaying it
+            this.ClearAllFields();
+
             //Adding days and years to combobox in form
             for (int i = 0; i < 31; i++)
             {
-                profileDayComboBox.Items.Add(i + 1);
+                visitDayComboBox.Items.Add(i + 1);
             }
 
-            for (int i = 1900; i <= DateTime.Now.Year; i++)
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
             {
-                profileYearComboBox.Items.Add(i);
+                visitYearComboBox.Items.Add(i);
             }
 
+            //Set current date in form
+            visitDayComboBox.SelectedItem = DateTime.Now.Day;
+            visitMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+            visitYearComboBox.SelectedItem = DateTime.Now.Year;
         }
 
         /// <summary>
@@ -115,24 +122,46 @@ namespace Health_Organizer
 
         #endregion
 
-        private void BrowseImage(object sender, RoutedEventArgs e)
+
+
+        private void ClearAllFields()
         {
+            VisitSymptoms.Text = "";
+            VisitDiseasesDiagnosed.Text = "";
+            VisitMedicineGiven.Text = "";
+            VisitBloodGlucose.Text = "";
+            VisitSystolicBP.Text = "";
+            VisitDiastolicBP.Text = "";
+        }
+
+        private void AddVisitClicked(object sender, RoutedEventArgs e)
+        {
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
+        }
+
+        private void EditVisitClicked(object sender, RoutedEventArgs e)
+        {
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
 
         }
 
-        private void CameraImage(object sender, RoutedEventArgs e)
+        private void DeleteVisitClicked(object sender, RoutedEventArgs e)
         {
-
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
         }
 
-        private void SaveNewProfile(object sender, RoutedEventArgs e)
+        private void VisitSaveClicked(object sender, RoutedEventArgs e)
         {
-
+            VisitFormBar.IsOpen = false;
         }
 
-        private void CancelNewProfile(object sender, RoutedEventArgs e)
+        private void VisitCancelClicked(object sender, RoutedEventArgs e)
         {
-
+            this.ClearAllFields();
+            VisitFormBar.IsOpen = false;
         }
     }
 }

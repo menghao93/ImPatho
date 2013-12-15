@@ -1,0 +1,234 @@
+﻿<Page
+    x:Name="pageRoot"
+    x:Class="Health_Organizer.CreateNewVisit"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Health_Organizer"
+    xmlns:callisto="using:Callisto.Controls"
+    xmlns:common="using:Health_Organizer.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Background="Black">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background="#00A2E8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Back button and page title -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        VerticalAlignment="Top"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/>
+                <TextBlock x:Name="pageTitle" Text="Patient" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,0,50"/>
+            </Grid>
+
+
+        </Grid>
+
+        <Grid Grid.Column="0">
+            
+        </Grid>
+        
+        <!--Black portion of page-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="650"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" />
+                    <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" />
+                </StackPanel>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+                
+            </Grid>
+            
+            <!--Form fields starts from here-->
+            <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Image of person visiting-->
+                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                        <Image Name="VisitPhoto" Height="180" Width="180" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg" />
+                        
+                        <!--General Detail Stackpanel-->
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,50,0,0">
+                            <TextBlock Name="VisitGeneralDetails" Text="General Details" FontSize="25" />
+                            <!--Height Detail-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Name="VisitTitleHeight"  Text="Height: " FontSize="15"/>
+                                <TextBlock Name="VisitTextHeight" FontSize="15" Text="180 cm" Margin="20,0,0,0"/>
+                            </StackPanel>
+                            <!--Weight Detail-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Name="VisitTitleWeight"  Text="Weight: " FontSize="15" />
+                                <TextBlock Name="VisitTextWeight" FontSize="15" Text="72 Kg" Margin="20,0,0,0"/>
+                            </StackPanel>
+                            <!--BMI Detail-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Name="VisitTitleBMI"  Text="BMI: " FontSize="15" />
+                                <TextBlock Name="VisitTextBMI" FontSize="15" Text="19" Margin="20,0,0,0"/>
+                            </StackPanel>
+                            <!--Blood pressure Detail-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Name="VisitTitleBP"  Text="Blood Pressure: " FontSize="15" />
+                                <TextBlock Name="VisitTextBP" FontSize="15" Text="120/70" Margin="20,0,0,0"/>
+                            </StackPanel>
+                            <!--Blood glucose detail-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Name="VisitTitleBG"  Text="Blood Glucose: " FontSize="15" />
+                                <TextBlock Name="VisitTextBG" FontSize="15" Text="180" Margin="20,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+
+                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <TextBlock Name="VisitTitleSymptoms"  Text="Symptoms" FontSize="25"/>
+                        <TextBlock Name="VisitTextSymptoms" FontSize="15" Width="350" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                        <TextBlock Name="VisitTitleDisease"  Text="Diseases" FontSize="25"/>
+                        <TextBlock Name="VisitTextDisease" FontSize="15" Width="250" Height="200" HorizontalAlignment="Left"/>
+                        <TextBlock Name="VisitTitleMedicines"  Text="Medicines" FontSize="25"/>
+                        <TextBlock Name="VisitTextMedicines" FontSize="15" Width="250" Height="200" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+
+        <!--Callisto bar for Visit form-->
+        <callisto:CustomDialog Name="VisitFormBar" 
+                                Title="Add Medical Details" 
+                                Background="#0064A0" >
+            <!--Actual Medical form Starts Here-->
+            <StackPanel Width="500" >
+
+                <TextBlock Text="Date of Visit" FontSize="14"/>
+                <!--Date of visit-->
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                    <ComboBox Name="visitDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
+                    <ComboBox Name="visitMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
+                        <x:String>January</x:String>
+                        <x:String>February</x:String>
+                        <x:String>March</x:String>
+                        <x:String>April</x:String>
+                        <x:String>May</x:String>
+                        <x:String>June</x:String>
+                        <x:String>July</x:String>
+                        <x:String>August</x:String>
+                        <x:String>Septamber</x:String>
+                        <x:String>October</x:String>
+                        <x:String>November</x:String>
+                        <x:String>December</x:String>
+                    </ComboBox>
+                    <ComboBox Name="visitYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
+                </StackPanel>
+
+                <!--Symptoms textbox-->
+                <TextBox Name="VisitSymptoms" Height="100" Header="Symptoms" Margin="0,10,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Fever, Headache, Vomiting..."/>
+
+                <!--Diseases diagonsed textbox-->
+                <TextBox Name="VisitDiseasesDiagnosed" Header="Diseases Diagnosed" Margin="0,10,30,0" PlaceholderText="Eg. Diarrhea"/>
+
+                <!--Medicine prescribed textbox-->
+                <TextBox Name="VisitMedicineGiven" Height="90" Header="Medicines Prescribed" Margin="0,10,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Acidophilus"/>
+
+                <!--Height and weight textbox-->
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="0,10,30,0">
+                        <ComboBox Name="VisitHeightFeet" Header="Height" Margin="0,3,0,0" PlaceholderText="Feet">
+                            <x:String>1'</x:String>
+                            <x:String>2'</x:String>
+                            <x:String>3'</x:String>
+                            <x:String>4'</x:String>
+                            <x:String>5'</x:String>
+                            <x:String>6'</x:String>
+                            <x:String>7'</x:String>
+                        </ComboBox>
+                        <ComboBox Name="VisitHeightInch" Margin="10,28,0,0" PlaceholderText="Inch">
+                            <x:String>1"</x:String>
+                            <x:String>2"</x:String>
+                            <x:String>3"</x:String>
+                            <x:String>4"</x:String>
+                            <x:String>5"</x:String>
+                            <x:String>6"</x:String>
+                            <x:String>7"</x:String>
+                            <x:String>8"</x:String>
+                            <x:String>9"</x:String>
+                            <x:String>10"</x:String>
+                            <x:String>11"</x:String>
+                        </ComboBox>
+                    </StackPanel>
+                    <TextBox Name="VisitWeight" Header="Weight" Width="100" Height="60" Margin="0,10,30,0" PlaceholderText="Kg" InputScope="Number"/>
+                </StackPanel>
+                
+                <!--Blood Pressure and Blood Glucoze mesurement int textbox-->
+                <StackPanel Orientation="Horizontal" Margin="0,10,30,0">
+                    <TextBox Name="VisitSystolicBP" Header="Systolic BP" Width="100"  Margin="0,0,30,0" InputScope="Number"/>
+                    <TextBox Name="VisitDiastolicBP" Header="Diastolic BP" Width="100" Margin="0,0,30,0" InputScope="Number"/>
+                    <TextBox Name="VisitBloodGlucose" Header="Blood Glucose" Margin="0,0,30,0" InputScope="Number"/>
+                </StackPanel>
+
+                <!--Stackpanel for save and clear button-->
+                <StackPanel Orientation="Horizontal" Margin="0,20,25,0" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <Button Name="VisitSave" Click="VisitSaveClicked" Width="90" Margin="-2,0,0,0">Save</Button>
+                    <Button Name="VisitCancelForm" Click="VisitCancelClicked" Width="90" Margin="10,0,0,0">Cancel</Button>
+                </StackPanel>
+            </StackPanel>
+        </callisto:CustomDialog>
+
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar Name="VisitFormCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
+            <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"></AppBarButton>
+            <AppBarButton Name="EditVisit" Label="Edit Disease" Icon="Edit" Click="EditVisitClicked" HorizontalAlignment="Right"></AppBarButton>
+            <AppBarButton Name="DeleteVisit" Label="Remove Disease" Icon="Cancel" Click="DeleteVisitClicked" HorizontalAlignment="Center"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

@@ -122,7 +122,20 @@
                                 <TextBlock FontSize="15">Birthday</TextBlock>
                                 <StackPanel Orientation="Horizontal" >
                                     <ComboBox Name="profileDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
-                                    <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center"/>
+                                    <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
+                                        <x:String>January</x:String>
+                                        <x:String>February</x:String>
+                                        <x:String>March</x:String>
+                                        <x:String>April</x:String>
+                                        <x:String>May</x:String>
+                                        <x:String>June</x:String>
+                                        <x:String>July</x:String>
+                                        <x:String>August</x:String>
+                                        <x:String>Septamber</x:String>
+                                        <x:String>October</x:String>
+                                        <x:String>November</x:String>
+                                        <x:String>December</x:String>
+                                    </ComboBox>
                                     <ComboBox Name="profileYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
                                 </StackPanel>
                             </StackPanel>
