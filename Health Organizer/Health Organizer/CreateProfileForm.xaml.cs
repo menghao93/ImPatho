@@ -1,7 +1,6 @@
 ﻿using Health_Organizer.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,7 +21,7 @@ namespace Health_Organizer
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class RecordPage : Page
+    public sealed partial class CreateProfileForm : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -46,12 +45,31 @@ namespace Health_Organizer
         }
 
 
-        public RecordPage()
+        public CreateProfileForm()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            //Adding days, months, and years to combobox in form
+            for (int i = 0; i < 31; i++)
+            {
+                profileDayComboBox.Items.Add(i + 1);
+            }
+
+            String[] monthArray = {"January", "February", "March", "April", "May", "June", "July", "August", "Septamber", "October", "November", "December" };
+
+            for (int i = 0; i < 12; i++)
+            {
+                profileMonthComboBox.Items.Add(monthArray[i]);
+            }
+
+            for (int i = 1900; i <= DateTime.Now.Year; i++)
+            {
+                profileYearComboBox.Items.Add(i);
+            }
+
         }
 
         /// <summary>
@@ -104,13 +122,24 @@ namespace Health_Organizer
 
         #endregion
 
-        private void AddNewEntryForm(object sender, RoutedEventArgs e)
+        private void BrowseImage(object sender, RoutedEventArgs e)
         {
-            if (this.Frame != null)
-            {
-                Debug.WriteLine("Okay clicked");
-                this.Frame.Navigate(typeof(CreateProfileForm));
-            }
+
+        }
+
+        private void CameraImage(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveNewProfile(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CancelNewProfile(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
