@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Sqlite-Winrt.3.8.1.1\build\netcore45\Sqlite-Winrt.props" Condition="Exists('..\packages\Sqlite-Winrt.3.8.1.1\build\netcore45\Sqlite-Winrt.props')" />
   <Import Project="..\packages\SyncClient.SQLite.3.8.0.3\build\netcore45\SyncClient.SQLite.props" Condition="Exists('..\packages\SyncClient.SQLite.3.8.0.3\build\netcore45\SyncClient.SQLite.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -120,14 +121,11 @@
     <Compile Include="Data Model Classes\BasicFirstAid.cs" />
     <Compile Include="Database Connet Classes\DBConnect.cs" />
     <Compile Include="Database Connet Classes\ImageMethods.cs" />
-    <Compile Include="Database Connet Classes\InterfaceDBConnect.cs" />
     <Compile Include="DiseaseTestPage.xaml.cs">
       <DependentUpon>DiseaseTestPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DML Method Classes\DiseasesTable.cs" />
     <Compile Include="DML Method Classes\FirstAidTable.cs" />
-    <Compile Include="DML Method Classes\InterfaceDiseasesTable.cs" />
-    <Compile Include="DML Method Classes\InterfaceFirstAidTable.cs" />
     <Compile Include="DocKitPage.xaml.cs">
       <DependentUpon>DocKitPage.xaml</DependentUpon>
     </Compile>
@@ -243,12 +241,16 @@
     <Reference Include="Microsoft.Synchronization.ClientServices.Win8">
       <HintPath>..\packages\SyncClient.SQLite.3.8.0.3\lib\netcore45\Microsoft.Synchronization.ClientServices.Win8.dll</HintPath>
     </Reference>
+    <Reference Include="SQLiteWinRT, Version=255.255.255.255, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sqlite-Winrt.3.8.1.1\lib\netcore45\SQLiteWinRT.winmd</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="..\packages\SyncClient.SQLite.3.8.0.3\build\netcore45\SyncClient.SQLite.targets" Condition="Exists('..\packages\SyncClient.SQLite.3.8.0.3\build\netcore45\SyncClient.SQLite.targets')" />
+  <Import Project="..\packages\Sqlite-Winrt.3.8.1.1\build\netcore45\Sqlite-Winrt.targets" Condition="Exists('..\packages\Sqlite-Winrt.3.8.1.1\build\netcore45\Sqlite-Winrt.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

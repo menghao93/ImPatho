@@ -9,7 +9,7 @@ using Health_Organizer.Data_Model_Classes;
 
 namespace Health_Organizer.DML_Method_Classes
 {
-    class FirstAidTable : InterfaceFirstAidTable
+    class FirstAidTable
     {
          SQLiteAsyncConnection conn;
 
