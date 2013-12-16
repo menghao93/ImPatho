@@ -54,6 +54,7 @@ namespace Health_Organizer
         private async void InitializeComponents()
         {
             //Adding days, months, and years to combobox in form
+
             for (int i = 0; i < 31; i++)
             {
                 profileDayComboBox.Items.Add(i + 1);
@@ -299,6 +300,8 @@ namespace Health_Organizer
             if (dialogResult.Label.Equals("Yes"))
             {
                 this.NavigationHelper.GoBack();
+                database.Dispose();
+                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
             }
         }
 

@@ -114,6 +114,9 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="CreateNewVisit.xaml.cs">
+      <DependentUpon>CreateNewVisit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CreateProfileForm.xaml.cs">
       <DependentUpon>CreateProfileForm.xaml</DependentUpon>
     </Compile>
@@ -146,7 +149,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <PRIResource Include="Resources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +200,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AnalysisPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateNewVisit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

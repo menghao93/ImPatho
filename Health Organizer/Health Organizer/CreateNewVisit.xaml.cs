@@ -1,7 +1,6 @@
 ﻿using Health_Organizer.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,7 +21,7 @@ namespace Health_Organizer
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class RecordPage : Page
+    public sealed partial class CreateNewVisit : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -46,12 +45,31 @@ namespace Health_Organizer
         }
 
 
-        public RecordPage()
+        public CreateNewVisit()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            //Clear all the text field in form before displaying it
+            this.ClearAllFields();
+
+            //Adding days and years to combobox in form
+            for (int i = 0; i < 31; i++)
+            {
+                visitDayComboBox.Items.Add(i + 1);
+            }
+
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
+            {
+                visitYearComboBox.Items.Add(i);
+            }
+
+            //Set current date in form
+            visitDayComboBox.SelectedItem = DateTime.Now.Day;
+            visitMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+            visitYearComboBox.SelectedItem = DateTime.Now.Year;
         }
 
         /// <summary>
@@ -104,22 +122,46 @@ namespace Health_Organizer
 
         #endregion
 
-        private void AddNewEntryForm(object sender, RoutedEventArgs e)
+
+
+        private void ClearAllFields()
         {
-            if (this.Frame != null)
-            {
-                Debug.WriteLine("Okay clicked");
-                this.Frame.Navigate(typeof(CreateProfileForm));
-            }
+            VisitSymptoms.Text = "";
+            VisitDiseasesDiagnosed.Text = "";
+            VisitMedicineGiven.Text = "";
+            VisitBloodGlucose.Text = "";
+            VisitSystolicBP.Text = "";
+            VisitDiastolicBP.Text = "";
         }
 
-        private void CreateNewVisit(object sender, RoutedEventArgs e)
+        private void AddVisitClicked(object sender, RoutedEventArgs e)
         {
-            if (this.Frame != null)
-            {
-                Debug.WriteLine("Okay clicked");
-                this.Frame.Navigate(typeof(CreateNewVisit));
-            }
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
+        }
+
+        private void EditVisitClicked(object sender, RoutedEventArgs e)
+        {
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
+
+        }
+
+        private void DeleteVisitClicked(object sender, RoutedEventArgs e)
+        {
+            VisitFormCmdbar.IsOpen = false;
+            VisitFormBar.IsOpen = true;
+        }
+
+        private void VisitSaveClicked(object sender, RoutedEventArgs e)
+        {
+            VisitFormBar.IsOpen = false;
+        }
+
+        private void VisitCancelClicked(object sender, RoutedEventArgs e)
+        {
+            this.ClearAllFields();
+            VisitFormBar.IsOpen = false;
         }
     }
 }

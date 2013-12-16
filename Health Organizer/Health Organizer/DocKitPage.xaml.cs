@@ -385,6 +385,22 @@ namespace Health_Organizer
                                 tempDisease.Description = docKitDDescription.Text;
                                 tempDisease.Image = decodedImage;
                                 tempDisease.Symptoms = docKitDSymptoms.Text;
+                                String temp = "";
+
+                                
+                                foreach (var i in tempDisease.Symptoms.Split(','))
+                                {
+
+                                    if (i.Equals(""))
+                                        continue;
+                                    
+
+                                    temp += i + ",";
+                                }
+                                
+                                docKitDSymptoms.Text = temp.Substring(0, temp.Length - 1);
+                                tempDisease.Symptoms = docKitDSymptoms.Text;
+
 
                                 await diseaseMethods.UpdateDisease(tempDisease);
                                 isUpdating = false;
@@ -507,6 +523,7 @@ namespace Health_Organizer
                     this.UpdateDiseaseData(tempDisease);
                     TitleTextBlockAnimation.Begin();
                     DiseaseGridAnimation.Begin();
+                    docKitScrollerDisease.ChangeView(0, 0, 1);
                 }
                 else
                 {
@@ -520,7 +537,7 @@ namespace Health_Organizer
                        tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
 
                     }
-                    
+                    docKitScrollerFirstAid.ChangeView(0, 0, 1);
                     this.UpdateFirstAidData(tempFirstAid);
                     TitleTextBlockAnimation.Begin();
                     FirstAidGridAnimation.Begin();
@@ -571,5 +588,6 @@ namespace Health_Organizer
         {
             docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
+
     }
 }

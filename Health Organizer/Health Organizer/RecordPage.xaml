@@ -48,5 +48,6 @@
             <AppBarButton  HorizontalAlignment="Right" Label="Settings"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,230,17" Icon="Setting"/>
         </Grid>
         <Button Content="New Patient" HorizontalAlignment="Left" Margin="37,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="AddNewEntryForm"/>
+        <Button Content="Create new Visit" HorizontalAlignment="Left" Margin="37,50,0,0" Grid.Row="1" VerticalAlignment="Top" Click="CreateNewVisit"/>
     </Grid>
 </Page>
