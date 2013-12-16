@@ -68,33 +68,33 @@ namespace Health_Organizer.Database_Connet_Classes
                             "PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                             "FirstName TEXT NOT NULL, " +
                             "LastName TEXT NOT NULL, " +
-                            "BloodGroup TEXT, " +
-                            "Sex CHAR NOT NULL, " +
-                            "Birthday DATE, " +
-                            "Image BLOB);";
+                            "BloodGroup TEXT NOT NULL, " +
+                            "Sex TEXT NOT NULL, " +
+                            "Birthday TEXT, " +
+                            "Image TEXT);";
 
             string query2 = "CREATE TABLE IF NOT EXISTS MutableDetails (" +
-                            "Married CHAR NOT NULL, " +
+                            "Married VARCHAR(2) NOT NULL, " +
                             "Occupation TEXT NOT NULL, " +
                             "FamilyBackground TEXT, " +
-                            "Email TEXT, " +
+                            "Email TEXT NOT NULL, " +
                             "Mobile INTEGER NOT NULL, " +
                             "EmMobile INTEGER, " +
                             "PID INTEGER PRIMARY KEY NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
-            string query3 = "CREATE TABLE IF NOT EXISTS MutableDetailsVaccine (" +
-                            "PID INTEGER NOT NULL, " +
-                            "Vaccine TEXT NOT NULL, " +
-                            "PRIMARY KEY(PID, Vaccine), " +
-                            "UNIQUE(PID, Vaccine), " +
-                            "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
-
-            string query4 = "CREATE TABLE IF NOT EXISTS MutableDetailsAllergy (" +
+            string query3 = "CREATE TABLE IF NOT EXISTS MutableDetailsAllergy (" +
                             "PID INTEGER NOT NULL, " +
                             "Allergy TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Allergy), " +
                             "UNIQUE(PID, Allergy)" +
+                            "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
+
+           string query4 = "CREATE TABLE IF NOT EXISTS MutableDetailsAddiction (" +
+                            "PID INTEGER NOT NULL, " +
+                            "Addiction TEXT NOT NULL, " +
+                            "PRIMARY KEY(PID, Addiction), " +
+                            "UNIQUE(PID, Addiction)" +
                             "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
 
             string query5 = "CREATE TABLE IF NOT EXISTS MutableDetailsOperation (" +
@@ -126,7 +126,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FOREIGN KEY(State) REFERENCES AddressCity(State) ON DELETE CASCADE);";
 
             string query10 = "CREATE TABLE IF NOT EXISTS MedicalDetails (" +
-                             "PID INTEGER PRIMARY KEY NOT NULL, " +
+                             "PID INTEGER NOT NULL, " +
                              "DateVisited DATE NOT NULL, " +
                              "Age INTEGER NOT NULL, " +
                              "BloodGlucose INTEGER, " +
@@ -134,6 +134,7 @@ namespace Health_Organizer.Database_Connet_Classes
                              "DiseaseFound TEXT, " +
                              "Height INTEGER NOT NULL, " +
                              "Weight INTEGER NOT NULL, " +
+                             "PRIMARY KEY(PID, DateVisited)" +
                              "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
             string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
@@ -152,6 +153,14 @@ namespace Health_Organizer.Database_Connet_Classes
                              "PRIMARY KEY(PID, DateVisited), " +
                              "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
 
+            string query13 = "CREATE TABLE IF NOT EXISTS MedicalDetailsVaccine (" +
+                             "PID INTEGER NOT NULL, " +
+                             "DateVisited DATE NOT NULL, " +
+                             "Vaccine TEXT NOT NULL, " +
+                             "UNIQUE(PID, DateVisited), " +
+                             "PRIMARY KEY(PID, DateVisited), " +
+                             "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
+
             await database.ExecuteStatementAsync(query1);
             await database.ExecuteStatementAsync(query2);
             await database.ExecuteStatementAsync(query3);
@@ -164,6 +173,7 @@ namespace Health_Organizer.Database_Connet_Classes
             await database.ExecuteStatementAsync(query10);
             await database.ExecuteStatementAsync(query11);
             await database.ExecuteStatementAsync(query12);
+            await database.ExecuteStatementAsync(query13);
         }
     }
 }

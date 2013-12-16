@@ -111,7 +111,7 @@
                             <!--Sex type Combobox-->
                             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,20,15">
                                 <TextBlock FontSize="15">Sex</TextBlock>
-                                <ComboBox Name="profileSexType" PlaceholderText="Female" AllowDrop="True">
+                                <ComboBox Name="profileSexType" PlaceholderText="Male" AllowDrop="True">
                                     <x:String>Male</x:String>
                                     <x:String>Female</x:String>
                                 </ComboBox>
@@ -121,9 +121,9 @@
                             <StackPanel Orientation="Vertical" Grid.Column="3" Margin="20,0,20,15">
                                 <TextBlock FontSize="15">Birthday</TextBlock>
                                 <StackPanel Orientation="Horizontal" >
-                                    <ComboBox Name="profileDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
-                                    <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center"/>
-                                    <ComboBox Name="profileYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
+                                    <ComboBox Name="profileDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left" SelectionChanged="profileDayComboBoxSelectionChanged"/>
+                                    <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center" SelectionChanged="profileMonthComboBoxSelectionChanged"/>
+                                    <ComboBox Name="profileYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right" SelectionChanged="profileYearComboBoxSelectionChanged"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -138,15 +138,15 @@
                         <!--Address, Contact, Status, Allergies, Addiction -->
                         <StackPanel Grid.Column="0">
                             <!--Address-->
-                            <TextBox Header="Address" Height="100" Name="Address" Margin="20,0,20,15" TextWrapping="Wrap"/>
+                            <TextBox Header="Address" Height="100" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap"/>
                             <StackPanel Orientation="Horizontal" >
                                 <TextBox Header="City" Name="profileCity" Width="90" Margin="20,0,20,15"/>
-                                <TextBox Header="Zip" Name="profileZip" Width="100" Margin="20,0,20,15"/>
+                                <TextBox Header="Zip" Name="profileZip" Width="100" Margin="20,0,20,15" InputScope="Number"/>
                             </StackPanel>
                             <!--Contact-->
                             <StackPanel Orientation="Horizontal" >
-                                <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15"/>
-                                <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15"/>
+                                <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"/>
+                                <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"/>
                             </StackPanel>
                             <TextBox Header="Email Address" Name="profileEmailAddress" Margin="20,0,20,15" />
                             <!--Status-->
@@ -181,12 +181,14 @@
                             <!--Addiction-->
                             <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast"/>
                         </Grid>
+                        <TextBox Name="profileState"/>
+                        <TextBox Name="profileCountry"/>
                     </Grid>
                     
                     <Grid Grid.Row="4">
                         <StackPanel Orientation="Horizontal" Margin="20,0,20,15">
-                            <Button Name="profileSaveProfile" Click="SaveNewProfile" Margin="0,0,20,15">Save</Button>
-                            <Button Name="profileCancel" Click="CancelNewProfile" Margin="0,0,20,15">Cancel</Button>
+                            <Button Name="profileSaveProfile" Width="150" Click="SaveNewProfile" Margin="0,0,20,15">Save</Button>
+                            <Button Name="profileCancel" Width="150"  Click="CancelNewProfile" Margin="0,0,20,15">Cancel</Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -194,7 +196,7 @@
                 <Grid Grid.Column="1">
 
                     <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Height="175" Width="175" HorizontalAlignment="Center" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg"/>
+                        <Image Name="profilePic" Height="175" Width="175" HorizontalAlignment="Center" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
                             <Button Name="profileBrowseImage" Click="BrowseImage" Margin="0,0,10,0">Browse</Button>
                             <Button Name="profileCameraImage" Click="CameraImage" Margin="10,0,0,0" >Camera</Button>
