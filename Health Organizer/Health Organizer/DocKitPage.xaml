@@ -107,7 +107,7 @@
                                 Title="Add Common Disease" 
                                 Background="#0064A0" >
                 <StackPanel>
-                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Maleria" />
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Malaria" />
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." Height="200" TextWrapping="Wrap" AcceptsReturn="True"/>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDSymptoms" Header="Symptoms (separated by comma) " PlaceholderText="Eg. Burning Sensation, Headache" />
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
