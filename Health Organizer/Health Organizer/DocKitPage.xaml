@@ -81,7 +81,7 @@
         * Row 1 contains the rest of the page layout
     -->
 
-    <Grid Background="Black">
+    <Grid Background="Black" KeyDown="KeyPressed">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <ContentThemeTransition/>
@@ -240,14 +240,14 @@
                 </Grid>
             </ScrollViewer>
 
-            <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="250" Height="250"/>
+            <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="50" Height="50"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Name="docKitCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
-            <AppBarButton Label="Add Diseases" Icon="Add" Click="docKitAddItem"></AppBarButton>
-            <AppBarButton Name="docKitDelBut" Label="Edit Disease" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
-            <AppBarButton Name="docKitEditBut" Label="Remove Disease" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
+            <AppBarButton Name="docKitAddBut" Icon="Add" Click="docKitAddItem"></AppBarButton>
+            <AppBarButton Name="docKitDelBut" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
+            <AppBarButton Name="docKitEditBut" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 

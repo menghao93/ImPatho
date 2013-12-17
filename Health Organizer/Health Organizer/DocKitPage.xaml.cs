@@ -91,23 +91,7 @@ namespace Health_Organizer
 
         private void docKitSearchClick(object sender, RoutedEventArgs e)
         {
-            if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
-            {
-                searchBoxOutAnimation.Stop();
-                Canvas.SetLeft(docKitSearchBox, 100);
-                docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                searchBoxInAnimation.Begin();
-                this.searchList = this.ocStrings.ToList();
-                this.ocSearchList = new ObservableCollection<string>(this.searchList);
-                docKitListBox.ItemsSource = this.ocSearchList;
-            }
-            else
-            {
-                Canvas.SetLeft(docKitSearchBox, 30);
-                searchBoxInAnimation.Stop();
-                searchBoxOutAnimation.Begin();
-                docKitListBox.ItemsSource = this.ocStrings;
-            }
+            this.searchBoxAnimation();
         }
 
         private void docKitComboBox(object sender, SelectionChangedEventArgs e)
@@ -129,6 +113,9 @@ namespace Health_Organizer
                 docKitScrollerDisease.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 isDiseaseSelected = true;
                 this.UpdateDiseaseListBox();
+                docKitAddBut.Label = "Add Disease";
+                docKitEditBut.Label = "Edit Disease";
+                docKitDelBut.Label = "Remove Disease";
             }
             else if (docKitCombo.SelectedIndex == 1)
             {
@@ -137,6 +124,9 @@ namespace Health_Organizer
                 docKitScrollerFirstAid.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 isDiseaseSelected = false;
                 this.UpdateFirstAidListBox();
+                docKitAddBut.Label = "Add Aid";
+                docKitEditBut.Label = "Edit Aid";
+                docKitDelBut.Label = "Remove Aid";
             }
         }
 
@@ -615,8 +605,38 @@ namespace Health_Organizer
             { 
             t.AcceptsReturn = true;
             countEnter=0;
-        }
+            }
         }
 
+        private void KeyPressed(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (char)70)
+            {
+                this.searchBoxAnimation();
+            }
+
+            //Other if statements if you want to keep an eye out for other keyPresses
+        }
+
+        private void searchBoxAnimation()
+        {
+            if (docKitSearchBox.Visibility != Windows.UI.Xaml.Visibility.Visible)
+            {
+                searchBoxOutAnimation.Stop();
+                Canvas.SetLeft(docKitSearchBox, 100);
+                docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                searchBoxInAnimation.Begin();
+                this.searchList = this.ocStrings.ToList();
+                this.ocSearchList = new ObservableCollection<string>(this.searchList);
+                docKitListBox.ItemsSource = this.ocSearchList;
+            }
+            else
+            {
+                Canvas.SetLeft(docKitSearchBox, 30);
+                searchBoxInAnimation.Stop();
+                searchBoxOutAnimation.Begin();
+                docKitListBox.ItemsSource = this.ocStrings;
+            }
+        }
     }
 }
