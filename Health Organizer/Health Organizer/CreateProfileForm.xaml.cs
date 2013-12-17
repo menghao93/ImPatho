@@ -218,7 +218,7 @@ namespace Health_Organizer
             statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
             if (!profileEmergencyNumber.Text.Equals(""))
             {
-                statement.BindIntParameterWithName("@eMob", Int32.Parse(profileEmergencyNumber.Text.ToString()));
+                statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
             }
             if (!profileFamilyHistory.Text.ToString().Equals(""))
             {

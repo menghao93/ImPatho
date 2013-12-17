@@ -136,6 +136,7 @@ namespace Health_Organizer.Database_Connet_Classes
                              "Height REAL NOT NULL, " +
                              "Weight INTEGER NOT NULL, " +
                              "Symptoms TEXT NOT NULL, " + 
+                             "BMI REAL NOT NULL, " +
                              "PRIMARY KEY(PID, DateVisited)" +
                              "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
@@ -173,7 +174,7 @@ namespace Health_Organizer.Database_Connet_Classes
             await database.ExecuteStatementAsync(query8);
             await database.ExecuteStatementAsync(query9);
             await database.ExecuteStatementAsync(query10);
-            await database.ExecuteStatementAsync(query11);
+            //await database.ExecuteStatementAsync(query11);
             await database.ExecuteStatementAsync(query12);
             await database.ExecuteStatementAsync(query13);
         }

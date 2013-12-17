@@ -67,17 +67,20 @@ namespace Health_Organizer
                 Debug.WriteLine(statement.Columns["DateVisited"]);
                 this.ocString.Add(statement.Columns["DateVisited"]);
             }
-            this.queryDB();
+            this.loadPatientDetails();
         }
 
-        private async void queryDB()
+        private async void loadPatientDetails()
         {
-            string q = "SELECT * FROM Patient";
+            string q = "SELECT * FROM Patient WHERE PID = @pid";
             Statement s = await this.database.PrepareStatementAsync(q);
+            s.BindIntParameterWithName("@pid", this.PID);
             s.EnableColumnsProperty();
-            while (await s.StepAsync())
+            if (await s.StepAsync())
             {
                 Debug.WriteLine(s.Columns["PID"]);
+                visitPatientName.Text = s.Columns["FirstName"] + s.Columns["LastName"];
+                visitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
             }
         }
 
@@ -141,6 +144,10 @@ namespace Health_Organizer
             VisitBloodGlucose.Text = "";
             VisitSystolicBP.Text = "";
             VisitDiastolicBP.Text = "";
+            VisitVaccine.Text = "";
+            VisitHeightFeet.SelectedItem = null;
+            VisitHeightInch.SelectedItem = null;
+            VisitWeight.Text = "";
             isUpdating = false;
         }
 
@@ -190,7 +197,7 @@ namespace Health_Organizer
                 VisitMedicineGiven.Text = "";
                 while (await statement.StepAsync())
                 {
-                    Debug.WriteLine(statement.Columns["Medicine"]);
+                    //Debug.WriteLine(statement.Columns["Medicine"]);
                     VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
                 }
 
@@ -203,7 +210,7 @@ namespace Health_Organizer
                 VisitVaccine.Text = "";
                 while (await statement.StepAsync())
                 {
-                    Debug.WriteLine(statement.Columns["Vaccine"]);
+                    //Debug.WriteLine(statement.Columns["Vaccine"]);
                     VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
                 }
 
@@ -216,14 +223,32 @@ namespace Health_Organizer
             VisitFormCmdbar.IsOpen = false;
             if (VisitListBox.SelectedItem != null)
             {
-                string DateVisited = visitYearComboBox.Items[visitYearComboBox.SelectedIndex].ToString() + "-" + visitMonthComboBox.Items[visitMonthComboBox.SelectedIndex].ToString() + "-" + visitDayComboBox.Items[visitDayComboBox.SelectedIndex].ToString();
+                string DateVisited = VisitListBox.Items[VisitListBox.SelectedIndex].ToString();
                 string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
-                if (await statement.StepAsync())
+                await statement.StepAsync();
+                this.ocString.Remove(DateVisited);
+
+                statement.Reset();
+                deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                statement = await this.database.PrepareStatementAsync(deleteQuery);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                while (await statement.StepAsync())
                 {
-                    this.ocString.Remove(DateVisited);
+                    Debug.WriteLine(statement.Columns["Vaccine"]);
+                }
+
+                statement.Reset();
+                deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                statement = await this.database.PrepareStatementAsync(deleteQuery);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                while (await statement.StepAsync())
+                {
+                    Debug.WriteLine(statement.Columns["Medicine"]);
                 }
             }
         }
@@ -232,8 +257,8 @@ namespace Health_Organizer
         {
             if (this.CheckIfFilled())
             {
-                //try
-                //{
+                try
+                {
                     if (isUpdating)
                     {
                         await this.UpdateDetails();
@@ -242,11 +267,11 @@ namespace Health_Organizer
                     {
                         await this.InsertDetails();
                     }
-                //}
-                //catch (Exception ex)
-                //{
-                //    Debug.WriteLine(ex);
-                //}
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
                 VisitFormBar.IsOpen = false;
             }
             else
@@ -262,8 +287,9 @@ namespace Health_Organizer
             double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
             int weight = Int32.Parse(VisitWeight.Text.ToString());
             string DateVisited = visitYearComboBox.Items[visitYearComboBox.SelectedIndex].ToString() + "-" + visitMonthComboBox.Items[visitMonthComboBox.SelectedIndex].ToString() + "-" + visitDayComboBox.Items[visitDayComboBox.SelectedIndex].ToString();
+            double bmi = (1.0 * height) / weight;
 
-            string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms WHERE PID = @pid AND DateVisited = @dv";
+            string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
             Statement statement = await this.database.PrepareStatementAsync(updateQuery);
             statement.BindIntParameterWithName("@pid", this.PID);
             statement.BindTextParameterWithName("@dv", DateVisited);
@@ -274,44 +300,44 @@ namespace Health_Organizer
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
             statement.BindTextParameterWithName("@symptoms", VisitSymptoms.Text.ToString());
-
-            await statement.StepAsync();
-
-            statement.Reset();
-            double bmi = (1.0 * height) / weight;
-            string insertBMI = "UPDATE MedicalDetailsBMI SET BMI = @bmi WHERE Height = @height AND Weight = @weight";
-            statement = await this.database.PrepareStatementAsync(insertBMI);
-            statement.BindDoubleParameterWithName("@height", height);
-            statement.BindIntParameterWithName("@weight", weight);
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
 
-            statement.Reset();
-            string updateMedicine = "UPDATE MedicalDetailsMedicine SET Medicine = @medicine WHERE PID = @pid AND DateVisited = @dv";
+            //statement.Reset();
+            //string insertBMI = "UPDATE MedicalDetailsBMI SET BMI = @bmi WHERE Height = @height AND Weight = @weight";
+            //statement = await this.database.PrepareStatementAsync(insertBMI);
+            //statement.BindDoubleParameterWithName("@height", height);
+            //statement.BindIntParameterWithName("@weight", weight);
+            //statement.BindDoubleParameterWithName("@bmi", bmi);
 
-            foreach (string str in VisitMedicineGiven.Text.Split(','))
-            {
-                statement = await this.database.PrepareStatementAsync(updateMedicine);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@medicine", str);
+            //await statement.StepAsync();
 
-                await statement.StepAsync();
-                statement.Reset();
-            }
+            //statement.Reset();
+            //string updateMedicine = "UPDATE MedicalDetailsMedicine SET Medicine = @medicine WHERE PID = @pid AND DateVisited = @dv";
 
-            string updateVaccine = "UPDATE MedicalDetailsVaccine SET Vaccine = @vaccine WHERE PID = @pid AND DateVisited = @dv";
-            foreach (string str in VisitVaccine.Text.Split(','))
-            {
-                statement = await this.database.PrepareStatementAsync(updateVaccine);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@vaccine", str);
+            //foreach (string str in VisitMedicineGiven.Text.Split(','))
+            //{
+            //    statement = await this.database.PrepareStatementAsync(updateMedicine);
+            //    statement.BindIntParameterWithName("@pid", this.PID);
+            //    statement.BindTextParameterWithName("@dv", DateVisited);
+            //    statement.BindTextParameterWithName("@medicine", str);
 
-                await statement.StepAsync();
-                statement.Reset();
-            }
+            //    await statement.StepAsync();
+            //    statement.Reset();
+            //}
+
+            //string updateVaccine = "UPDATE MedicalDetailsVaccine SET Vaccine = @vaccine WHERE PID = @pid AND DateVisited = @dv";
+            //foreach (string str in VisitVaccine.Text.Split(','))
+            //{
+            //    statement = await this.database.PrepareStatementAsync(updateVaccine);
+            //    statement.BindIntParameterWithName("@pid", this.PID);
+            //    statement.BindTextParameterWithName("@dv", DateVisited);
+            //    statement.BindTextParameterWithName("@vaccine", str);
+
+            //    await statement.StepAsync();
+            //    statement.Reset();
+            //}
             this.ClearAllFields();
             isUpdating = false;
 
@@ -323,32 +349,33 @@ namespace Health_Organizer
             double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
             int weight = Int32.Parse(VisitWeight.Text.ToString());
             string DateVisited = visitYearComboBox.Items[visitYearComboBox.SelectedIndex].ToString() + "-" + visitMonthComboBox.Items[visitMonthComboBox.SelectedIndex].ToString() + "-" + visitDayComboBox.Items[visitDayComboBox.SelectedIndex].ToString();
+            double bmi = 1.0 * height / weight;
 
-            string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms) " +
-                                 "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms)";
+            string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
+                                 "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
             Statement statement = await this.database.PrepareStatementAsync(insertQuery);
             statement.BindIntParameterWithName("@pid", this.PID);
             statement.BindTextParameterWithName("@dv", DateVisited);
             statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
             statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
-            statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
+            statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
             statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
             statement.BindTextParameterWithName("@symptoms", VisitSymptoms.Text.ToString());
-
-            await statement.StepAsync();
-
-            statement.Reset();
-            double bmi = 1.0 * height / weight;
-            string insertBMI = "INSERT INTO MedicalDetailsBMI (Height, Weight, BMI) VALUES (@height, @weight, @bmi)";
-            statement = await this.database.PrepareStatementAsync(insertBMI);
-            statement.BindDoubleParameterWithName("@height", height);
-            statement.BindIntParameterWithName("@weight", weight);
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
+
+            //statement.Reset();
+            //double bmi = 1.0 * height / weight;
+            //string insertBMI = "INSERT INTO MedicalDetailsBMI (Height, Weight, BMI) VALUES (@height, @weight, @bmi)";
+            //statement = await this.database.PrepareStatementAsync(insertBMI);
+            //statement.BindDoubleParameterWithName("@height", height);
+            //statement.BindIntParameterWithName("@weight", weight);
+            //statement.BindDoubleParameterWithName("@bmi", bmi);
+            //await statement.StepAsync();
 
             statement.Reset();
             string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
@@ -416,6 +443,45 @@ namespace Health_Organizer
         {
             this.ClearAllFields();
             VisitFormBar.IsOpen = false;
+        }
+
+        private async void visitSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count() < 0)
+                return;
+
+            string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
+            Statement statement = await this.database.PrepareStatementAsync(query);
+            statement.BindIntParameterWithName("@pid", this.PID);
+            statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                Debug.WriteLine("okay selected");
+                VisitTextSymptoms.Text = "";
+                foreach (string str in statement.Columns["Symptoms"].Split(','))
+                {
+                    VisitTextSymptoms.Text += "\n• " + str;
+                }
+
+                VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
+                VisitTextBG.Text = statement.Columns["BloodGlucose"];
+                VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
+                VisitTextBMI.Text = statement.Columns["BMI"];
+                VisitTextWeight.Text = statement.Columns["Weight"];
+                VisitTextHeight.Text = statement.Columns["Height"];
+            }
+
+            statement.Reset();
+            query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+            statement = await this.database.PrepareStatementAsync(query);
+            statement.BindIntParameterWithName("@pid", this.PID);
+            statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+            statement.EnableColumnsProperty();
+            VisitTextMedicines.Text = "";
+            while(await statement.StepAsync()){
+                VisitTextMedicines.Text += "\n• " + statement.Columns["Medicine"];
+            }
         }
     }
 }
