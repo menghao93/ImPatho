@@ -166,16 +166,18 @@
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="500"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
                 <Canvas Width="500" Height="100" Grid.Row="0">
                     <SearchBox Canvas.Top="20" Canvas.Left="100" VerticalAlignment="Center" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Right" Grid.ColumnSpan="2" QueryChanged="docKitSearchBoxQueryChnaged" />
                 </Canvas>
-                <AppBarButton Name="docKitSearchBut" HorizontalAlignment="Center" Icon="Find" Click="docKitSearchClick" VerticalAlignment="Center" Label="Search" Grid.Column="2" Margin="-300,0,0,0"/>
-                <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Margin="100,0,0,0"/>
-                <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
+                
+                <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <AppBarButton  Name="docKitSearchBut" Icon="Find" Click="docKitSearchClick"  Label="Search" />
+                    <AppBarButton  Label="Help" Icon="Help" />
+                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                </StackPanel>                
             </Grid>
             <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
                 <TextBlock.RenderTransform>
