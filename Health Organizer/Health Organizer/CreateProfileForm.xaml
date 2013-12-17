@@ -195,15 +195,14 @@
                             </Grid.RowDefinitions>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Normal">
+                                    </VisualState>
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Background">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxPointerOverBackgroundThemeBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxPointerOverBorderThemeBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
+                                     
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="Highlight">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxSelectedPointerOverBackgroundThemeBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -251,11 +250,13 @@
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxFocusedForegroundThemeBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
-                                            
+
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="FocusedPressed">
+                                        
                                         <Storyboard>
+                                           
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxPressedForegroundThemeBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -285,11 +286,17 @@
                                 <VisualStateGroup x:Name="DropDownStates">
                                     <VisualState x:Name="Opened">
                                         <Storyboard>
+                                            
                                             <SplitOpenThemeAnimation ClosedTargetName="ContentPresenter" ContentTranslationOffset="0" ContentTargetName="ScrollViewer" ClosedLength="{Binding TemplateSettings.DropDownClosedHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}" OffsetFromCenter="{Binding TemplateSettings.DropDownOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" OpenedTargetName="PopupBorder" OpenedLength="{Binding TemplateSettings.DropDownOpenedHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Closed">
                                         <Storyboard>
+
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ComboBoxPointerOverBackgroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+
                                             <SplitCloseThemeAnimation ClosedTargetName="ContentPresenter" ContentTranslationOffset="40" ContentTranslationDirection="{Binding TemplateSettings.SelectedItemDirection, RelativeSource={RelativeSource Mode=TemplatedParent}}" ContentTargetName="ScrollViewer" ClosedLength="{Binding TemplateSettings.DropDownClosedHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}" OffsetFromCenter="{Binding TemplateSettings.DropDownOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" OpenedTargetName="PopupBorder" OpenedLength="{Binding TemplateSettings.DropDownOpenedHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
                                         </Storyboard>
                                     </VisualState>
@@ -353,7 +360,7 @@
         </Grid>
 
         <!--Actual form starts from here-->
-        <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,23,0,-23">
             <Grid  Margin="20,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -401,7 +408,7 @@
                             <!--Blood Group Combobox-->
                             <StackPanel Orientation="Vertical" Grid.Column="0" Margin="20,0,20,15">
                                 <TextBlock FontSize="15">Blood Group</TextBlock>
-                                <ComboBox Name="profileBloodGroup" PlaceholderText="A+" AllowDrop="True" >
+                                <ComboBox Name="profileBloodGroup" PlaceholderText="Select" AllowDrop="True" >
                                     <x:String>A+</x:String>
                                     <x:String>A-</x:String>
                                     <x:String>B+</x:String>
@@ -416,7 +423,7 @@
                             <!--Sex type Combobox-->
                             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,20,15">
                                 <TextBlock FontSize="15">Sex</TextBlock>
-                                <ComboBox Name="profileSexType" PlaceholderText="Male" AllowDrop="True">
+                                <ComboBox Name="profileSexType" PlaceholderText="Select" AllowDrop="True">
                                     <x:String>Male</x:String>
                                     <x:String>Female</x:String>
                                 </ComboBox>
@@ -457,15 +464,19 @@
                         <!--Address, Contact, Status, Allergies, Addiction -->
                         <StackPanel Grid.Column="0">
                             <!--Address-->
-                            <TextBox Header="Address" Height="100" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap"/>
+                            <TextBox Header="Address" Height="100" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap" AcceptsReturn="True"/>
                             <StackPanel Orientation="Horizontal" >
-                                <TextBox Header="City" Name="profileCity" Width="90" Margin="20,0,20,15"/>
-                                <TextBox Header="Zip" Name="profileZip" Width="100" Margin="20,0,20,15" InputScope="Number"/>
+                                <TextBox Header="City" Name="profileCity" Width="150" Margin="20,0,20,15"/>
+                                <TextBox Header="Zip" Name="profileZip" Width="100" Margin="20,0,20,15" InputScope="Number" KeyDown="numberValidation"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Header="State" Name="profileState" Width="150" Margin="20,0,20,15"/>
+                                <TextBox Header="Country" Name="profileCountry" Width="150" Margin="20,0,20,15"/>
                             </StackPanel>
                             <!--Contact-->
                             <StackPanel Orientation="Horizontal" >
-                                <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"/>
-                                <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"/>
+                                <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
+                                <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
                             </StackPanel>
                             <TextBox Header="Email Address" Name="profileEmailAddress" Margin="20,0,20,15" />
                             <!--Status-->
@@ -473,6 +484,7 @@
                                 <TextBox Header="Occupation" Name="profileOccupation" Width="150" Margin="20,0,20,15"/>
                                 <CheckBox Name="profileMarried" Content="Married" Margin="20,15,20,15"></CheckBox>
                             </StackPanel>
+                          
                         </StackPanel>
                     </Grid>
                     
@@ -483,9 +495,9 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <!--Allergies-->
-                            <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy" />
+                            <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy" KeyDown="commaKeyDown"/>
                             <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine"/>
+                            <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine" KeyDown="commaKeyDown"/>
                         </Grid>
                     </Grid>
 
@@ -498,10 +510,9 @@
                             <!--Allergies-->
                             <TextBox Grid.Column="0" Header="Family History" Height="90" Name="profileFamilyHistory" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Mother is suffering from HIV" />
                             <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast"/>
+                            <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast" KeyDown="commaKeyDown"/>
                         </Grid>
-                        <TextBox Name="profileState"/>
-                        <TextBox Name="profileCountry"/>
+                        
                     </Grid>
                     
                     <Grid Grid.Row="4">

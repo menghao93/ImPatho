@@ -19,6 +19,7 @@ using Health_Organizer.Database_Connet_Classes;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Health_Organizer
 {
@@ -29,7 +30,7 @@ namespace Health_Organizer
         private Database database;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        int counterComma = 0;
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -45,7 +46,7 @@ namespace Health_Organizer
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
-            
+
             this.InitializeDB();
             this.InitializeComponents();
             //this.queryDB();
@@ -60,13 +61,6 @@ namespace Health_Organizer
                 profileDayComboBox.Items.Add(i + 1);
             }
 
-            String[] monthArray = { "January", "February", "March", "April", "May", "June", "July", "August", "Septamber", "October", "November", "December" };
-
-            for (int i = 0; i < 12; i++)
-            {
-                profileMonthComboBox.Items.Add(monthArray[i]);
-            }
-
             for (int i = 1900; i <= DateTime.Now.Year; i++)
             {
                 profileYearComboBox.Items.Add(i);
@@ -76,7 +70,7 @@ namespace Health_Organizer
             StorageFile defaultImage = await InstallationFolder.GetFileAsync("Assets\\DefaultProfilePic.jpg");
             decodedImage = await ImageMethods.ConvertStorageFileToBase64String(defaultImage);
         }
-        
+
         private async void InitializeDB()
         {
             this.connection = new DBConnect();
@@ -233,7 +227,7 @@ namespace Health_Organizer
             if (!profileAllergies.Text.ToString().Equals(""))
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
-                
+
                 foreach (string str in profileAllergies.Text.ToString().Split(','))
                 {
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -246,7 +240,7 @@ namespace Health_Organizer
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
                 statement = await this.database.PrepareStatementAsync(insertAllergyString);
-                
+
                 foreach (string str in profileAddictions.Text.ToString().Split(','))
                 {
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -258,7 +252,7 @@ namespace Health_Organizer
             if (!profileOperations.Text.ToString().Equals(""))
             {
                 string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
-                
+
                 foreach (string str in profileAddictions.Text.ToString().Split(','))
                 {
                     statement = await this.database.PrepareStatementAsync(insertOperationString);
@@ -271,22 +265,106 @@ namespace Health_Organizer
 
         private bool CheckIfFilled()
         {
+            //if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") ||
+            //    profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
+            //    profileEmailAddress.Equals("") || profileOccupation.Text.Equals(""))
+            //{
+            //    return false;
+            //}
+
+            //if (profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null)
+            //{
+            //    return false;
+            //}
+
+            //if (decodedImage == null)
+            //    return false;
+            profileLastName.ClearValue(BorderBrushProperty);
+            profileSexType.ClearValue(BorderBrushProperty);
+            profileDayComboBox.ClearValue(BorderBrushProperty);
+            profileMonthComboBox.ClearValue(BorderBrushProperty);
+            profileYearComboBox.ClearValue(BorderBrushProperty);
+            profileAddress.ClearValue(BorderBrushProperty);
+            profileCity.ClearValue(BorderBrushProperty);
+            profileZip.ClearValue(BorderBrushProperty);
+            profileContactNumber.ClearValue(BorderBrushProperty);
+            profileEmailAddress.ClearValue(BorderBrushProperty);
+            profileOccupation.ClearValue(BorderBrushProperty);
+
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") ||
                 profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
-                profileEmailAddress.Equals("") || profileOccupation.Text.Equals(""))
+                profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
+                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z")))
             {
+                Debug.WriteLine("false");
+                if (profileFirstName.Text.Equals(""))
+                {
+
+                    profileFirstName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileLastName.Text.Equals(""))
+                {
+                    profileLastName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileSexType.SelectedItem == null)
+                {
+                    profileSexType.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileDayComboBox.SelectedItem == null)
+                {
+                    profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileMonthComboBox.SelectedItem == null)
+                {
+                    profileMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileYearComboBox.SelectedItem == null)
+                {
+                    profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileAddress.Text.Equals(""))
+                {
+                    profileAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileCity.Text.Equals(""))
+                {
+                    profileCity.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileZip.Text.Equals(""))
+                {
+                    profileZip.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileContactNumber.Text.Equals(""))
+                {
+                    profileContactNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileEmailAddress.Text.Equals(""))
+                {
+                    profileEmailAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    profileEmailAddress.PlaceholderText = "";
+                }
+                else
+                {
+                    if (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z"))
+                    {
+                        profileEmailAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                        profileEmailAddress.PlaceholderText = "Invalid Email";
+                        profileEmailAddress.Text = "";
+
+                    }
+                }
+                if (profileOccupation.Text.Equals(""))
+                {
+                    profileOccupation.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+
                 return false;
             }
-
-            if (profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null)
+            else
             {
-                return false;
+                Debug.WriteLine("true");
+                return true;
             }
-
-            if (decodedImage == null)
-                return false;
-
-            return true;
         }
 
         private async void CancelNewProfile(object sender, RoutedEventArgs e)
@@ -318,6 +396,37 @@ namespace Health_Organizer
         private void profileYearComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void numberValidation(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+
+        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (counterComma >= 1 && ((uint)e.Key == 188)){
+                e.Handled = true;
+            }
+            else
+            {
+                e.Handled = false;
+            }
+
+            if (((uint)e.Key == 188))
+            {
+                counterComma++;
+            }
+            else
+            {
+                 counterComma = 0;
+            }
+        
         }
     }
 }

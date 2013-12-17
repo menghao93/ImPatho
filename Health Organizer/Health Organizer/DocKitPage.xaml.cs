@@ -29,13 +29,13 @@ namespace Health_Organizer
         DiseasesTable diseaseMethods;
         FirstAidTable firstAidMethods;
         DBConnect connect;
-        private bool isUpdating = false, isDiseaseSelected = true,isSearching=false;
+        private bool isUpdating = false, isDiseaseSelected = true, isSearching = false;
         private string decodedImage = null;
         private NavigationHelper navigationHelper;
         private ObservableCollection<string> ocStrings, ocSearchList;
         private List<string> searchList;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        int countEnter = 0;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -65,7 +65,7 @@ namespace Health_Organizer
             docKitListBox.ItemsSource = this.ocStrings;
         }
 
-         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
         }
 
@@ -119,9 +119,9 @@ namespace Health_Organizer
                 this.isSearching = false;
                 searchBoxOutAnimation.Begin();
             }
-            if(docKitListBox.ItemsSource != this.ocStrings)
+            if (docKitListBox.ItemsSource != this.ocStrings)
                 docKitListBox.ItemsSource = this.ocStrings;
-            
+
             if (docKitCombo.SelectedIndex == 0)
             {
                 pageTitle.Text = "Disease List";
@@ -157,7 +157,7 @@ namespace Health_Organizer
         private async void docKitEditItem(object sender, RoutedEventArgs e)
         {
             docKitCmdbar.IsOpen = false;
-
+            countEnter = 0;
             if (docKitListBox.SelectedItem != null)
             {
                 //Load all the values from the DB. Assertion: Value exist in DB since loaded from list.Also set PK to ReadOnly.
@@ -387,17 +387,17 @@ namespace Health_Organizer
                                 tempDisease.Symptoms = docKitDSymptoms.Text;
                                 String temp = "";
 
-                                
+
                                 foreach (var i in tempDisease.Symptoms.Split(','))
                                 {
 
                                     if (i.Equals(""))
                                         continue;
-                                    
+
 
                                     temp += i + ",";
                                 }
-                                
+
                                 docKitDSymptoms.Text = temp.Substring(0, temp.Length - 1);
                                 tempDisease.Symptoms = docKitDSymptoms.Text;
 
@@ -518,7 +518,7 @@ namespace Health_Organizer
                     else
                     {
                         tempDisease = await diseaseMethods.FindSingleDisease(this.ocStrings[docKitListBox.SelectedIndex].ToString());
-                      
+
                     }
                     this.UpdateDiseaseData(tempDisease);
                     TitleTextBlockAnimation.Begin();
@@ -530,11 +530,11 @@ namespace Health_Organizer
                     BasicFirstAid tempFirstAid;
                     if (isSearching)
                     {
-                       tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocSearchList[docKitListBox.SelectedIndex].ToString());
+                        tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocSearchList[docKitListBox.SelectedIndex].ToString());
                     }
                     else
                     {
-                       tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
+                        tempFirstAid = await firstAidMethods.FindSingleFirstAid(this.ocStrings[docKitListBox.SelectedIndex].ToString());
 
                     }
                     docKitScrollerFirstAid.ChangeView(0, 0, 1);
@@ -545,7 +545,7 @@ namespace Health_Organizer
             }
         }
 
-/////////////////////////This is used to clear all the Dialog Fields
+        /////////////////////////This is used to clear all the Dialog Fields
         private void ClearFormFields()
         {
             if (docKitDialog.IsOpen == true)
@@ -566,7 +566,7 @@ namespace Health_Organizer
             docKitFAName.IsReadOnly = false;
         }
 
-///////////////////////This module is used to filter the list box when we enter query in search box.
+        ///////////////////////This module is used to filter the list box when we enter query in search box.
         private void docKitSearchBoxQueryChnaged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
         {
             if (this.ocStrings.Count() < 0)
@@ -583,10 +583,39 @@ namespace Health_Organizer
             isSearching = true;
         }
 
-/////////////////////This module is used hide elements after animations complete. Used to hiding search box.
+        /////////////////////This module is used hide elements after animations complete. Used to hiding search box.
         private void OutAnimationCompleted(object sender, object e)
         {
             docKitSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void newLineCheck(object sender, KeyRoutedEventArgs e)
+        {
+            TextBox t = (TextBox)sender;
+
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
+            {
+                Debug.WriteLine(countEnter);
+                countEnter++;
+            }
+            if (countEnter > 1 && (uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
+            {
+                Debug.WriteLine("avo");
+
+                t.AcceptsReturn = false;
+            }
+           
+            
+        }
+
+        private void keyDown_newline(object sender, KeyRoutedEventArgs e)
+        {
+            TextBox t = (TextBox)sender;
+            if ((uint)e.Key != (uint)Windows.System.VirtualKey.Enter && (uint)e.Key != (uint)Windows.System.VirtualKey.Space && (uint)e.Key != (uint)Windows.System.VirtualKey.Back)
+            { 
+            t.AcceptsReturn = true;
+            countEnter=0;
+        }
         }
 
     }
