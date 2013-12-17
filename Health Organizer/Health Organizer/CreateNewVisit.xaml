@@ -63,15 +63,15 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="650"/>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1.5*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" />
-                    <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                    <AppBarButton  Label="Help" Icon="Help" />
+                    <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
             </Grid>
             
@@ -84,8 +84,9 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"/>
-                        <ColumnDefinition Width="400"/>
-                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
 
                     <!--Image of person visiting-->
@@ -126,14 +127,17 @@
 
                     <StackPanel Grid.Column="1" Orientation="Vertical">
                         <TextBlock Name="VisitTitleSymptoms"  Text="Symptoms" FontSize="25"/>
-                        <TextBlock Name="VisitTextSymptoms" FontSize="15" Width="350" HorizontalAlignment="Left"/>
+                        <TextBlock Name="VisitTextSymptoms" FontSize="15" Width="350" HorizontalAlignment="Left" TextWrapping="Wrap"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Vertical">
                         <TextBlock Name="VisitTitleDisease"  Text="Diseases" FontSize="25"/>
-                        <TextBlock Name="VisitTextDisease" FontSize="15" Width="250" Height="200" HorizontalAlignment="Left"/>
+                        <TextBlock Name="VisitTextDisease" FontSize="15"  Height="200" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    
+                    <StackPanel Grid.Column="3" Orientation="Vertical">
                         <TextBlock Name="VisitTitleMedicines"  Text="Medicines" FontSize="25"/>
-                        <TextBlock Name="VisitTextMedicines" FontSize="15" Width="250" Height="200" HorizontalAlignment="Left"/>
+                        <TextBlock Name="VisitTextMedicines" FontSize="15" Height="200" HorizontalAlignment="Left" TextWrapping="Wrap"/>
                     </StackPanel>
                     
                 </Grid>

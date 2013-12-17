@@ -36,16 +36,26 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+
+            <Grid Grid.Column="0">
+                <Button x:Name="backButton" HorizontalAlignment="Center" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Center"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-            <AppBarButton  HorizontalAlignment="Right" Label="Help"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,82,17" Icon="Help"/>
-            <AppBarButton  HorizontalAlignment="Right" Label="Settings"  VerticalAlignment="Center" Grid.Column="1" Margin="0,35,230,17" Icon="Setting"/>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
+                    <AppBarButton  Label="Help" Icon="Help" />
+                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

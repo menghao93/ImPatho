@@ -81,7 +81,7 @@
         * Row 1 contains the rest of the page layout
     -->
 
-    <Grid Background="Black">
+    <Grid Background="Black" KeyDown="KeyPressed">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <ContentThemeTransition/>
@@ -108,7 +108,7 @@
                                 Background="#0064A0" >
                 <StackPanel>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Malaria" />
-                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." Height="200" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." Height="200" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="newLineCheck" KeyDown="keyDown_newline"/>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDSymptoms" Header="Symptoms (separated by comma) " PlaceholderText="Eg. Burning Sensation, Headache" />
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Name="docKitDBrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
@@ -128,8 +128,8 @@
                                 Background="#0064A0" >
                 <StackPanel>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFAName" Header="Situation" PlaceholderText="Describe in a word or two. Eg. Burning" />
-                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." Height="200" TextWrapping="Wrap" AcceptsReturn="True"/>
-                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFASymptoms" Header="Do Not" PlaceholderText="Eg. Donot Move Patient, Donot rub Ice" HorizontalAlignment="Stretch" AcceptsReturn="True" Height="150"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." Height="200" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="newLineCheck" KeyDown="keyDown_newline"/>
+                    <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFASymptoms" Header="Do Not" PlaceholderText="Eg. Donot Move Patient, Donot rub Ice" HorizontalAlignment="Stretch" AcceptsReturn="True" Height="150" KeyUp="newLineCheck" KeyDown="keyDown_newline"/>
                     <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button Name="docKitFABrowseBut" Content="Browse" Width="90" Click="docKitDialogBrowse"/>
                         <TextBox Name="docKitFAImage" Height="25" PlaceholderText="Absolute Path of Your Image" HorizontalAlignment="Stretch" Width="310" IsSpellCheckEnabled="True" IsReadOnly="True"/>
@@ -166,16 +166,18 @@
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="500"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
                 <Canvas Width="500" Height="100" Grid.Row="0">
                     <SearchBox Canvas.Top="20" Canvas.Left="100" VerticalAlignment="Center" Name="docKitSearchBox" Visibility="Collapsed" BorderBrush="#38ACEC" Height="40" Width="400"  HorizontalAlignment="Right" Grid.ColumnSpan="2" QueryChanged="docKitSearchBoxQueryChnaged" />
                 </Canvas>
-                <AppBarButton Name="docKitSearchBut" HorizontalAlignment="Center" Icon="Find" Click="docKitSearchClick" VerticalAlignment="Center" Label="Search" Grid.Column="2" Margin="-300,0,0,0"/>
-                <AppBarButton HorizontalAlignment="Center" Label="Help"  VerticalAlignment="Center" Icon="Help" Grid.Column="2" Margin="100,0,0,0"/>
-                <AppBarButton HorizontalAlignment="Center" Label="Settings"  VerticalAlignment="Center" Icon="Setting" Grid.Column="2" Margin="-100,0,0,0"/>
+                
+                <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <AppBarButton  Name="docKitSearchBut" Icon="Find" Click="docKitSearchClick"  Label="Search" />
+                    <AppBarButton  Label="Help" Icon="Help" />
+                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                </StackPanel>                
             </Grid>
             <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
                 <TextBlock.RenderTransform>
@@ -238,14 +240,14 @@
                 </Grid>
             </ScrollViewer>
 
-            <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="250" Height="250"/>
+            <ProgressRing Grid.Row="2" IsActive="{Binding IsChecked,ElementName=RunningRB}" Visibility="Visible" Name="docKitProgress" Grid.Column="1" Width="50" Height="50"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Name="docKitCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
-            <AppBarButton Label="Add Diseases" Icon="Add" Click="docKitAddItem"></AppBarButton>
-            <AppBarButton Name="docKitDelBut" Label="Edit Disease" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
-            <AppBarButton Name="docKitEditBut" Label="Remove Disease" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
+            <AppBarButton Name="docKitAddBut" Icon="Add" Click="docKitAddItem"></AppBarButton>
+            <AppBarButton Name="docKitDelBut" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
+            <AppBarButton Name="docKitEditBut" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 
