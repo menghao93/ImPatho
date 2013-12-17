@@ -28,13 +28,7 @@ namespace Health_Organizer
         private string decodedImage = null;
         private Database database;
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
-
+        
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -123,9 +117,11 @@ namespace Health_Organizer
             {
                 try
                 {
+                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
                     int pid = await this.insertBasicDetais();
                     this.insertAddress(pid);
                     this.insertMutableDetails(pid);
+                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
 
                     this.navigationHelper.GoBack();
                 }
@@ -152,8 +148,8 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@sex", profileSexType.Items[profileSexType.SelectedIndex].ToString());
             statement.BindTextParameterWithName("@image", decodedImage);
             statement.BindTextParameterWithName("@bday", profileYearComboBox.Items[profileYearComboBox.SelectedIndex].ToString() + "-" +
-                                                            profileMonthComboBox.Items[profileMonthComboBox.SelectedIndex].ToString() + "-" +
-                                                            profileDayComboBox.Items[profileDayComboBox.SelectedIndex].ToString());
+                                                         profileMonthComboBox.Items[profileMonthComboBox.SelectedIndex].ToString() + "-" +
+                                                         profileDayComboBox.Items[profileDayComboBox.SelectedIndex].ToString());
             await statement.StepAsync();
             string getPIDquery = "SELECT * FROM Patient";
             statement = await this.database.PrepareStatementAsync(getPIDquery);
@@ -218,7 +214,7 @@ namespace Health_Organizer
             }
             statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
             statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
-            statement.BindIntParameterWithName("@mob", Int32.Parse(profileContactNumber.Text.ToString()));
+            statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
             if (!profileEmergencyNumber.Text.Equals(""))
             {
                 statement.BindIntParameterWithName("@eMob", Int32.Parse(profileEmergencyNumber.Text.ToString()));
@@ -230,29 +226,35 @@ namespace Health_Organizer
 
             await statement.StepAsync();
 
-            if (!profileAllergies.Text.ToString().Equals(""))
+            if (!profileAllergies.Text.Equals(""))
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
                 
                 foreach (string str in profileAllergies.Text.ToString().Split(','))
                 {
+                    Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
                     statement.BindIntParameterWithName("@pid", PID);
                     statement.BindTextParameterWithName("@allergy", str);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false);
                     await statement.StepAsync();
+                    statement.Reset();
                 }
             }
-            if (!profileAddictions.Text.ToString().Equals(""))
+            if (!profileAddictions.Text.Equals(""))
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
                 statement = await this.database.PrepareStatementAsync(insertAllergyString);
                 
                 foreach (string str in profileAddictions.Text.ToString().Split(','))
                 {
+                    Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
                     statement.BindTextParameterWithName("@addiction", str);
                     statement.BindIntParameterWithName("@pid", PID);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false);
                     await statement.StepAsync();
+                    statement.Reset();
                 }
             }
             if (!profileOperations.Text.ToString().Equals(""))
@@ -261,12 +263,16 @@ namespace Health_Organizer
                 
                 foreach (string str in profileAddictions.Text.ToString().Split(','))
                 {
+                    Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertOperationString);
                     statement.BindIntParameterWithName("@pid", PID);
                     statement.BindTextParameterWithName("@operation", str);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false); 
                     await statement.StepAsync();
+                    statement.Reset();
                 }
             }
+            //this.queryDB();
         }
 
         private bool CheckIfFilled()

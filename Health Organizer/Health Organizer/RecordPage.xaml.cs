@@ -108,7 +108,6 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                Debug.WriteLine("Okay clicked");
                 this.Frame.Navigate(typeof(CreateProfileForm));
             }
         }
@@ -117,7 +116,6 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                Debug.WriteLine("Okay clicked");
                 this.Frame.Navigate(typeof(CreateNewVisit));
             }
         }

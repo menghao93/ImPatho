@@ -78,7 +78,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "Occupation TEXT NOT NULL, " +
                             "FamilyBackground TEXT, " +
                             "Email TEXT NOT NULL, " +
-                            "Mobile INTEGER NOT NULL, " +
+                            "Mobile UNSIGNED BIG INT NOT NULL, " +
                             "EmMobile INTEGER, " +
                             "PID INTEGER PRIMARY KEY NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
@@ -127,18 +127,20 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query10 = "CREATE TABLE IF NOT EXISTS MedicalDetails (" +
                              "PID INTEGER NOT NULL, " +
-                             "DateVisited DATE NOT NULL, " +
+                             "DateVisited TEXT NOT NULL, " +
                              "Age INTEGER NOT NULL, " +
                              "BloodGlucose INTEGER, " +
-                             "BP INTEGER, " +
+                             "SystolicBP INTEGER, " +
+                             "DiastolicBP INTEGER, " +
                              "DiseaseFound TEXT, " +
-                             "Height INTEGER NOT NULL, " +
+                             "Height REAL NOT NULL, " +
                              "Weight INTEGER NOT NULL, " +
+                             "Symptoms TEXT NOT NULL, " + 
                              "PRIMARY KEY(PID, DateVisited)" +
                              "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
             string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
-                             "Height INTEGER NOT NULL, " +
+                             "Height REAL NOT NULL, " +
                              "Weight INTEGER NOT NULL, " +
                              "BMI REAL NOT NULL, " +
                              "UNIQUE(Height, Weight), " +
@@ -147,18 +149,18 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query12 = "CREATE TABLE IF NOT EXISTS MedicalDetailsMedicine (" +
                              "PID INTEGER NOT NULL, " +
-                             "DateVisited DATE NOT NULL, " +
+                             "DateVisited TEXT NOT NULL, " +
                              "Medicine TEXT NOT NULL, " +
-                             "UNIQUE(PID, DateVisited), " +
-                             "PRIMARY KEY(PID, DateVisited), " +
+                             "UNIQUE(PID, DateVisited, Medicine), " +
+                             "PRIMARY KEY(PID, DateVisited, Medicine), " +
                              "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
 
             string query13 = "CREATE TABLE IF NOT EXISTS MedicalDetailsVaccine (" +
                              "PID INTEGER NOT NULL, " +
                              "DateVisited DATE NOT NULL, " +
                              "Vaccine TEXT NOT NULL, " +
-                             "UNIQUE(PID, DateVisited), " +
-                             "PRIMARY KEY(PID, DateVisited), " +
+                             "UNIQUE(PID, DateVisited, Vaccine), " +
+                             "PRIMARY KEY(PID, DateVisited, Vaccine), " +
                              "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
 
             await database.ExecuteStatementAsync(query1);
