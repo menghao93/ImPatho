@@ -231,6 +231,7 @@
             <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"></AppBarButton>
             <AppBarButton Name="EditVisit" Label="Edit Disease" Icon="Edit" Click="EditVisitClicked" HorizontalAlignment="Right"></AppBarButton>
             <AppBarButton Name="DeleteVisit" Label="Remove Disease" Icon="Cancel" Click="DeleteVisitClicked" HorizontalAlignment="Center"></AppBarButton>
+            <AppBarButton Name="ViewProfileVisit" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Center"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

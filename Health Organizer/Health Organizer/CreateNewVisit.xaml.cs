@@ -582,5 +582,13 @@ namespace Health_Organizer
 
         }
 
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(ProfileDetailsPage));
+            }
+        }
+
     }
 }
