@@ -32,7 +32,8 @@ namespace Health_Organizer
         private int PID = 0;
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
-
+        Boolean check = true;
+        int counterComma = 0;
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -46,7 +47,6 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
             this.ocString = new ObservableCollection<string>();
             VisitListBox.ItemsSource = this.ocString;
-
             this.InitializeVisitDetialsComboBox();
             this.InitializeDB(1);
             this.PID = 1;
@@ -155,10 +155,12 @@ namespace Health_Organizer
         {
             VisitFormCmdbar.IsOpen = false;
             VisitFormBar.IsOpen = true;
+            counterComma = 0;
         }
 
         private async void EditVisitClicked(object sender, RoutedEventArgs e)
         {
+            counterComma = 0;
             VisitFormCmdbar.IsOpen = false;
             if (VisitListBox.SelectedItem != null)
             {
@@ -255,7 +257,9 @@ namespace Health_Organizer
 
         private async void VisitSaveClicked(object sender, RoutedEventArgs e)
         {
-            if (this.CheckIfFilled())
+            bool x = await this.CheckIfFilled();
+
+            if (x)
             {
                 try
                 {
@@ -276,9 +280,12 @@ namespace Health_Organizer
             }
             else
             {
-                var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
-                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
-                var dialogResult = await messageDialog.ShowAsync();
+                if (check)
+                {
+                    var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
+                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
+                    var dialogResult = await messageDialog.ShowAsync();
+                }
             }
         }
 
@@ -424,19 +431,69 @@ namespace Health_Organizer
             return -1;
         }
 
-        private bool CheckIfFilled()
+        private async Task<bool> CheckIfFilled()
         {
-            if (VisitDiseasesDiagnosed.Text.Equals("") || VisitSymptoms.Text.Equals("") ||
-                VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals(""))
-            {
-                return false;
-            }
+            VisitDiseasesDiagnosed.ClearValue(BorderBrushProperty);
+            VisitSymptoms.ClearValue(BorderBrushProperty);
+            VisitMedicineGiven.ClearValue(BorderBrushProperty);
+            VisitWeight.ClearValue(BorderBrushProperty);
+            VisitHeightFeet.ClearValue(BorderBrushProperty);
+            VisitHeightInch.ClearValue(BorderBrushProperty);
+            visitMonthComboBox.ClearValue(BorderBrushProperty);
+            visitDayComboBox.ClearValue(BorderBrushProperty);
+            visitYearComboBox.ClearValue(BorderBrushProperty);
 
-            if (VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null)
+           
+            if (VisitDiseasesDiagnosed.Text.Equals("") || VisitSymptoms.Text.Equals("") ||
+                VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals("") || VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null ||
+                (ocString.Contains(visitYearComboBox.SelectedItem + "-" + visitMonthComboBox.SelectedItem + "-" + visitDayComboBox.SelectedItem)))
             {
+               
+                if ((ocString.Contains(visitYearComboBox.SelectedItem + "-" + visitMonthComboBox.SelectedItem + "-" + visitDayComboBox.SelectedItem)))
+                {
+                    check = false;
+                    var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
+                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
+                    var dialogResult = await messageDialog.ShowAsync();
+                    visitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    visitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    visitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                else
+                {
+                    check = true;
+                }
+                if (VisitDiseasesDiagnosed.Text.Equals(""))
+                {
+                    VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (VisitSymptoms.Text.Equals(""))
+                {
+                    VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (VisitMedicineGiven.Text.Equals(""))
+                {
+                    VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (VisitWeight.Text.Equals(""))
+                {
+                    VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (VisitHeightFeet.SelectedItem == null)
+                {
+                    VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+
+                }
+                if (VisitHeightInch.SelectedItem == null)
+                {
+                    VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
                 return false;
             }
-            return true;
+            else
+            {
+                return true;
+            }
         }
 
         private void VisitCancelClicked(object sender, RoutedEventArgs e)
@@ -479,9 +536,51 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
             statement.EnableColumnsProperty();
             VisitTextMedicines.Text = "";
-            while(await statement.StepAsync()){
+            while (await statement.StepAsync())
+            {
                 VisitTextMedicines.Text += "\n• " + statement.Columns["Medicine"];
             }
         }
+        //Validation for numeric entries in weight, bp and glucose
+        private void numberValidation_decimal(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab || (uint)e.Key == (uint)Windows.System.VirtualKey.Decimal)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+        private void numberValidation_integer(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (counterComma >= 1 && ((uint)e.Key == 188))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                e.Handled = false;
+            }
+
+            if (((uint)e.Key == 188))
+            {
+                counterComma++;
+            }
+            else
+            {
+                counterComma = 0;
+            }
+
+        }
+
     }
 }

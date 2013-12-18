@@ -172,13 +172,13 @@
                 </StackPanel>
 
                 <!--Symptoms textbox-->
-                <TextBox Name="VisitSymptoms" Height="100" Header="Symptoms" Margin="0,10,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Fever, Headache, Vomiting..."/>
+                <TextBox Name="VisitSymptoms" Height="100" Header="Symptoms" Margin="0,0,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Fever, Headache, Vomiting..." KeyDown="commaKeyDown"/>
 
                 <!--Diseases diagonsed textbox-->
-                <TextBox Name="VisitDiseasesDiagnosed" Header="Diseases Diagnosed" Margin="0,10,30,0" PlaceholderText="Eg. Diarrhea"/>
+                <TextBox Name="VisitDiseasesDiagnosed" Header="Diseases Diagnosed" Margin="0,10,30,0" PlaceholderText="Eg. Diarrhea" KeyDown="commaKeyDown"/>
 
                 <!--Medicine prescribed textbox-->
-                <TextBox Name="VisitMedicineGiven" Height="90" Header="Medicines Prescribed" Margin="0,10,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Acidophilus"/>
+                <TextBox Name="VisitMedicineGiven" Height="90" Header="Medicines Prescribed" Margin="0,10,30,0" TextWrapping="Wrap" PlaceholderText="Eg. Acidophilus" KeyDown="commaKeyDown"/>
 
                 <!--Height and weight textbox-->
                 <StackPanel Orientation="Horizontal">
@@ -206,16 +206,16 @@
                             <x:String>11</x:String>
                         </ComboBox>
                     </StackPanel>
-                    <TextBox Name="VisitWeight" Header="Weight" Width="100" Height="60" Margin="0,10,30,0" PlaceholderText="Kg" InputScope="Number"/>
+                    <TextBox Name="VisitWeight" Header="Weight" Width="100" Height="60" Margin="0,10,30,0" PlaceholderText="Kg" InputScope="Number" KeyDown="numberValidation_integer"/>
                 </StackPanel>
 
                 <!--Blood Pressure and Blood Glucoze mesurement int textbox-->
                 <StackPanel Orientation="Horizontal" Margin="0,10,30,0">
-                    <TextBox Name="VisitSystolicBP" Header="Systolic BP" Width="100"  Margin="0,0,30,0" InputScope="Number"/>
-                    <TextBox Name="VisitDiastolicBP" Header="Diastolic BP" Width="100" Margin="0,0,30,0" InputScope="Number"/>
-                    <TextBox Name="VisitBloodGlucose" Header="Blood Glucose" Margin="0,0,30,0" InputScope="Number"/>
+                    <TextBox Name="VisitSystolicBP" Header="Systolic BP" Width="100"  Margin="0,0,30,0" InputScope="Number" KeyDown="numberValidation_decimal"/>
+                    <TextBox Name="VisitDiastolicBP" Header="Diastolic BP" Width="100" Margin="0,0,30,0" InputScope="Number" KeyDown="numberValidation_decimal"/>
+                    <TextBox Name="VisitBloodGlucose" Header="Blood Glucose" Margin="0,0,30,0" InputScope="Number" KeyDown="numberValidation_decimal"/>
                 </StackPanel>
-                <TextBox Name="VisitVaccine"/>
+                <TextBox Name="VisitVaccine" Header="Vaccination" Margin="0,0,30,10" KeyDown="commaKeyDown"/>
                 <!--Stackpanel for save and clear button-->
                 <StackPanel Orientation="Horizontal" Margin="0,20,25,0" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                     <Button Name="VisitSave" Click="VisitSaveClicked" Width="90" Margin="-2,0,0,0">Save</Button>
