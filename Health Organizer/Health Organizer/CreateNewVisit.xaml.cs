@@ -544,9 +544,11 @@ namespace Health_Organizer
                 {
                     //Debug.WriteLine("okay selected");
                     VisitTextSymptoms.Text = "";
+                    
                     foreach (string str in statement.Columns["Symptoms"].Split(','))
-                    {
-                        VisitTextSymptoms.Text += "\n• " + str;
+                    {   
+
+                        VisitTextSymptoms.Text += "\n• " + ExtraModules.RemoveStringSpace(str);
                     }
 
                     VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];

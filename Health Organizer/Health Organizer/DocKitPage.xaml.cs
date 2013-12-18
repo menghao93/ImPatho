@@ -338,7 +338,7 @@ namespace Health_Organizer
             string tempSymptoms = "";
             foreach (var i in tempDisease.Symptoms.Split(','))
             {
-                tempSymptoms += "\n• " + i;
+                tempSymptoms += "\n• " + ExtraModules.RemoveStringSpace(i);
             }
             docKitSymptoms.Text = tempSymptoms;
         }
