@@ -76,7 +76,7 @@
             </Grid>
 
 
-            <TextBlock Grid.Row="1" Name="visitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Left" Padding="10,0,0,0"/>
+            <TextBlock Grid.Row="1" Name="VisitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Left" Padding="50,0,0,0"/>
 
             <!--Form fields starts from here-->
             <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -90,7 +90,7 @@
 
                     <!--Image of person visiting-->
                     <StackPanel Grid.Column="0" Orientation="Vertical">
-                        <Image Name="visitPatientPhoto" Height="180" Width="180" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg" />
+                        <Image Name="VisitPatientPhoto" Height="180" Width="180" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg" Margin="50,0,0,0" HorizontalAlignment="Left"/>
 
                         <!--General Detail Stackpanel-->
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,50,0,0">
@@ -153,8 +153,8 @@
                 <TextBlock Text="Date of Visit" FontSize="14"/>
                 <!--Date of visit-->
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                    <ComboBox Name="visitDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
-                    <ComboBox Name="visitMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
+                    <ComboBox Name="VisitDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
+                    <ComboBox Name="VisitMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
                         <x:String>January</x:String>
                         <x:String>February</x:String>
                         <x:String>March</x:String>
@@ -168,7 +168,7 @@
                         <x:String>November</x:String>
                         <x:String>December</x:String>
                     </ComboBox>
-                    <ComboBox Name="visitYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
+                    <ComboBox Name="VisitYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
                 </StackPanel>
 
                 <!--Symptoms textbox-->

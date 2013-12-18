@@ -46,10 +46,12 @@ namespace Health_Organizer
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
             this.ocString = new ObservableCollection<string>();
+
             VisitListBox.ItemsSource = this.ocString;
             this.InitializeVisitDetialsComboBox();
             this.InitializeDB(1);
             this.PID = 1;
+
         }
 
         private async void InitializeDB(int PID)
@@ -64,10 +66,14 @@ namespace Health_Organizer
             statement.EnableColumnsProperty();
             while (await statement.StepAsync())
             {
-                Debug.WriteLine(statement.Columns["DateVisited"]);
+                //Debug.WriteLine(statement.Columns["DateVisited"]);
                 this.ocString.Add(statement.Columns["DateVisited"]);
             }
             this.loadPatientDetails();
+            if (this.ocString.Count() > 0)
+            {
+                VisitListBox.SelectedIndex = 0;
+            }
         }
 
         private async void loadPatientDetails()
@@ -79,8 +85,8 @@ namespace Health_Organizer
             if (await s.StepAsync())
             {
                 Debug.WriteLine(s.Columns["PID"]);
-                visitPatientName.Text = s.Columns["FirstName"] + s.Columns["LastName"];
-                visitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
+                VisitPatientName.Text = s.Columns["FirstName"] + s.Columns["LastName"];
+                VisitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
             }
         }
 
@@ -90,18 +96,18 @@ namespace Health_Organizer
             //Adding days and years to combobox in form
             for (int i = 0; i < 31; i++)
             {
-                visitDayComboBox.Items.Add(i + 1);
+                VisitDayComboBox.Items.Add(i + 1);
             }
 
             for (int i = 2000; i <= DateTime.Now.Year; i++)
             {
-                visitYearComboBox.Items.Add(i);
+                VisitYearComboBox.Items.Add(i);
             }
 
             //Set current date in form
-            visitDayComboBox.SelectedItem = DateTime.Now.Day;
-            visitMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
-            visitYearComboBox.SelectedItem = DateTime.Now.Year;
+            VisitDayComboBox.SelectedItem = DateTime.Now.Day;
+            VisitMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+            VisitYearComboBox.SelectedItem = DateTime.Now.Year;
         }
 
 
@@ -176,9 +182,9 @@ namespace Health_Organizer
                     string[] dv = statement.Columns["DateVisited"].Split('-');
                     string[] height = statement.Columns["Height"].ToString().Split('.');
 
-                    visitDayComboBox.SelectedIndex = visitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
-                    visitMonthComboBox.SelectedIndex = visitMonthComboBox.Items.IndexOf(dv[1]);
-                    visitYearComboBox.SelectedIndex = visitYearComboBox.Items.IndexOf(Int32.Parse(dv[0]));
+                    VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
+                    VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
+                    VisitYearComboBox.SelectedIndex = VisitYearComboBox.Items.IndexOf(Int32.Parse(dv[0]));
                     VisitSymptoms.Text = statement.Columns["Symptoms"];
                     VisitDiseasesDiagnosed.Text = statement.Columns["DiseaseFound"];
 
@@ -191,6 +197,7 @@ namespace Health_Organizer
                 }
 
                 statement.Reset();
+                VisitMedicineGiven.IsEnabled = false;
                 query = "SELECT Medicine FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                 statement = await this.database.PrepareStatementAsync(query);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -204,6 +211,7 @@ namespace Health_Organizer
                 }
 
                 statement.Reset();
+                VisitVaccine.IsEnabled = false;
                 query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                 statement = await this.database.PrepareStatementAsync(query);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -257,9 +265,8 @@ namespace Health_Organizer
 
         private async void VisitSaveClicked(object sender, RoutedEventArgs e)
         {
-            bool x = await this.CheckIfFilled();
-
-            if (x)
+            check = false;
+            if (await this.CheckIfFilled())
             {
                 try
                 {
@@ -280,7 +287,8 @@ namespace Health_Organizer
             }
             else
             {
-                if (check)
+                Debug.WriteLine(check);
+                if (check && !isUpdating)
                 {
                     var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
                     messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
@@ -293,7 +301,7 @@ namespace Health_Organizer
         {
             double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
             int weight = Int32.Parse(VisitWeight.Text.ToString());
-            string DateVisited = visitYearComboBox.Items[visitYearComboBox.SelectedIndex].ToString() + "-" + visitMonthComboBox.Items[visitMonthComboBox.SelectedIndex].ToString() + "-" + visitDayComboBox.Items[visitDayComboBox.SelectedIndex].ToString();
+            string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
             double bmi = (1.0 * height) / weight;
 
             string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
@@ -347,6 +355,9 @@ namespace Health_Organizer
             //}
             this.ClearAllFields();
             isUpdating = false;
+            VisitMedicineGiven.IsEnabled = true;
+            VisitVaccine.IsEnabled = true;
+            this.UpdateEditedDetails();
 
             return 1;
         }
@@ -355,7 +366,7 @@ namespace Health_Organizer
         {
             double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
             int weight = Int32.Parse(VisitWeight.Text.ToString());
-            string DateVisited = visitYearComboBox.Items[visitYearComboBox.SelectedIndex].ToString() + "-" + visitMonthComboBox.Items[visitMonthComboBox.SelectedIndex].ToString() + "-" + visitDayComboBox.Items[visitDayComboBox.SelectedIndex].ToString();
+            string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
             double bmi = 1.0 * height / weight;
 
             string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
@@ -365,8 +376,14 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@dv", DateVisited);
             statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
             statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
-            statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
-            statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+            if (!VisitDiastolicBP.Text.ToString().Equals(""))
+            {
+                statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
+            }
+            if (!VisitSystolicBP.Text.ToString().Equals(""))
+            {
+                statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+            }
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
@@ -412,6 +429,7 @@ namespace Health_Organizer
             }
             this.ocString.Add(DateVisited);
             this.ClearAllFields();
+            VisitListBox.SelectedIndex = this.ocString.IndexOf(DateVisited);
 
             return 1;
         }
@@ -439,25 +457,25 @@ namespace Health_Organizer
             VisitWeight.ClearValue(BorderBrushProperty);
             VisitHeightFeet.ClearValue(BorderBrushProperty);
             VisitHeightInch.ClearValue(BorderBrushProperty);
-            visitMonthComboBox.ClearValue(BorderBrushProperty);
-            visitDayComboBox.ClearValue(BorderBrushProperty);
-            visitYearComboBox.ClearValue(BorderBrushProperty);
+            VisitMonthComboBox.ClearValue(BorderBrushProperty);
+            VisitDayComboBox.ClearValue(BorderBrushProperty);
+            VisitYearComboBox.ClearValue(BorderBrushProperty);
 
-           
             if (VisitDiseasesDiagnosed.Text.Equals("") || VisitSymptoms.Text.Equals("") ||
                 VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals("") || VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null ||
-                (ocString.Contains(visitYearComboBox.SelectedItem + "-" + visitMonthComboBox.SelectedItem + "-" + visitDayComboBox.SelectedItem)))
+                ((ocString.Contains(VisitYearComboBox.SelectedItem + "-" + VisitMonthComboBox.SelectedItem + "-" + VisitDayComboBox.SelectedItem) && !isUpdating)))
             {
-               
-                if ((ocString.Contains(visitYearComboBox.SelectedItem + "-" + visitMonthComboBox.SelectedItem + "-" + visitDayComboBox.SelectedItem)))
+                if ((ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
                 {
                     check = false;
                     var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
                     messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                     var dialogResult = await messageDialog.ShowAsync();
-                    visitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    visitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    visitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    VisitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    VisitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                    VisitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+
+                    return false;
                 }
                 else
                 {
@@ -499,46 +517,57 @@ namespace Health_Organizer
         private void VisitCancelClicked(object sender, RoutedEventArgs e)
         {
             this.ClearAllFields();
+            VisitMedicineGiven.IsEnabled = true;
+            VisitVaccine.IsEnabled = true;
             VisitFormBar.IsOpen = false;
         }
 
-        private async void visitSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void visitSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count() < 0)
                 return;
 
-            string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
-            Statement statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
+
+            this.UpdateEditedDetails();
+        }
+
+        private async void UpdateEditedDetails()
+        {
+            if (VisitListBox.SelectedItem != null)
             {
-                Debug.WriteLine("okay selected");
-                VisitTextSymptoms.Text = "";
-                foreach (string str in statement.Columns["Symptoms"].Split(','))
+                string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
                 {
-                    VisitTextSymptoms.Text += "\n• " + str;
+                    //Debug.WriteLine("okay selected");
+                    VisitTextSymptoms.Text = "";
+                    foreach (string str in statement.Columns["Symptoms"].Split(','))
+                    {
+                        VisitTextSymptoms.Text += "\n• " + str;
+                    }
+
+                    VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
+                    VisitTextBG.Text = statement.Columns["BloodGlucose"];
+                    VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
+                    VisitTextBMI.Text = statement.Columns["BMI"];
+                    VisitTextWeight.Text = statement.Columns["Weight"];
+                    VisitTextHeight.Text = statement.Columns["Height"];
                 }
 
-                VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
-                VisitTextBG.Text = statement.Columns["BloodGlucose"];
-                VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
-                VisitTextBMI.Text = statement.Columns["BMI"];
-                VisitTextWeight.Text = statement.Columns["Weight"];
-                VisitTextHeight.Text = statement.Columns["Height"];
-            }
-
-            statement.Reset();
-            query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
-            statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-            statement.EnableColumnsProperty();
-            VisitTextMedicines.Text = "";
-            while (await statement.StepAsync())
-            {
-                VisitTextMedicines.Text += "\n• " + statement.Columns["Medicine"];
+                statement.Reset();
+                query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                statement.EnableColumnsProperty();
+                VisitTextMedicines.Text = "";
+                while (await statement.StepAsync())
+                {
+                    VisitTextMedicines.Text += "\n• " + statement.Columns["Medicine"];
+                }
             }
         }
         //Validation for numeric entries in weight, bp and glucose
