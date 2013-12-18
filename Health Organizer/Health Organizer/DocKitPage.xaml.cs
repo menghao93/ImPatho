@@ -638,5 +638,31 @@ namespace Health_Organizer
                 docKitListBox.ItemsSource = this.ocStrings;
             }
         }
+        //For sorting the diseases
+        private void asc_option_Click(object sender, RoutedEventArgs e)
+        {
+            searchList = ocStrings.ToList();
+            ocStrings.Clear();
+            searchList.Sort(delegate(String c1, String c2)
+            {
+                return c1.CompareTo(c2);
+            });
+            this.ocStrings = new ObservableCollection<string>(searchList);
+            searchList.Clear();
+            this.docKitListBox.ItemsSource = this.ocStrings;
+        }
+
+        private void dsc_option_Click(object sender, RoutedEventArgs e)
+        {
+            searchList = ocStrings.ToList();
+            ocStrings.Clear();
+            searchList.Sort(delegate(String c1, String c2)
+            {
+                return c2.CompareTo(c1);
+            });
+            this.ocStrings = new ObservableCollection<string>(searchList);
+            searchList.Clear();
+            this.docKitListBox.ItemsSource = this.ocStrings;
+        }
     }
 }

@@ -246,8 +246,18 @@
     <Page.BottomAppBar>
         <CommandBar Name="docKitCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
             <AppBarButton Name="docKitAddBut" Icon="Add" Click="docKitAddItem"></AppBarButton>
-            <AppBarButton Name="docKitDelBut" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
-            <AppBarButton Name="docKitEditBut" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
+            <AppBarButton Name="docKitEditBut" Icon="Edit" Click="docKitEditItem" HorizontalAlignment="Right"></AppBarButton>
+            <AppBarButton Name="docKitDelBut" Icon="Cancel" Click="docKitDelItem" HorizontalAlignment="Center"></AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Name="docKitSortBut" Label="Sort"  HorizontalAlignment="Left" Icon="Sort">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Sort Ascending" Click="asc_option_Click"/>
+                            <MenuFlyoutItem Text="Sort Descending" Click="dsc_option_Click"/>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 
