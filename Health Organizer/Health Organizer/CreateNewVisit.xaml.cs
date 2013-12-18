@@ -49,43 +49,41 @@ namespace Health_Organizer
 
             VisitListBox.ItemsSource = this.ocString;
             this.InitializeVisitDetialsComboBox();
-            this.InitializeDB(1);
-            this.PID = 1;
-
         }
 
-        private async void InitializeDB(int PID)
+        private async void InitializeDB(int pid)
         {
             this.connection = new DBConnect();
             await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
             database = this.connection.GetConnection();
 
-            string query = "SELECT * FROM MedicalDetails";
+            string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(query);
-            //statement.BindIntParameterWithName("@pid", PID);
+            statement.BindIntParameterWithName("@pid", pid);
             statement.EnableColumnsProperty();
             while (await statement.StepAsync())
             {
                 //Debug.WriteLine(statement.Columns["DateVisited"]);
                 this.ocString.Add(statement.Columns["DateVisited"]);
             }
-            this.loadPatientDetails();
+
+            this.loadPatientDetails(pid);
             if (this.ocString.Count() > 0)
             {
                 VisitListBox.SelectedIndex = 0;
             }
         }
 
-        private async void loadPatientDetails()
+        private async void loadPatientDetails(int pid)
         {
             string q = "SELECT * FROM Patient WHERE PID = @pid";
             Statement s = await this.database.PrepareStatementAsync(q);
-            s.BindIntParameterWithName("@pid", this.PID);
+            s.BindIntParameterWithName("@pid", pid);
             s.EnableColumnsProperty();
             if (await s.StepAsync())
             {
-                Debug.WriteLine(s.Columns["PID"]);
-                VisitPatientName.Text = s.Columns["FirstName"] + s.Columns["LastName"];
+                //Debug.WriteLine(s.Columns["PID"]);
+                VisitPatientName.Text = s.Columns["FirstName"] + " " + s.Columns["LastName"];
                 VisitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
             }
         }
@@ -133,6 +131,8 @@ namespace Health_Organizer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            this.PID = Int32.Parse(e.Parameter as string);
+            this.InitializeDB(this.PID);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
