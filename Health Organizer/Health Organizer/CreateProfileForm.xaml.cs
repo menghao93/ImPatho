@@ -366,9 +366,9 @@ namespace Health_Organizer
             }
         }
 
-        private async void CancelNewProfile(object sender, RoutedEventArgs e)
+        private async void ResetNewProfile(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to cancel? All the details entered would be lost.", "Confirmation.");
+            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to reset? All the details entered would be lost.", "Confirmation.");
             messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
             messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
             messageDialog.DefaultCommandIndex = 1;
@@ -376,10 +376,30 @@ namespace Health_Organizer
 
             if (dialogResult.Label.Equals("Yes"))
             {
-                this.NavigationHelper.GoBack();
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
+                profileFirstName.Text = "";
+                profileLastName.Text = "";
+                profileBloodGroup.SelectedItem = null;
+                profileSexType.SelectedItem = null;
+                profileMonthComboBox.SelectedItem = null;
+                profileYearComboBox.SelectedItem = null;
+                profileDayComboBox.SelectedItem = null;
+                profileAddress.Text = "";
+                profileCity.Text = "";
+                profileZip.Text = "";
+                profileState.Text = "";
+                profileCountry.Text = "";
+                profileContactNumber.Text = "";
+                profileEmergencyNumber.Text = "";
+                profileEmailAddress.Text = "";
+                profileAllergies.Text = "";
+                profileOccupation.Text = "";
+                profileOperations.Text = "";
+                profileFamilyHistory.Text = "";
+                profileAddictions.Text = "";
+                profileMarried.IsChecked = false;
+                
             }
+
         }
 
         private void profileDayComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -426,6 +446,22 @@ namespace Health_Organizer
                  counterComma = 0;
             }
         
+        }
+
+        private async void GoBackNewProfile(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to cancel? All the details entered would be lost.", "Confirmation.");
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
+            messageDialog.DefaultCommandIndex = 1;
+            var dialogResult = await messageDialog.ShowAsync();
+
+            if (dialogResult.Label.Equals("Yes"))
+            {
+                this.NavigationHelper.GoBack();
+                database.Dispose();
+                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
+            }
         }
     }
 }
