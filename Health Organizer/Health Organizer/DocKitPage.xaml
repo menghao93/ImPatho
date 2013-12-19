@@ -252,8 +252,8 @@
                 <AppBarButton Name="docKitSortBut" Label="Sort"  HorizontalAlignment="Left" Icon="Sort">
                     <AppBarButton.Flyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Sort Ascending" Click="asc_option_Click"/>
-                            <MenuFlyoutItem Text="Sort Descending" Click="dsc_option_Click"/>
+                            <MenuFlyoutItem Text="Sort Ascending" Click="SortAscending"/>
+                            <MenuFlyoutItem Text="Sort Descending" Click="SortDescending"/>
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
