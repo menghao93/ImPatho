@@ -20,7 +20,7 @@ namespace Health_Organizer
 {
     public sealed partial class RecordPage : Page
     {
-        private int PID = 2;
+        private int PID = 1;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 

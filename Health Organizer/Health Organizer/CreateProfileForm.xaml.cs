@@ -111,8 +111,8 @@ namespace Health_Organizer
                 profileDayComboBox.SelectedIndex = profileDayComboBox.Items.IndexOf(Int32.Parse(date[2]));
                 profileMonthComboBox.SelectedIndex = profileMonthComboBox.Items.IndexOf(date[1]);
                 profileYearComboBox.SelectedIndex = profileYearComboBox.Items.IndexOf(Int32.Parse(date[0]));
-                profilePic.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
-                Debug.WriteLine(decodedImage + " 1");
+                decodedImage = statement.Columns["Image"];
+                profilePic.Source = await ImageMethods.Base64StringToBitmap(decodedImage);
             }
             statement.Reset();
 
@@ -263,6 +263,7 @@ namespace Health_Organizer
                         this.UpdateBasicDetails();
                         this.UpdateAddress(this.updatePID);
                         this.UpdateMutableDetails(this.updatePID);
+                        this.isUpdating = false;
                     }
                     else
                     {
