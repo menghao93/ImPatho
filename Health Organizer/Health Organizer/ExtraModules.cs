@@ -20,5 +20,10 @@ namespace Health_Organizer
             }
             return result;
         }
+
+        public static double CalculateBMI(int feet, int inch, int weight)
+        {
+            return weight / (((feet * 12) + inch) * 0.0254); 
+        }
     }
 }

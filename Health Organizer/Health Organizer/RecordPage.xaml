@@ -51,12 +51,12 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
+                    <AppBarButton Name="ViewProfileVisit" Label="New Patient" Icon="Add" Click="AddNewEntryForm" HorizontalAlignment="Center"/>
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
             </Grid>
         </Grid>
-        <Button Content="New Patient" HorizontalAlignment="Left" Margin="37,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="AddNewEntryForm"/>
-        <Button Content="Create new Visit" HorizontalAlignment="Left" Margin="37,50,0,0" Grid.Row="1" VerticalAlignment="Top" Click="CreateNewVisit"/>
+        <Button Content="Create new Visit" HorizontalAlignment="Left" Margin="40,0,0,0" Grid.Row="1" VerticalAlignment="Top" Click="CreateNewVisit"/>
     </Grid>
 </Page>

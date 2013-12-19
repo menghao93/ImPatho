@@ -200,14 +200,14 @@
                     <Image Name="docKitImage" Height="500" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Name="docKitD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
-                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                        <ScrollViewer Height="400" Margin="0,25,0,0" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
                             <TextBlock Name="docKitDescription" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
                         <TextBlock Name="docKitS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
-                        <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
-                            <TextBlock Name="docKitSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
+                        <ScrollViewer Height="400" Margin="0,25,0,0" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                            <StackPanel Name="docKitSymptomsPanel" />
                         </ScrollViewer>
                     </StackPanel>
                 </Grid>

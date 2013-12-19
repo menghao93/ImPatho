@@ -290,7 +290,7 @@ namespace Health_Organizer
 
         private void showDiseaseItems()
         {
-            docKitSymptoms.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            docKitSymptomsPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitName.Visibility = Windows.UI.Xaml.Visibility.Visible;
             docKitImage.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -310,7 +310,7 @@ namespace Health_Organizer
 
         private void hideDiseaseItems()
         {
-            docKitSymptoms.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            docKitSymptomsPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             docKitDescription.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             docKitName.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             docKitImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -335,12 +335,33 @@ namespace Health_Organizer
             docKitDescription.Text = "\n" + tempDisease.Description;
             docKitImage.Source = await ImageMethods.Base64StringToBitmap(tempDisease.Image);
 
-            string tempSymptoms = "";
+          //  string tempSymptoms = "";
+
+            docKitSymptomsPanel.Children.Clear();
             foreach (var i in tempDisease.Symptoms.Split(','))
             {
-                tempSymptoms += "\n• " + ExtraModules.RemoveStringSpace(i);
+               // tempSymptoms += "\n• " + ExtraModules.RemoveStringSpace(i);
+
+                StackPanel docKitSymptomsStackPanels = new StackPanel();
+                docKitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                docKitSymptomsStackPanels.Orientation = Orientation.Horizontal;
+
+                TextBlock dot = new TextBlock();
+                dot.Width = 15;
+                dot.FontSize = 20;
+                dot.Text = "•";
+                docKitSymptomsStackPanels.Children.Add(dot);
+
+                TextBlock Symptom = new TextBlock();
+                Symptom.Width = 650;
+                Symptom.Text = ExtraModules.RemoveStringSpace(i);
+                Symptom.TextWrapping = TextWrapping.Wrap;
+                Symptom.FontSize = 20;
+                docKitSymptomsStackPanels.Children.Add(Symptom);
+
+                docKitSymptomsPanel.Children.Add(docKitSymptomsStackPanels);
             }
-            docKitSymptoms.Text = tempSymptoms;
+          //  docKitSymptoms.Text = tempSymptoms;
         }
 
         private async void UpdateFirstAidData(BasicFirstAid tempFirstAid)

@@ -172,14 +172,27 @@ namespace Health_Organizer
                     string[] dv = statement.Columns["DateVisited"].Split('-');
                     string[] height = statement.Columns["Height"].ToString().Split('.');
 
+                    double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
+                    double inchHeight = totalInchHeight % 12;
+                    double feetHeight = (totalInchHeight - inchHeight)/12;
+
                     VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
                     VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
                     VisitYearComboBox.SelectedIndex = VisitYearComboBox.Items.IndexOf(Int32.Parse(dv[0]));
                     VisitSymptoms.Text = statement.Columns["Symptoms"];
                     VisitDiseasesDiagnosed.Text = statement.Columns["DiseaseFound"];
 
-                    VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(height[0]);
-                    VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(height[1]);
+                    int itemFeetHeight = Convert.ToInt32(Math.Round(feetHeight));
+                    int itemInchHeight = Convert.ToInt32(Math.Round(inchHeight));
+
+                    if (itemInchHeight == 12)
+                    {
+                        itemFeetHeight += 1;
+                        itemInchHeight = 0;
+                    }
+
+                    VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
+                    VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
                     VisitWeight.Text = statement.Columns["Weight"];
                     VisitSystolicBP.Text = statement.Columns["SystolicBP"];
                     VisitDiastolicBP.Text = statement.Columns["DiastolicBP"];
@@ -196,7 +209,6 @@ namespace Health_Organizer
                 VisitMedicineGiven.Text = "";
                 while (await statement.StepAsync())
                 {
-                    //Debug.WriteLine(statement.Columns["Medicine"]);
                     VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
                 }
 
@@ -211,7 +223,7 @@ namespace Health_Organizer
                 while (await statement.StepAsync())
                 {
                     //Debug.WriteLine(statement.Columns["Vaccine"]);
-                    VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
+                    VisitVaccine.Text += statement.Columns["Vaccine"] + ",";                  
                 }
 
                 isUpdating = true;
@@ -289,10 +301,10 @@ namespace Health_Organizer
 
         private async Task<int> UpdateDetails()
         {
-            double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
+            double height = ((VisitHeightFeet.SelectedIndex + 1)*12 + VisitHeightInch.SelectedIndex) * 0.0254;
             int weight = Int32.Parse(VisitWeight.Text.ToString());
             string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
-            double bmi = (1.0 * height) / weight;
+            double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
 
             string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
             Statement statement = await this.database.PrepareStatementAsync(updateQuery);
@@ -354,10 +366,10 @@ namespace Health_Organizer
 
         private async Task<int> InsertDetails()
         {
-            double height = Double.Parse(VisitHeightFeet.Items[VisitHeightFeet.SelectedIndex].ToString() + "." + VisitHeightInch.Items[VisitHeightInch.SelectedIndex].ToString());
+            double height = ((VisitHeightFeet.SelectedIndex + 1) * 12 + VisitHeightInch.SelectedIndex) * 0.0254;
             int weight = Int32.Parse(VisitWeight.Text.ToString());
             string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
-            double bmi = 1.0 * height / weight;
+            double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
 
             string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
                                  "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
@@ -532,20 +544,41 @@ namespace Health_Organizer
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {
-                    //Debug.WriteLine("okay selected");
-                    VisitTextSymptoms.Text = "";
-                    
+
+                    VisitSymptomsPanel.Children.Clear(); 
+
                     foreach (string str in statement.Columns["Symptoms"].Split(','))
                     {   
+                        StackPanel VisitSymptomsStackPanels = new StackPanel();
+                        VisitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                        VisitSymptomsStackPanels.Orientation = Orientation.Horizontal;
 
-                        VisitTextSymptoms.Text += "\n• " + ExtraModules.RemoveStringSpace(str);
+                        TextBlock dot = new TextBlock();
+                        dot.Width = 10;
+                        dot.FontSize = 15;
+                        dot.Text = "•";
+                        VisitSymptomsStackPanels.Children.Add(dot);
+                        
+                        TextBlock vaccineName = new TextBlock();
+                        vaccineName.Width = 280;
+                        vaccineName.Text = ExtraModules.RemoveStringSpace(str);
+                        vaccineName.TextWrapping = TextWrapping.Wrap;
+                        vaccineName.FontSize = 15;
+                        VisitSymptomsStackPanels.Children.Add(vaccineName);
+                        
+                        VisitSymptomsPanel.Children.Add(VisitSymptomsStackPanels);
                     }
 
                     VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
                     VisitTextBG.Text = statement.Columns["BloodGlucose"];
                     VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
-                    VisitTextBMI.Text = statement.Columns["BMI"];
+
+                    double BMIDouble = Convert.ToDouble(statement.Columns["BMI"]);
+                    Double BMIRounded3 = Math.Round(BMIDouble, 3);
+                    VisitTextBMI.Text = BMIRounded3.ToString();
+                    
                     VisitTextWeight.Text = statement.Columns["Weight"];
+                    Debug.WriteLine(statement.Columns["Height"]);
                     VisitTextHeight.Text = statement.Columns["Height"];
                 }
 
@@ -555,10 +588,58 @@ namespace Health_Organizer
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                 statement.EnableColumnsProperty();
-                VisitTextMedicines.Text = "";
+
+                VisitTextMedicines.Children.Clear();
                 while (await statement.StepAsync())
                 {
-                    VisitTextMedicines.Text += "\n• " + statement.Columns["Medicine"];
+                    StackPanel VisitMedicineStackPanels = new StackPanel();
+                    VisitMedicineStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                    VisitMedicineStackPanels.Orientation = Orientation.Horizontal;
+
+                    TextBlock dot = new TextBlock();
+                    dot.Width = 10;
+                    dot.FontSize = 15;
+                    dot.Text = "•";
+                    VisitMedicineStackPanels.Children.Add(dot);
+
+                    TextBlock medicineName = new TextBlock();
+                    medicineName.Width = 280;
+                    medicineName.Text = ExtraModules.RemoveStringSpace(statement.Columns["Medicine"]);
+                    medicineName.TextWrapping = TextWrapping.Wrap;
+                    medicineName.FontSize = 15;
+                    VisitMedicineStackPanels.Children.Add(medicineName);
+
+                    VisitTextMedicines.Children.Add(VisitMedicineStackPanels);
+                }
+
+                statement.Reset();
+                query = "SELECT * FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                statement.EnableColumnsProperty();
+
+                VisitTextVaccine.Children.Clear();
+                while (await statement.StepAsync())
+                {
+                    StackPanel VisitVaccineStackPanels = new StackPanel();
+                    VisitVaccineStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                    VisitVaccineStackPanels.Orientation = Orientation.Horizontal;
+
+                    TextBlock dot = new TextBlock();
+                    dot.Width = 10;
+                    dot.FontSize = 15;
+                    dot.Text = "•";
+                    VisitVaccineStackPanels.Children.Add(dot);
+
+                    TextBlock VaccineName = new TextBlock();
+                    VaccineName.Width = 280;
+                    VaccineName.Text = ExtraModules.RemoveStringSpace(statement.Columns["Vaccine"]);
+                    VaccineName.TextWrapping = TextWrapping.Wrap;
+                    VaccineName.FontSize = 15;
+                    VisitVaccineStackPanels.Children.Add(VaccineName);
+
+                    VisitTextVaccine.Children.Add(VisitVaccineStackPanels);
                 }
             }
         }
