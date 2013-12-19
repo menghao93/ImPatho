@@ -48,14 +48,18 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="0.90*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             
-            <Grid Grid.Column="1">
-                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+            <Grid Grid.Column="0">
+                <Image Name="ProfileImage" Source="Assets/DefaultProfilePic.jpg" Height="250" Width="250" VerticalAlignment="Top" Margin="0,15,0,0"/>
+            </Grid>
+            
+            <ScrollViewer Grid.Column="1">
+                <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="600" HorizontalAlignment="Left">
 
-                    <TextBlock Name="ProfileBasicDetails" Text="Basic Details" FontSize="30" Margin="0,00,0,20"/>
+                    <TextBlock Name="ProfileBasicDetails" Text="Basic Details" FontSize="30" Margin="0,0,0,20"/>
                     
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="20" Width="150" Text="Name: " />
@@ -63,14 +67,22 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock FontSize="20" Width="150" Text="Date of Birth: " />
+                        <TextBlock Name="ProfileDateOfBirth" FontSize="20" Text="1994-April-13" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                         <TextBlock FontSize="20" Width="150" Text="Address: " />
-                        <TextBlock Name="ProfileAddress" FontSize="20" Text="First Name Last Name" />
+                        <TextBlock Name="ProfileAddress" Width="450"  TextWrapping="Wrap" FontSize="20" Text="64, Tulshi shyam soc, Near nowhere in India, Ahemdabad, Gujarat" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Contact: " />
                         <TextBlock Name="ProfileContact" Width="300" FontSize="20" Text="8141000007" />
-                        <TextBlock FontSize="20" Width="250" Text="Emergency Contact: " />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <TextBlock FontSize="20" Width="150" Text="Emergency No: " />
                         <TextBlock Name="ProfileEmContact" FontSize="20" Text="9141000007" />
                     </StackPanel>
 
@@ -82,11 +94,14 @@
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Occupation: " />
                         <TextBlock Name="ProfileOccupation" Width="300" FontSize="20" Text="Student" />
-                        <TextBlock FontSize="20" Width="250" Text="Marital Status: " />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <TextBlock FontSize="20" Width="150" Text="Marital Status: " />
                         <TextBlock Name="ProfileMaritalStatus" FontSize="20" Text="Not Married" />
                     </StackPanel>
 
-                    <TextBlock Name="ProfileOtherDetails" Text="Other Details" FontSize="30" Margin="0,20,0,20"/>
+                    <TextBlock Name="ProfileOtherDetails" Text="Other Details" FontSize="30" Margin="0,30,0,20"/>
                     
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Blood Group: " />
@@ -100,44 +115,22 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Allergies: " />
-                        <TextBlock Name="ProfileAllergies" FontSize="20" Text="I dont have one dear " />
+                        <TextBlock Name="ProfileAllergies" Width="450"  TextWrapping="Wrap" FontSize="20" Text="I dont have one dear If you have one"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Addictions: " />
-                        <TextBlock Name="ProfileAddictions" FontSize="20" Text="Cocain, Heroin" />
+                        <TextBlock Name="ProfileAddictions" FontSize="20" Width="450"  TextWrapping="Wrap" Text="Cocain, Heroin, Ganja, Wine, Cigaret, Women, Sex, Marijura, Coca, Necoine" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Family History: " />
-                        <TextBlock Name="ProfileFamilyHistory" FontSize="20" Text="Other" />
+                        <TextBlock Name="ProfileFamilyHistory" Width="450"  TextWrapping="Wrap" FontSize="20" Text="Grandfather had HIV, Father had Diabitis, Two brothers suffering from cancer" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Operations: " />
-                        <TextBlock Name="ProfileOperations" FontSize="20" Text="Other" />
+                        <TextBlock Name="ProfileOperations" FontSize="20" Width="450"  TextWrapping="Wrap" Text="Apendix removal, Kideny Stone and Breast implantation" />
                     </StackPanel>
                 </StackPanel>
-
-                <!--<StackPanel Grid.Column="0" Margin="10,10,10,10">
-                    <TextBlock FontSize="30" Margin="0,0,0,20" Text="Basic Details"/>
-                    <TextBlock FontSize="20" Text="Name :" Margin="0,5,0,0"/>
-                    <TextBlock FontSize="20" Margin="0,10,0,0" Text="Address :"/>
-                    <TextBlock FontSize="20" Text="Contact Number :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Emergency Number :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Email :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Occupation :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Married :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="30" Margin="0,20,0,20" Text="Other Details"/>
-                    <TextBlock FontSize="20" Text="Blood Group :" Margin="0,5,0,0"/>
-                    <TextBlock FontSize="20" Text="Sex :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Allergies :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Addictions :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Family History :" Margin="0,10,0,0"/>
-                    <TextBlock FontSize="20" Text="Operations :" Margin="0,10,0,0"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Margin="10,10,10,10">
-                    <TextBlock Name="profileDetailsName" Margin="0,25,0,0" Text="vSV"/>
-                    
-                </StackPanel>-->
-            </Grid>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>
