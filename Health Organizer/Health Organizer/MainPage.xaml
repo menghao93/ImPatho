@@ -6,7 +6,8 @@
     xmlns:local="using:Health_Organizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    KeyUp="SignInEnterPressed">
     <Page.Resources>
         <Style x:Key="ButtonStyleEdited" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
@@ -84,17 +85,19 @@
     </Page.Resources>
 
     <StackPanel Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" Background="Black">
-        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Welcome to HEALTH ORGANIZER!" TextAlignment="Center" FontSize="80" Padding="100"/>
+        <Image Source="Assets/logo_homescreen.png" Height="400" Width="800"></Image>
         <Border Padding="10">
-            <StackPanel Orientation="Horizontal" Width="1200" Height="50" >
-                <TextBlock ToolTipService.ToolTip="Eg: You need your password to Enter" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
-                <TextBox Style="{StaticResource TextBoxStyle}" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  Margin="50,0,0,0" Width="500" Text="Please Enter your user name"/>
-            </StackPanel>
+            <ScrollViewer IsTabStop="True" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal" Width="1200" Height="50" >
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  Margin="50,0,0,0" Width="500" PlaceholderText="Please Enter your user name" Padding="10"/>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
         <Border Padding="10">
             <StackPanel Orientation="Horizontal" Width="1200" Height="50" >
                 <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="30" Margin="310,0,0,0"/>
-                <TextBox Style="{StaticResource TextBoxStyle}" Margin="50,0,0,0" Width="500" Text="Please Enter the password"/>
+                <TextBox Style="{StaticResource TextBoxStyle}" Margin="50,0,0,0" Width="500" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
             </StackPanel>
         </Border>
         <Border Padding="10">

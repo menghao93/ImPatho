@@ -40,5 +40,16 @@ namespace Health_Organizer
 
         }
 
+        private void SignInEnterPressed(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
+            {
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MainMenuPage));
+                }
+            }
+        }
+
     }
 }
