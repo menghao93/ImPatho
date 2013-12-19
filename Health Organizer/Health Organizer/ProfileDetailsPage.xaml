@@ -45,7 +45,12 @@
                         AutomationProperties.ItemType="Navigation Button"/>
             <TextBlock x:Name="pageTitle" Text="Profile" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-            <AppBarButton Grid.Column="1" HorizontalAlignment="Left" Label="Edit Profile" Margin="998,45,0,0" VerticalAlignment="Top" Icon="Edit" Click="profileDetailsEditBut"/>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0" >
+                <AppBarButton Grid.Column="1" Label="Edit Profile" Icon="Edit" Click="profileDetailsEditBut"/>
+                <AppBarButton  Label="Help" Icon="Help" />
+                <AppBarButton  Label="Settings" Icon="Setting"  />
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
