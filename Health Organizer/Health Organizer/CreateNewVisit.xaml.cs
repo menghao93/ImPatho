@@ -173,8 +173,8 @@ namespace Health_Organizer
                     string[] height = statement.Columns["Height"].ToString().Split('.');
 
                     double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
-                    double feetHeight = totalInchHeight % 12;
-                    double inchHeight = totalInchHeight - feetHeight * 12;
+                    double inchHeight = totalInchHeight % 12;
+                    double feetHeight = (totalInchHeight - inchHeight)/12;
 
                     VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
                     VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
@@ -209,7 +209,6 @@ namespace Health_Organizer
                 VisitMedicineGiven.Text = "";
                 while (await statement.StepAsync())
                 {
-                    //Debug.WriteLine(statement.Columns["Medicine"]);
                     VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
                 }
 

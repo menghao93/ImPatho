@@ -83,7 +83,7 @@
             </Grid>
 
 
-            <TextBlock Grid.Row="1" Name="VisitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Left" Text="FirstName LastName" Padding="50,0,0,0"/>
+            <TextBlock Grid.Row="1" Name="VisitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Left" Text="Name" Padding="50,0,0,0"/>
 
             <!--Form fields starts from here-->
             <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -104,27 +104,27 @@
                             <!--Height Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleHeight"  Text="Height: " FontSize="15"/>
-                                <TextBlock Name="VisitTextHeight" FontSize="15" Text="180 cm" Margin="15,0,0,0"/>
+                                <TextBlock Name="VisitTextHeight" FontSize="15" Margin="15,0,0,0"/>
                             </StackPanel>
                             <!--Weight Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleWeight"  Text="Weight: " FontSize="15" />
-                                <TextBlock Name="VisitTextWeight" FontSize="15" Text="72 Kg" Margin="15,0,0,0"/>
+                                <TextBlock Name="VisitTextWeight" FontSize="15" Margin="15,0,0,0"/>
                             </StackPanel>
                             <!--BMI Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleBMI"  Text="BMI: " FontSize="15" />
-                                <TextBlock Name="VisitTextBMI" FontSize="15" Text="19" Margin="15,0,0,0"/>
+                                <TextBlock Name="VisitTextBMI" FontSize="15" Margin="15,0,0,0"/>
                             </StackPanel>
                             <!--Blood pressure Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleBP"  Text="Blood Pressure: " FontSize="15" />
-                                <TextBlock Name="VisitTextBP" FontSize="15" Text="320/170" Margin="15,0,0,0"/>
+                                <TextBlock Name="VisitTextBP" FontSize="15" Margin="15,0,0,0"/>
                             </StackPanel>
                             <!--Blood glucose detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleBG"  Text="Blood Glucose: " FontSize="15" />
-                                <TextBlock Name="VisitTextBG" FontSize="15" Text="180" Margin="15,0,0,0"/>
+                                <TextBlock Name="VisitTextBG" FontSize="15" Margin="15,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
