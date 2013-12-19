@@ -20,7 +20,7 @@ namespace Health_Organizer
 {
     public sealed partial class RecordPage : Page
     {
-        private int PID = 1;
+        private int PID = 2;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
@@ -78,7 +78,8 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(CreateProfileForm));
+                //This indicates that no PID is passed as a parameter
+                this.Frame.Navigate(typeof(CreateProfileForm), "-1");
             }
         }
 

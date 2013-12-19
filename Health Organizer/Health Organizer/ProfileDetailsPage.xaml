@@ -45,18 +45,19 @@
                         AutomationProperties.ItemType="Navigation Button"/>
             <TextBlock x:Name="pageTitle" Text="Profile" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <AppBarButton Grid.Column="1" HorizontalAlignment="Left" Label="Edit Profile" Margin="998,45,0,0" VerticalAlignment="Top" Icon="Edit" Click="profileDetailsEditBut"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid Grid.Column="1">
                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">
 
                     <TextBlock Name="ProfileBasicDetails" Text="Basic Details" FontSize="30" Margin="0,00,0,20"/>
-                    
+
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="20" Width="150" Text="Name: " />
                         <TextBlock Name="ProfileName" FontSize="20" Text="First Name Last Name" />
@@ -87,7 +88,7 @@
                     </StackPanel>
 
                     <TextBlock Name="ProfileOtherDetails" Text="Other Details" FontSize="30" Margin="0,20,0,20"/>
-                    
+
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <TextBlock FontSize="20" Width="150" Text="Blood Group: " />
                         <TextBlock Name="ProfileBloodGroup" Width="300" FontSize="20" Text="AB+" />
