@@ -72,6 +72,12 @@ namespace Health_Organizer
             {
                 VisitListBox.SelectedIndex = 0;
             }
+            else
+            {
+                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                EditVisit.IsEnabled = false;
+                DeleteVisit.IsEnabled = false;
+            }
         }
 
         private async void loadPatientDetails(int pid)
@@ -174,7 +180,7 @@ namespace Health_Organizer
 
                     double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
                     double inchHeight = totalInchHeight % 12;
-                    double feetHeight = (totalInchHeight - inchHeight)/12;
+                    double feetHeight = (totalInchHeight - inchHeight) / 12;
 
                     VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
                     VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
@@ -200,7 +206,7 @@ namespace Health_Organizer
                 }
 
                 statement.Reset();
-                VisitMedicineGiven.IsEnabled = false;
+                //VisitMedicineGiven.IsEnabled = false;
                 query = "SELECT Medicine FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                 statement = await this.database.PrepareStatementAsync(query);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -213,7 +219,7 @@ namespace Health_Organizer
                 }
 
                 statement.Reset();
-                VisitVaccine.IsEnabled = false;
+                //VisitVaccine.IsEnabled = false;
                 query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                 statement = await this.database.PrepareStatementAsync(query);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -223,7 +229,7 @@ namespace Health_Organizer
                 while (await statement.StepAsync())
                 {
                     //Debug.WriteLine(statement.Columns["Vaccine"]);
-                    VisitVaccine.Text += statement.Columns["Vaccine"] + ",";                  
+                    VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
                 }
 
                 isUpdating = true;
@@ -263,6 +269,17 @@ namespace Health_Organizer
                     Debug.WriteLine(statement.Columns["Medicine"]);
                 }
             }
+
+            if (this.ocString.Count() <= 0)
+            {
+                EditVisit.IsEnabled = false;
+                DeleteVisit.IsEnabled = false;
+                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else
+            {
+                VisitListBox.SelectedIndex = 0;
+            }
         }
 
         private async void VisitSaveClicked(object sender, RoutedEventArgs e)
@@ -301,7 +318,7 @@ namespace Health_Organizer
 
         private async Task<int> UpdateDetails()
         {
-            double height = ((VisitHeightFeet.SelectedIndex + 1)*12 + VisitHeightInch.SelectedIndex) * 0.0254;
+            double height = ((VisitHeightFeet.SelectedIndex + 1) * 12 + VisitHeightInch.SelectedIndex) * 0.0254;
             int weight = Int32.Parse(VisitWeight.Text.ToString());
             string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
             double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
@@ -330,35 +347,48 @@ namespace Health_Organizer
 
             //await statement.StepAsync();
 
-            //statement.Reset();
-            //string updateMedicine = "UPDATE MedicalDetailsMedicine SET Medicine = @medicine WHERE PID = @pid AND DateVisited = @dv";
+            statement.Reset();
+            string deleteMedicine = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+            statement = await this.database.PrepareStatementAsync(deleteMedicine);
+            statement.BindIntParameterWithName("@pid", this.PID);
+            statement.BindTextParameterWithName("@dv", DateVisited);
+            await statement.StepAsync();
 
-            //foreach (string str in VisitMedicineGiven.Text.Split(','))
-            //{
-            //    statement = await this.database.PrepareStatementAsync(updateMedicine);
-            //    statement.BindIntParameterWithName("@pid", this.PID);
-            //    statement.BindTextParameterWithName("@dv", DateVisited);
-            //    statement.BindTextParameterWithName("@medicine", str);
+            string deleteVaccine = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+            statement = await this.database.PrepareStatementAsync(deleteVaccine);
+            statement.BindIntParameterWithName("@pid", this.PID);
+            statement.BindTextParameterWithName("@dv", DateVisited);
+            await statement.StepAsync();
 
-            //    await statement.StepAsync();
-            //    statement.Reset();
-            //}
+            statement.Reset();
+            string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
+            foreach (string str in VisitMedicineGiven.Text.Split(','))
+            {
+                statement = await this.database.PrepareStatementAsync(insertMedicine);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                statement.BindTextParameterWithName("@medicine", str);
 
-            //string updateVaccine = "UPDATE MedicalDetailsVaccine SET Vaccine = @vaccine WHERE PID = @pid AND DateVisited = @dv";
-            //foreach (string str in VisitVaccine.Text.Split(','))
-            //{
-            //    statement = await this.database.PrepareStatementAsync(updateVaccine);
-            //    statement.BindIntParameterWithName("@pid", this.PID);
-            //    statement.BindTextParameterWithName("@dv", DateVisited);
-            //    statement.BindTextParameterWithName("@vaccine", str);
+                await statement.StepAsync();
+                statement.Reset();
+            }
 
-            //    await statement.StepAsync();
-            //    statement.Reset();
-            //}
+            string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
+            foreach (string str in VisitVaccine.Text.Split(','))
+            {
+                statement = await this.database.PrepareStatementAsync(insertVaccine);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                statement.BindTextParameterWithName("@vaccine", str);
+
+                await statement.StepAsync();
+                statement.Reset();
+            }
+
             this.ClearAllFields();
             isUpdating = false;
-            VisitMedicineGiven.IsEnabled = true;
-            VisitVaccine.IsEnabled = true;
+            //VisitMedicineGiven.IsEnabled = true;
+            //VisitVaccine.IsEnabled = true;
             this.UpdateEditedDetails();
 
             return 1;
@@ -432,6 +462,13 @@ namespace Health_Organizer
             this.ocString.Add(DateVisited);
             this.ClearAllFields();
             VisitListBox.SelectedIndex = this.ocString.IndexOf(DateVisited);
+
+            if (this.ocString.Count() == 1)
+            {
+                EditVisit.IsEnabled = true;
+                DeleteVisit.IsEnabled = true;
+                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
 
             return 1;
         }
@@ -545,10 +582,10 @@ namespace Health_Organizer
                 if (await statement.StepAsync())
                 {
 
-                    VisitSymptomsPanel.Children.Clear(); 
+                    VisitSymptomsPanel.Children.Clear();
 
                     foreach (string str in statement.Columns["Symptoms"].Split(','))
-                    {   
+                    {
                         StackPanel VisitSymptomsStackPanels = new StackPanel();
                         VisitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
                         VisitSymptomsStackPanels.Orientation = Orientation.Horizontal;
@@ -558,14 +595,14 @@ namespace Health_Organizer
                         dot.FontSize = 15;
                         dot.Text = "•";
                         VisitSymptomsStackPanels.Children.Add(dot);
-                        
+
                         TextBlock vaccineName = new TextBlock();
                         vaccineName.Width = 280;
                         vaccineName.Text = ExtraModules.RemoveStringSpace(str);
                         vaccineName.TextWrapping = TextWrapping.Wrap;
                         vaccineName.FontSize = 15;
                         VisitSymptomsStackPanels.Children.Add(vaccineName);
-                        
+
                         VisitSymptomsPanel.Children.Add(VisitSymptomsStackPanels);
                     }
 
@@ -576,7 +613,7 @@ namespace Health_Organizer
                     double BMIDouble = Convert.ToDouble(statement.Columns["BMI"]);
                     Double BMIRounded3 = Math.Round(BMIDouble, 3);
                     VisitTextBMI.Text = BMIRounded3.ToString();
-                    
+
                     VisitTextWeight.Text = statement.Columns["Weight"];
                     Debug.WriteLine(statement.Columns["Height"]);
                     VisitTextHeight.Text = statement.Columns["Height"];
@@ -692,5 +729,62 @@ namespace Health_Organizer
             }
         }
 
+        //For sorting the date
+        private void SortAscending(object sender, RoutedEventArgs e)
+        {
+            List<string> searchList = ocString.ToList();
+            List<DateTime> dateList = new List<DateTime>();
+            for (int i = 0; i < searchList.Count(); i++)
+            {
+                dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));
+            }
+
+            ocString.Clear();
+
+            dateList.Sort(delegate(DateTime c1, DateTime c2)
+            {
+                return c1.CompareTo(c2);
+            });
+
+            searchList.Clear();
+
+            for (int i = 0; i < dateList.Count(); i++)
+            {
+                searchList.Add(Convert.ToString(dateList.ElementAt(i).ToString("yyyy-MMMM-dd")));
+            }
+
+            this.ocString = new ObservableCollection<string>(searchList);
+            searchList.Clear();
+            this.VisitListBox.ItemsSource = this.ocString;
+        }
+
+        private void SortDescending(object sender, RoutedEventArgs e)
+        {
+            List<string> searchList = ocString.ToList();
+            List<DateTime> dateList = new List<DateTime>();
+            string format = "yyyy MMM ddd";
+            for (int i = 0; i < searchList.Count(); i++)
+            {
+                dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));
+            }
+
+            ocString.Clear();
+
+            dateList.Sort(delegate(DateTime c1, DateTime c2)
+            {
+                return c2.CompareTo(c1);
+            });
+
+            searchList.Clear();
+            
+            for (int i = 0; i < dateList.Count(); i++)
+            {
+                searchList.Add(Convert.ToString(dateList.ElementAt(i).ToString("yyyy-MMMM-dd")));
+            }
+
+            this.ocString = new ObservableCollection<string>(searchList);
+            searchList.Clear();
+            this.VisitListBox.ItemsSource = this.ocString;
+        }
     }
 }

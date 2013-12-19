@@ -87,7 +87,7 @@
 
             <!--Form fields starts from here-->
             <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <Grid>
+                <Grid Name="VisitMainGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"/>
                         <ColumnDefinition Width="300"/>
@@ -242,6 +242,16 @@
             <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"></AppBarButton>
             <AppBarButton Name="EditVisit" Label="Edit Disease" Icon="Edit" Click="EditVisitClicked" HorizontalAlignment="Right"></AppBarButton>
             <AppBarButton Name="DeleteVisit" Label="Remove Disease" Icon="Cancel" Click="DeleteVisitClicked" HorizontalAlignment="Center"></AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Name="SortVisit" Label="Sort"  HorizontalAlignment="Left" Icon="Sort">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Sort Ascending" Click="SortAscending"/>
+                            <MenuFlyoutItem Text="Sort Descending" Click="SortDescending"/>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
