@@ -31,6 +31,8 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         int counterComma = 0;
+        private bool isUpdating = false;
+        private int updatePID = -1;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -48,9 +50,7 @@ namespace Health_Organizer
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
 
-            this.InitializeDB();
             this.InitializeComponents();
-            //this.queryDB();
         }
 
         private async void InitializeComponents()
@@ -77,11 +77,152 @@ namespace Health_Organizer
             this.connection = new DBConnect();
             await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
             database = this.connection.GetConnection();
+
+            if (isUpdating)
+            {
+                this.LoadStoredDetails(this.updatePID);
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            this.InitializeDB();
+            if (Int32.Parse(e.Parameter as string) != -1)
+            {
+                this.isUpdating = true;
+                this.updatePID = Int32.Parse(e.Parameter as string);
+            }
+        }
+
+        private async void LoadStoredDetails(int pid)
+        {
+            string query = "SELECT * FROM Patient WHERE PID = @pid";
+            Statement statement = await this.database.PrepareStatementAsync(query);
+            statement.BindInt64ParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                profileFirstName.Text = statement.Columns["FirstName"];
+                profileLastName.Text = statement.Columns["LastName"];
+                profileBloodGroup.SelectedIndex = profileBloodGroup.Items.IndexOf(statement.Columns["BloodGroup"]);
+                profileSexType.SelectedIndex = profileSexType.Items.IndexOf(statement.Columns["Sex"]);
+                string[] date = statement.Columns["Birthday"].Split('-');
+                profileDayComboBox.SelectedIndex = profileDayComboBox.Items.IndexOf(Int32.Parse(date[2]));
+                profileMonthComboBox.SelectedIndex = profileMonthComboBox.Items.IndexOf(date[1]);
+                profileYearComboBox.SelectedIndex = profileYearComboBox.Items.IndexOf(Int32.Parse(date[0]));
+                profilePic.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
+                Debug.WriteLine(decodedImage + " 1");
+            }
+            statement.Reset();
+
+            query = "SELECT * FROM Address WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(query);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                profileAddress.Text = statement.Columns["Street"];
+                profileZip.Text = statement.Columns["ZIP"];
+            }
+            statement.Reset();
+
+            query = "SELECT * FROM AddressZIP WHERE ZIP = @zip";
+            statement = await this.database.PrepareStatementAsync(query);
+            statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                profileCity.Text = statement.Columns["City"];
+            }
+            statement.Reset();
+
+            query = "SELECT * FROM AddressCity WHERE City = @city";
+            statement = await this.database.PrepareStatementAsync(query);
+            statement.BindTextParameterWithName("@city", profileCity.Text);
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                profileState.Text = statement.Columns["State"];
+            }
+            statement.Reset();
+
+            query = "SELECT * FROM AddressState WHERE State = @state";
+            statement = await this.database.PrepareStatementAsync(query);
+            statement.BindTextParameterWithName("@state", profileState.Text);
+            statement.EnableColumnsProperty();
+            if (await statement.StepAsync())
+            {
+                profileCountry.Text = statement.Columns["Country"];
+            }
+
+            statement.Reset();
+            string queryDetails = "SELECT * FROM MutableDetails WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(queryDetails);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+
+            if (await statement.StepAsync())
+            {
+                profileContactNumber.Text = statement.Columns["Mobile"];
+                profileEmergencyNumber.Text = statement.Columns["EmMobile"];
+                profileEmailAddress.Text = statement.Columns["Email"];
+                profileOccupation.Text = statement.Columns["Occupation"];
+                profileFamilyHistory.Text = statement.Columns["FamilyBackground"];
+
+                if (statement.Columns["Married"].Equals("T"))
+                {
+                    profileMarried.IsChecked = true;
+                }
+                else
+                {
+                    profileMarried.IsChecked = false;
+                }
+            }
+
+            string allergyDetails = "SELECT * FROM MutableDetailsAllergy WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(allergyDetails);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                profileAllergies.Text += statement.Columns["Allergy"] + ",";
+            }
+            if (!profileAllergies.Text.Equals(""))
+            {
+                profileAllergies.Text = profileAllergies.Text.Substring(0, profileAllergies.Text.Length - 1);
+            }
+            statement.Reset();
+
+
+            string operationDetails = "SELECT * FROM MutableDetailsOperation WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(operationDetails);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+
+            while (await statement.StepAsync())
+            {
+                profileOperations.Text += statement.Columns["Operation"] + ",";
+            }
+            if (!profileOperations.Text.Equals(""))
+            {
+                profileOperations.Text = profileOperations.Text.Substring(0, profileOperations.Text.Length - 1);
+            }
+            statement.Reset();
+
+            string addictionDetails = "SELECT * FROM MutableDetailsAddiction WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(addictionDetails);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.EnableColumnsProperty();
+
+            while (await statement.StepAsync())
+            {
+                profileAddictions.Text += statement.Columns["Addiction"] + ",";
+            }
+            if (!profileAddictions.Text.Equals(""))
+            {
+                profileAddictions.Text = profileAddictions.Text.Substring(0, profileAddictions.Text.Length - 1);
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -103,7 +244,6 @@ namespace Health_Organizer
                 await bmp.SetSourceAsync(stream);
                 profilePic.Source = bmp;
                 decodedImage = await ImageMethods.ConvertStorageFileToBase64String(file);
-
             }
         }
 
@@ -118,12 +258,20 @@ namespace Health_Organizer
             {
                 try
                 {
-                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
-                    int pid = await this.insertBasicDetais();
-                    this.insertAddress(pid);
-                    this.insertMutableDetails(pid);
-                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
-
+                    if (isUpdating)
+                    {
+                        this.UpdateBasicDetails();
+                        this.UpdateAddress(this.updatePID);
+                        this.UpdateMutableDetails(this.updatePID);
+                    }
+                    else
+                    {
+                        await database.ExecuteStatementAsync("BEGIN TRANSACTION");
+                        int pid = await this.insertBasicDetais();
+                        this.insertAddress(pid);
+                        this.insertMutableDetails(pid);
+                        await database.ExecuteStatementAsync("COMMIT TRANSACTION");
+                    }
                     this.navigationHelper.GoBack();
                 }
                 catch (Exception ex)
@@ -137,6 +285,198 @@ namespace Health_Organizer
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                 var dialogResult = await messageDialog.ShowAsync();
             }
+        }
+
+        private async void UpdateMutableDetails(int pid)
+        {
+            string updateQuery = "UPDATE MutableDetails SET Married = @married , Occupation = @occupation , FamilyBackground = @fb , Email = @email , Mobile = @mob , EmMobile = @eMob " +
+                                 "WHERE PID = @pid";
+            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+            statement.BindIntParameterWithName("@pid", pid);
+            if (profileMarried.IsChecked.Value)
+            {
+                statement.BindTextParameterWithName("@married", "T");
+            }
+            else
+            {
+                statement.BindTextParameterWithName("@married", "F");
+            }
+            statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
+            statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
+            statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
+            statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
+            statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
+
+            await statement.StepAsync();
+
+            statement.Reset();
+            string deleteOperation = "DELETE FROM MutableDetailsOperation WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(deleteOperation);
+            statement.BindIntParameterWithName("@pid", pid);
+            await statement.StepAsync();
+
+            statement.Reset();
+            string deleteAllergy = "DELETE FROM MutableDetailsAllergy WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(deleteAllergy);
+            statement.BindIntParameterWithName("@pid", pid);
+            await statement.StepAsync();
+
+            statement.Reset();
+            string deleteAddiction = "DELETE FROM MutableDetailsAddiction WHERE PID = @pid";
+            statement = await this.database.PrepareStatementAsync(deleteAddiction);
+            statement.BindIntParameterWithName("@pid", pid);
+            await statement.StepAsync();
+
+            statement.Reset();
+            if (!profileAllergies.Text.Equals(""))
+            {
+                string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
+
+                foreach (string str in profileAllergies.Text.ToString().Split(','))
+                {
+                    Debug.WriteLine(str);
+                    statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                    statement.BindIntParameterWithName("@pid", pid);
+                    statement.BindTextParameterWithName("@allergy", str);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false);
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+            }
+            if (!profileAddictions.Text.Equals(""))
+            {
+                string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
+                statement = await this.database.PrepareStatementAsync(insertAllergyString);
+
+                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                {
+                    Debug.WriteLine(str);
+                    statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                    statement.BindTextParameterWithName("@addiction", str);
+                    statement.BindIntParameterWithName("@pid", pid);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false);
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+            }
+            if (!profileOperations.Text.ToString().Equals(""))
+            {
+                string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
+
+                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                {
+                    Debug.WriteLine(str);
+                    statement = await this.database.PrepareStatementAsync(insertOperationString);
+                    statement.BindIntParameterWithName("@pid", pid);
+                    statement.BindTextParameterWithName("@operation", str);
+                    //await statement.StepAsync().AsTask().ConfigureAwait(false); 
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+            }
+        }
+
+        private async void UpdateAddress(int pid)
+        {
+            string updateQuery = "UPDATE Address SET ZIP = @zip , Street = @street WHERE PID = @pid";
+            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+            statement.BindIntParameterWithName("@pid", pid);
+            statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+            statement.BindTextParameterWithName("@street", profileAddress.Text.ToString());
+
+            await statement.StepAsync();
+
+            statement.Reset();
+            string queryZIP = "SELECT * FROM AddressZIP WHERE ZIP = @zip";
+            statement = await this.database.PrepareStatementAsync(queryZIP);
+            statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+
+            if (!await statement.StepAsync())
+            {
+                statement.Reset();
+                string insertCityQuery = "INSERT INTO AddressZIP (ZIP, City) VALUES (@zip, @city)";
+                statement = await this.database.PrepareStatementAsync(insertCityQuery);
+                statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+
+                await statement.StepAsync();
+            }
+            else
+            {
+                statement.Reset();
+                string updateCityQuery = "UPDATE AddressZIP SET City = @city WHERE ZIP = @zip";
+                statement = await this.database.PrepareStatementAsync(updateCityQuery);
+                statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+
+                await statement.StepAsync();
+            }
+
+            statement.Reset();
+            string queryCity = "SELECT * FROM AddressCity WHERE City = @city";
+            statement = await this.database.PrepareStatementAsync(queryCity);
+            statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+
+            if (!await statement.StepAsync())
+            {
+                string insertStateQuery = "INSERT INTO AddressCity (City, State) VALUES (@city, @state)";
+                statement = await this.database.PrepareStatementAsync(insertStateQuery);
+                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+
+                await statement.StepAsync();
+            }
+            else
+            {
+                statement.Reset();
+                string updateStateQuery = "UPDATE AddressCity SET State = @state WHERE City = @city";
+                statement = await this.database.PrepareStatementAsync(updateStateQuery);
+                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+
+                await statement.StepAsync();
+            }
+
+            statement.Reset();
+            string queryState = "SELECT * FROM AddressState WHERE State = @state";
+            statement = await this.database.PrepareStatementAsync(queryState);
+            statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+
+            if (!await statement.StepAsync())
+            {
+                string insertCountryQuery = "INSERT INTO AddressState (State, Country) VALUES (@state, @country)";
+                statement = await this.database.PrepareStatementAsync(insertCountryQuery);
+                statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+
+                await statement.StepAsync();
+            }
+            else
+            {
+                statement.Reset();
+                string updateCountryQuery = "UPDATE AddressState SET Country = @country WHERE State = @state";
+                statement = await this.database.PrepareStatementAsync(updateCountryQuery);
+                statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+
+                await statement.StepAsync();
+            }
+        }
+
+        private async void UpdateBasicDetails()
+        {
+            string updateQuery = "UPDATE Patient SET FirstName = @fName , LastName = @lName , BloodGroup = @bg , Sex = @sex , Birthday = @bday , Image = @image WHERE PID = @pid";
+            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+            statement.BindIntParameterWithName("@pid", this.updatePID);
+            statement.BindTextParameterWithName("@fName", profileFirstName.Text);
+            statement.BindTextParameterWithName("@lName", profileLastName.Text);
+            statement.BindTextParameterWithName("@bg", profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString());
+            statement.BindTextParameterWithName("@sex", profileSexType.Items[profileSexType.SelectedIndex].ToString());
+            statement.BindTextParameterWithName("@image", decodedImage);
+            statement.BindTextParameterWithName("@bday", profileYearComboBox.Items[profileYearComboBox.SelectedIndex].ToString() + "-" +
+                                                         profileMonthComboBox.Items[profileMonthComboBox.SelectedIndex].ToString() + "-" +
+                                                         profileDayComboBox.Items[profileDayComboBox.SelectedIndex].ToString());
+            await statement.StepAsync();
         }
 
         private async Task<int> insertBasicDetais()
@@ -290,8 +630,8 @@ namespace Health_Organizer
             profileEmailAddress.ClearValue(BorderBrushProperty);
             profileOccupation.ClearValue(BorderBrushProperty);
 
-            if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") ||
-                profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
+            if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
+                profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
                 || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z")))
             {
@@ -336,6 +676,14 @@ namespace Health_Organizer
                 if (profileContactNumber.Text.Equals(""))
                 {
                     profileContactNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileState.Text.Equals(""))
+                {
+                    profileState.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileCountry.Text.Equals(""))
+                {
+                    profileCountry.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileEmailAddress.Text.Equals(""))
                 {
@@ -397,7 +745,7 @@ namespace Health_Organizer
                 profileFamilyHistory.Text = "";
                 profileAddictions.Text = "";
                 profileMarried.IsChecked = false;
-                
+
             }
 
         }
@@ -429,7 +777,8 @@ namespace Health_Organizer
 
         private void commaKeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (counterComma >= 1 && ((uint)e.Key == 188)){
+            if (counterComma >= 1 && ((uint)e.Key == 188))
+            {
                 e.Handled = true;
             }
             else
@@ -443,9 +792,9 @@ namespace Health_Organizer
             }
             else
             {
-                 counterComma = 0;
+                counterComma = 0;
             }
-        
+
         }
 
         private async void GoBackNewProfile(object sender, RoutedEventArgs e)
