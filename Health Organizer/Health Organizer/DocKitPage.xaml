@@ -88,7 +88,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Background="#00A2E8"/>
@@ -142,21 +142,22 @@
                 </StackPanel>
             </callisto:CustomDialog>
 
-            <Button x:Name="backButton" Margin="31,38,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="backButton" VerticalAlignment="Center" Margin="30,-10,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
 
-            <TextBlock Name="pageTitle" Text="{StaticResource docKitTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="116,0,94,71"/>
-
-            <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="400" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
+                <TextBlock Name="pageTitle" VerticalAlignment="Center"  Text="{StaticResource docKitTitle}"  Style="{StaticResource SubheaderTextBlockStyle}" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" Margin="30,-25,0,0"/>
+            </StackPanel>
+            
+            <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="350" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
                 <ComboBoxItem Content="Common Diseases" />
                 <ComboBoxItem Content="Simple First Aid" />
             </ComboBox>
-            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="480" SelectionChanged="docKitListItemSelected" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsScrollInertiaEnabled="True" />
+            <ListBox Name="docKitListBox" Grid.Row="2" Background="#00A2E8" Grid.Column="0" HorizontalAlignment="Left" Width="402" SelectionChanged="docKitListItemSelected" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsScrollInertiaEnabled="True" />
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -179,7 +180,7 @@
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>                
             </Grid>
-            <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Top" Margin="40,0,0,0" FontSize="40" >
+            <TextBlock Grid.Row="1" Name="docKitName" Canvas.Left="200" Text="Diseases Name" Style="{StaticResource SubheaderTextBlockStyleInBody}" VerticalAlignment="Top" Margin="40,0,0,0" >
                 <TextBlock.RenderTransform>
                     <TranslateTransform x:Name="textTrans"></TranslateTransform>
                 </TextBlock.RenderTransform>
@@ -199,13 +200,13 @@
                     </Grid.ColumnDefinitions>
                     <Image Name="docKitImage" Height="500" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Name="docKitD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
+                        <TextBlock Name="docKitD" Padding="0,0,0,10" Style="{StaticResource SubheaderTextBlockStyleInBody}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Description"/>
                         <ScrollViewer Height="400" Margin="0,25,0,0" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
                             <TextBlock Name="docKitDescription" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
-                        <TextBlock Name="docKitS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
+                        <TextBlock Name="docKitS" Padding="0,0,0,10" Style="{StaticResource SubheaderTextBlockStyleInBody}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Symptoms"/>
                         <ScrollViewer Height="400" Margin="0,25,0,0" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
                             <StackPanel Name="docKitSymptomsPanel" />
                         </ScrollViewer>
@@ -226,13 +227,13 @@
                     </Grid.ColumnDefinitions>
                     <Image Name="docKitFirstAidImage" Height="600" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Name="docKitFirstAidD" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="First Aid Procedure"/>
+                        <TextBlock Name="docKitFirstAidD" Padding="0,0,0,10" Style="{StaticResource SubheaderTextBlockStyleInBody}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="First Aid Procedure"/>
                         <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
                             <TextBlock Name="docKitFirstAidDescription" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,0,0,0">
-                        <TextBlock Name="docKitFirstAidS" Padding="0,0,0,10" FontSize="35" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Do Not"/>
+                        <TextBlock Name="docKitFirstAidS" Padding="0,0,0,10" Style="{StaticResource SubheaderTextBlockStyleInBody}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Do Not"/>
                         <ScrollViewer Height="485" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
                             <TextBlock Name="docKitFirstAidSymptoms" LineHeight="35" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiLight" TextWrapping="Wrap"/>
                         </ScrollViewer>

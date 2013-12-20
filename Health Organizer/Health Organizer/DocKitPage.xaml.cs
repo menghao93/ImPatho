@@ -224,9 +224,6 @@ namespace Health_Organizer
         ////////////////////////This methods are for Updating the View after changes in FB
         private async void UpdateDiseaseListBox()
         {
-            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            docKitProgress.IsActive = true;
-
             List<BasicDiseases> result = await diseaseMethods.SelectAllDisease();
 
             //This is used to sort the list on the basis of Name value pairs. Also note first we need to clear previous list.
@@ -255,14 +252,11 @@ namespace Health_Organizer
                 docKitEditBut.IsEnabled = false;
             }
 
-            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            docKitProgress.IsActive = false;
+
         }
 
         public async void UpdateFirstAidListBox()
         {
-            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            docKitProgress.IsActive = true;
 
             List<BasicFirstAid> result = await firstAidMethods.SelectAllFirstAids();
 
@@ -289,8 +283,7 @@ namespace Health_Organizer
                 docKitEditBut.IsEnabled = false;
             }
 
-            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            docKitProgress.IsActive = false;
+
         }
 
         private void showDiseaseItems()

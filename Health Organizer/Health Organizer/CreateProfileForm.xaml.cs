@@ -20,6 +20,8 @@ using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Windows.Media.Capture;
+using System.Text;
 
 namespace Health_Organizer
 {
@@ -247,9 +249,21 @@ namespace Health_Organizer
             }
         }
 
-        private void CameraImage(object sender, RoutedEventArgs e)
+        async private void CameraImage(object sender, RoutedEventArgs e)
         {
+            CameraCaptureUI cameraUI = new CameraCaptureUI();
 
+            Windows.Storage.StorageFile capturedMedia =
+                await cameraUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (capturedMedia != null)
+            {
+                var stream = await capturedMedia.OpenAsync(FileAccessMode.Read);
+                BitmapImage bmp = new BitmapImage();
+                await bmp.SetSourceAsync(stream);
+                profilePic.Source = bmp;
+                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(capturedMedia);
+            }
         }
 
         private async void SaveNewProfile(object sender, RoutedEventArgs e)
