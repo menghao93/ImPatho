@@ -81,6 +81,7 @@ namespace Health_Organizer
             if (await statement.StepAsync())
             {
                 ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
+                ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
                 ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
                 ProfileSex.Text = statement.Columns["Sex"];
                 //IMage
