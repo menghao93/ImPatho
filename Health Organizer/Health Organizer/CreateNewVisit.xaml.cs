@@ -333,7 +333,7 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", VisitSymptoms.Text.ToString());
+            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString()));
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
@@ -362,20 +362,27 @@ namespace Health_Organizer
 
             statement.Reset();
             string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
-            foreach (string str in VisitMedicineGiven.Text.Split(','))
+            foreach (string str in ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString()).Split(','))
             {
-                statement = await this.database.PrepareStatementAsync(insertMedicine);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@medicine", str);
+                if (str != "")
+                {
+                    statement = await this.database.PrepareStatementAsync(insertMedicine);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    statement.BindTextParameterWithName("@medicine", str);
 
-                await statement.StepAsync();
-                statement.Reset();
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
             }
 
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
-            foreach (string str in VisitVaccine.Text.Split(','))
+
+            Debug.WriteLine(VisitVaccine.Text.ToString());
+
+            foreach (string str in ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString()).Split(','))
             {
+                Debug.WriteLine( "Vaccinces " + str);
                 statement = await this.database.PrepareStatementAsync(insertVaccine);
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
@@ -419,7 +426,7 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", VisitSymptoms.Text.ToString());
+            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString()));
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
@@ -436,7 +443,7 @@ namespace Health_Organizer
             statement.Reset();
             string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
 
-            foreach (string str in VisitMedicineGiven.Text.Split(','))
+            foreach (string str in ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString()).Split(','))
             {
                 statement = await this.database.PrepareStatementAsync(insertMedicine);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -449,7 +456,7 @@ namespace Health_Organizer
 
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
 
-            foreach (string str in VisitVaccine.Text.Split(','))
+            foreach (string str in ExtraModules.RemoveStringNewLine(VisitVaccine.Text).Split(','))
             {
                 statement = await this.database.PrepareStatementAsync(insertVaccine);
                 statement.BindIntParameterWithName("@pid", this.PID);
