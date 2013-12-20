@@ -78,18 +78,33 @@ namespace Health_Organizer
                 DeleteVisit.IsEnabled = false;
             }
 
-            this.queryDB();
+            //this.queryDB();
         }
 
         private async void queryDB()
         {
-            string query = "SELECT * FROM (Patient NATURAL JOIN Address NATURAL JOIN AddressZIP)";
+            string query = "SELECT * FROM Patient";
             Statement statement = await database.PrepareStatementAsync(query);
             statement.EnableColumnsProperty();
             while (await statement.StepAsync())
             {
-                //Debug.WriteLine(statement.GetIntAt(0).ToString() + " " + statement.GetTextAt(1)+ " " + statement.GetTextAt(2) + statement.GetTextAt(4));
-                Debug.WriteLine(statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"]);
+            }
+
+            query = "SELECT * FROM Address";
+            statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["Street"]);
+            }
+
+            query = "SELECT * FROM (Address NATURAL JOIN AddressZIP) ORDER BY City";
+            statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
             }
         }
 
@@ -769,7 +784,7 @@ namespace Health_Organizer
         {
             List<string> searchList = ocString.ToList();
             List<DateTime> dateList = new List<DateTime>();
- 
+
             for (int i = 0; i < searchList.Count(); i++)
             {
                 dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));

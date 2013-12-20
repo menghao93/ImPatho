@@ -528,30 +528,54 @@ namespace Health_Organizer
 
             await statement.StepAsync();
 
-            string insertCityQuery = "INSERT INTO AddressZIP (ZIP, City) VALUES (@zip, @city)";
-            statement = await this.database.PrepareStatementAsync(insertCityQuery);
-            statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-            statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+            try
+            {
+                statement.Reset();
+                string insertCityQuery = "INSERT INTO AddressZIP (ZIP, City) VALUES (@zip, @city)";
+                statement = await this.database.PrepareStatementAsync(insertCityQuery);
+                statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
+                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
 
-            await statement.StepAsync();
+                await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             if (!profileState.Text.Equals(""))
             {
-                string insertStateQuery = "INSERT INTO AddressCity (City, State) VALUES (@city, @state)";
-                statement = await this.database.PrepareStatementAsync(insertStateQuery);
-                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
-                statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                try
+                {
+                    statement.Reset();
+                    string insertStateQuery = "INSERT INTO AddressCity (City, State) VALUES (@city, @state)";
+                    statement = await this.database.PrepareStatementAsync(insertStateQuery);
+                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
 
-                await statement.StepAsync();
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
 
                 if (!profileCountry.Text.Equals(""))
                 {
-                    string insertCountryQuery = "INSERT INTO AddressState (State, Country) VALUES (@state, @country)";
-                    statement = await this.database.PrepareStatementAsync(insertCountryQuery);
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
-                    statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+                    try
+                    {
+                        statement.Reset();
+                        string insertCountryQuery = "INSERT INTO AddressState (State, Country) VALUES (@state, @country)";
+                        statement = await this.database.PrepareStatementAsync(insertCountryQuery);
+                        statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                        statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
 
-                    await statement.StepAsync();
+                        await statement.StepAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
                 }
             }
         }
@@ -573,14 +597,8 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
             statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
             statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
-            if (!profileEmergencyNumber.Text.Equals(""))
-            {
-                statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
-            }
-            if (!profileFamilyHistory.Text.ToString().Equals(""))
-            {
-                statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
-            }
+            statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
+            statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
 
             await statement.StepAsync();
 
@@ -719,7 +737,6 @@ namespace Health_Organizer
                         profileEmailAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                         profileEmailAddress.PlaceholderText = "Invalid Email";
                         profileEmailAddress.Text = "";
-
                     }
                 }
                 if (profileOccupation.Text.Equals(""))
@@ -731,7 +748,6 @@ namespace Health_Organizer
             }
             else
             {
-                Debug.WriteLine("true");
                 return true;
             }
         }
@@ -769,21 +785,6 @@ namespace Health_Organizer
                 profileMarried.IsChecked = false;
 
             }
-
-        }
-
-        private void profileDayComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Debug.WriteLine(profileDayComboBox.Items[profileDayComboBox.SelectedIndex]);
-        }
-
-        private void profileMonthComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void profileYearComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
         }
 

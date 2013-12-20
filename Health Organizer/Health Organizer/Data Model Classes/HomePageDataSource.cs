@@ -99,7 +99,7 @@ namespace Health_Organizer.Data
 
                 if (this.db != null)
                 {
-                    string query = "SELECT * FROM (Patient NATURAL JOIN Address NATURAL JOIN AddressZIP) GROUP BY City";
+                    string query = "SELECT * FROM (Patient NATURAL JOIN Address) NATURAL JOIN AddressZIP ORDER BY City";
                     Statement statement = await db.PrepareStatementAsync(query);
                     statement.EnableColumnsProperty();
                     string prevGroup = "xxx";
@@ -109,7 +109,7 @@ namespace Health_Organizer.Data
                     //add the new item to this new grp.
                     while (await statement.StepAsync())
                     {
-                        Debug.WriteLine(statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
+                        Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
                         string currentGroup = statement.Columns["City"];
                         if (currentGroup.Equals(prevGroup))
                         {
