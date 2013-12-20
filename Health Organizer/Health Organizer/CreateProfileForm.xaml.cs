@@ -20,6 +20,8 @@ using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Windows.Media.Capture;
+using System.Text;
 
 namespace Health_Organizer
 {
@@ -247,9 +249,21 @@ namespace Health_Organizer
             }
         }
 
-        private void CameraImage(object sender, RoutedEventArgs e)
+        async private void CameraImage(object sender, RoutedEventArgs e)
         {
+            CameraCaptureUI cameraUI = new CameraCaptureUI();
 
+            Windows.Storage.StorageFile capturedMedia =
+                await cameraUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (capturedMedia != null)
+            {
+                var stream = await capturedMedia.OpenAsync(FileAccessMode.Read);
+                BitmapImage bmp = new BitmapImage();
+                await bmp.SetSourceAsync(stream);
+                profilePic.Source = bmp;
+                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(capturedMedia);
+            }
         }
 
         private async void SaveNewProfile(object sender, RoutedEventArgs e)
@@ -536,6 +550,8 @@ namespace Health_Organizer
                     statement = await this.database.PrepareStatementAsync(insertCountryQuery);
                     statement.BindTextParameterWithName("@state", profileState.Text.ToString());
                     statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+
+                    await statement.StepAsync();
                 }
             }
         }
@@ -572,7 +588,7 @@ namespace Health_Organizer
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
 
-                foreach (string str in profileAllergies.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileAllergies.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -585,13 +601,13 @@ namespace Health_Organizer
             }
             if (!profileAddictions.Text.Equals(""))
             {
-                string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
-                statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                string insertAddictionString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
+                statement = await this.database.PrepareStatementAsync(insertAddictionString);
 
-                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileAddictions.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
-                    statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                    statement = await this.database.PrepareStatementAsync(insertAddictionString);
                     statement.BindTextParameterWithName("@addiction", str);
                     statement.BindIntParameterWithName("@pid", PID);
                     //await statement.StepAsync().AsTask().ConfigureAwait(false);
@@ -603,7 +619,7 @@ namespace Health_Organizer
             {
                 string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
 
-                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileOperations.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertOperationString);
@@ -634,7 +650,8 @@ namespace Health_Organizer
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
                 profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
-                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z")))
+                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z"))
+                || profileBloodGroup.SelectedItem == null)
             {
                 Debug.WriteLine("false");
                 if (profileFirstName.Text.Equals(""))
@@ -645,6 +662,10 @@ namespace Health_Organizer
                 if (profileLastName.Text.Equals(""))
                 {
                     profileLastName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileBloodGroup.SelectedItem == null)
+                {
+                    profileBloodGroup.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileSexType.SelectedItem == null)
                 {

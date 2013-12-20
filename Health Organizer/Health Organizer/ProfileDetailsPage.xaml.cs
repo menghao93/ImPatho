@@ -81,6 +81,7 @@ namespace Health_Organizer
             if (await statement.StepAsync())
             {
                 ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
+                ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
                 ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
                 ProfileSex.Text = statement.Columns["Sex"];
                 //IMage
@@ -94,7 +95,7 @@ namespace Health_Organizer
             statement.EnableColumnsProperty();
             if (await statement.StepAsync())
             {
-                street = statement.Columns["Street"] + "\n";
+                street = statement.Columns["Street"];
                 //ZIP code
                 zip = statement.Columns["ZIP"];
             }
@@ -115,7 +116,7 @@ namespace Health_Organizer
             statement.EnableColumnsProperty();
             if (await statement.StepAsync())
             {
-                state= statement.Columns["State"] + '\n';
+                state= statement.Columns["State"];
             }
             statement.Reset();
 
@@ -127,7 +128,7 @@ namespace Health_Organizer
             {
                 country = statement.Columns["Country"];
             }
-            ProfileAddress.Text = street + "\n" + city + "\n" + state + "\n" + country + "\n" + zip + ".";
+            ProfileAddress.Text = street + "\n" + city + ", " + state + ", "+ zip + "\n" + country;
 
 
 

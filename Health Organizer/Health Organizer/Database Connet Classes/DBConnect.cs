@@ -64,6 +64,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
         private async Task CreateTableAsync()
         {
+            //DATE format = "yyyy MMM ddd";
             string query1 = "CREATE TABLE IF NOT EXISTS Patient (" +
                             "PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                             "FirstName TEXT NOT NULL, " +

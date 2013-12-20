@@ -11,11 +11,8 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <x:String x:Key="AppName">NGO Home</x:String>
+        <x:String x:Key="AppName">Organisation Name</x:String>
 
-       
-
-        <CollectionViewSource x:Name="recordCvs" IsSourceGrouped="True"/>
         <CollectionViewSource
            x:Name="groupedItemsViewSource"
             Source="{Binding Groups}"
@@ -33,7 +30,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="4*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <Grid>
@@ -96,6 +93,6 @@
                 </GridView.GroupStyle>
             </GridView>
         </Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="269,138,0,0" Grid.Row="2" VerticalAlignment="Top" Click="CreateNewVisit"/>
+        <Button Content="Button" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Click="CreateNewVisit"/>
     </Grid>
 </Page>

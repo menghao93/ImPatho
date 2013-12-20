@@ -13,10 +13,7 @@ using System.Diagnostics;
 
 namespace Health_Organizer.Data
 {
-    /// <summary>
-    /// Generic item data model.
-    /// </summary>
-    public class SampleDataItem
+     public class SampleDataItem
     {
         public SampleDataItem(String uniqueId, String title, String description, BitmapImage image)
         {
@@ -37,9 +34,6 @@ namespace Health_Organizer.Data
         }
     }
 
-    /// <summary>
-    /// Generic group data model.
-    /// </summary>
     public class SampleDataGroup
     {
         public SampleDataGroup(String uniqueId, String title)
@@ -59,12 +53,6 @@ namespace Health_Organizer.Data
         }
     }
 
-    /// <summary>
-    /// Creates a collection of groups and items with content read from a static json file.
-    /// 
-    /// SampleDataSource initializes with data read from a static json file included in the 
-    /// project.  This provides sample data at both design-time and run-time.
-    /// </summary>
     public sealed class HomePageDataSoure
     {
         private static HomePageDataSoure _sampleDataSource = new HomePageDataSoure();
@@ -117,6 +105,8 @@ namespace Health_Organizer.Data
                     string prevGroup = "xxx";
                     SampleDataGroup groups = null;
 
+                    //Check previous entered city and current city are same. if same -> add new item to same grp; if not -> create new grp and
+                    //add the new item to this new grp.
                     while (await statement.StepAsync())
                     {
                         Debug.WriteLine(statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
@@ -137,8 +127,9 @@ namespace Health_Organizer.Data
                             groups = new SampleDataGroup(statement.Columns["ZIP"], statement.Columns["City"]);
                             groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
                         }
-                        this.Groups.Add(groups);
+                       prevGroup = currentGroup;
                     }
+                    this.Groups.Add(groups);
                 }
             }
             catch (Exception ex)
