@@ -88,20 +88,22 @@
         <Image Source="Assets/logo_homescreen.png" Height="400" Width="800"></Image>
         <Border Padding="10">
             <ScrollViewer IsTabStop="True" VerticalScrollBarVisibility="Disabled">
-                <StackPanel Orientation="Horizontal" Width="1200" Height="50" >
-                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="30" Margin="300,0,0,0"/>
-                    <TextBox Style="{StaticResource TextBoxStyle}" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  Margin="50,0,0,0" Width="500" PlaceholderText="Please Enter your user name" Padding="10"/>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
+                        <TextBox Style="{StaticResource TextBoxStyle}"  Margin="25,0,0,0" Width="450" Height="45" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
+                        <TextBox Style="{StaticResource TextBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
+                    </StackPanel>
+                    <Border>
+                        <Button Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="400,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
+                    </Border>
                 </StackPanel>
+                
             </ScrollViewer>
         </Border>
-        <Border Padding="10">
-            <StackPanel Orientation="Horizontal" Width="1200" Height="50" >
-                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="30" Margin="310,0,0,0"/>
-                <TextBox Style="{StaticResource TextBoxStyle}" Margin="50,0,0,0" Width="500" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
-            </StackPanel>
-        </Border>
-        <Border Padding="10">
-            <Button  Background="#00A2E8" Content="Sign In" Width="200" HorizontalAlignment="Center" Margin="550,0,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
-        </Border>
+        
     </StackPanel>
 </Page>

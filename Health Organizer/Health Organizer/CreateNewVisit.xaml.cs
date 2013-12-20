@@ -218,6 +218,11 @@ namespace Health_Organizer
                     VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
                 }
 
+                if (!VisitMedicineGiven.Text.Equals(""))
+                {
+                    VisitMedicineGiven.Text = VisitMedicineGiven.Text.Substring(0, VisitMedicineGiven.Text.Length - 1); 
+                }
+
                 statement.Reset();
                 //VisitVaccine.IsEnabled = false;
                 query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
@@ -231,6 +236,11 @@ namespace Health_Organizer
                     //Debug.WriteLine(statement.Columns["Vaccine"]);
                     VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
                 }
+
+                if (!VisitVaccine.Text.Equals(""))
+                {
+                    VisitVaccine.Text = VisitVaccine.Text.Substring(0, VisitVaccine.Text.Length - 1);
+                } 
 
                 isUpdating = true;
             }
@@ -378,18 +388,18 @@ namespace Health_Organizer
 
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
 
-            Debug.WriteLine(VisitVaccine.Text.ToString());
-
             foreach (string str in ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString()).Split(','))
             {
-                Debug.WriteLine( "Vaccinces " + str);
-                statement = await this.database.PrepareStatementAsync(insertVaccine);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@vaccine", str);
+                if (str != "")
+                {
+                    statement = await this.database.PrepareStatementAsync(insertVaccine);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    statement.BindTextParameterWithName("@vaccine", str);
 
-                await statement.StepAsync();
-                statement.Reset();
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
             }
 
             this.ClearAllFields();
