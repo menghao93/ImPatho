@@ -11,7 +11,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Health_Organizer.Common
+namespace Health_Organizer.Data
 {
     /// <summary>
     /// SuspensionManager captures global session state to simplify process lifetime management

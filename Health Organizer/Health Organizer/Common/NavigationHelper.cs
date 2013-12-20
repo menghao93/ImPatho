@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace Health_Organizer.Common
+namespace Health_Organizer.Data
 {
     /// <summary>
     /// NavigationManager aids in navigation between pages.  It provides commands used to 

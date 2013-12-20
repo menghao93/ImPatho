@@ -1,4 +1,4 @@
-﻿using Health_Organizer.Common;
+﻿using Health_Organizer.Data;
 using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
@@ -27,7 +27,6 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private DBConnect connection;
-        private string decodedImage = null;
         private Database database;
         private int PID = 0;
         ObservableCollection<string> ocString;
@@ -77,6 +76,20 @@ namespace Health_Organizer
                 VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 EditVisit.IsEnabled = false;
                 DeleteVisit.IsEnabled = false;
+            }
+
+            this.queryDB();
+        }
+
+        private async void queryDB()
+        {
+            string query = "SELECT * FROM (Patient NATURAL JOIN Address NATURAL JOIN AddressZIP)";
+            Statement statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                //Debug.WriteLine(statement.GetIntAt(0).ToString() + " " + statement.GetTextAt(1)+ " " + statement.GetTextAt(2) + statement.GetTextAt(4));
+                Debug.WriteLine(statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
             }
         }
 
@@ -762,7 +775,7 @@ namespace Health_Organizer
         {
             List<string> searchList = ocString.ToList();
             List<DateTime> dateList = new List<DateTime>();
-            string format = "yyyy MMM ddd";
+            //string format = "yyyy MMM ddd";
             for (int i = 0; i < searchList.Count(); i++)
             {
                 dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));

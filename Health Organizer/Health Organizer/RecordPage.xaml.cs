@@ -1,6 +1,7 @@
-﻿using Health_Organizer.Common;
+﻿using Health_Organizer.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using Health_Organizer.Data_Model_Classes;
 
 namespace Health_Organizer
 {
@@ -43,8 +44,10 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var sample = await HomePageDataSoure.GetGroupsAsync();
+            this.DefaultViewModel["Groups"] = sample;
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)

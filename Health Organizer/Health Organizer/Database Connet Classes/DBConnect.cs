@@ -79,7 +79,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FamilyBackground TEXT, " +
                             "Email TEXT NOT NULL, " +
                             "Mobile UNSIGNED BIG INT NOT NULL, " +
-                            "EmMobile INTEGER, " +
+                            "EmMobile UNSIGNED BIG INT NOT NULL, " +
                             "PID INTEGER PRIMARY KEY NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
@@ -140,13 +140,13 @@ namespace Health_Organizer.Database_Connet_Classes
                              "PRIMARY KEY(PID, DateVisited)" +
                              "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
-            string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
-                             "Height REAL NOT NULL, " +
-                             "Weight INTEGER NOT NULL, " +
-                             "BMI REAL NOT NULL, " +
-                             "UNIQUE(Height, Weight), " +
-                             "PRIMARY KEY(Height, Weight), " +
-                             "FOREIGN KEY(Height, Weight) REFERENCES MedicalDetails(Height, Weight) ON DELETE CASCADE);";
+            //string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
+            //                 "Height REAL NOT NULL, " +
+            //                 "Weight INTEGER NOT NULL, " +
+            //                 "BMI REAL NOT NULL, " +
+            //                 "UNIQUE(Height, Weight), " +
+            //                 "PRIMARY KEY(Height, Weight), " +
+            //                 "FOREIGN KEY(Height, Weight) REFERENCES MedicalDetails(Height, Weight) ON DELETE CASCADE);";
 
             string query12 = "CREATE TABLE IF NOT EXISTS MedicalDetailsMedicine (" +
                              "PID INTEGER NOT NULL, " +

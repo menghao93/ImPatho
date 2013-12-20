@@ -6,7 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Health_Organizer"
     xmlns:callisto="using:Callisto.Controls"
-    xmlns:common="using:Health_Organizer.Common"
+    xmlns:common="using:Health_Organizer.Data"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">

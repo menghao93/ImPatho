@@ -57,7 +57,7 @@ namespace Health_Organizer
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-                Health_Organizer.Common.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
+                Health_Organizer.Data.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
                 // Set the default language
                 rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
