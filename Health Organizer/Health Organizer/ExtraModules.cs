@@ -32,5 +32,19 @@ namespace Health_Organizer
             String OutputString = Regex.Replace(InputString, @"\t|\n|\r", "");
             return OutputString;
         }
+        public static String RemoveExtraCommas(String input)
+        {
+            String result = "",temp="";
+            foreach (var i in input.Split(','))
+            {
+                temp = i;
+                if (temp.Trim().Equals("") )
+                    continue;
+                result += i + ",";
+            }
+            if(!result.Equals(""))
+                 result=result.Substring(0,result.Length-1);
+            return result;
+        }
     }
 }

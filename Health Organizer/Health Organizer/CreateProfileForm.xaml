@@ -496,9 +496,9 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <!--Allergies-->
-                            <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy" KeyDown="commaKeyDown"/>
+                            <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy"/>
                             <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine" KeyDown="commaKeyDown"/>
+                            <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine"/>
                         </Grid>
                     </Grid>
 
@@ -511,7 +511,7 @@
                             <!--Allergies-->
                             <TextBox Grid.Column="0" Header="Family History" Height="90" Name="profileFamilyHistory" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Mother is suffering from HIV" />
                             <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast" KeyDown="commaKeyDown"/>
+                            <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast"/>
                         </Grid>
                         
                     </Grid>

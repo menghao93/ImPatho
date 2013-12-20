@@ -220,7 +220,7 @@ namespace Health_Organizer
 
                 if (!VisitMedicineGiven.Text.Equals(""))
                 {
-                    VisitMedicineGiven.Text = VisitMedicineGiven.Text.Substring(0, VisitMedicineGiven.Text.Length - 1); 
+                    VisitMedicineGiven.Text = VisitMedicineGiven.Text.Substring(0, VisitMedicineGiven.Text.Length - 1);
                 }
 
                 statement.Reset();
@@ -240,7 +240,7 @@ namespace Health_Organizer
                 if (!VisitVaccine.Text.Equals(""))
                 {
                     VisitVaccine.Text = VisitVaccine.Text.Substring(0, VisitVaccine.Text.Length - 1);
-                } 
+                }
 
                 isUpdating = true;
             }
@@ -343,7 +343,7 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString()));
+            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
@@ -372,7 +372,7 @@ namespace Health_Organizer
 
             statement.Reset();
             string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
-            foreach (string str in ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString()).Split(','))
+            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
             {
                 if (str != "")
                 {
@@ -388,7 +388,7 @@ namespace Health_Organizer
 
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
 
-            foreach (string str in ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString()).Split(','))
+            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
             {
                 if (str != "")
                 {
@@ -436,7 +436,7 @@ namespace Health_Organizer
             statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
             statement.BindDoubleParameterWithName("@height", height);
             statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString()));
+            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
             statement.BindDoubleParameterWithName("@bmi", bmi);
 
             await statement.StepAsync();
@@ -452,8 +452,8 @@ namespace Health_Organizer
 
             statement.Reset();
             string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
-
-            foreach (string str in ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString()).Split(','))
+            Debug.WriteLine("upar");
+            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
             {
                 statement = await this.database.PrepareStatementAsync(insertMedicine);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -463,10 +463,8 @@ namespace Health_Organizer
                 await statement.StepAsync();
                 statement.Reset();
             }
-
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
-
-            foreach (string str in ExtraModules.RemoveStringNewLine(VisitVaccine.Text).Split(','))
+            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(VisitVaccine.Text)).Split(','))
             {
                 statement = await this.database.PrepareStatementAsync(insertVaccine);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -615,7 +613,7 @@ namespace Health_Organizer
 
                         TextBlock vaccineName = new TextBlock();
                         vaccineName.Width = 280;
-                        vaccineName.Text = ExtraModules.RemoveStringSpace(str);
+                        vaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(str));
                         vaccineName.TextWrapping = TextWrapping.Wrap;
                         vaccineName.FontSize = 15;
                         VisitSymptomsStackPanels.Children.Add(vaccineName);
@@ -658,7 +656,7 @@ namespace Health_Organizer
 
                     TextBlock medicineName = new TextBlock();
                     medicineName.Width = 280;
-                    medicineName.Text = ExtraModules.RemoveStringSpace(statement.Columns["Medicine"]);
+                    medicineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Medicine"]));
                     medicineName.TextWrapping = TextWrapping.Wrap;
                     medicineName.FontSize = 15;
                     VisitMedicineStackPanels.Children.Add(medicineName);
@@ -688,7 +686,7 @@ namespace Health_Organizer
 
                     TextBlock VaccineName = new TextBlock();
                     VaccineName.Width = 280;
-                    VaccineName.Text = ExtraModules.RemoveStringSpace(statement.Columns["Vaccine"]);
+                    VaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Vaccine"]));
                     VaccineName.TextWrapping = TextWrapping.Wrap;
                     VaccineName.FontSize = 15;
                     VisitVaccineStackPanels.Children.Add(VaccineName);
@@ -715,27 +713,6 @@ namespace Health_Organizer
                 e.Handled = false;
             }
             else e.Handled = true;
-        }
-        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (counterComma >= 1 && ((uint)e.Key == 188))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                e.Handled = false;
-            }
-
-            if (((uint)e.Key == 188))
-            {
-                counterComma++;
-            }
-            else
-            {
-                counterComma = 0;
-            }
-
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
@@ -779,7 +756,6 @@ namespace Health_Organizer
         {
             List<string> searchList = ocString.ToList();
             List<DateTime> dateList = new List<DateTime>();
-            string format = "yyyy MMM ddd";
             for (int i = 0; i < searchList.Count(); i++)
             {
                 dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));
@@ -793,7 +769,7 @@ namespace Health_Organizer
             });
 
             searchList.Clear();
-            
+
             for (int i = 0; i < dateList.Count(); i++)
             {
                 searchList.Add(Convert.ToString(dateList.ElementAt(i).ToString("yyyy-MMMM-dd")));
