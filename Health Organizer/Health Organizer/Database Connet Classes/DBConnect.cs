@@ -26,7 +26,7 @@ namespace Health_Organizer.Database_Connet_Classes
         }
 
         //This used to connect to the Tables or Create Tables.All the tables we need to add in future would be mentioned here.
-        public async Task InitializeDatabase(int database_name) {
+        public async Task<int> InitializeDatabase(int database_name) {
             if (database_name == DOC_KIT_DB)
             {
                 await conn.CreateTableAsync<BasicDiseases>();
@@ -37,6 +37,7 @@ namespace Health_Organizer.Database_Connet_Classes
                 await database.OpenAsync();
                 await CreateTableAsync(); 
             }
+            return 1;
         }
 
         public SQLiteAsyncConnection GetAsyncConnection()

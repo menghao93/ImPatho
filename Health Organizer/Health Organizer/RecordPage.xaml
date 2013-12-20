@@ -61,7 +61,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <GridView Name="recordGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" Padding="20">
+            <GridView Name="recordGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" Padding="20" IsItemClickEnabled="True" ItemClick="recordGridViewClicked" SelectedItem="-1">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Width="350" Height="130">

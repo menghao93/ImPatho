@@ -44,38 +44,28 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            var sample = await HomePageDataSoure.GetGroupsAsync();
-            this.DefaultViewModel["Groups"] = sample;
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
 
-        #region NavigationHelper registration
 
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// 
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="GridCS.Common.NavigationHelper.LoadState"/>
-        /// and <see cref="GridCS.Common.NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            var sample = await HomePageDataSoure.GetGroupsAsync();
+            this.DefaultViewModel["Groups"] = sample;
+
+            recordGrid.SelectedItem = null;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
         }
-
-        #endregion
 
         private void AddNewEntryForm(object sender, RoutedEventArgs e)
         {
@@ -88,6 +78,17 @@ namespace Health_Organizer
 
         private void CreateNewVisit(object sender, RoutedEventArgs e)
         {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+            }
+        }
+
+        private void recordGridViewClicked(object sender, ItemClickEventArgs e)
+        {
+            SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
+            this.PID = Int32.Parse(clickedItem.UniqueId);
+
             if (this.Frame != null)
             {
                 this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
