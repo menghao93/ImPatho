@@ -260,19 +260,24 @@ namespace Health_Organizer
                 {
                     if (isUpdating)
                     {
-                        this.UpdateBasicDetails();
-                        this.UpdateAddress(this.updatePID);
-                        this.UpdateMutableDetails(this.updatePID);
+                        await this.UpdateBasicDetails();
+                        await this.UpdateAddress(this.updatePID);
+                        await this.UpdateMutableDetails(this.updatePID);
                         this.isUpdating = false;
+                        Debug.WriteLine("avo");
+                        profileProgressRing.IsActive = false;
+                        profileProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     }
                     else
                     {
                         await database.ExecuteStatementAsync("BEGIN TRANSACTION");
                         int pid = await this.insertBasicDetais();
-                        this.insertAddress(pid);
-                        this.insertMutableDetails(pid);
+                        await this.insertAddress(pid);
+                        await this.insertMutableDetails(pid);
                         await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                     }
+                    database.Dispose();
+                    this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
                     this.navigationHelper.GoBack();
                 }
                 catch (Exception ex)
@@ -288,8 +293,9 @@ namespace Health_Organizer
             }
         }
 
-        private async void UpdateMutableDetails(int pid)
+        private async Task<bool> UpdateMutableDetails(int pid)
         {
+            Debug.WriteLine(3);
             string updateQuery = "UPDATE MutableDetails SET Married = @married , Occupation = @occupation , FamilyBackground = @fb , Email = @email , Mobile = @mob , EmMobile = @eMob " +
                                  "WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(updateQuery);
@@ -346,13 +352,13 @@ namespace Health_Organizer
             }
             if (!profileAddictions.Text.Equals(""))
             {
-                string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
-                statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                string insertAddictionString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
+                statement = await this.database.PrepareStatementAsync(insertAddictionString);
 
                 foreach (string str in profileAddictions.Text.ToString().Split(','))
                 {
                     Debug.WriteLine(str);
-                    statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                    statement = await this.database.PrepareStatementAsync(insertAddictionString);
                     statement.BindTextParameterWithName("@addiction", str);
                     statement.BindIntParameterWithName("@pid", pid);
                     //await statement.StepAsync().AsTask().ConfigureAwait(false);
@@ -364,7 +370,7 @@ namespace Health_Organizer
             {
                 string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
 
-                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                foreach (string str in profileOperations.Text.ToString().Split(','))
                 {
                     Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertOperationString);
@@ -375,9 +381,10 @@ namespace Health_Organizer
                     statement.Reset();
                 }
             }
+            return true;
         }
 
-        private async void UpdateAddress(int pid)
+        private async Task<bool> UpdateAddress(int pid)
         {
             string updateQuery = "UPDATE Address SET ZIP = @zip , Street = @street WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(updateQuery);
@@ -462,10 +469,14 @@ namespace Health_Organizer
 
                 await statement.StepAsync();
             }
+            return true;
         }
 
-        private async void UpdateBasicDetails()
+        private async Task<bool> UpdateBasicDetails()
         {
+            profileMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            profileProgressRing.IsActive = true;
+            profileProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             string updateQuery = "UPDATE Patient SET FirstName = @fName , LastName = @lName , BloodGroup = @bg , Sex = @sex , Birthday = @bday , Image = @image WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(updateQuery);
             statement.BindIntParameterWithName("@pid", this.updatePID);
@@ -478,10 +489,14 @@ namespace Health_Organizer
                                                          profileMonthComboBox.Items[profileMonthComboBox.SelectedIndex].ToString() + "-" +
                                                          profileDayComboBox.Items[profileDayComboBox.SelectedIndex].ToString());
             await statement.StepAsync();
+            return true;
         }
 
         private async Task<int> insertBasicDetais()
         {
+            profileMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            profileProgressRing.IsActive = true;
+            profileProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             string insertQuery = "INSERT INTO Patient (FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@fName, @lName, @bg, @sex, @bday, @image)";
             Statement statement = await this.database.PrepareStatementAsync(insertQuery);
             statement.BindTextParameterWithName("@fName", profileFirstName.Text);
@@ -504,7 +519,7 @@ namespace Health_Organizer
             return pid;
         }
 
-        private async void insertAddress(int PID)
+        private async Task<bool> insertAddress(int PID)
         {
             string insertQuery = "INSERT INTO Address (PID, ZIP, Street) VALUES (@pid, @zip, @street)";
             Statement statement = await this.database.PrepareStatementAsync(insertQuery);
@@ -540,9 +555,10 @@ namespace Health_Organizer
                     await statement.StepAsync();
                 }
             }
+            return true;
         }
 
-        private async void insertMutableDetails(int PID)
+        private async Task<bool> insertMutableDetails(int PID)
         {
             string insertQuery = "INSERT INTO MutableDetails (PID, Married, Occupation, FamilyBackground, Email, Mobile, EmMobile) " +
                                  "VALUES (@pid, @married, @occupation, @fb, @email, @mob, @eMob)";
@@ -617,6 +633,7 @@ namespace Health_Organizer
                 }
             }
             //this.queryDB();
+            return true;
         }
 
         private bool CheckIfFilled()

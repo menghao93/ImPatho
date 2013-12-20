@@ -75,18 +75,23 @@ namespace Health_Organizer
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            await this.InitializeDB();
-            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            docKitProgress.IsActive = false;
+            if (await this.InitializeDB())
+            {
+                docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                docKitProgress.IsActive = false;
+            }
             docKitCombo.SelectedIndex = 0;
         }
 
-        private async Task InitializeDB()
+        private async Task<bool> InitializeDB()
         {
+            docKitProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            docKitProgress.IsActive = true;
             connect = new DBConnect();
             await connect.InitializeDatabase(DBConnect.DOC_KIT_DB);
             diseaseMethods = new DiseasesTable(connect);
             firstAidMethods = new FirstAidTable(connect);
+            return true;
         }
 
         private void docKitSearchClick(object sender, RoutedEventArgs e)
@@ -329,7 +334,7 @@ namespace Health_Organizer
         }
 
         ///////////////////This are the methods used to update the display immideately after updating
-        private async void UpdateDiseaseData(BasicDiseases tempDisease)
+        private async Task<bool> UpdateDiseaseData(BasicDiseases tempDisease)
         {
             docKitName.Text = tempDisease.Name;
             docKitDescription.Text = "\n" + tempDisease.Description;
@@ -362,14 +367,16 @@ namespace Health_Organizer
                 docKitSymptomsPanel.Children.Add(docKitSymptomsStackPanels);
             }
             //  docKitSymptoms.Text = tempSymptoms;
+            return true;
         }
 
-        private async void UpdateFirstAidData(BasicFirstAid tempFirstAid)
+        private async Task<bool> UpdateFirstAidData(BasicFirstAid tempFirstAid)
         {
             docKitName.Text = tempFirstAid.Name;
             docKitFirstAidDescription.Text = "\n" + tempFirstAid.FirstAid;
             docKitFirstAidImage.Source = await ImageMethods.Base64StringToBitmap(tempFirstAid.Image);
             docKitFirstAidSymptoms.Text = "\n" + tempFirstAid.DoNot;
+            return true;
         }
 
         //////////////////////This methods are for Buttons click events in Dialog Box opened.
@@ -405,7 +412,7 @@ namespace Health_Organizer
                                 await diseaseMethods.UpdateDisease(tempDisease);
                                 isUpdating = false;
                                 docKitDName.IsReadOnly = false;
-                                this.UpdateDiseaseData(tempDisease);
+                                await this.UpdateDiseaseData(tempDisease);
                             }
                         }
                         else
@@ -416,7 +423,7 @@ namespace Health_Organizer
                             if (ocString.Count() == 1)
                             {
                                 this.showDiseaseItems();
-                                this.UpdateDiseaseData(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = ExtraModules.RemoveExtraCommas(docKitDSymptoms.Text), Image = decodedImage });
+                                await this.UpdateDiseaseData(new BasicDiseases() { Name = docKitDName.Text, Description = docKitDDescription.Text, Symptoms = ExtraModules.RemoveExtraCommas(docKitDSymptoms.Text), Image = decodedImage });
                                 docKitDelBut.IsEnabled = true;
                                 docKitEditBut.IsEnabled = true;
                             }
@@ -446,7 +453,7 @@ namespace Health_Organizer
                             await firstAidMethods.UpdateFirstAid(tempFirstAid);
                             isUpdating = false;
                             docKitFAName.IsReadOnly = false;
-                            this.UpdateFirstAidData(tempFirstAid);
+                            await this.UpdateFirstAidData(tempFirstAid);
                         }
                     }
                     else
@@ -458,7 +465,7 @@ namespace Health_Organizer
                         if (ocString.Count() == 1)
                         {
                             this.showFirstAidItems();
-                            this.UpdateFirstAidData(new BasicFirstAid() { Name = docKitFAName.Text, FirstAid = docKitFADescription.Text, DoNot = docKitFASymptoms.Text, Image = decodedImage });
+                            await this.UpdateFirstAidData(new BasicFirstAid() { Name = docKitFAName.Text, FirstAid = docKitFADescription.Text, DoNot = docKitFASymptoms.Text, Image = decodedImage });
                             docKitDelBut.IsEnabled = true;
                             docKitEditBut.IsEnabled = true;
                         }
@@ -520,7 +527,7 @@ namespace Health_Organizer
                         tempDisease = await diseaseMethods.FindSingleDisease(this.ocString[docKitListBox.SelectedIndex].ToString());
 
                     }
-                    this.UpdateDiseaseData(tempDisease);
+                    await this.UpdateDiseaseData(tempDisease);
                     TitleTextBlockAnimation.Begin();
                     DiseaseGridAnimation.Begin();
                     docKitScrollerDisease.ChangeView(0, 0, 1);
@@ -538,7 +545,7 @@ namespace Health_Organizer
 
                     }
                     docKitScrollerFirstAid.ChangeView(0, 0, 1);
-                    this.UpdateFirstAidData(tempFirstAid);
+                    await this.UpdateFirstAidData(tempFirstAid);
                     TitleTextBlockAnimation.Begin();
                     FirstAidGridAnimation.Begin();
                 }
