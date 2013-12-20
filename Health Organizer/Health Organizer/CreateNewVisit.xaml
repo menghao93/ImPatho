@@ -83,7 +83,7 @@
             </Grid>
 
 
-            <TextBlock Grid.Row="1" Name="VisitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Left" Text="Name" Padding="50,0,0,0"/>
+            <TextBlock Grid.Row="1" Name="VisitPatientName" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="35" HorizontalAlignment="Left" Text="Name" Padding="50,0,0,0"/>
 
             <!--Form fields starts from here-->
             <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -100,7 +100,7 @@
 
                         <!--General Detail Stackpanel-->
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="180" Margin="0,50,0,0">
-                            <TextBlock Name="VisitGeneralDetails" Text="General Details" FontSize="25" />
+                            <TextBlock Foreground="#00A2E8" Name="VisitGeneralDetails" Text="General Details" FontSize="25" />
                             <!--Height Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Name="VisitTitleHeight"  Text="Height: " FontSize="15"/>
@@ -131,18 +131,18 @@
 
 
                     <StackPanel Grid.Column="1" Orientation="Vertical">
-                        <TextBlock Name="VisitTitleDisease"  Text="Disease" FontSize="25"/>
+                        <TextBlock Foreground="#00A2E8" Name="VisitTitleDisease"  Text="Disease" FontSize="25"/>
                         <TextBlock Name="VisitTextDisease" FontSize="15"  Height="60" HorizontalAlignment="Left" TextWrapping="Wrap" Width="290"/>
-                        <TextBlock Name="VisitTitleSymptoms"  Text="Symptoms" FontSize="25"/>
+                        <TextBlock Foreground="#00A2E8" Name="VisitTitleSymptoms"  Text="Symptoms" FontSize="25"/>
                         <StackPanel Height="300" Name="VisitSymptomsPanel" Orientation="Vertical"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Vertical">
-                        <TextBlock Name="VisitTitleMedicines"  Text="Medicines" FontSize="25"/>
+                        <TextBlock Foreground="#00A2E8" Name="VisitTitleMedicines"  Text="Medicines" FontSize="25"/>
                         <ScrollViewer VerticalScrollMode="Enabled" Height="180" Margin="0,0,0,15" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                             <StackPanel Name="VisitTextMedicines" Orientation="Vertical"/>
                         </ScrollViewer>
-                        <TextBlock Name="VisitTitleVaccine"  Text="Vaccines" FontSize="25"/>
+                        <TextBlock Foreground="#00A2E8" Name="VisitTitleVaccine"  Text="Vaccines" FontSize="25"/>
                         <ScrollViewer VerticalScrollMode="Enabled" Height="200" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                             <StackPanel Name="VisitTextVaccine" Orientation="Vertical"/>
                         </ScrollViewer>

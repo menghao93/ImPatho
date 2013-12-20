@@ -63,9 +63,9 @@
             </Grid>
             
             <ScrollViewer Grid.Column="1">
-                <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="600" HorizontalAlignment="Left">
+                <StackPanel Orientation="Vertical" Margin="0,10,0,40" Width="600" HorizontalAlignment="Left">
 
-                    <TextBlock Name="ProfileBasicDetails" Text="Basic Details" FontSize="30" Margin="0,0,0,20"/>
+                    <TextBlock Foreground="#00A2E8" Name="ProfileBasicDetails" Text="Basic Details" FontSize="30" Margin="0,0,0,20"/>
                     
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="20" Width="150" Text="Name: " />
@@ -107,9 +107,9 @@
                         <TextBlock Name="ProfileMaritalStatus" FontSize="20" Text="Not Married" />
                     </StackPanel>
 
-                    <TextBlock Name="ProfileOtherDetails" Text="Other Details" FontSize="30" Margin="0,30,0,20"/>
+                    <TextBlock Foreground="#00A2E8" Name="ProfileOtherDetails" Text="Other Details" FontSize="30" Margin="0,75,0,20"/>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                    <StackPanel Orientation="Horizontal" >
                         <TextBlock FontSize="20" Width="150" Text="Age: " />
                         <TextBlock Name="ProfileAge" Width="300" FontSize="20" Text="19" />
                     </StackPanel>
