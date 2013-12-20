@@ -307,7 +307,7 @@ namespace Health_Organizer
             else
             {
                 Debug.WriteLine(check);
-                if (check && !isUpdating)
+                if (check)
                 {
                     var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
                     messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
@@ -511,7 +511,7 @@ namespace Health_Organizer
                 VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals("") || VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null ||
                 ((ocString.Contains(VisitYearComboBox.SelectedItem + "-" + VisitMonthComboBox.SelectedItem + "-" + VisitDayComboBox.SelectedItem) && !isUpdating)))
             {
-                if ((ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
+                if (!isUpdating && (ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
                 {
                     check = false;
                     var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");

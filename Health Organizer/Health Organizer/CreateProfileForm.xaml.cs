@@ -634,7 +634,8 @@ namespace Health_Organizer
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
                 profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
-                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z")))
+                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z"))
+                || profileBloodGroup.SelectedItem == null)
             {
                 Debug.WriteLine("false");
                 if (profileFirstName.Text.Equals(""))
@@ -645,6 +646,10 @@ namespace Health_Organizer
                 if (profileLastName.Text.Equals(""))
                 {
                     profileLastName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (profileBloodGroup.SelectedItem == null)
+                {
+                    profileBloodGroup.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileSexType.SelectedItem == null)
                 {
