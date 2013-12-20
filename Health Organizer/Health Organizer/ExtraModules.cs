@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Health_Organizer
@@ -24,6 +25,12 @@ namespace Health_Organizer
         public static double CalculateBMI(int feet, int inch, int weight)
         {
             return weight / (((feet * 12) + inch) * 0.0254); 
+        }
+
+        public static String RemoveStringNewLine(String InputString)
+        {
+            String OutputString = Regex.Replace(InputString, @"\t|\n|\r", "");
+            return OutputString;
         }
     }
 }
