@@ -81,7 +81,7 @@
         * Row 1 contains the rest of the page layout
     -->
 
-    <Grid Background="Black" KeyDown="KeyPressed">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" KeyDown="KeyPressed">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <ContentThemeTransition/>

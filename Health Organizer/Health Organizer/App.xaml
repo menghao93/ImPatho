@@ -9,6 +9,7 @@
             <!--ListBox Properties are set here in the ThemeDictionary while others would be set in MergedDictionary(I don't know why..SHALIN)-->
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="Black"/>
                     <SolidColorBrush x:Key="ListBoxFocusBackgroundThemeBrush" Color="#00A2E8"/>
                     <SolidColorBrush x:Key="ListBoxBackgroundThemeBrush" Color="#00A2E8"/>
                     <SolidColorBrush x:Key="ListBoxBorderThemeBrush" Color="Transparent"/>

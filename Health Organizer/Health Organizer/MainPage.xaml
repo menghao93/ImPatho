@@ -84,7 +84,7 @@
         </Style>
     </Page.Resources>
 
-    <StackPanel Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" Background="Black">
+    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" >
         <Image Source="Assets/logo_homescreen.png" Height="400" Width="800"></Image>
         <Border Padding="10">
             <ScrollViewer IsTabStop="True" VerticalScrollBarVisibility="Disabled">
