@@ -550,6 +550,8 @@ namespace Health_Organizer
                     statement = await this.database.PrepareStatementAsync(insertCountryQuery);
                     statement.BindTextParameterWithName("@state", profileState.Text.ToString());
                     statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+
+                    await statement.StepAsync();
                 }
             }
         }
@@ -586,7 +588,7 @@ namespace Health_Organizer
             {
                 string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
 
-                foreach (string str in profileAllergies.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileAllergies.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -599,13 +601,13 @@ namespace Health_Organizer
             }
             if (!profileAddictions.Text.Equals(""))
             {
-                string insertAllergyString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
-                statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                string insertAddictionString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
+                statement = await this.database.PrepareStatementAsync(insertAddictionString);
 
-                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileAddictions.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
-                    statement = await this.database.PrepareStatementAsync(insertAllergyString);
+                    statement = await this.database.PrepareStatementAsync(insertAddictionString);
                     statement.BindTextParameterWithName("@addiction", str);
                     statement.BindIntParameterWithName("@pid", PID);
                     //await statement.StepAsync().AsTask().ConfigureAwait(false);
@@ -617,7 +619,7 @@ namespace Health_Organizer
             {
                 string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
 
-                foreach (string str in profileAddictions.Text.ToString().Split(','))
+                foreach (string str in ExtraModules.RemoveExtraCommas(profileOperations.Text.ToString()).Split(','))
                 {
                     Debug.WriteLine(str);
                     statement = await this.database.PrepareStatementAsync(insertOperationString);
