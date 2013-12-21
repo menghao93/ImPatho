@@ -109,7 +109,7 @@ namespace Health_Organizer.Data
                     //add the new item to this new grp.
                     while (await statement.StepAsync())
                     {
-                        Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
+                        //Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
                         string currentGroup = statement.Columns["City"];
                         if (currentGroup.Equals(prevGroup))
                         {

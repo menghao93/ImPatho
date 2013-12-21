@@ -44,8 +44,10 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var sample = await HomePageDataSoure.GetGroupsAsync();
+            this.DefaultViewModel["Groups"] = sample;
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -53,12 +55,9 @@ namespace Health_Organizer
         }
 
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            var sample = await HomePageDataSoure.GetGroupsAsync();
-            this.DefaultViewModel["Groups"] = sample;
-
             recordGrid.SelectedItem = null;
         }
 
@@ -76,14 +75,6 @@ namespace Health_Organizer
             }
         }
 
-        private void CreateNewVisit(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
-            }
-        }
-
         private void recordGridViewClicked(object sender, ItemClickEventArgs e)
         {
             SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
@@ -92,6 +83,20 @@ namespace Health_Organizer
             if (this.Frame != null)
             {
                 this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+            }
+        }
+
+        private async void recordGridHeader(object sender, RoutedEventArgs e)
+        {
+            TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
+            IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+            foreach (SampleDataGroup sample in samples) {
+                if (sample.Title.Equals(clickedItem.Text.ToString())) {
+                    if (this.Frame != null)
+                    {
+                        this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                    }   
+                }
             }
         }
     }

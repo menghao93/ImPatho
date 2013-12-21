@@ -28,9 +28,8 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="180"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid>
@@ -61,7 +60,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <GridView Name="recordGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" Padding="20" IsItemClickEnabled="True" ItemClick="recordGridViewClicked" SelectedItem="-1">
+            <GridView Name="recordGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" Padding="20" IsItemClickEnabled="True" ItemClick="recordGridViewClicked">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Width="350" Height="130">
@@ -85,7 +84,15 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Title}" Foreground="#00A2E8" TextWrapping="NoWrap" Style="{StaticResource SubheaderTextBlockStyle}" FontWeight="SemiLight"/>
+                                    <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
+                                    AutomationProperties.Name="Group Title"
+                                    Click="recordGridHeader"
+                                    Style="{StaticResource TextBlockButtonStyle}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                            <TextBlock Text="&#xE26B;" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                        </StackPanel>
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
@@ -93,6 +100,5 @@
                 </GridView.GroupStyle>
             </GridView>
         </Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Click="CreateNewVisit"/>
     </Grid>
 </Page>
