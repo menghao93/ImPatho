@@ -88,9 +88,11 @@ namespace Health_Organizer.Data
 
         private async Task GetSampleDataAsync()
         {
+            //Debug.WriteLine("getting data a");
             if (this._groups.Count != 0)
                 return;
 
+            Debug.WriteLine("getting data");
             try
             {
                 DBConnect connection = new DBConnect();
@@ -131,9 +133,12 @@ namespace Health_Organizer.Data
                     }
                     this.Groups.Add(groups);
                 }
+                this.db.Dispose();
+                connection.CloseConnection(DBConnect.ORG_HOME_DB);
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("HomePageDataSource.GetSampleDataAsync");
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(ex.Source);
                 Debug.WriteLine(ex.InnerException);

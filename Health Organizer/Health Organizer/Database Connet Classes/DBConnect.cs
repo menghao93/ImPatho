@@ -15,6 +15,8 @@ namespace Health_Organizer.Database_Connet_Classes
     {
         public const int ORG_HOME_DB = 0;
         public const int DOC_KIT_DB = 1;
+        public const int RESULT_OK = 3;
+        public const int RESULT_ERROR = -1;
         
         SQLiteAsyncConnection conn;
         Database database;

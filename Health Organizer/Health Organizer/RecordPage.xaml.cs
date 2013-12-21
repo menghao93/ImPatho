@@ -42,13 +42,20 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            this.InitializeGrid();
+            //Debug.WriteLine("Intializing again");
         }
 
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void InitializeGrid()
         {
             var sample = await HomePageDataSoure.GetGroupsAsync();
-            this.DefaultViewModel["Groups"] = sample;
+            groupedItemsViewSource.Source = sample;
             recordGrid.SelectedItem = null;
+        }
+
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -90,12 +97,14 @@ namespace Health_Organizer
         {
             TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
             IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
-            foreach (SampleDataGroup sample in samples) {
-                if (sample.Title.Equals(clickedItem.Text.ToString())) {
+            foreach (SampleDataGroup sample in samples)
+            {
+                if (sample.Title.Equals(clickedItem.Text.ToString()))
+                {
                     if (this.Frame != null)
                     {
                         this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
-                    }   
+                    }
                 }
             }
         }
