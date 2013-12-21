@@ -64,7 +64,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Width="325" Height="130">
-                        <Border Height="110" Width="110" >
+                        <Border Height="110" Width="110" Margin="10,0,0,0">
                             <Image Source="{Binding Image}" Stretch="UniformToFill"/>
                         </Border>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" >
