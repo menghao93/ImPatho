@@ -52,7 +52,7 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
-                    <AppBarButton Name="ViewProfileVisit" Label="New Patient" Icon="Add" Click="AddNewEntryForm" HorizontalAlignment="Center"/>
+                    <AppBarButton Name="AddNewEntry" Label="New Patient" Icon="Add" Click="AddNewEntryForm" HorizontalAlignment="Center"/>
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
@@ -60,7 +60,16 @@
         </Grid>
 
         <Grid Grid.Row="1">            
-            <GridView Margin="0,-20,0,0" Padding="120,0,0,0" Name="recordGrid" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" IsItemClickEnabled="True" ItemClick="recordGridViewClicked">
+            <GridView SelectionChanged="RecordPageNewItemClicked" 
+                      Margin="0,-20,0,0" 
+                      Padding="120,0,0,0" 
+                      Name="recordGrid" 
+                      ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
+                      CanReorderItems="True" 
+                      CanDragItems="True" 
+                      ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" 
+                      IsItemClickEnabled="True" 
+                      ItemClick="recordGridViewClicked">
                 <GridView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Width="325" Height="130">
@@ -79,7 +88,7 @@
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <Grid Height="50">
+                                <Grid Height="50" Margin="0,0,0,15">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -101,4 +110,12 @@
             </GridView>            
         </Grid>
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar Name="RecordPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
+            <AppBarButton Name="RecordPageViewProfile" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Right"/>
+            <AppBarButton Name="RecordPageEditBut" Icon="Edit" Label="Edit Profile" Click="profileDetailsEditBut" HorizontalAlignment="Right" />
+            <AppBarButton Name="RecordPageDelBut" Icon="Cancel" Label="Remove Patient" HorizontalAlignment="Right" />
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

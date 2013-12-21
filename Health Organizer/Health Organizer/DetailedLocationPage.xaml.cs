@@ -21,8 +21,8 @@ namespace Health_Organizer
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private int PID = 0;
-
+        private int PID = -1;
+        bool justLanded = true;
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -41,10 +41,15 @@ namespace Health_Organizer
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+            this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
+        }
+
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
 
@@ -54,7 +59,10 @@ namespace Health_Organizer
             var group = await HomePageDataSoure.GetGroupAsync((String)e.Parameter);
             this.DefaultViewModel["Group"] = group;
             this.DefaultViewModel["Items"] = group.Items;
-            pageTitle.Text = group.Title;
+            pageTitle.Text = group.Title; 
+            
+            itemGridView.SelectedItem = null;
+            this.disableAppButtons();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -71,6 +79,53 @@ namespace Health_Organizer
             {
                 this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
             }
+        }
+
+        private void LocationPageNewItemClicked(object sender, SelectionChangedEventArgs e)
+        {
+            if (itemGridView.SelectedItem != null && !justLanded)
+            {
+                this.enableAppButtons();
+                SampleDataItem clickedItem = itemGridView.SelectedItem as SampleDataItem;
+                this.PID = Int32.Parse(clickedItem.UniqueId);
+                LocationPageCmdbar.IsOpen = true;
+                this.enableAppButtons();
+            }
+            else
+            {
+                this.disableAppButtons();
+                justLanded = false;
+            }  
+        }
+
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
+            }
+        }
+
+        private void profileDetailsEditBut(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
+            }
+        }
+
+        private void disableAppButtons()
+        {
+            LocationPageViewProfile.IsEnabled = false;
+            LocationPageEditBut.IsEnabled = false;
+            LocationPageDelBut.IsEnabled = false;
+        }
+
+        private void enableAppButtons()
+        {
+            LocationPageViewProfile.IsEnabled = true;
+            LocationPageEditBut.IsEnabled = true;
+            LocationPageDelBut.IsEnabled = true;
         }
     }
 }
