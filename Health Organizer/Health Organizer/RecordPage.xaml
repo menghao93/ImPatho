@@ -32,7 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
@@ -59,27 +59,27 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="1">
-            <GridView Name="recordGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" Padding="20" IsItemClickEnabled="True" ItemClick="recordGridViewClicked">
+        <Grid Grid.Row="1">            
+            <GridView Margin="0,-20,0,0" Padding="120,0,0,0" Name="recordGrid" ScrollViewer.IsHorizontalScrollChainingEnabled="False" CanReorderItems="True" CanDragItems="True" ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" IsItemClickEnabled="True" ItemClick="recordGridViewClicked">
                 <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Width="350" Height="130">
-                            <Border Height="110" Width="110" Margin="10,10,0,10">
-                                <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                            </Border>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
-                                <TextBlock Text="{Binding Title}" Margin="10,0,0,0" Width="200" TextTrimming="WordEllipsis" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
-                                <TextBlock Text="{Binding Description}" Margin="10,2,0,0" Width="200" TextTrimming="WordEllipsis" HorizontalAlignment="Left" Opacity="0.49" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Width="325" Height="130">
+                                <Border Height="110" Width="110" >
+                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                </Border>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                                    <TextBlock Text="{Binding Title}"  Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Description}" Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" HorizontalAlignment="Left" Opacity="0.50" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>                 
-                </GridView.ItemTemplate>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
 
                 <GridView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <Grid Height="50" Margin="10">
+                                <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -89,8 +89,8 @@
                                     Click="recordGridHeader"
                                     Style="{StaticResource TextBlockButtonStyle}" >
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
-                                            <TextBlock Text="&#xE26B;" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding Title}" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                            <TextBlock Text="&#xE26B;" Margin="10,0,0,0" FontFamily="Segoe UI Symbol" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
                                         </StackPanel>
                                     </Button>
                                 </Grid>
@@ -98,7 +98,7 @@
                         </GroupStyle.HeaderTemplate>
                     </GroupStyle>
                 </GridView.GroupStyle>
-            </GridView>
+            </GridView>            
         </Grid>
     </Grid>
 </Page>

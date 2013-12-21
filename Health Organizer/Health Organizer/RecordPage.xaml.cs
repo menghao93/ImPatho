@@ -89,13 +89,19 @@ namespace Health_Organizer
         private async void recordGridHeader(object sender, RoutedEventArgs e)
         {
             TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
-            IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
-            foreach (SampleDataGroup sample in samples) {
-                if (sample.Title.Equals(clickedItem.Text.ToString())) {
-                    if (this.Frame != null)
+
+            if (clickedItem.Text.ToString() != "")
+            {
+                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                foreach (SampleDataGroup sample in samples)
+                {
+                    if (sample.Title.Equals(clickedItem.Text.ToString()))
                     {
-                        this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
-                    }   
+                        if (this.Frame != null)
+                        {
+                            this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                        }
+                    }
                 }
             }
         }
