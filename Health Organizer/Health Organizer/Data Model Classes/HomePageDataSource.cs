@@ -92,7 +92,7 @@ namespace Health_Organizer.Data
             if (this._groups.Count != 0)
                 return;
 
-            Debug.WriteLine("getting data");
+            //Debug.WriteLine("getting data");
             try
             {
                 DBConnect connection = new DBConnect();
@@ -138,12 +138,8 @@ namespace Health_Organizer.Data
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("HomePageDataSource.GetSampleDataAsync");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.Source);
-                Debug.WriteLine(ex.InnerException);
-                Debug.WriteLine(ex.Data);
-                Debug.WriteLine(ex.StackTrace);
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("HOME_PAGE_DATA_SOURCE---LOAD_GROUP_ASYNC" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
     }

@@ -21,9 +21,10 @@ namespace Health_Organizer
 {
     public sealed partial class RecordPage : Page
     {
-        private int PID = 1;
+        private int PID = -1;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        bool justLanded = true;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -43,7 +44,7 @@ namespace Health_Organizer
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
-            this.InitializeGrid();
+            //this.InitializeGrid();
             //Debug.WriteLine("Intializing again");
         }
 
@@ -63,9 +64,14 @@ namespace Health_Organizer
         }
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            var sample = await HomePageDataSoure.GetGroupsAsync();
+            this.DefaultViewModel["Groups"] = sample;
+
+            recordGrid.SelectedItem = null;
+            this.disableAppButtons();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -96,17 +102,68 @@ namespace Health_Organizer
         private async void recordGridHeader(object sender, RoutedEventArgs e)
         {
             TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
-            IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
-            foreach (SampleDataGroup sample in samples)
+
+            if (clickedItem.Text.ToString() != "")
             {
-                if (sample.Title.Equals(clickedItem.Text.ToString()))
+                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                foreach (SampleDataGroup sample in samples)
                 {
-                    if (this.Frame != null)
+                    if (sample.Title.Equals(clickedItem.Text.ToString()))
                     {
-                        this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                        if (this.Frame != null)
+                        {
+                            this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                        }
                     }
                 }
             }
+        }
+
+        private void RecordPageNewItemClicked(object sender, SelectionChangedEventArgs e)
+        {
+            if (recordGrid.SelectedItem != null && !justLanded)
+            {
+                this.enableAppButtons();
+                SampleDataItem clickedItem = recordGrid.SelectedItem as SampleDataItem;
+                this.PID = Int32.Parse(clickedItem.UniqueId);
+                RecordPageCmdbar.IsOpen = true;
+                this.enableAppButtons();
+            }
+            else
+            {
+                this.disableAppButtons();
+                justLanded = false;  
+            }  
+        }
+
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
+            }
+        }
+
+        private void profileDetailsEditBut(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
+            }
+        }
+
+        private void disableAppButtons()
+        {
+            RecordPageViewProfile.IsEnabled = false;
+            RecordPageEditBut.IsEnabled = false;
+            RecordPageDelBut.IsEnabled = false;
+        }
+
+        private void enableAppButtons()
+        {
+            RecordPageViewProfile.IsEnabled = true;
+            RecordPageEditBut.IsEnabled = true;
+            RecordPageDelBut.IsEnabled = true;
         }
     }
 }

@@ -72,9 +72,7 @@ namespace Health_Organizer
             }
             else
             {
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
+                this.collapseStackPanels();
             }
             //this.queryDB();
         }
@@ -360,9 +358,7 @@ namespace Health_Organizer
 
             if (this.ocString.Count() <= 0)
             {
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                this.collapseStackPanels();
             }
             else
             {
@@ -388,10 +384,9 @@ namespace Health_Organizer
             }
             else
             {
-                //Debug.WriteLine(check);
                 if (check)
                 {
-                    var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
+                    var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form correctly before saving it.", "Error!");
                     messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                     var dialogResult = await messageDialog.ShowAsync();
                 }
@@ -614,9 +609,7 @@ namespace Health_Organizer
 
             if (this.ocString.Count() == 1)
             {
-                EditVisit.IsEnabled = true;
-                DeleteVisit.IsEnabled = true;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                this.visibleStackPanels();
             }
 
             return DBConnect.RESULT_OK;
@@ -650,6 +643,8 @@ namespace Health_Organizer
 
         private async Task<bool> CheckIfFilled()
         {
+            int temp;
+            bool ret = true;
             VisitDiseasesDiagnosed.ClearValue(BorderBrushProperty);
             VisitSymptoms.ClearValue(BorderBrushProperty);
             VisitMedicineGiven.ClearValue(BorderBrushProperty);
@@ -660,57 +655,69 @@ namespace Health_Organizer
             VisitDayComboBox.ClearValue(BorderBrushProperty);
             VisitYearComboBox.ClearValue(BorderBrushProperty);
 
-            if (VisitDiseasesDiagnosed.Text.Equals("") || VisitSymptoms.Text.Equals("") ||
-                VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals("") || VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null ||
-                ((ocString.Contains(VisitYearComboBox.SelectedItem + "-" + VisitMonthComboBox.SelectedItem + "-" + VisitDayComboBox.SelectedItem) && !isUpdating)))
+            if (!isUpdating && (ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
             {
-                if (!isUpdating && (ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
-                {
-                    check = false;
-                    var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
-                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
-                    var dialogResult = await messageDialog.ShowAsync();
-                    VisitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    VisitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    VisitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                check = false;
+                var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
+                var dialogResult = await messageDialog.ShowAsync();
+                VisitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                VisitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                VisitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
 
-                    return false;
-                }
-                else
-                {
-                    check = true;
-                }
-                if (VisitDiseasesDiagnosed.Text.Equals(""))
-                {
-                    VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitSymptoms.Text.Equals(""))
-                {
-                    VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitMedicineGiven.Text.Equals(""))
-                {
-                    VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitWeight.Text.Equals(""))
-                {
-                    VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitHeightFeet.SelectedItem == null)
-                {
-                    VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-
-                }
-                if (VisitHeightInch.SelectedItem == null)
-                {
-                    VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
                 return false;
             }
             else
             {
-                return true;
+                check = true;
             }
+
+            if (VisitDiseasesDiagnosed.Text.Equals(""))
+            {
+                VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitSymptoms.Text.Equals(""))
+            {
+                VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitMedicineGiven.Text.Equals(""))
+            {
+                VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitWeight.Text.ToString(), out temp))
+            {
+                VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitSystolicBP.Text.ToString(), out temp))
+            {
+                VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitDiastolicBP.Text.ToString(), out temp))
+            {
+                VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitBloodGlucose.Text.ToString(), out temp))
+            {
+                VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitHeightFeet.SelectedItem == null)
+            {
+                VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitHeightInch.SelectedItem == null)
+            {
+                VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            return ret;
         }
 
         private void VisitCancelClicked(object sender, RoutedEventArgs e)
@@ -860,6 +867,8 @@ namespace Health_Organizer
                     var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                     Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_EDITED_DETAILS---VACCINE" + "\n" + ex.Message + "\n" + result.ToString());
                 }
+
+                this.visibleStackPanels();
             }
         }
 
@@ -947,6 +956,27 @@ namespace Health_Organizer
             this.ocString = new ObservableCollection<string>(searchList);
             searchList.Clear();
             this.VisitListBox.ItemsSource = this.ocString;
+        }
+
+        public void collapseStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            EditVisit.IsEnabled = false;
+            DeleteVisit.IsEnabled = false;
+
+        }
+
+        public void visibleStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            EditVisit.IsEnabled = true;
+            DeleteVisit.IsEnabled = true;
         }
     }
 }

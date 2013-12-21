@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SQLiteWinRT;
 using Health_Organizer.Database_Connet_Classes;
+using System.Diagnostics;
 
 namespace Health_Organizer
 {
@@ -54,7 +55,6 @@ namespace Health_Organizer
         {
         }
 
-        #region NavigationHelper registration
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
@@ -73,142 +73,202 @@ namespace Health_Organizer
 
         private async void LoadDetails()
         {
-            string query = "SELECT * FROM Patient WHERE PID = @pid";
-            Statement statement = await this.database.PrepareStatementAsync(query);
-            statement.BindInt64ParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-
-            if (await statement.StepAsync())
+            try
             {
-                ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
-                ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
-                ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
-                ProfileSex.Text = statement.Columns["Sex"];
-                //IMage
-                //Age
-            }
-            // for the address
-            String street = "", city = "", state = "", country = "", zip = "";
-            query = "SELECT * FROM Address WHERE PID = @pid";
-            statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
-            {
-                street = statement.Columns["Street"];
-                //ZIP code
-                zip = statement.Columns["ZIP"];
-            }
+                string query = "SELECT * FROM Patient WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindInt64ParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
 
-            query = "SELECT * FROM AddressZIP WHERE ZIP = @zip";
-            statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@zip", Int32.Parse(zip));
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
-            {
-                city= statement.Columns["City"];
-            }
-            statement.Reset();
-            statement.Reset();
-            query = "SELECT * FROM AddressCity WHERE City = @city";
-            statement = await this.database.PrepareStatementAsync(query);
-            statement.BindTextParameterWithName("@city",city);
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
-            {
-                state= statement.Columns["State"];
-            }
-            statement.Reset();
-
-            query = "SELECT * FROM AddressState WHERE State = @state";
-            statement = await this.database.PrepareStatementAsync(query);
-            statement.BindTextParameterWithName("@state", state);
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
-            {
-                country = statement.Columns["Country"];
-            }
-            ProfileAddress.Text = street + "\n" + city + ", " + state + ", "+ zip + "\n" + country;
-
-
-
-            string queryDetails = "SELECT * FROM MutableDetails WHERE PID = @pid";
-            statement = await this.database.PrepareStatementAsync(queryDetails);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-
-            if (await statement.StepAsync())
-            {
-                ProfileContact.Text = statement.Columns["Mobile"];
-                ProfileEmContact.Text = statement.Columns["EmMobile"];
-                ProfileEmail.Text = statement.Columns["Email"];
-                ProfileOccupation.Text = statement.Columns["Occupation"];
-                ProfileFamilyHistory.Text = statement.Columns["FamilyBackground"];
-
-                if (statement.Columns["Married"].Equals("T"))
+                if (await statement.StepAsync())
                 {
-                    ProfileMaritalStatus.Text = "Married";
-                }
-                else
-                {
-                    ProfileMaritalStatus.Text = "Unmarried";
+                    ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
+                    ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
+                    ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
+                    ProfileSex.Text = statement.Columns["Sex"];
                 }
             }
-
-
-            ProfileAllergies.Text = "";
-            string allergyDetails = "SELECT * FROM MutableDetailsAllergy WHERE PID = @pid";
-            statement = await this.database.PrepareStatementAsync(allergyDetails);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-            while (await statement.StepAsync())
+            catch (Exception ex)
             {
-                ProfileAllergies.Text += statement.Columns["Allergy"] + ",";
-            }
-            if (!ProfileAllergies.Text.Equals(""))
-            {
-                ProfileAllergies.Text = ProfileAllergies.Text.Substring(0, ProfileAllergies.Text.Length - 1);
-            }
-            statement.Reset();
-
-            ProfileOperations.Text = "";
-            string operationDetails = "SELECT * FROM MutableDetailsOperation WHERE PID = @pid";
-            statement = await this.database.PrepareStatementAsync(operationDetails);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-
-            while (await statement.StepAsync())
-            {
-                ProfileOperations.Text += statement.Columns["Operation"] + ",";
-            }
-            if (!ProfileOperations.Text.Equals(""))
-            {
-                ProfileOperations.Text = ProfileOperations.Text.Substring(0, ProfileOperations.Text.Length - 1);
-            }
-            statement.Reset();
-
-            ProfileAddictions.Text = "";
-            string addictionDetails = "SELECT * FROM MutableDetailsAddiction WHERE PID = @pid";
-            statement = await this.database.PrepareStatementAsync(addictionDetails);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.EnableColumnsProperty();
-
-            while (await statement.StepAsync())
-            {
-                ProfileAddictions.Text += statement.Columns["Addiction"] + ",";
-            }
-            if (!ProfileAddictions.Text.Equals(""))
-            {
-                ProfileAddictions.Text = ProfileAddictions.Text.Substring(0, ProfileAddictions.Text.Length - 1);
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---PATIENT" + "\n" + ex.Message + "\n" + result.ToString());
             }
 
+            string street = "", city = "", state = "", country = "", zip = "";
+            try
+            {
+                string query = "SELECT * FROM Address WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    street = statement.Columns["Street"];
+                    zip = statement.Columns["ZIP"];
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---ADDRESS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string query = "SELECT * FROM AddressZIP WHERE ZIP = @zip";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@zip", Int32.Parse(zip));
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    city = statement.Columns["City"];
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---ADDRESS_ZIP" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string query = "SELECT * FROM AddressCity WHERE City = @city";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindTextParameterWithName("@city", city);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    state = statement.Columns["State"];
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---ADDRESS_CITY" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string query = "SELECT * FROM AddressState WHERE State = @state";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindTextParameterWithName("@state", state);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    country = statement.Columns["Country"];
+                }
+                ProfileAddress.Text = street + "\n" + city + ", " + state + ", " + zip + "\n" + country;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---ADDRESS_STATE" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string queryDetails = "SELECT * FROM MutableDetails WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(queryDetails);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+
+                if (await statement.StepAsync())
+                {
+                    ProfileContact.Text = statement.Columns["Mobile"];
+                    ProfileEmContact.Text = statement.Columns["EmMobile"];
+                    ProfileEmail.Text = statement.Columns["Email"];
+                    ProfileOccupation.Text = statement.Columns["Occupation"];
+                    ProfileFamilyHistory.Text = statement.Columns["FamilyBackground"];
+
+                    if (statement.Columns["Married"].Equals("T"))
+                    {
+                        ProfileMaritalStatus.Text = "Married";
+                    }
+                    else
+                    {
+                        ProfileMaritalStatus.Text = "Unmarried";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                ProfileAllergies.Text = "";
+                string allergyDetails = "SELECT * FROM MutableDetailsAllergy WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(allergyDetails);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+                while (await statement.StepAsync())
+                {
+                    ProfileAllergies.Text += statement.Columns["Allergy"] + ",";
+                }
+                if (!ProfileAllergies.Text.Equals(""))
+                {
+                    ProfileAllergies.Text = ProfileAllergies.Text.Substring(0, ProfileAllergies.Text.Length - 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS_ALLERGY" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                ProfileOperations.Text = "";
+                string operationDetails = "SELECT * FROM MutableDetailsOperation WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(operationDetails);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+
+                while (await statement.StepAsync())
+                {
+                    ProfileOperations.Text += statement.Columns["Operation"] + ",";
+                }
+                if (!ProfileOperations.Text.Equals(""))
+                {
+                    ProfileOperations.Text = ProfileOperations.Text.Substring(0, ProfileOperations.Text.Length - 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS_OPERATION" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                ProfileAddictions.Text = "";
+                string addictionDetails = "SELECT * FROM MutableDetailsAddiction WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(addictionDetails);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+
+                while (await statement.StepAsync())
+                {
+                    ProfileAddictions.Text += statement.Columns["Addiction"] + ",";
+                }
+                if (!ProfileAddictions.Text.Equals(""))
+                {
+                    ProfileAddictions.Text = ProfileAddictions.Text.Substring(0, ProfileAddictions.Text.Length - 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS_ADDICTION" + "\n" + ex.Message + "\n" + result.ToString());
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
         }
-        #endregion
 
         private void profileDetailsEditBut(object sender, RoutedEventArgs e)
         {
