@@ -22,6 +22,24 @@
                     <SolidColorBrush x:Key="ListBoxItemSelectedForegroundThemeBrush" Color="White"/>
                     <SolidColorBrush x:Key="ListBoxItemPointerOverForegroundThemeBrush" Color="White"/>
 
+                    
+                    <SolidColorBrush x:Key="ListViewItemCheckHintThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ListViewItemCheckSelectingThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ListViewItemSelectedBackgroundThemeBrush" Color="#0076A8"/>
+                    <SolidColorBrush x:Key="TextSelectionHighlightColorThemeBrush" Color="#0076A8"/>
+                    <SolidColorBrush x:Key="ComboBoxItemSelectedBackgroundThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ComboBoxSelectedBackgroundThemeBrush" Color="#0076A8" />
+
+                    <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBackgroundThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBorderThemeBrush" Color="#0091D2" />
+
+
+                    <SolidColorBrush x:Key="ProgressBarForegroundThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="#0076A8" />
+
+                    <SolidColorBrush x:Key="SearchBoxButtonBackgroundThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="SearchBoxHitHighlightForegroundThemeBrush" Color="#0076A8" />
+
                     <Style x:Key="SubheaderTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
                         <Setter Property="FontSize" Value="35"/>
                         <Setter Property="FontWeight" Value="Light"/>
