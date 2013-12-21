@@ -340,7 +340,6 @@ namespace Health_Organizer
             }
             else
             {
-                Debug.WriteLine(check);
                 if (check)
                 {
                     var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
@@ -488,7 +487,7 @@ namespace Health_Organizer
                 statement.Reset();
             }
             string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
-            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(VisitVaccine.Text)).Split(','))
+            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(VisitVaccine.Text.ToString())).Split(','))
             {
                 statement = await this.database.PrepareStatementAsync(insertVaccine);
                 statement.BindIntParameterWithName("@pid", this.PID);
@@ -715,6 +714,8 @@ namespace Health_Organizer
 
                     VisitTextVaccine.Children.Add(VisitVaccineStackPanels);
                 }
+
+                this.visibleStackPanels();
             }
         }
         //Validation for numeric entries in weight, bp and glucose
