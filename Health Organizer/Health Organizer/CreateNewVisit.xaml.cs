@@ -72,10 +72,8 @@ namespace Health_Organizer
                 VisitListBox.SelectedIndex = 0;
             }
             else
-            {
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
+            {           
+                this.collapseStackPanels();
             }
 
             //this.queryDB();
@@ -310,9 +308,7 @@ namespace Health_Organizer
 
             if (this.ocString.Count() <= 0)
             {
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                this.collapseStackPanels();
             }
             else
             {
@@ -508,9 +504,7 @@ namespace Health_Organizer
 
             if (this.ocString.Count() == 1)
             {
-                EditVisit.IsEnabled = true;
-                DeleteVisit.IsEnabled = true;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                this.visibleStackPanels();
             }
 
             return 1;
@@ -807,6 +801,27 @@ namespace Health_Organizer
             this.ocString = new ObservableCollection<string>(searchList);
             searchList.Clear();
             this.VisitListBox.ItemsSource = this.ocString;
+        }
+
+        public void collapseStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            EditVisit.IsEnabled = false;
+            DeleteVisit.IsEnabled = false;
+
+        }
+
+        public void visibleStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            EditVisit.IsEnabled = true;
+            DeleteVisit.IsEnabled = true;
         }
     }
 }

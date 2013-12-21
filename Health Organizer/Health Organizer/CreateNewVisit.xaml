@@ -93,7 +93,7 @@
                         <Image Name="VisitPatientPhoto" Height="180" Width="180" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg"  HorizontalAlignment="Center"/>
 
                         <!--General Detail Stackpanel-->
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="180" Margin="0,50,0,0">
+                        <StackPanel Name="VisitStackPanel1" Orientation="Vertical" HorizontalAlignment="Center" Width="180" Margin="0,50,0,0">
                             <TextBlock Style="{StaticResource CreatNewProfileBodyHeader}" Name="VisitGeneralDetails" Text="General Details"  />
                             <!--Height Detail-->
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
@@ -124,14 +124,14 @@
                     </StackPanel>
 
 
-                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <StackPanel Name="VisitStackPanel2" Grid.Column="1" Orientation="Vertical">
                         <TextBlock Style="{StaticResource CreatNewProfileBodyHeader}" Name="VisitTitleDisease"  Text="Disease"/>
                         <TextBlock Name="VisitTextDisease" FontSize="15"  Height="60" HorizontalAlignment="Left" TextWrapping="Wrap" Width="290"/>
                         <TextBlock Style="{StaticResource CreatNewProfileBodyHeader}" Name="VisitTitleSymptoms"  Text="Symptoms"/>
                         <StackPanel Height="300" Name="VisitSymptomsPanel" Orientation="Vertical"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                    <StackPanel Name="VisitStackPanel3" Grid.Column="2" Orientation="Vertical">
                         <TextBlock Style="{StaticResource CreatNewProfileBodyHeader}" Name="VisitTitleMedicines"  Text="Medicines"/>
                         <ScrollViewer VerticalScrollMode="Enabled" Height="180" Margin="0,0,0,15" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                             <StackPanel Name="VisitTextMedicines" Orientation="Vertical"/>
