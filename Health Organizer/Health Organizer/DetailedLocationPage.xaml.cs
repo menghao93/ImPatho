@@ -21,6 +21,7 @@ namespace Health_Organizer
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private int PID = 0;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -59,6 +60,17 @@ namespace Health_Organizer
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
+        }
+
+        private void detailLocGridClicked(object sender, ItemClickEventArgs e)
+        {
+            SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
+            this.PID = Int32.Parse(clickedItem.UniqueId);
+            
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+            }
         }
     }
 }

@@ -12,7 +12,7 @@
 
     <Page.Resources>
         <x:String x:Key="ChevronGlyph">&#xE26B;</x:String>
-        
+
         <CollectionViewSource
             x:Name="gridViewSource"
             ItemsPath="TopItems"
@@ -40,7 +40,9 @@
             Padding="116,137,40,46"
             ItemsSource="{Binding Source={StaticResource gridViewSource}}"
             SelectionMode="None"
-            IsSwipeEnabled="false">
+            IsSwipeEnabled="false"
+            IsItemClickEnabled ="True" 
+            ItemClick="detailLocGridClicked">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Width="350" Height="130">
@@ -53,7 +55,7 @@
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
-            </GridView.ItemTemplate>            
+            </GridView.ItemTemplate>
         </GridView>
 
         <!-- Back button and page title -->

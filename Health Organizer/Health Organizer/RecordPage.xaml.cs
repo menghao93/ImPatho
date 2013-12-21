@@ -48,6 +48,7 @@ namespace Health_Organizer
         {
             var sample = await HomePageDataSoure.GetGroupsAsync();
             this.DefaultViewModel["Groups"] = sample;
+            recordGrid.SelectedItem = null;
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -58,7 +59,6 @@ namespace Health_Organizer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            recordGrid.SelectedItem = null;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
