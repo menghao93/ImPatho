@@ -16,6 +16,7 @@ using Health_Organizer.Data;
 using System.Diagnostics;
 using SQLiteWinRT;
 using Health_Organizer.Database_Connet_Classes;
+using System.Text.RegularExpressions;
 
 namespace Health_Organizer
 {
@@ -25,9 +26,13 @@ namespace Health_Organizer
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private DBConnect connection;
         private Database database;
+        Statement statement;
+
         private int PID = -1;
         bool justLanded = true;
-        Statement statement;
+        bool isSearchBarVisible = false;
+
+        List<SampleDataItem> ListOfAllItem;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -48,6 +53,11 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+        }
+
+        public void updateListOfAllItem()
+        {
+            ListOfAllItem = itemGridView.Items.OfType<SampleDataItem>().ToList(); 
         }
 
         private async void InitializeDB()
@@ -73,9 +83,10 @@ namespace Health_Organizer
             this.DefaultViewModel["Items"] = group.Items;
             pageTitle.Text = group.Title;
 
-            itemGridView.SelectedItem = null;
             this.disableAppButtons();
             this.InitializeDB();
+            this.updateListOfAllItem();
+            itemGridView.SelectedItem = null;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -96,19 +107,23 @@ namespace Health_Organizer
 
         private void LocationPageNewItemClicked(object sender, SelectionChangedEventArgs e)
         {
-            if (itemGridView.SelectedItem != null && !justLanded)
+            if ( ! isSearchBarVisible)
             {
-                this.enableAppButtons();
-                SampleDataItem clickedItem = itemGridView.SelectedItem as SampleDataItem;
-                this.PID = Int32.Parse(clickedItem.UniqueId);
-                LocationPageCmdbar.IsOpen = true;
-                this.enableAppButtons();
+                if (itemGridView.SelectedItem != null && !justLanded)
+                {
+                    this.enableAppButtons();
+                    SampleDataItem clickedItem = itemGridView.SelectedItem as SampleDataItem;
+                    this.PID = Int32.Parse(clickedItem.UniqueId);
+                    LocationPageCmdbar.IsOpen = true;
+                    this.enableAppButtons();
+                }
+                else
+                {
+                    this.disableAppButtons();
+                    justLanded = false;
+                }
             }
-            else
-            {
-                this.disableAppButtons();
-                justLanded = false;
-            }
+            
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
@@ -271,6 +286,58 @@ namespace Health_Organizer
             LocationPageViewProfile.IsEnabled = true;
             LocationPageEditBut.IsEnabled = true;
             LocationPageDelBut.IsEnabled = true;
+        }
+
+
+        private List<SampleDataItem> Search(string searchString)
+        {
+            var regex = new Regex(searchString, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+
+            List<SampleDataItem> list = ListOfAllItem;
+            List<SampleDataItem> resultlist = new List<SampleDataItem>();
+
+            foreach (SampleDataItem item in list)
+            {
+                if (regex.IsMatch(item.ToString())){
+                    resultlist.Add(item);
+                }
+            }
+
+            return resultlist;
+        }
+
+
+        private void SearchBoxQueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
+        {
+            if (! args.QueryText.ToString().Equals(""))
+            {
+                this.DefaultViewModel["Items"] = Search(args.QueryText.ToString());
+                itemGridView.SelectedItem = null;
+            }
+            else
+            {
+                this.DefaultViewModel["Items"] = ListOfAllItem;
+            }
+        }
+
+        private void LocationSearchButClicked(object sender, RoutedEventArgs e)
+        {
+            if (isSearchBarVisible)
+            {
+                LocationPageSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                isSearchBarVisible = false;
+            }
+            else
+            {
+                LocationPageSearchBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                isSearchBarVisible = true;
+            }
+        }
+
+        private void LocationPageItemCliced(object sender, PointerRoutedEventArgs e)
+        {
+            LocationPageSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            isSearchBarVisible = false;
         }
 
     }

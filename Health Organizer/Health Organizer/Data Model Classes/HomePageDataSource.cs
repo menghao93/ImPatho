@@ -126,7 +126,7 @@ namespace Health_Organizer.Data
                             }
 
                             BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
-                            groups = new SampleDataGroup(statement.Columns["ZIP"], statement.Columns["City"]);
+                            groups = new SampleDataGroup(statement.Columns["PID"], statement.Columns["City"]);
                             groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
                         }
                        prevGroup = currentGroup;
