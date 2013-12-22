@@ -429,7 +429,7 @@ namespace Health_Organizer
                 {
                     string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
 
-                    foreach (string str in profileAllergies.Text.ToString().Split(','))
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileAllergies.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -452,8 +452,8 @@ namespace Health_Organizer
                 if (!profileAddictions.Text.Equals(""))
                 {
                     string insertAddictionString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
-                    
-                    foreach (string str in profileAddictions.Text.ToString().Split(','))
+
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileAddictions.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
@@ -477,7 +477,7 @@ namespace Health_Organizer
                 {
                     string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
 
-                    foreach (string str in profileOperations.Text.ToString().Split(','))
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileOperations.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);
@@ -808,7 +808,7 @@ namespace Health_Organizer
                 {
                     string insertAllergyString = "INSERT INTO MutableDetailsAllergy (PID, Allergy) VALUES (@pid, @allergy)";
 
-                    foreach (string str in ExtraModules.RemoveExtraCommas(profileAllergies.Text.ToString()).Split(','))
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileAllergies.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
@@ -831,8 +831,8 @@ namespace Health_Organizer
                 if (!profileAddictions.Text.Equals(""))
                 {
                     string insertAddictionString = "INSERT INTO MutableDetailsAddiction (PID, Addiction) VALUES (@pid, @addiction)";
-                    
-                    foreach (string str in ExtraModules.RemoveExtraCommas(profileAddictions.Text.ToString()).Split(','))
+
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileAddictions.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
@@ -856,7 +856,7 @@ namespace Health_Organizer
                 {
                     string insertOperationString = "INSERT INTO MutableDetailsOperation (PID, Operation) VALUES (@pid, @operation)";
 
-                    foreach (string str in ExtraModules.RemoveExtraCommas(profileOperations.Text.ToString()).Split(','))
+                    foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(profileOperations.Text.ToString())).Split(','))
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);

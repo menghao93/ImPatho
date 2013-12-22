@@ -144,7 +144,7 @@ namespace Health_Organizer
             }
         }
 
-        private void profileDetailsEditBut(object sender, RoutedEventArgs e)
+        private void ProfileDetailsEditBut(object sender, RoutedEventArgs e)
         {
             if (this.Frame != null)
             {
@@ -156,14 +156,12 @@ namespace Health_Organizer
         {
             RecordPageViewProfile.IsEnabled = false;
             RecordPageEditBut.IsEnabled = false;
-            RecordPageDelBut.IsEnabled = false;
         }
 
         private void enableAppButtons()
         {
             RecordPageViewProfile.IsEnabled = true;
             RecordPageEditBut.IsEnabled = true;
-            RecordPageDelBut.IsEnabled = true;
         }
     }
 }

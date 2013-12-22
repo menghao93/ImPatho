@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,16 +39,20 @@ namespace Health_Organizer
         public static String RemoveRepeatedPart(String InputString)
         {
             String OutputString = "";
+            String trimedString = "";
 
+            //Append all non repeating portion of string in outputString
             foreach (string str in InputString.Split(','))
             {
-                if (OutputString.IndexOf(str) == -1)
+                if (trimedString.Trim().IndexOf(str.Trim()) == -1)
                 {
+                    trimedString = trimedString + "," + str;
                     OutputString = OutputString + "," + str;
                 }
             }
 
-            return OutputString;
+            //Remove all space from begining and end 
+            return OutputString.TrimStart().TrimEnd();
         }
 
         public static String RemoveExtraCommas(String input)

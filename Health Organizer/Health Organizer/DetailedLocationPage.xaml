@@ -81,8 +81,8 @@
     <Page.BottomAppBar>
         <CommandBar Name="LocationPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
             <AppBarButton Name="LocationPageViewProfile" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Right"/>
-            <AppBarButton Name="LocationPageEditBut" Icon="Edit" Label="Edit Profile" Click="profileDetailsEditBut" HorizontalAlignment="Right" />
-            <AppBarButton Name="LocationPageDelBut" Icon="Cancel" Label="Remove Patient" HorizontalAlignment="Right" />
+            <AppBarButton Name="LocationPageEditBut" Icon="Edit" Label="Edit Profile" Click="ProfileDetailsEditClicked" HorizontalAlignment="Right" />
+            <AppBarButton Name="LocationPageDelBut" Icon="Cancel" Label="Remove Patient" Click="ProfileDeleteButClicked" HorizontalAlignment="Right" />
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

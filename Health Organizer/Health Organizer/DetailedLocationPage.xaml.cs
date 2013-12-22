@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Health_Organizer.Data;
 using System.Diagnostics;
+using SQLiteWinRT;
+using Health_Organizer.Database_Connet_Classes;
 
 namespace Health_Organizer
 {
@@ -21,8 +23,12 @@ namespace Health_Organizer
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private DBConnect connection;
+        private Database database;
         private int PID = -1;
         bool justLanded = true;
+        Statement statement;
+
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -59,10 +65,11 @@ namespace Health_Organizer
             var group = await HomePageDataSoure.GetGroupAsync((String)e.Parameter);
             this.DefaultViewModel["Group"] = group;
             this.DefaultViewModel["Items"] = group.Items;
-            pageTitle.Text = group.Title; 
-            
+            pageTitle.Text = group.Title;
+
             itemGridView.SelectedItem = null;
             this.disableAppButtons();
+            this.InitializeDB();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -74,7 +81,7 @@ namespace Health_Organizer
         {
             SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
             this.PID = Int32.Parse(clickedItem.UniqueId);
-            
+
             if (this.Frame != null)
             {
                 this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
@@ -95,7 +102,7 @@ namespace Health_Organizer
             {
                 this.disableAppButtons();
                 justLanded = false;
-            }  
+            }
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
@@ -106,7 +113,7 @@ namespace Health_Organizer
             }
         }
 
-        private void profileDetailsEditBut(object sender, RoutedEventArgs e)
+        private void ProfileDetailsEditClicked(object sender, RoutedEventArgs e)
         {
             if (this.Frame != null)
             {
@@ -126,6 +133,145 @@ namespace Health_Organizer
             LocationPageViewProfile.IsEnabled = true;
             LocationPageEditBut.IsEnabled = true;
             LocationPageDelBut.IsEnabled = true;
+        }
+
+        private async void InitializeDB()
+        {
+            this.connection = new DBConnect();
+            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
+            database = this.connection.GetConnection();
+        }
+
+        private async void ProfileDeleteButClicked(object sender, RoutedEventArgs e)
+        {
+            if (itemGridView.SelectedItems != null && this.PID > 0)
+            {
+                try
+                {
+                    string deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MedicalDetailsVaccine" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MedicalDetailsMedicine" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MedicalDetails" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM Address WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---Address" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MutableDetailsOperation WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MutableDetailsOperation" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MutableDetailsAddiction WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MutableDetailsAddiction" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MutableDetailsAllergy WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MutableDetailsAllergy" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM MutableDetails WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---MutableDetails" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    statement.Reset();
+                    string deleteQuery = "DELETE FROM Patient WHERE PID = @pid";
+                    statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    await statement.StepAsync();
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---Patient" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+            }
+
         }
     }
 }
