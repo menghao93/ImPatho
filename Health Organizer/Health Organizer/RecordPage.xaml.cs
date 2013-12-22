@@ -69,7 +69,7 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedTo(e);
             var sample = await HomePageDataSoure.GetGroupsAsync();
             this.DefaultViewModel["Groups"] = sample;
-
+            
             recordGrid.SelectedItem = null;
             this.disableAppButtons();
         }
@@ -90,12 +90,11 @@ namespace Health_Organizer
 
         private void recordGridViewClicked(object sender, ItemClickEventArgs e)
         {
-            SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
-            this.PID = Int32.Parse(clickedItem.UniqueId);
+            this.PID = Int32.Parse(((SampleDataItem)e.ClickedItem).UniqueId);
 
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+                this.Frame.Navigate(typeof(CreateNewVisit), ((SampleDataItem)e.ClickedItem).UniqueId);
             }
         }
 

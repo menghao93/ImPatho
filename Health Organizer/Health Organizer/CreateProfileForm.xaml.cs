@@ -314,15 +314,15 @@ namespace Health_Organizer
                     await this.UpdateBasicDetails();
                     await this.UpdateAddress(this.updatePID);
                     await this.UpdateMutableDetails(this.updatePID);
+                    await this.UpdateGridView(this.updatePID);
                     this.isUpdating = false;
                 }
                 else
                 {
-                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
-                    int pid = await this.insertBasicDetais();
-                    await this.insertAddress(pid);
-                    await this.insertMutableDetails(pid);
-                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
+                    int pid = await this.InsertBasicDetais();
+                    await this.InsertAddress(pid);
+                    await this.InsertMutableDetails(pid);
+                    await this.InsertIntoGridView(pid);
                 }
 
                 database.Dispose();
@@ -340,6 +340,59 @@ namespace Health_Organizer
                 var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                 var dialogResult = await messageDialog.ShowAsync();
+            }
+        }
+
+        private async Task<int> InsertIntoGridView(int pid)
+        {
+            try
+            {
+                BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
+                bool groupExist = false;
+
+                IEnumerable<SampleDataGroup> grp = await HomePageDataSoure.GetGroupsAsync();
+                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                foreach (SampleDataGroup sample in samples)
+                {
+                    if (sample.Title.Equals(profileCity.Text.ToString()))
+                    {
+                        sample.Items.Add(new SampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
+                        groupExist = true;
+                    }
+                }
+                if (!groupExist)
+                {
+                    SampleDataGroup group = new SampleDataGroup(profileCity.Text, profileCity.Text);
+                    group.Items.Add(new SampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
+                    HomePageDataSoure._sampleDataSource.Groups.Add(group);
+                }
+
+                return DBConnect.RESULT_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CREATE_PROFILE_FORM---INSERT_INTO_GRID_VIEW" + ex.Message);
+                return DBConnect.RESULT_ERROR;
+            }
+        }
+
+        private async Task<int> UpdateGridView(int pid)
+        {
+            try
+            {
+                BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
+
+                SampleDataItem updateItem = await HomePageDataSoure.GetItemAsync(pid.ToString());
+                updateItem.Title = profileFirstName.Text + " " + profileLastName.Text;
+                updateItem.Description = profileAddress.Text;
+                updateItem.Image = bmp;
+
+                return DBConnect.RESULT_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CREATE_PROFILE_FORM---UPDATE_INTO_GRID_VIEW" + ex.Message);
+                return DBConnect.RESULT_ERROR;
             }
         }
 
@@ -621,7 +674,7 @@ namespace Health_Organizer
             return true;
         }
 
-        private async Task<int> insertBasicDetais()
+        private async Task<int> InsertBasicDetais()
         {
             profileMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             profileProgressRing.IsActive = true;
@@ -669,7 +722,7 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<bool> insertAddress(int PID)
+        private async Task<bool> InsertAddress(int PID)
         {
             try
             {
@@ -740,7 +793,7 @@ namespace Health_Organizer
             return true;
         }
 
-        private async Task<bool> insertMutableDetails(int PID)
+        private async Task<bool> InsertMutableDetails(int PID)
         {
             try
             {

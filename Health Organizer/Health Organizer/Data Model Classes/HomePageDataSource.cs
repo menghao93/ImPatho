@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace Health_Organizer.Data
 {
-     public class SampleDataItem
+    public class SampleDataItem
     {
         public SampleDataItem(String uniqueId, String title, String description, BitmapImage image)
         {
@@ -23,10 +23,10 @@ namespace Health_Organizer.Data
             this.Image = image;
         }
 
-        public string UniqueId { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-        public BitmapImage Image { get; private set; }
+        public string UniqueId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public BitmapImage Image { get; set; }
 
         public override string ToString()
         {
@@ -55,9 +55,9 @@ namespace Health_Organizer.Data
 
     public sealed class HomePageDataSoure
     {
-        private static HomePageDataSoure _sampleDataSource = new HomePageDataSoure();
+        public static HomePageDataSoure _sampleDataSource = new HomePageDataSoure();
         private Database db = null;
-        private ObservableCollection<SampleDataGroup> _groups = new ObservableCollection<SampleDataGroup>();
+        public ObservableCollection<SampleDataGroup> _groups = new ObservableCollection<SampleDataGroup>();
         public ObservableCollection<SampleDataGroup> Groups
         {
             get { return this._groups; }
@@ -88,11 +88,9 @@ namespace Health_Organizer.Data
 
         private async Task GetSampleDataAsync()
         {
-            //Debug.WriteLine("getting data a");
             if (this._groups.Count != 0)
                 return;
-
-            //Debug.WriteLine("getting data");
+            
             try
             {
                 DBConnect connection = new DBConnect();
@@ -127,9 +125,9 @@ namespace Health_Organizer.Data
 
                             BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
                             groups = new SampleDataGroup(statement.Columns["ZIP"], statement.Columns["City"]);
-                            groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+                            groups.Items.Add(new SampleDataItem(statement.Columns["City"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
                         }
-                       prevGroup = currentGroup;
+                        prevGroup = currentGroup;
                     }
                     this.Groups.Add(groups);
                 }
