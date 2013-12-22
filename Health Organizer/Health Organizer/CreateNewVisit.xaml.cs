@@ -552,15 +552,6 @@ namespace Health_Organizer
                 Debug.WriteLine("CREATE_NEW_VISIT---INSERT_DETAILS---MEDIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
             }
 
-            //statement.Reset();
-            //double bmi = 1.0 * height / weight;
-            //string insertBMI = "INSERT INTO MedicalDetailsBMI (Height, Weight, BMI) VALUES (@height, @weight, @bmi)";
-            //statement = await this.database.PrepareStatementAsync(insertBMI);
-            //statement.BindDoubleParameterWithName("@height", height);
-            //statement.BindIntParameterWithName("@weight", weight);
-            //statement.BindDoubleParameterWithName("@bmi", bmi);
-            //await statement.StepAsync();
-
             try
             {
                 string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";

@@ -204,7 +204,16 @@ namespace Health_Organizer
                 if (await statement.StepAsync())
                 {
                     profileContactNumber.Text = statement.Columns["Mobile"];
-                    profileEmergencyNumber.Text = statement.Columns["EmMobile"];
+
+                    if (statement.Columns["EmMobile"].ToString() != "0")
+                    {
+                        profileEmergencyNumber.Text = statement.Columns["EmMobile"];
+                    }
+                    else
+                    {
+                        profileEmergencyNumber.Text = "";
+                    }
+
                     profileEmailAddress.Text = statement.Columns["Email"];
                     profileOccupation.Text = statement.Columns["Occupation"];
                     profileFamilyHistory.Text = statement.Columns["FamilyBackground"];

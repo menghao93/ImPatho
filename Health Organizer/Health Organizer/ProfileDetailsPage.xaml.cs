@@ -175,7 +175,16 @@ namespace Health_Organizer
                 if (await statement.StepAsync())
                 {
                     ProfileContact.Text = statement.Columns["Mobile"];
-                    ProfileEmContact.Text = statement.Columns["EmMobile"];
+
+                    if (statement.Columns["EmMobile"].ToString() != "0")
+                    {
+                        ProfileEmContact.Text = statement.Columns["EmMobile"];
+                    }
+                    else
+                    {
+                        ProfileEmContact.Text = "NA";
+                    }
+
                     ProfileEmail.Text = statement.Columns["Email"];
                     ProfileOccupation.Text = statement.Columns["Occupation"];
                     ProfileFamilyHistory.Text = statement.Columns["FamilyBackground"];
@@ -211,6 +220,10 @@ namespace Health_Organizer
                 {
                     ProfileAllergies.Text = ProfileAllergies.Text.Substring(0, ProfileAllergies.Text.Length - 1);
                 }
+                else
+                {
+                    ProfileAllergies.Text = "NA";
+                }
             }
             catch (Exception ex)
             {
@@ -234,6 +247,10 @@ namespace Health_Organizer
                 {
                     ProfileOperations.Text = ProfileOperations.Text.Substring(0, ProfileOperations.Text.Length - 1);
                 }
+                else
+                {
+                    ProfileOperations.Text = "NA";
+                }
             }
             catch (Exception ex)
             {
@@ -256,6 +273,10 @@ namespace Health_Organizer
                 if (!ProfileAddictions.Text.Equals(""))
                 {
                     ProfileAddictions.Text = ProfileAddictions.Text.Substring(0, ProfileAddictions.Text.Length - 1);
+                }
+                else
+                {
+                    ProfileAddictions.Text = "NA";
                 }
             }
             catch (Exception ex)
