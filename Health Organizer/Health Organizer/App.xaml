@@ -34,8 +34,8 @@
                     <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBorderThemeBrush" Color="#0091D2" />
 
 
-                    <SolidColorBrush x:Key="ProgressBarForegroundThemeBrush" Color="#0076A8" />
-                    <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="#0076A8" />
+                    <SolidColorBrush x:Key="ProgressBarForegroundThemeBrush" Color="#00A2E8" />
+                    <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="#00A2E8" />
 
                     <SolidColorBrush x:Key="SearchBoxButtonBackgroundThemeBrush" Color="#0076A8" />
                     <SolidColorBrush x:Key="SearchBoxHitHighlightForegroundThemeBrush" Color="#0076A8" />

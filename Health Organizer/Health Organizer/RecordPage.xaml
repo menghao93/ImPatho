@@ -28,7 +28,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="180"/>
+            <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -61,8 +61,7 @@
 
         <Grid Grid.Row="1">
             <GridView SelectionChanged="RecordPageNewItemClicked" 
-                      Margin="0,-20,0,0" 
-                      Padding="120,0,0,0" 
+                      Padding="50" 
                       Name="recordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
                       CanReorderItems="True" 
