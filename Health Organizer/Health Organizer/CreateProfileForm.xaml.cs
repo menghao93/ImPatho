@@ -415,7 +415,15 @@ namespace Health_Organizer
                 statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
                 statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
                 statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
-                statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
+                if (!profileEmergencyNumber.Text.ToString().Equals(""))
+                {
+                    statement.BindInt64ParameterWithName("@eMob", Int64.Parse(profileEmergencyNumber.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindInt64ParameterWithName("@eMob", 0000000000);
+                }
+
                 statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
 
                 await statement.StepAsync();
