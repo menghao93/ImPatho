@@ -62,6 +62,11 @@ namespace Health_Organizer
             this.InitializeDB();
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            navigationHelper.OnNavigatedFrom(e);
+        }
+
         private async void InitializeDB()
         {
             this.connection = new DBConnect();
@@ -218,7 +223,7 @@ namespace Health_Organizer
                 }
                 if (!ProfileAllergies.Text.Equals(""))
                 {
-                    ProfileAllergies.Text = ProfileAllergies.Text.Substring(0, ProfileAllergies.Text.Length - 1);
+                    ProfileAllergies.Text = ProfileAllergies.Text.Substring(0, ProfileAllergies.Text.Length - 1).TrimStart().TrimEnd();
                 }
                 else
                 {
@@ -245,7 +250,7 @@ namespace Health_Organizer
                 }
                 if (!ProfileOperations.Text.Equals(""))
                 {
-                    ProfileOperations.Text = ProfileOperations.Text.Substring(0, ProfileOperations.Text.Length - 1);
+                    ProfileOperations.Text = ProfileOperations.Text.Substring(0, ProfileOperations.Text.Length - 1).TrimStart().TrimEnd();
                 }
                 else
                 {
@@ -272,7 +277,7 @@ namespace Health_Organizer
                 }
                 if (!ProfileAddictions.Text.Equals(""))
                 {
-                    ProfileAddictions.Text = ProfileAddictions.Text.Substring(0, ProfileAddictions.Text.Length - 1);
+                    ProfileAddictions.Text = ProfileAddictions.Text.Substring(0, ProfileAddictions.Text.Length - 1).TrimEnd().TrimStart();
                 }
                 else
                 {
@@ -284,11 +289,6 @@ namespace Health_Organizer
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                 Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS_ADDICTION" + "\n" + ex.Message + "\n" + result.ToString());
             }
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedFrom(e);
         }
 
         private void profileDetailsEditBut(object sender, RoutedEventArgs e)

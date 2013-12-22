@@ -305,40 +305,6 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedFrom(e);
         }
 
-        private async void BrowseImage(object sender, RoutedEventArgs e)
-        {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.FileTypeFilter.Add(".jpg");
-            picker.FileTypeFilter.Add(".png");
-            picker.FileTypeFilter.Add(".jpeg");
-            var file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                var stream = await file.OpenReadAsync();
-                BitmapImage bmp = new BitmapImage();
-                await bmp.SetSourceAsync(stream);
-                profilePic.Source = bmp;
-                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(file);
-            }
-        }
-
-        async private void CameraImage(object sender, RoutedEventArgs e)
-        {
-            CameraCaptureUI cameraUI = new CameraCaptureUI();
-
-            Windows.Storage.StorageFile capturedMedia =
-                await cameraUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
-
-            if (capturedMedia != null)
-            {
-                var stream = await capturedMedia.OpenAsync(FileAccessMode.Read);
-                BitmapImage bmp = new BitmapImage();
-                await bmp.SetSourceAsync(stream);
-                profilePic.Source = bmp;
-                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(capturedMedia);
-            }
-        }
-
         private async void SaveNewProfile(object sender, RoutedEventArgs e)
         {
             if (this.CheckIfFilled())
@@ -887,6 +853,124 @@ namespace Health_Organizer
             return true;
         }
 
+        private async void ResetNewProfile(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to reset? All the details entered would be lost.", "Confirmation.");
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
+            messageDialog.DefaultCommandIndex = 1;
+            var dialogResult = await messageDialog.ShowAsync();
+
+            if (dialogResult.Label.Equals("Yes"))
+            {
+                profileFirstName.Text = "";
+                profileLastName.Text = "";
+                profileBloodGroup.SelectedItem = null;
+                profileSexType.SelectedItem = null;
+                profileMonthComboBox.SelectedItem = null;
+                profileYearComboBox.SelectedItem = null;
+                profileDayComboBox.SelectedItem = null;
+                profileAddress.Text = "";
+                profileCity.Text = "";
+                profileZip.Text = "";
+                profileState.Text = "";
+                profileCountry.Text = "";
+                profileContactNumber.Text = "";
+                profileEmergencyNumber.Text = "";
+                profileEmailAddress.Text = "";
+                profileAllergies.Text = "";
+                profileOccupation.Text = "";
+                profileOperations.Text = "";
+                profileFamilyHistory.Text = "";
+                profileAddictions.Text = "";
+                profileMarried.IsChecked = false;
+
+            }
+
+        }
+
+        private async void GoBackNewProfile(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to cancel? All the details entered would be lost.", "Confirmation.");
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
+            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
+            messageDialog.DefaultCommandIndex = 1;
+            var dialogResult = await messageDialog.ShowAsync();
+
+            if (dialogResult.Label.Equals("Yes"))
+            {
+                this.NavigationHelper.GoBack();
+                database.Dispose();
+                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
+            }
+        }
+
+        private async void BrowseImage(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".jpeg");
+            var file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                var stream = await file.OpenReadAsync();
+                BitmapImage bmp = new BitmapImage();
+                await bmp.SetSourceAsync(stream);
+                profilePic.Source = bmp;
+                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(file);
+            }
+        }
+
+        async private void CameraImage(object sender, RoutedEventArgs e)
+        {
+            CameraCaptureUI cameraUI = new CameraCaptureUI();
+
+            Windows.Storage.StorageFile capturedMedia =
+                await cameraUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (capturedMedia != null)
+            {
+                var stream = await capturedMedia.OpenAsync(FileAccessMode.Read);
+                BitmapImage bmp = new BitmapImage();
+                await bmp.SetSourceAsync(stream);
+                profilePic.Source = bmp;
+                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(capturedMedia);
+            }
+        }
+
+        private void numberValidation(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+
+        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (counterComma >= 1 && ((uint)e.Key == 188))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                e.Handled = false;
+            }
+
+            if (((uint)e.Key == 188))
+            {
+                counterComma++;
+            }
+            else
+            {
+                counterComma = 0;
+            }
+
+        }
+
         private bool CheckIfFilled()
         {
             profileLastName.ClearValue(BorderBrushProperty);
@@ -987,88 +1071,5 @@ namespace Health_Organizer
             }
         }
 
-        private async void ResetNewProfile(object sender, RoutedEventArgs e)
-        {
-            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to reset? All the details entered would be lost.", "Confirmation.");
-            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
-            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
-            messageDialog.DefaultCommandIndex = 1;
-            var dialogResult = await messageDialog.ShowAsync();
-
-            if (dialogResult.Label.Equals("Yes"))
-            {
-                profileFirstName.Text = "";
-                profileLastName.Text = "";
-                profileBloodGroup.SelectedItem = null;
-                profileSexType.SelectedItem = null;
-                profileMonthComboBox.SelectedItem = null;
-                profileYearComboBox.SelectedItem = null;
-                profileDayComboBox.SelectedItem = null;
-                profileAddress.Text = "";
-                profileCity.Text = "";
-                profileZip.Text = "";
-                profileState.Text = "";
-                profileCountry.Text = "";
-                profileContactNumber.Text = "";
-                profileEmergencyNumber.Text = "";
-                profileEmailAddress.Text = "";
-                profileAllergies.Text = "";
-                profileOccupation.Text = "";
-                profileOperations.Text = "";
-                profileFamilyHistory.Text = "";
-                profileAddictions.Text = "";
-                profileMarried.IsChecked = false;
-
-            }
-
-        }
-
-        private void numberValidation(object sender, KeyRoutedEventArgs e)
-        {
-            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
-          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
-            {
-                e.Handled = false;
-            }
-            else e.Handled = true;
-        }
-
-        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (counterComma >= 1 && ((uint)e.Key == 188))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                e.Handled = false;
-            }
-
-            if (((uint)e.Key == 188))
-            {
-                counterComma++;
-            }
-            else
-            {
-                counterComma = 0;
-            }
-
-        }
-
-        private async void GoBackNewProfile(object sender, RoutedEventArgs e)
-        {
-            var messageDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to cancel? All the details entered would be lost.", "Confirmation.");
-            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes", null));
-            messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("No", null));
-            messageDialog.DefaultCommandIndex = 1;
-            var dialogResult = await messageDialog.ShowAsync();
-
-            if (dialogResult.Label.Equals("Yes"))
-            {
-                this.NavigationHelper.GoBack();
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
-            }
-        }
     }
 }

@@ -99,26 +99,6 @@ namespace Health_Organizer
             }
         }
 
-        private async void recordGridHeader(object sender, RoutedEventArgs e)
-        {
-            TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
-
-            if (clickedItem.Text.ToString() != "")
-            {
-                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
-                foreach (SampleDataGroup sample in samples)
-                {
-                    if (sample.Title.Equals(clickedItem.Text.ToString()))
-                    {
-                        if (this.Frame != null)
-                        {
-                            this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
-                        }
-                    }
-                }
-            }
-        }
-
         private void RecordPageNewItemClicked(object sender, SelectionChangedEventArgs e)
         {
             if (recordGrid.SelectedItem != null && !justLanded)
@@ -149,6 +129,26 @@ namespace Health_Organizer
             if (this.Frame != null)
             {
                 this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
+            }
+        }
+
+        private async void recordGridHeader(object sender, RoutedEventArgs e)
+        {
+            TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
+
+            if (clickedItem.Text.ToString() != "")
+            {
+                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                foreach (SampleDataGroup sample in samples)
+                {
+                    if (sample.Title.Equals(clickedItem.Text.ToString()))
+                    {
+                        if (this.Frame != null)
+                        {
+                            this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                        }
+                    }
+                }
             }
         }
 

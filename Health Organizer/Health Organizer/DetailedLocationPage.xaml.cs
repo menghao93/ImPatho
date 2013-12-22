@@ -50,6 +50,12 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
+        private async void InitializeDB()
+        {
+            this.connection = new DBConnect();
+            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
+            database = this.connection.GetConnection();
+        }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
@@ -119,27 +125,6 @@ namespace Health_Organizer
             {
                 this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
             }
-        }
-
-        private void disableAppButtons()
-        {
-            LocationPageViewProfile.IsEnabled = false;
-            LocationPageEditBut.IsEnabled = false;
-            LocationPageDelBut.IsEnabled = false;
-        }
-
-        private void enableAppButtons()
-        {
-            LocationPageViewProfile.IsEnabled = true;
-            LocationPageEditBut.IsEnabled = true;
-            LocationPageDelBut.IsEnabled = true;
-        }
-
-        private async void InitializeDB()
-        {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
         }
 
         private async void ProfileDeleteButClicked(object sender, RoutedEventArgs e)
@@ -273,5 +258,20 @@ namespace Health_Organizer
             }
 
         }
+
+        private void disableAppButtons()
+        {
+            LocationPageViewProfile.IsEnabled = false;
+            LocationPageEditBut.IsEnabled = false;
+            LocationPageDelBut.IsEnabled = false;
+        }
+
+        private void enableAppButtons()
+        {
+            LocationPageViewProfile.IsEnabled = true;
+            LocationPageEditBut.IsEnabled = true;
+            LocationPageDelBut.IsEnabled = true;
+        }
+
     }
 }

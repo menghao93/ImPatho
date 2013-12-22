@@ -577,7 +577,6 @@ namespace Health_Organizer
                 this.ocSearchList.Clear();
             foreach (string i in searchList)
             {
-                Debug.WriteLine(i);
                 this.ocSearchList.Add(i);
             }
             isSearching = true;
@@ -595,13 +594,10 @@ namespace Health_Organizer
 
             if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
-                Debug.WriteLine(countEnter);
                 countEnter++;
             }
             if (countEnter > 1 && (uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
-                Debug.WriteLine("avo");
-
                 t.AcceptsReturn = false;
             }
 
