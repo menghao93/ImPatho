@@ -60,7 +60,42 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <GridView SelectionChanged="RecordPageNewItemClicked" 
+            <SemanticZoom Name="SemanticZoomGrid" >
+                <SemanticZoom.ZoomedOutView>
+                    <GridView ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
+                              Padding="50" >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                x:Name="LocationName"
+                                Text="{Binding Group.Title}"
+                                FontFamily="Segoe UI" FontWeight="Light"
+                                Foreground="White"
+                                FontSize="24"/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid  ItemWidth="{Binding ElementName=LocationName, Path=ItemWidth}" MaximumRowsOrColumns="1"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Margin" Value="4" />
+                                <Setter Property="Padding" Value="10" />
+                                <Setter Property="BorderBrush" Value="Gray" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <!--<Setter Property="Height" Value="50" />-->
+                                <Setter Property="Width" Value="200" />
+                            </Style>
+                        </GridView.ItemContainerStyle>
+                    </GridView>
+                </SemanticZoom.ZoomedOutView>
+                <SemanticZoom.ZoomedInView>
+                    <GridView SelectionChanged="RecordPageNewItemClicked" 
                       Padding="50" 
                       Name="recordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
@@ -69,49 +104,54 @@
                       ItemsSource="{Binding Source = {StaticResource groupedItemsViewSource}}" 
                       IsItemClickEnabled="True" 
                       ItemClick="recordGridViewClicked">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Width="325" Height="130">
-                            <Border Height="110" Width="110" Margin="10,0,0,0">
-                                <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                            </Border>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                                <TextBlock Text="{Binding Title}"  Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
-                                <TextBlock Text="{Binding Description}" Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" HorizontalAlignment="Left" Opacity="0.50" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-
-                <GridView.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
+                        <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Height="50" Margin="0,0,0,15">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
+                                <StackPanel Orientation="Horizontal" Width="325" Height="130">
+                                    <Border Height="110" Width="110" Margin="10,0,0,0">
+                                        <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                                        <TextBlock Text="{Binding Title}"  Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Description}" Width="200" Margin="10,0,0,0" TextTrimming="WordEllipsis" Foreground="#00A2E8" HorizontalAlignment="Left" Opacity="0.50" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+
+                        <GridView.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="50" Margin="0,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
                                     AutomationProperties.Name="Group Title"
                                     Click="recordGridHeader"
                                     Style="{StaticResource TextBlockButtonStyle}" >
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Title}" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
-                                            <TextBlock Text="&#xE26B;" Margin="10,0,0,0" FontFamily="Segoe UI Symbol" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
-                                        </StackPanel>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </GridView.GroupStyle>
-            </GridView>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Title}" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                                    <TextBlock Text="&#xE26B;" Margin="10,0,0,0" FontFamily="Segoe UI Symbol" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </GridView.GroupStyle>
+                    </GridView>
+                </SemanticZoom.ZoomedInView>
+            </SemanticZoom>
         </Grid>
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar Name="RecordPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Name="RecordPageSemanticZoomBut" Icon="ViewAll" Label="View All Places" Click="SemanticZoomButClicked" HorizontalAlignment="Left" />
+            </CommandBar.SecondaryCommands>
             <AppBarButton Name="RecordPageViewProfile" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Right"/>
             <AppBarButton Name="RecordPageEditBut" Icon="Edit" Label="Edit Profile" Click="ProfileDetailsEditBut" HorizontalAlignment="Right" />
         </CommandBar>

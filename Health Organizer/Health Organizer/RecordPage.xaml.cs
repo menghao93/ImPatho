@@ -63,6 +63,7 @@ namespace Health_Organizer
         {
         }
 
+        
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -72,6 +73,8 @@ namespace Health_Organizer
             
             recordGrid.SelectedItem = null;
             this.disableAppButtons();
+
+            (SemanticZoomGrid.ZoomedOutView as ListViewBase).ItemsSource = groupedItemsViewSource.View.CollectionGroups;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -162,5 +165,11 @@ namespace Health_Organizer
             RecordPageViewProfile.IsEnabled = true;
             RecordPageEditBut.IsEnabled = true;
         }
+
+        private void SemanticZoomButClicked(object sender, RoutedEventArgs e)
+        {
+            SemanticZoomGrid.ToggleActiveView();
+            RecordPageCmdbar.IsOpen = false;
+        }  
     }
 }
