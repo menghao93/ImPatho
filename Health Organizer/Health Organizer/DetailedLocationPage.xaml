@@ -55,21 +55,23 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
             </Grid>
 
-            <Grid Grid.Column="1">
-                <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
-                    <SearchBox VerticalAlignment="Center" Name="LocationPageSearchBox" BorderBrush="#38ACEC" Height="40" Width="400" QueryChanged="SearchBoxQueryChanged" Margin="0,-2,30,0" Visibility="Collapsed"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <SearchBox VerticalAlignment="Center" Name="LocationPageSearchBox" BorderBrush="#38ACEC" Height="40" Width="400" QueryChanged="SearchBoxQueryChanged" Margin="0,-2,30,0" Visibility="Collapsed"/>
+                <StackPanel Orientation="Horizontal" Margin="0,17,0,0">
                     <AppBarButton  x:Name="docKitSearchBut" Icon="Find" Label="Search" Click="LocationSearchButClicked" />
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
-            </Grid>
+            </StackPanel>
+
 
         </Grid>
 
         <!-- Horizontal scrolling grid -->
         <GridView
             Grid.Row="1"
-            Padding="50"
+            Padding="50,0,0,0"
             x:Name="itemGridView"
             AutomationProperties.AutomationId="ItemGridView"
             AutomationProperties.Name="Grouped Items"
