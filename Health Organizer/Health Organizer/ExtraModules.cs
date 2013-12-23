@@ -69,5 +69,50 @@ namespace Health_Organizer
                 result = result.Substring(0, result.Length - 1);
             return result;
         }
+
+        //    public static DateTime ConvertStringToDateTime(string date)
+        //    {
+        //        string[] tempDate = date.Split('-');
+        //        int month;
+        //        switch (tempDate[1])
+        //        {
+        //            case "January": month = 1;
+        //                break;
+
+        //            case "February": month = 2;
+        //                break;
+
+        //            case "March": month = 3;
+        //                break;
+
+        //            case "April": month = 4;
+        //                break;
+
+        //            case "May": month = 5;
+        //                break;
+
+        //            case "June": month = 6;
+        //                break;
+
+        //            case "July": month = 7;
+        //                break;
+
+        //            case "Augast": month = 8;
+        //                break;
+
+        //            case "September": month = 9;
+        //                break;
+
+        //            case "October": month = 10;
+        //                break;
+
+        //            case "November": month = 11;
+        //                break;
+
+        //            case "December": month = 12;
+        //                break;
+        //        }
+        //        DateTime a = new DateTime();
+        //    }
     }
 }
