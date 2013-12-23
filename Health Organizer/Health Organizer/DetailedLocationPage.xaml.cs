@@ -24,7 +24,6 @@ namespace Health_Organizer
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private DBConnect connection;
         private Database database;
         Statement statement;
 

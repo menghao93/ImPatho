@@ -26,13 +26,12 @@ namespace Health_Organizer
     {
 
         private NavigationHelper navigationHelper;
-        private DBConnect connection;
         private Database database;
         private int PID = 0;
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
         Boolean check = true;
-        //int counterComma = 0;
+        
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -72,9 +71,6 @@ namespace Health_Organizer
 
         private async void InitializeDB(int pid)
         {
-            //this.connection = new DBConnect();
-            //await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            //database = this.connection.GetConnection();
             this.database = App.database;
 
             string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
@@ -175,12 +171,10 @@ namespace Health_Organizer
         {
             VisitFormCmdbar.IsOpen = false;
             VisitFormBar.IsOpen = true;
-            //counterComma = 0;
         }
 
         private async void EditVisitClicked(object sender, RoutedEventArgs e)
         {
-            //counterComma = 0;
             VisitFormCmdbar.IsOpen = false;
             if (VisitListBox.SelectedItem != null)
             {

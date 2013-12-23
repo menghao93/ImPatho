@@ -25,7 +25,6 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private int PID;
-        private DBConnect connection;
         private Database database;
 
         public ObservableDictionary DefaultViewModel

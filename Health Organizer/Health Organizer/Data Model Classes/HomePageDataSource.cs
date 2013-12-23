@@ -113,9 +113,6 @@ namespace Health_Organizer.Data
             
             try
             {
-                //DBConnect connection = new DBConnect();
-                //await connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-                //db = connection.GetConnection();
                 this.db = App.database;
 
                 if (this.db != null)
@@ -152,8 +149,6 @@ namespace Health_Organizer.Data
                     }
                     this.Groups.Add(groups);
                 }
-                //this.db.Dispose();
-                //connection.CloseConnection(DBConnect.ORG_HOME_DB);
             }
             catch (Exception ex)
             {
