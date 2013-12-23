@@ -27,7 +27,6 @@ namespace Health_Organizer
 {
     public sealed partial class CreateProfileForm : Page
     {
-        private DBConnect connection;
         private string decodedImage = null;
         private Database database;
         private NavigationHelper navigationHelper;
@@ -51,14 +50,11 @@ namespace Health_Organizer
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
-
-            this.InitializeComponents();
         }
 
-        private async void InitializeComponents()
+        private async void InitializeCombos()
         {
             //Adding days, months, and years to combobox in form
-
             for (int i = 0; i < 31; i++)
             {
                 profileDayComboBox.Items.Add(i + 1);
@@ -68,32 +64,35 @@ namespace Health_Organizer
             {
                 profileYearComboBox.Items.Add(i);
             }
-
-            StorageFolder InstallationFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            StorageFile defaultImage = await InstallationFolder.GetFileAsync("Assets\\DefaultProfilePic.jpg");
-            decodedImage = await ImageMethods.ConvertStorageFileToBase64String(defaultImage);
         }
 
-        private async void InitializeDB()
+        private void InitializeDB()
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
-
-            if (isUpdating)
-            {
-                this.LoadStoredDetails(this.updatePID);
-            }
+            this.database = App.database;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+
             this.InitializeDB();
+            this.InitializeCombos();
             if (Int32.Parse(e.Parameter as string) != -1)
             {
                 this.isUpdating = true;
                 this.updatePID = Int32.Parse(e.Parameter as string);
+            }
+
+            //If data us edited then we donot need to set the default Image.
+            if (isUpdating)
+            {
+                this.LoadStoredDetails(this.updatePID);
+            }
+            else
+            {
+                StorageFolder InstallationFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                StorageFile defaultImage = await InstallationFolder.GetFileAsync("Assets\\DefaultProfilePic.jpg");
+                decodedImage = await ImageMethods.ConvertStorageFileToBase64String(defaultImage);
             }
         }
 
@@ -326,8 +325,6 @@ namespace Health_Organizer
                     await this.InsertIntoGridView(pid);
                 }
 
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
                 this.navigationHelper.GoBack();
 
                 if (profileProgressRing.IsActive == true)
@@ -973,8 +970,6 @@ namespace Health_Organizer
             if (dialogResult.Label.Equals("Yes"))
             {
                 this.NavigationHelper.GoBack();
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
             }
         }
 

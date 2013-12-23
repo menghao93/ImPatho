@@ -15,11 +15,17 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Health_Organizer.Database_Connet_Classes;
+using SQLiteWinRT;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Health_Organizer
 {
     sealed partial class App : Application
     {
+        private static DBConnect connection = new DBConnect();
+        public static Database database;
+
         public App()
         {
             this.InitializeComponent();
@@ -68,13 +74,23 @@ namespace Health_Organizer
             }
             // Ensure the current window is active
             Window.Current.Activate();
-
-            //this.InitializeDB();
         }
 
-        private void InitializeDB()
+        public static async Task<int> InitializeDB()
         {
-            
+            try
+            {
+                Debug.WriteLine("Ïnitialized");
+                await connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
+                database = connection.GetConnection();
+                
+                return DBConnect.RESULT_OK;
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("Cannot initialize DB");
+                return DBConnect.RESULT_ERROR;
+            }
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
@@ -84,8 +100,8 @@ namespace Health_Organizer
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
     }

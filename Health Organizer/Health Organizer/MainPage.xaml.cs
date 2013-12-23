@@ -15,16 +15,18 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Health_Organizer
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         
         public MainPage()
         {
             this.InitializeComponent();
-            //await this.InitializeDB();
+            this.InitializeDB();
+        }
+
+        private async void InitializeDB()
+        {
+            await App.InitializeDB();
         }
 
         private void sign_in_click(object sender, RoutedEventArgs e)

@@ -25,7 +25,6 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private int PID;
-        private DBConnect connection;
         private Database database;
 
         public ObservableDictionary DefaultViewModel
@@ -67,11 +66,9 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedFrom(e);
         }
 
-        private async void InitializeDB()
+        private void InitializeDB()
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
+            this.database = App.database;
 
             this.LoadDetails();
         }
