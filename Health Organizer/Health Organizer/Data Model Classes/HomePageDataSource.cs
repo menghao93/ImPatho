@@ -86,6 +86,26 @@ namespace Health_Organizer.Data
             return null;
         }
 
+        public static async Task<int> DelItemAsync(string uniqueId)
+        {
+            await _sampleDataSource.GetSampleDataAsync();
+
+            SampleDataItem xItem = await GetItemAsync(uniqueId);
+            foreach (SampleDataGroup sample in _sampleDataSource.Groups) {
+                if (sample.Items.Contains(xItem))
+                {
+                    sample.Items.Remove(xItem);
+
+                    if (sample.Items.Count() < 1) {
+                        _sampleDataSource.Groups.Remove(sample);
+                    }
+                    return 1;
+                }
+                
+            }
+            return -1;
+        }
+
         private async Task GetSampleDataAsync()
         {
             if (this._groups.Count != 0)
