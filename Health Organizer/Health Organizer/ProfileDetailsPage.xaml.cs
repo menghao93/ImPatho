@@ -87,6 +87,8 @@ namespace Health_Organizer
                 {
                     ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
                     ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
+                    ProfileDateOfBirth.Text = statement.Columns["Birthday"];
+                    ProfileAge.Text = (DateTime.Now.Year - Convert.ToInt32(statement.Columns["Birthday"].Substring(0, statement.Columns["Birthday"].IndexOf("-")))).ToString(); 
                     ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
                     ProfileSex.Text = statement.Columns["Sex"];
                 }
