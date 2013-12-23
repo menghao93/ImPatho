@@ -95,9 +95,10 @@
                     </GridView>
                 </SemanticZoom.ZoomedOutView>
                 <SemanticZoom.ZoomedInView>
-                    <GridView SelectionChanged="RecordPageNewItemClicked" 
+                    <GridView 
+                      SelectionChanged="RecordPageNewItemClicked" 
                       Padding="50" 
-                      Name="recordGrid" 
+                      Name="RecordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
                       CanReorderItems="True" 
                       CanDragItems="True" 

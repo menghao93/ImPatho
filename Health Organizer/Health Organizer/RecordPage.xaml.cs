@@ -52,7 +52,7 @@ namespace Health_Organizer
         {
             var sample = await HomePageDataSoure.GetGroupsAsync();
             groupedItemsViewSource.Source = sample;
-            recordGrid.SelectedItem = null;
+            RecordGrid.SelectedItem = null;
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -71,7 +71,7 @@ namespace Health_Organizer
             var sample = await HomePageDataSoure.GetGroupsAsync();
             this.DefaultViewModel["Groups"] = sample;
             
-            recordGrid.SelectedItem = null;
+            RecordGrid.SelectedItem = null;
             this.disableAppButtons();
 
             (SemanticZoomGrid.ZoomedOutView as ListViewBase).ItemsSource = groupedItemsViewSource.View.CollectionGroups;
@@ -103,10 +103,10 @@ namespace Health_Organizer
 
         private void RecordPageNewItemClicked(object sender, SelectionChangedEventArgs e)
         {
-            if (recordGrid.SelectedItem != null && !justLanded)
+            if (RecordGrid.SelectedItem != null && !justLanded)
             {
                 this.enableAppButtons();
-                SampleDataItem clickedItem = recordGrid.SelectedItem as SampleDataItem;
+                SampleDataItem clickedItem = RecordGrid.SelectedItem as SampleDataItem;
                 this.PID = Int32.Parse(clickedItem.UniqueId);
                 RecordPageCmdbar.IsOpen = true;
                 this.enableAppButtons();

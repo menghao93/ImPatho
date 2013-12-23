@@ -32,9 +32,9 @@ namespace Health_Organizer
         private Database database;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        int counterComma = 0;
         private bool isUpdating = false;
         private int updatePID = -1;
+        private string pastGridGroup = null;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -152,6 +152,7 @@ namespace Health_Organizer
                 if (await statement.StepAsync())
                 {
                     profileCity.Text = statement.Columns["City"];
+                    this.pastGridGroup = statement.Columns["City"];
                 }
             }
             catch (Exception ex)
@@ -383,9 +384,20 @@ namespace Health_Organizer
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
 
                 SampleDataItem updateItem = await HomePageDataSoure.GetItemAsync(pid.ToString());
-                updateItem.Title = profileFirstName.Text + " " + profileLastName.Text;
-                updateItem.Description = profileAddress.Text;
-                updateItem.Image = bmp;
+                if (pastGridGroup != null)
+                {
+                    if (pastGridGroup.Equals(profileCity))
+                    {
+                        updateItem.Title = profileFirstName.Text + " " + profileLastName.Text;
+                        updateItem.Description = profileAddress.Text;
+                        updateItem.Image = bmp;
+                    }
+                    else
+                    {
+                        await HomePageDataSoure.DelItemAsync(pid.ToString());
+                        await this.InsertIntoGridView(pid);
+                    }
+                }
 
                 return DBConnect.RESULT_OK;
             }
@@ -1010,27 +1022,27 @@ namespace Health_Organizer
             else e.Handled = true;
         }
 
-        private void commaKeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (counterComma >= 1 && ((uint)e.Key == 188))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                e.Handled = false;
-            }
+        //private void commaKeyDown(object sender, KeyRoutedEventArgs e)
+        //{
+        //    if (counterComma >= 1 && ((uint)e.Key == 188))
+        //    {
+        //        e.Handled = true;
+        //    }
+        //    else
+        //    {
+        //        e.Handled = false;
+        //    }
 
-            if (((uint)e.Key == 188))
-            {
-                counterComma++;
-            }
-            else
-            {
-                counterComma = 0;
-            }
+        //    if (((uint)e.Key == 188))
+        //    {
+        //        counterComma++;
+        //    }
+        //    else
+        //    {
+        //        counterComma = 0;
+        //    }
 
-        }
+        //}
 
         private bool CheckIfFilled()
         {
