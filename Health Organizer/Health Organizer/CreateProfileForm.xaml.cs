@@ -74,26 +74,24 @@ namespace Health_Organizer
             decodedImage = await ImageMethods.ConvertStorageFileToBase64String(defaultImage);
         }
 
-        private async void InitializeDB()
+        private void InitializeDB()
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
-
-            if (isUpdating)
-            {
-                this.LoadStoredDetails(this.updatePID);
-            }
+            this.database = App.database;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+
             this.InitializeDB();
             if (Int32.Parse(e.Parameter as string) != -1)
             {
                 this.isUpdating = true;
                 this.updatePID = Int32.Parse(e.Parameter as string);
+            }
+            if (isUpdating)
+            {
+                this.LoadStoredDetails(this.updatePID);
             }
         }
 
@@ -326,8 +324,6 @@ namespace Health_Organizer
                     await this.InsertIntoGridView(pid);
                 }
 
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
                 this.navigationHelper.GoBack();
 
                 if (profileProgressRing.IsActive == true)
@@ -973,8 +969,6 @@ namespace Health_Organizer
             if (dialogResult.Label.Equals("Yes"))
             {
                 this.NavigationHelper.GoBack();
-                database.Dispose();
-                this.connection.CloseConnection(DBConnect.ORG_HOME_DB);
             }
         }
 

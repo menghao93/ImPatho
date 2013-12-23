@@ -72,9 +72,10 @@ namespace Health_Organizer
 
         private async void InitializeDB(int pid)
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
+            //this.connection = new DBConnect();
+            //await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
+            //database = this.connection.GetConnection();
+            this.database = App.database;
 
             string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(query);

@@ -43,16 +43,6 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-
-            //this.InitializeGrid();
-            //Debug.WriteLine("Intializing again");
-        }
-
-        private async void InitializeGrid()
-        {
-            var sample = await HomePageDataSoure.GetGroupsAsync();
-            groupedItemsViewSource.Source = sample;
-            RecordGrid.SelectedItem = null;
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)

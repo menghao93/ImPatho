@@ -60,11 +60,9 @@ namespace Health_Organizer
             ListOfAllItem = itemGridView.Items.OfType<SampleDataItem>().ToList(); 
         }
 
-        private async void InitializeDB()
+        private void InitializeDB()
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
+            this.database = App.database;
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)

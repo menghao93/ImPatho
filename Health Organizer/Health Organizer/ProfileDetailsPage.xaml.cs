@@ -67,11 +67,9 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedFrom(e);
         }
 
-        private async void InitializeDB()
+        private void InitializeDB()
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
+            this.database = App.database;
 
             this.LoadDetails();
         }
