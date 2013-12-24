@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Health_Organizer.Data_Model_Classes;
+using System.Diagnostics;
 
 namespace Health_Organizer
 {
@@ -22,6 +23,21 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        public List<AnalysisSampleDataItem> mainItemList;
+        public List<string> cityList;
+        public List<string> diseaseList;
+        public List<string> allergyList;
+        public List<string> addictionList;
+        public List<string> vaccinationList;
+        public List<string> operationList;
+        public Dictionary<string, string> city2state;
+
+        bool CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
+            AddictionFlag, VaccineFlag, OperationFlag;
+
+        Int16 sexMale = 0;
+        Int16 isMarried = 0;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -48,6 +64,15 @@ namespace Health_Organizer
             this.DefaultViewModel["Items"] = sample;
 
             RecordGrid.SelectedItem = null;
+
+            mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
+
+            fillAllLists();
+            fillAllComboBox();
+
+            this.AnalysisResetBox();
+            this.AnalysisResetFlag();
+            this.AnalysisResetDateBox();
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -62,6 +87,449 @@ namespace Health_Organizer
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
+        }
+
+        private void fillAllLists()
+        {
+            cityList = new List<string>();
+            city2state = new Dictionary<string, string>();
+            diseaseList = new List<string>();
+            allergyList = new List<string>();
+            addictionList = new List<string>();
+            vaccinationList = new List<string>();
+            operationList = new List<string>();
+
+            //Adding city and corrosponding State to Lists
+            foreach (AnalysisSampleDataItem item in mainItemList)
+            {
+                if (!cityList.Contains(item.City))
+                {
+                    cityList.Add(item.City);
+
+                    if (!city2state.ContainsValue(item.State))
+                    {
+                        city2state.Add(item.City, item.State);
+                    }
+
+                }
+
+                //Adding disease to list
+                foreach (string diseases in item.Diseases.Values)
+                {
+                    if (!diseaseList.Contains(diseases))
+                    {
+                        diseaseList.Add(diseases);
+                    }
+                }
+
+                //Adding allergies to list
+                foreach (string allergy in item.Allergy)
+                {
+                    if (!allergyList.Contains(allergy))
+                    {
+                        allergyList.Add(allergy);
+                    }
+                }
+
+                //Adding addictions to list
+                foreach (string addiction in item.Addiction)
+                {
+                    if (!addictionList.Contains(addiction))
+                    {
+                        addictionList.Add(addiction);
+                    }
+                }
+
+                foreach (string vaccine in item.Vaccines.Values)
+                {
+                    if (!vaccinationList.Contains(vaccine))
+                    {
+                        vaccinationList.Add(vaccine);
+                    }
+                }
+
+                foreach (string operation in item.Operation)
+                {
+                    if (!operationList.Contains(operation))
+                    {
+                        operationList.Add(operation);
+                    }
+                }
+
+            }
+        }
+
+        private void fillAllComboBox()
+        {
+            AnalysisAllCheck.IsChecked = true;
+            AnalysisAllCatCheck.IsChecked = true;
+
+            for (Int16 i = 0; i < 31; i++)
+            {
+                AnalysisFromDayComboBox.Items.Add(i + 1);
+                AnalysisToDayComboBox.Items.Add(i + 1);
+            }
+
+            for (Int16 i = 1980; i < DateTime.Now.Year; i++)
+            {
+                AnalysisFromYearComboBox.Items.Add(i + 1);
+                AnalysisToYearComboBox.Items.Add(i + 1);
+            }
+
+            this.AnalysisResetDateBox();
+
+            foreach (string city in cityList)
+            {
+                AnalysisCityBox.Items.Add(city);
+            }
+
+            foreach (string state in city2state.Values)
+            {
+                AnalysisStateBox.Items.Add(state);
+            }
+
+            foreach (string disease in diseaseList)
+            {
+                AnalysisDiseaseBox.Items.Add(disease);
+            }
+
+            foreach (string allergy in allergyList)
+            {
+                AnalysisAllergyBox.Items.Add(allergy);
+            }
+
+            foreach (string addiction in addictionList)
+            {
+                AnalysisAddictionBox.Items.Add(addiction);
+            }
+
+            foreach (string vaccine in vaccinationList)
+            {
+                AnalysisVaccinationBox.Items.Add(vaccine);
+            }
+
+            foreach (string operation in operationList)
+            {
+                AnalysisOperationsBox.Items.Add(operation);
+            }
+
+        }
+
+        private void AnalysisAllChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = 0;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisFemaleCheck.IsChecked = false;
+        }
+
+        private void AnalysisMaleChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = 1;
+            AnalysisFemaleCheck.IsChecked = false;
+            AnalysisAllCheck.IsChecked = false;
+        }
+
+        private void AnalysisFemaleChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = -1;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisAllCheck.IsChecked = false;
+        }
+
+        private void AnalysisAllCatChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = 0;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisUnmarriedCheck.IsChecked = false;
+        }
+        private void AnalysisMarriedChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = 1;
+            AnalysisUnmarriedCheck.IsChecked = false;
+            AnalysisAllCatCheck.IsChecked = false;
+        }
+
+        private void AnalysisUnmarriedChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = -1;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisAllCatCheck.IsChecked = false;
+        }
+
+        private void AnalysisCitySelected(object sender, SelectionChangedEventArgs e)
+        {
+            string state;
+            if (AnalysisCityBox.SelectedIndex != -1)
+            {
+                if (city2state.TryGetValue(AnalysisCityBox.SelectedItem.ToString(), out state))
+                {
+                    AnalysisStateBox.SelectedItem = state;
+                }
+            }
+        }
+
+        private void AnalysisResetFieldsClicked(object sender, RoutedEventArgs e)
+        {
+            this.AnalysisResetBox();
+            this.AnalysisResetFlag();
+            this.AnalysisResetDateBox();
+            this.DefaultViewModel["Items"] = mainItemList;
+        }
+
+        private void AnalysisResetBox()
+        {
+            AnalysisCityBox.SelectedIndex = -1;
+            AnalysisStateBox.SelectedIndex = -1;
+            AnalysisAllCheck.IsChecked = true;
+            AnalysisAllCatCheck.IsChecked = true;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisFemaleCheck.IsChecked = false;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisUnmarriedCheck.IsChecked = false;
+            AnalysisBloodGroupBox.SelectedIndex = -1;
+            AnalysisDiseaseBox.SelectedIndex = -1;
+            AnalysisAllergyBox.SelectedIndex = -1;
+            AnalysisAddictionBox.SelectedIndex = -1;
+            AnalysisVaccinationBox.SelectedIndex = -1;
+            AnalysisOperationsBox.SelectedIndex = -1;
+        }
+
+        private void AnalysisResetDateBox()
+        {
+            AnalysisFromDayComboBox.SelectedIndex = 0;
+            AnalysisFromMonthComboBox.SelectedIndex = 0;
+            AnalysisFromYearComboBox.SelectedIndex = 0;
+            AnalysisToDayComboBox.SelectedItem = DateTime.Now.Day;
+            AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+            AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
+        }
+
+        private void AnalysisResetFlag()
+        {
+            CityFlag = false;
+            StateFlag = false;
+            SexFlag = false;
+            StatusFlag = false;
+            BGFlag = false;
+            DiseaseFlag = false;
+            AllergyFlag = false;
+            AddictionFlag = false;
+            VaccineFlag = false;
+            OperationFlag = false;
+        }
+
+        private void AnalysisSearchClicked(object sender, RoutedEventArgs e)
+        {
+            this.AnalysisValidateFields();
+            this.AnalysisSetFlags();
+            this.updateView();
+        }
+
+        private void updateView()
+        {
+            List<AnalysisSampleDataItem> resultList = new List<AnalysisSampleDataItem>();
+
+            foreach (AnalysisSampleDataItem item in mainItemList)
+            {
+                if (CityFlag)
+                {
+                    if (!AnalysisCityBox.SelectedItem.ToString().Equals(item.City))
+                    {
+                        continue;
+                    }
+                }
+
+                if (StateFlag)
+                {
+                    if (!AnalysisStateBox.SelectedItem.ToString().Equals(item.State))
+                    {
+                        continue;
+                    }
+                }
+
+                if (SexFlag)
+                {
+                    switch (sexMale)
+                    {
+                        case 1: if (item.Sex != 'M')
+                            {
+                                continue;
+                            }
+                            break;
+                        case -1: if (item.Sex != 'F')
+                            {
+                                continue;
+                            }
+                            break;
+                    }
+                }
+
+                if (StateFlag)
+                {
+                    switch (isMarried)
+                    {
+                        case 1: if (!item.Married)
+                            {
+                                continue;
+                            }
+                            break;
+                        case -1: if (!item.Married)
+                            {
+                                continue;
+                            }
+                            break;
+                    }
+                }
+
+                if (BGFlag)
+                {
+                    if (!AnalysisBloodGroupBox.SelectedItem.ToString().Equals(item.BloodGroup))
+                    {
+                        continue;
+                    }
+                }
+
+                if (DiseaseFlag)
+                {
+                    bool found = false;
+                    foreach (string disease in item.Diseases.Values)
+                    {
+                        if (AnalysisDiseaseBox.SelectedItem.ToString().Equals(disease))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        continue;
+                    }
+                }
+
+                if (AllergyFlag)
+                {
+                    bool found = false;
+                    foreach (string allergy in item.Allergy)
+                    {
+                        if (AnalysisAllergyBox.SelectedItem.ToString().Equals(allergy))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        continue;
+                    }
+                }
+
+                if (AddictionFlag)
+                {
+                    bool found = false;
+                    foreach (string addiction in item.Addiction)
+                    {
+                        if (AnalysisAddictionBox.SelectedItem.ToString().Equals(addiction))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        continue;
+                    }
+                }
+
+                if (VaccineFlag)
+                {
+                    bool found = false;
+                    foreach (string vaccine in item.Vaccines.Values)
+                    {
+                        if (AnalysisVaccinationBox.SelectedItem.ToString().Equals(vaccine))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        continue;
+                    }
+                }
+
+                if (OperationFlag)
+                {
+                    bool found = false;
+                    foreach (string operation in item.Operation)
+                    {
+                        if (AnalysisOperationsBox.SelectedItem.ToString().Equals(operation))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        continue;
+                    }
+                }
+
+                resultList.Add(item);
+            }
+            this.DefaultViewModel["Items"] = resultList;
+        }
+
+        private void AnalysisValidateFields()
+        {
+            DateTime toDate = new DateTime(Convert.ToInt16(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisToDayComboBox.SelectedItem));
+            DateTime fromDate = new DateTime(Convert.ToInt16(AnalysisFromYearComboBox.SelectedItem), AnalysisFromMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisFromDayComboBox.SelectedItem));
+
+            if (toDate < fromDate)
+            {
+                AnalysisFromDayComboBox.SelectedItem = AnalysisToDayComboBox.SelectedItem;
+                AnalysisFromMonthComboBox.SelectedIndex = AnalysisToMonthComboBox.SelectedIndex;
+                AnalysisFromYearComboBox.SelectedItem = AnalysisToYearComboBox.SelectedItem;
+            }
+        }
+
+        private void AnalysisSetFlags()
+        {
+            if (AnalysisCityBox.SelectedIndex != -1)
+            {
+                CityFlag = true;
+            }
+            if (AnalysisStateBox.SelectedIndex != -1)
+            {
+                StateFlag = true;
+            }
+            if (sexMale != 0)
+            {
+                SexFlag = true;
+            }
+            if (isMarried != 0)
+            {
+                StatusFlag = true;
+            }
+            if (AnalysisBloodGroupBox.SelectedIndex != -1)
+            {
+                BGFlag = true;
+            }
+            if (AnalysisDiseaseBox.SelectedIndex != -1)
+            {
+                DiseaseFlag = true;
+            }
+            if (AnalysisAllergyBox.SelectedIndex != -1)
+            {
+                AllergyFlag = true;
+            }
+            if (AnalysisVaccinationBox.SelectedIndex != -1)
+            {
+                VaccineFlag = true;
+            }
+            if (AnalysisOperationsBox.SelectedIndex != -1)
+            {
+                OperationFlag = true;
+            }
         }
     }
 }

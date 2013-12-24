@@ -16,7 +16,7 @@
             ItemsPath="TopItems"
             Source="{Binding Items}"/>
 
-        <x:String x:Key="AppName">Analyse your Data</x:String>
+        <x:String x:Key="AppName">Advanced Search</x:String>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -25,40 +25,156 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Back button and page title -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="#00A2E8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0">
-                <Button x:Name="backButton" HorizontalAlignment="Center" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+            <!-- Back button and page title -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="-10,0,0,50"/>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                
+                <StackPanel Grid.Row="0" Margin="50,0,0,0">
 
+                    <TextBlock Text="Records from date" FontSize="15"/>
+                    <!--Analysis From date-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <ComboBox Name="AnalysisFromDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
+                        <ComboBox Name="AnalysisFromMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
+                            <x:String>January</x:String>
+                            <x:String>February</x:String>
+                            <x:String>March</x:String>
+                            <x:String>April</x:String>
+                            <x:String>May</x:String>
+                            <x:String>June</x:String>
+                            <x:String>July</x:String>
+                            <x:String>August</x:String>
+                            <x:String>September</x:String>
+                            <x:String>October</x:String>
+                            <x:String>November</x:String>
+                            <x:String>December</x:String>
+                        </ComboBox>
+                        <ComboBox Name="AnalysisFromYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Records To date" FontSize="15" Margin="0,15,0,0"/>
+                    <!--Analysis To Date-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <ComboBox Name="AnalysisToDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
+                        <ComboBox Name="AnalysisToMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
+                            <x:String>January</x:String>
+                            <x:String>February</x:String>
+                            <x:String>March</x:String>
+                            <x:String>April</x:String>
+                            <x:String>May</x:String>
+                            <x:String>June</x:String>
+                            <x:String>July</x:String>
+                            <x:String>August</x:String>
+                            <x:String>September</x:String>
+                            <x:String>October</x:String>
+                            <x:String>November</x:String>
+                            <x:String>December</x:String>
+                        </ComboBox>
+                        <ComboBox Name="AnalysisToYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <ComboBox Name="AnalysisCityBox"  PlaceholderText="City" Width="150" SelectionChanged="AnalysisCitySelected"/>
+                        <ComboBox Name="AnalysisStateBox" PlaceholderText="State" Width="150" Margin="20,0,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <RadioButton Name="AnalysisAllCheck" Checked="AnalysisAllChecked" Content="All" FontSize="15" />
+                        <RadioButton Name="AnalysisMaleCheck" Checked="AnalysisMaleChecked" Content="Male" FontSize="15" Margin="20,0,0,0" />
+                        <RadioButton Name="AnalysisFemaleCheck" Checked="AnalysisFemaleChecked" Content="Female" FontSize="15" Margin="20,0,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <RadioButton Name="AnalysisAllCatCheck" Checked="AnalysisAllCatChecked" Content="All" FontSize="15" />
+                        <RadioButton Name="AnalysisUnmarriedCheck" Checked="AnalysisUnmarriedChecked" Content="Not Married" FontSize="15" Margin="20,0,0,0" />
+                        <RadioButton Name="AnalysisMarriedCheck" Checked="AnalysisMarriedChecked" Content="Married" FontSize="15" Margin="20,0,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <ComboBox Name="AnalysisBloodGroupBox" PlaceholderText="Blood Group" Width="130" AllowDrop="True" >
+                            <x:String>A+</x:String>
+                            <x:String>A-</x:String>
+                            <x:String>B+</x:String>
+                            <x:String>B-</x:String>
+                            <x:String>AB+</x:String>
+                            <x:String>AB-</x:String>
+                            <x:String>O+</x:String>
+                            <x:String>O-</x:String>
+                        </ComboBox>
+                        <ComboBox Name="AnalysisDiseaseBox" PlaceholderText="Disease" Width="160" Margin="15,0,0,0" AllowDrop="True"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <ComboBox Name="AnalysisAllergyBox" PlaceholderText="Allergy" Width="175" AllowDrop="True" />
+                        <ComboBox Name="AnalysisAddictionBox" PlaceholderText="Addiction" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                        <ComboBox Name="AnalysisVaccinationBox" PlaceholderText="Vaccination" Width="175" AllowDrop="True" />
+                        <ComboBox Name="AnalysisOperationsBox" PlaceholderText="Operations" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,50,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                    <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
+                    <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
+                </StackPanel>
             </Grid>
 
-            <Grid Grid.Column="1">
-                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
+        </Grid>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
+        <!--Black portion of page-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1.5*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
             </Grid>
-        </Grid>
-        <Grid Grid.Row="1">
-            <GridView 
+            
+            <Grid Grid.Row="1">
+                <GridView 
                       Padding="50"
                       Name="RecordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
@@ -67,26 +183,32 @@
                       ItemsSource="{Binding Source = {StaticResource gridViewSource}}" 
                       IsItemClickEnabled="True" 
                       >
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Width="300" Height="70">
-                            <Border Height="40" Width="40" Margin="10,10,0,10">
-                                <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                            </Border>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
-                                <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Width="300" Height="70">
+                                <Border Height="40" Width="40" Margin="10,10,0,10">
+                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                </Border>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
+                                    <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
                        Width="180" Height="20" HorizontalAlignment="Left" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
-                                <TextBlock Text="{Binding Description}" 
+                                    <TextBlock Text="{Binding Description}" 
                        Margin="10,2,0,0" Width="180" Height="42" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap" 
                        HorizontalAlignment="Left" Opacity="0.49"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </Grid>
+
+
 
         </Grid>
-    </Grid>
+
+    </Grid>    
+            
+
 </Page>
