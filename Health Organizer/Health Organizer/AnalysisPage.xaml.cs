@@ -363,7 +363,7 @@ namespace Health_Organizer
                                 continue;
                             }
                             break;
-                        case -1: if (!item.Married)
+                        case -1: if (item.Married)
                             {
                                 continue;
                             }
@@ -420,12 +420,12 @@ namespace Health_Organizer
                     {
                         if (AnalysisAddictionBox.SelectedItem.ToString().Equals(addiction))
                         {
-                            found = true;
+                           found = true;
                         }
                     }
 
                     if (!found)
-                    {
+                    {  
                         continue;
                     }
                 }
@@ -557,6 +557,10 @@ namespace Health_Organizer
             if (AnalysisAllergyBox.SelectedIndex != -1)
             {
                 AllergyFlag = true;
+            }
+            if (AnalysisAddictionBox.SelectedIndex != 1)
+            {
+                AddictionFlag = true;
             }
             if (AnalysisVaccinationBox.SelectedIndex != -1)
             {
