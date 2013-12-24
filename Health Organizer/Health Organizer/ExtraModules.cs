@@ -70,49 +70,67 @@ namespace Health_Organizer
             return result;
         }
 
-        //    public static DateTime ConvertStringToDateTime(string date)
-        //    {
-        //        string[] tempDate = date.Split('-');
-        //        int month;
-        //        switch (tempDate[1])
-        //        {
-        //            case "January": month = 1;
-        //                break;
+        public static DateTime ConvertStringToDateTime(string date)
+        {
+            string[] tempDate = date.Split('-');
+            DateTime c_date;
+            int day, month = 1, year;
 
-        //            case "February": month = 2;
-        //                break;
+            year = Convert.ToInt32(tempDate[0]);
 
-        //            case "March": month = 3;
-        //                break;
+            switch (tempDate[1])
+            {
+                case "January": month = 1;
+                    break;
 
-        //            case "April": month = 4;
-        //                break;
+                case "February": month = 2;
+                    break;
 
-        //            case "May": month = 5;
-        //                break;
+                case "March": month = 3;
+                    break;
 
-        //            case "June": month = 6;
-        //                break;
+                case "April": month = 4;
+                    break;
 
-        //            case "July": month = 7;
-        //                break;
+                case "May": month = 5;
+                    break;
 
-        //            case "Augast": month = 8;
-        //                break;
+                case "June": month = 6;
+                    break;
 
-        //            case "September": month = 9;
-        //                break;
+                case "July": month = 7;
+                    break;
 
-        //            case "October": month = 10;
-        //                break;
+                case "August": month = 8;
+                    break;
 
-        //            case "November": month = 11;
-        //                break;
+                case "September": month = 9;
+                    break;
 
-        //            case "December": month = 12;
-        //                break;
-        //        }
-        //        DateTime a = new DateTime();
-        //    }
+                case "October": month = 10;
+                    break;
+
+                case "November": month = 11;
+                    break;
+
+                case "December": month = 12;
+                    break;
+            }
+
+            day = Convert.ToInt32(tempDate[2]);
+
+            try
+            {
+                c_date = new DateTime(year, month, day);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("Date was not able to be converted: " + year + " " + month + " " + day );
+                Debug.WriteLine(ex.ToString());
+                c_date = new DateTime(1980, 1, 1);
+            }
+
+            return c_date;
+        }
     }
 }

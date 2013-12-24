@@ -33,7 +33,7 @@ namespace Health_Organizer
         public List<string> operationList;
         public Dictionary<string, string> city2state;
 
-        bool CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
+        bool ByDateFlag, CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
             AddictionFlag, VaccineFlag, OperationFlag;
 
         Int16 sexMale = 0;
@@ -66,7 +66,6 @@ namespace Health_Organizer
             RecordGrid.SelectedItem = null;
 
             mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
-
             fillAllLists();
             fillAllComboBox();
 
@@ -242,6 +241,7 @@ namespace Health_Organizer
             AnalysisMarriedCheck.IsChecked = false;
             AnalysisUnmarriedCheck.IsChecked = false;
         }
+
         private void AnalysisMarriedChecked(object sender, RoutedEventArgs e)
         {
             isMarried = 1;
@@ -254,6 +254,12 @@ namespace Health_Organizer
             isMarried = -1;
             AnalysisMarriedCheck.IsChecked = false;
             AnalysisAllCatCheck.IsChecked = false;
+        }
+
+        private void AnalysisByDateChecked(object sender, RoutedEventArgs e)
+        {
+            ByDateFlag = true;
+            this.AnalysisDateBoxEnable();
         }
 
         private void AnalysisCitySelected(object sender, SelectionChangedEventArgs e)
@@ -273,49 +279,9 @@ namespace Health_Organizer
             this.AnalysisResetBox();
             this.AnalysisResetFlag();
             this.AnalysisResetDateBox();
+            this.AnalysisDateBoxDisable();
             this.DefaultViewModel["Items"] = mainItemList;
-        }
-
-        private void AnalysisResetBox()
-        {
-            AnalysisCityBox.SelectedIndex = -1;
-            AnalysisStateBox.SelectedIndex = -1;
-            AnalysisAllCheck.IsChecked = true;
-            AnalysisAllCatCheck.IsChecked = true;
-            AnalysisMaleCheck.IsChecked = false;
-            AnalysisFemaleCheck.IsChecked = false;
-            AnalysisMarriedCheck.IsChecked = false;
-            AnalysisUnmarriedCheck.IsChecked = false;
-            AnalysisBloodGroupBox.SelectedIndex = -1;
-            AnalysisDiseaseBox.SelectedIndex = -1;
-            AnalysisAllergyBox.SelectedIndex = -1;
-            AnalysisAddictionBox.SelectedIndex = -1;
-            AnalysisVaccinationBox.SelectedIndex = -1;
-            AnalysisOperationsBox.SelectedIndex = -1;
-        }
-
-        private void AnalysisResetDateBox()
-        {
-            AnalysisFromDayComboBox.SelectedIndex = 0;
-            AnalysisFromMonthComboBox.SelectedIndex = 0;
-            AnalysisFromYearComboBox.SelectedIndex = 0;
-            AnalysisToDayComboBox.SelectedItem = DateTime.Now.Day;
-            AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
-            AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
-        }
-
-        private void AnalysisResetFlag()
-        {
-            CityFlag = false;
-            StateFlag = false;
-            SexFlag = false;
-            StatusFlag = false;
-            BGFlag = false;
-            DiseaseFlag = false;
-            AllergyFlag = false;
-            AddictionFlag = false;
-            VaccineFlag = false;
-            OperationFlag = false;
+            RecordGrid.SelectedItem = null;
         }
 
         private void AnalysisSearchClicked(object sender, RoutedEventArgs e)
@@ -323,6 +289,7 @@ namespace Health_Organizer
             this.AnalysisValidateFields();
             this.AnalysisSetFlags();
             this.updateView();
+            RecordGrid.SelectedItem = null;
         }
 
         private void updateView()
@@ -331,6 +298,29 @@ namespace Health_Organizer
 
             foreach (AnalysisSampleDataItem item in mainItemList)
             {
+                if (ByDateFlag)
+                {
+                    int lastDateOn = item.DatesVisited.Count;
+
+                    if (lastDateOn > 0)
+                    {
+                        DateTime lastDate = ExtraModules.ConvertStringToDateTime(item.DatesVisited.ElementAt(lastDateOn - 1));
+                        DateTime fromDate = new DateTime(Convert.ToInt32(AnalysisFromYearComboBox.SelectedItem), AnalysisFromMonthComboBox.SelectedIndex + 1, Convert.ToInt32(AnalysisFromDayComboBox.SelectedItem));
+                        DateTime toDate = new DateTime(Convert.ToInt32(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt32(AnalysisToDayComboBox.SelectedItem));
+
+                        if (!(fromDate <= lastDate && toDate >= lastDate))
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                }
+
+
                 if (CityFlag)
                 {
                     if (!AnalysisCityBox.SelectedItem.ToString().Equals(item.City))
@@ -364,7 +354,7 @@ namespace Health_Organizer
                     }
                 }
 
-                if (StateFlag)
+                if (StatusFlag)
                 {
                     switch (isMarried)
                     {
@@ -479,6 +469,52 @@ namespace Health_Organizer
             this.DefaultViewModel["Items"] = resultList;
         }
 
+        private void AnalysisResetBox()
+        {
+            AnalysisCityBox.SelectedIndex = -1;
+            AnalysisStateBox.SelectedIndex = -1;
+            AnalysisByDate.IsChecked = false;
+            AnalysisAllCheck.IsChecked = true;
+            AnalysisAllCatCheck.IsChecked = true;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisFemaleCheck.IsChecked = false;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisUnmarriedCheck.IsChecked = false;
+            AnalysisBloodGroupBox.SelectedIndex = -1;
+            AnalysisDiseaseBox.SelectedIndex = -1;
+            AnalysisAllergyBox.SelectedIndex = -1;
+            AnalysisAddictionBox.SelectedIndex = -1;
+            AnalysisVaccinationBox.SelectedIndex = -1;
+            AnalysisOperationsBox.SelectedIndex = -1;
+
+            this.AnalysisDateBoxDisable();
+        }
+
+        private void AnalysisResetDateBox()
+        {
+            AnalysisFromDayComboBox.SelectedIndex = 0;
+            AnalysisFromMonthComboBox.SelectedIndex = 0;
+            AnalysisFromYearComboBox.SelectedIndex = 0;
+            AnalysisToDayComboBox.SelectedItem = DateTime.Now.Day;
+            AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+            AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
+        }
+
+        private void AnalysisResetFlag()
+        {
+            ByDateFlag = false;
+            CityFlag = false;
+            StateFlag = false;
+            SexFlag = false;
+            StatusFlag = false;
+            BGFlag = false;
+            DiseaseFlag = false;
+            AllergyFlag = false;
+            AddictionFlag = false;
+            VaccineFlag = false;
+            OperationFlag = false;
+        }
+
         private void AnalysisValidateFields()
         {
             DateTime toDate = new DateTime(Convert.ToInt16(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisToDayComboBox.SelectedItem));
@@ -531,5 +567,27 @@ namespace Health_Organizer
                 OperationFlag = true;
             }
         }
+
+        private void AnalysisDateBoxDisable()
+        {
+            AnalysisFromDayComboBox.IsEnabled = false;
+            AnalysisFromMonthComboBox.IsEnabled = false;
+            AnalysisFromYearComboBox.IsEnabled = false;
+            AnalysisToDayComboBox.IsEnabled = false;
+            AnalysisToMonthComboBox.IsEnabled = false;
+            AnalysisToYearComboBox.IsEnabled = false;
+        }
+
+        private void AnalysisDateBoxEnable()
+        {
+            AnalysisFromDayComboBox.IsEnabled = true;
+            AnalysisFromMonthComboBox.IsEnabled = true;
+            AnalysisFromYearComboBox.IsEnabled = true;
+            AnalysisToDayComboBox.IsEnabled = true;
+            AnalysisToMonthComboBox.IsEnabled = true;
+            AnalysisToYearComboBox.IsEnabled = true;
+        }
+
+
     }
 }
