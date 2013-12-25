@@ -370,6 +370,8 @@ namespace Health_Organizer
                     var dialogResult = await messageDialog.ShowAsync();
                 }
             }
+
+            this.resetAllBorders();
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
@@ -383,6 +385,7 @@ namespace Health_Organizer
         private void VisitCancelClicked(object sender, RoutedEventArgs e)
         {
             this.ClearAllFields();
+            this.resetAllBorders();
             VisitMedicineGiven.IsEnabled = true;
             VisitVaccine.IsEnabled = true;
             VisitFormBar.IsOpen = false;
@@ -704,6 +707,11 @@ namespace Health_Organizer
                     VisitTextVaccine.Children.Clear();
                     while (await statement.StepAsync())
                     {
+                        if (statement.Columns["Vaccine"].Equals(""))
+                        {
+                            break;
+                        }
+
                         StackPanel VisitVaccineStackPanels = new StackPanel();
                         VisitVaccineStackPanels.Margin = new Thickness(0, 15, 0, 0);
                         VisitVaccineStackPanels.Orientation = Orientation.Horizontal;
@@ -764,7 +772,6 @@ namespace Health_Organizer
         {
             if (e.AddedItems.Count() < 0)
                 return;
-
 
             this.UpdateEditedDetails();
         }
@@ -946,6 +953,27 @@ namespace Health_Organizer
 
             EditVisit.IsEnabled = true;
             DeleteVisit.IsEnabled = true;
+        }
+
+        private void resetAllBorders()
+        {
+            VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
         }
 
         private void ClearAllFields()
