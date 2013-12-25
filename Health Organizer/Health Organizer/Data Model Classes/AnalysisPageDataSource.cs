@@ -121,6 +121,7 @@ namespace Health_Organizer.Data_Model_Classes
                     {
                         //Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"] + " " + statement.Columns["State"] + " " + statement.Columns["Country"] + " " + statement.Columns["Occupation"] + " " + statement.Columns["Married"]);
                         AnalysisSampleDataItem newItem = new AnalysisSampleDataItem();
+                        newItem.UniqueId = statement.Columns["PID"];
                         BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
                         newItem.Name = statement.Columns["FirstName"] + " " + statement.Columns["LastName"];
                         newItem.BloodGroup = statement.Columns["BloodGroup"];

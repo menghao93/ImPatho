@@ -558,7 +558,7 @@ namespace Health_Organizer
             {
                 AllergyFlag = true;
             }
-            if (AnalysisAddictionBox.SelectedIndex != 1)
+            if (AnalysisAddictionBox.SelectedIndex != -1)
             {
                 AddictionFlag = true;
             }
@@ -590,6 +590,16 @@ namespace Health_Organizer
             AnalysisToDayComboBox.IsEnabled = true;
             AnalysisToMonthComboBox.IsEnabled = true;
             AnalysisToYearComboBox.IsEnabled = true;
+        }
+
+        private void AnalysisItemClicked(object sender, ItemClickEventArgs e)
+        {
+            AnalysisSampleDataItem clickedItem = e.ClickedItem as AnalysisSampleDataItem;
+
+            if (this.Frame != null && !clickedItem.UniqueId.Equals(""))
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), clickedItem.UniqueId);
+            }
         }
 
 

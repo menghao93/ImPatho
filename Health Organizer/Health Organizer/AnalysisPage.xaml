@@ -183,7 +183,8 @@
                       CanReorderItems="True" 
                       CanDragItems="True" 
                       ItemsSource="{Binding Source = {StaticResource gridViewSource}}" 
-                      IsItemClickEnabled="True" 
+                      IsItemClickEnabled="True"
+                      ItemClick="AnalysisItemClicked"
                       >
                     <GridView.ItemTemplate>
                         <DataTemplate>

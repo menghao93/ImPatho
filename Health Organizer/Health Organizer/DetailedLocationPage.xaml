@@ -78,7 +78,7 @@
             ItemsSource="{Binding Source={StaticResource gridViewSource}}"
             SelectionMode="Single"
             SelectionChanged="LocationPageNewItemClicked"
-            PointerPressed="LocationPageItemCliced"
+            PointerPressed="LocationPageItemClicked"
             IsSwipeEnabled="false"
             IsItemClickEnabled ="True" 
             ItemClick="detailLocGridClicked">

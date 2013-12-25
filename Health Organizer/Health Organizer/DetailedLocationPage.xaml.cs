@@ -331,7 +331,7 @@ namespace Health_Organizer
             }
         }
 
-        private void LocationPageItemCliced(object sender, PointerRoutedEventArgs e)
+        private void LocationPageItemClicked(object sender, PointerRoutedEventArgs e)
         {
             LocationPageSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             isSearchBarVisible = false;
