@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Health_Organizer.Data_Model_Classes;
 using System.Diagnostics;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
 
 namespace Health_Organizer
 {
@@ -25,6 +28,7 @@ namespace Health_Organizer
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         public List<AnalysisSampleDataItem> mainItemList;
+        List<AnalysisSampleDataItem> resultList;
         public List<string> cityList;
         public List<string> diseaseList;
         public List<string> allergyList;
@@ -294,7 +298,7 @@ namespace Health_Organizer
 
         private void updateView()
         {
-            List<AnalysisSampleDataItem> resultList = new List<AnalysisSampleDataItem>();
+            resultList = new List<AnalysisSampleDataItem>();
 
             foreach (AnalysisSampleDataItem item in mainItemList)
             {
@@ -420,12 +424,12 @@ namespace Health_Organizer
                     {
                         if (AnalysisAddictionBox.SelectedItem.ToString().Equals(addiction))
                         {
-                           found = true;
+                            found = true;
                         }
                     }
 
                     if (!found)
-                    {  
+                    {
                         continue;
                     }
                 }
@@ -602,6 +606,60 @@ namespace Health_Organizer
             }
         }
 
+        private async void AnalysisExportListClicked(object sender, RoutedEventArgs e)
+        {
+            this.AnalysisValidateFields();
+            this.AnalysisSetFlags();
+            this.updateView();
+            RecordGrid.SelectedItem = null;
+
+            FileSavePicker savePicker = new FileSavePicker();
+
+            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+
+            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
+            // Default file name if the user does not type one in or select a file to replace
+
+            savePicker.SuggestedFileName = "New Document";
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+
+
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+
+                string data = "";
+                string columnSeparator = ", ";
+
+                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "\r\n";
+
+                foreach (AnalysisSampleDataItem item in resultList)
+                {
+                    data += item.Name + columnSeparator;
+                    data += item.BloodGroup + columnSeparator;
+                    data += item.Sex + columnSeparator;
+                    data += ExtraModules.getMartialStatus(item.Married) + columnSeparator;
+                    data += item.Occupation + columnSeparator;
+                    data += "\r\n";
+                }
+
+                // write to file
+                await FileIO.WriteTextAsync(file, data);
+
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                if (status == FileUpdateStatus.Complete)
+                {
+                    Debug.WriteLine("File " + file.Name + " was saved.");
+                }
+                else
+                {
+                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
+                }
+            }
+        }
 
     }
 }

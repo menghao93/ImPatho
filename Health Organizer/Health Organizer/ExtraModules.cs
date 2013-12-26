@@ -70,6 +70,18 @@ namespace Health_Organizer
             return result;
         }
 
+        public static string getMartialStatus(bool status)
+        {
+            if (status)
+            {
+                return "Married";
+            }
+            else
+            {
+                return "Unmarried";
+            }
+        }
+
         public static DateTime ConvertStringToDateTime(string date)
         {
             string[] tempDate = date.Split('-');
