@@ -38,6 +38,7 @@
             <SupportedFileTypes>
               <FileType>.csv</FileType>
               <FileType>.txt</FileType>
+              <FileType>.xlsx</FileType>
             </SupportedFileTypes>
           </FileTypeAssociation>
         </Extension>

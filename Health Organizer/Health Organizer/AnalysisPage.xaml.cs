@@ -76,6 +76,7 @@ namespace Health_Organizer
             this.AnalysisResetBox();
             this.AnalysisResetFlag();
             this.AnalysisResetDateBox();
+            this.disableCommandBarButtons();
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -600,7 +601,7 @@ namespace Health_Organizer
         {
             AnalysisSampleDataItem clickedItem = e.ClickedItem as AnalysisSampleDataItem;
 
-            if (this.Frame != null && !clickedItem.UniqueId.Equals(""))
+            if (this.Frame != null && clickedItem != null)
             {
                 this.Frame.Navigate(typeof(CreateNewVisit), clickedItem.UniqueId);
             }
@@ -659,6 +660,134 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
+        }
+
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+
+            if (this.Frame != null && selectedItem != null)
+            {
+                this.Frame.Navigate(typeof(ProfileDetailsPage), selectedItem.UniqueId);
+            }
+
+        }
+
+        private async void ExportProfileClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+            
+            FileSavePicker savePicker = new FileSavePicker();
+
+            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+
+            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
+            // Default file name if the user does not type one in or select a file to replace
+
+            savePicker.SuggestedFileName = selectedItem.Name;
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+
+
+            if (file != null && selectedItem != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+
+                string data = "";
+                string columnSeparator = ", ";
+                string lineSeparator = "\r\n";
+
+                data += "Name" + columnSeparator;
+                data += selectedItem.Name + columnSeparator + lineSeparator;
+                data += "Blood Group" + columnSeparator;
+                data += selectedItem.BloodGroup + columnSeparator + lineSeparator;
+                data += "Sex " + columnSeparator;
+                data += selectedItem.Sex + columnSeparator + lineSeparator;
+                data += "Martial Status " + columnSeparator;
+                data += ExtraModules.getMartialStatus(selectedItem.Married) + columnSeparator + lineSeparator;
+                data += "Occupation" + columnSeparator;
+                data += selectedItem.Occupation + columnSeparator + lineSeparator;
+                
+                data += lineSeparator + "Allergies";
+
+                foreach (string allergy in selectedItem.Allergy)
+                {
+                    data += columnSeparator;
+                    data += allergy + columnSeparator + lineSeparator;
+                }
+
+                data += lineSeparator + "Addiction";
+                foreach (string addiction in selectedItem.Addiction)
+                {
+                    data += columnSeparator;
+                    data += addiction + columnSeparator + lineSeparator;
+                }
+
+                data += lineSeparator+ "Operation";
+                foreach (string operation in selectedItem.Operation)
+                {
+                    data += columnSeparator;
+                    data += operation + columnSeparator + lineSeparator;
+                }
+
+                if (selectedItem.DatesVisited.Count > 0)
+                {
+                    data += lineSeparator + "Visits" + lineSeparator;
+
+                    foreach (string date in selectedItem.DatesVisited)
+                    {
+                        data += date + columnSeparator;
+                        string disease = "";
+                        selectedItem.Diseases.TryGetValue(date, out disease);
+                        string vaccine = "";
+                        selectedItem.Vaccines.TryGetValue(date, out vaccine);
+                        data += disease + columnSeparator + vaccine + lineSeparator;
+                    }
+                }
+
+                // write to file
+                await FileIO.WriteTextAsync(file, data);
+
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                if (status == FileUpdateStatus.Complete)
+                {
+                    Debug.WriteLine("File " + file.Name + " was saved.");
+                }
+                else
+                {
+                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
+                }
+            }
+        }
+
+        private void AnalysisNewItemSelected(object sender, SelectionChangedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+            if (selectedItem != null)
+            {
+                AnalysisPageCmdbar.IsOpen = true;
+                this.enableCommandBarButtons();
+            }
+            else
+            {
+                AnalysisPageCmdbar.IsOpen = false;
+                this.disableCommandBarButtons();
+            }
+            
+        }
+
+        private void enableCommandBarButtons()
+        {
+            ViewProfile.IsEnabled = true;
+            ExportProfile.IsEnabled = true;
+        }
+
+        private void disableCommandBarButtons()
+        {
+            ViewProfile.IsEnabled = false;
+            ExportProfile.IsEnabled = false;
         }
 
     }

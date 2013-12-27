@@ -186,6 +186,7 @@
                       ItemsSource="{Binding Source = {StaticResource gridViewSource}}" 
                       IsItemClickEnabled="True"
                       ItemClick="AnalysisItemClicked"
+                    SelectionChanged="AnalysisNewItemSelected"
                       >
                     <GridView.ItemTemplate>
                         <DataTemplate>
@@ -207,12 +208,14 @@
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
-
-
-
         </Grid>
 
-    </Grid>    
-            
+    </Grid>
 
+    <Page.BottomAppBar>
+        <CommandBar Name="AnalysisPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
+            <AppBarButton Name="ViewProfile" Click="ViewProfileClicked" Icon="Contact" Label="View Profile"></AppBarButton>
+            <AppBarButton Name="ExportProfile" Click="ExportProfileClicked" Icon="Save" Label="Export Profile"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
