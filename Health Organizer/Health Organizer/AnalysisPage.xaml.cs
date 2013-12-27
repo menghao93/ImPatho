@@ -93,192 +93,6 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedFrom(e);
         }
 
-        private void fillAllLists()
-        {
-            cityList = new List<string>();
-            city2state = new Dictionary<string, string>();
-            diseaseList = new List<string>();
-            allergyList = new List<string>();
-            addictionList = new List<string>();
-            vaccinationList = new List<string>();
-            operationList = new List<string>();
-
-            //Adding city and corrosponding State to Lists
-            foreach (AnalysisSampleDataItem item in mainItemList)
-            {
-                if (!cityList.Contains(item.City))
-                {
-                    cityList.Add(item.City);
-
-                    if (!city2state.ContainsValue(item.State))
-                    {
-                        city2state.Add(item.City, item.State);
-                    }
-
-                }
-
-                //Adding disease to list
-                foreach (string diseases in item.Diseases.Values)
-                {
-                    if (!diseaseList.Contains(diseases))
-                    {
-                        diseaseList.Add(diseases);
-                    }
-                }
-
-                //Adding allergies to list
-                foreach (string allergy in item.Allergy)
-                {
-                    if (!allergyList.Contains(allergy))
-                    {
-                        allergyList.Add(allergy);
-                    }
-                }
-
-                //Adding addictions to list
-                foreach (string addiction in item.Addiction)
-                {
-                    if (!addictionList.Contains(addiction))
-                    {
-                        addictionList.Add(addiction);
-                    }
-                }
-
-                foreach (string vaccine in item.Vaccines.Values)
-                {
-                    if (!vaccinationList.Contains(vaccine))
-                    {
-                        vaccinationList.Add(vaccine);
-                    }
-                }
-
-                foreach (string operation in item.Operation)
-                {
-                    if (!operationList.Contains(operation))
-                    {
-                        operationList.Add(operation);
-                    }
-                }
-
-            }
-        }
-
-        private void fillAllComboBox()
-        {
-            AnalysisAllCheck.IsChecked = true;
-            AnalysisAllCatCheck.IsChecked = true;
-
-            for (Int16 i = 0; i < 31; i++)
-            {
-                AnalysisFromDayComboBox.Items.Add(i + 1);
-                AnalysisToDayComboBox.Items.Add(i + 1);
-            }
-
-            for (Int16 i = 1980; i < DateTime.Now.Year; i++)
-            {
-                AnalysisFromYearComboBox.Items.Add(i + 1);
-                AnalysisToYearComboBox.Items.Add(i + 1);
-            }
-
-            this.AnalysisResetDateBox();
-
-            foreach (string city in cityList)
-            {
-                AnalysisCityBox.Items.Add(city);
-            }
-
-            foreach (string state in city2state.Values)
-            {
-                AnalysisStateBox.Items.Add(state);
-            }
-
-            foreach (string disease in diseaseList)
-            {
-                AnalysisDiseaseBox.Items.Add(disease);
-            }
-
-            foreach (string allergy in allergyList)
-            {
-                AnalysisAllergyBox.Items.Add(allergy);
-            }
-
-            foreach (string addiction in addictionList)
-            {
-                AnalysisAddictionBox.Items.Add(addiction);
-            }
-
-            foreach (string vaccine in vaccinationList)
-            {
-                AnalysisVaccinationBox.Items.Add(vaccine);
-            }
-
-            foreach (string operation in operationList)
-            {
-                AnalysisOperationsBox.Items.Add(operation);
-            }
-
-        }
-
-        private void AnalysisAllChecked(object sender, RoutedEventArgs e)
-        {
-            sexMale = 0;
-            AnalysisMaleCheck.IsChecked = false;
-            AnalysisFemaleCheck.IsChecked = false;
-        }
-
-        private void AnalysisMaleChecked(object sender, RoutedEventArgs e)
-        {
-            sexMale = 1;
-            AnalysisFemaleCheck.IsChecked = false;
-            AnalysisAllCheck.IsChecked = false;
-        }
-
-        private void AnalysisFemaleChecked(object sender, RoutedEventArgs e)
-        {
-            sexMale = -1;
-            AnalysisMaleCheck.IsChecked = false;
-            AnalysisAllCheck.IsChecked = false;
-        }
-
-        private void AnalysisAllCatChecked(object sender, RoutedEventArgs e)
-        {
-            isMarried = 0;
-            AnalysisMarriedCheck.IsChecked = false;
-            AnalysisUnmarriedCheck.IsChecked = false;
-        }
-
-        private void AnalysisMarriedChecked(object sender, RoutedEventArgs e)
-        {
-            isMarried = 1;
-            AnalysisUnmarriedCheck.IsChecked = false;
-            AnalysisAllCatCheck.IsChecked = false;
-        }
-
-        private void AnalysisUnmarriedChecked(object sender, RoutedEventArgs e)
-        {
-            isMarried = -1;
-            AnalysisMarriedCheck.IsChecked = false;
-            AnalysisAllCatCheck.IsChecked = false;
-        }
-
-        private void AnalysisByDateChecked(object sender, RoutedEventArgs e)
-        {
-            ByDateFlag = true;
-            this.AnalysisDateBoxEnable();
-        }
-
-        private void AnalysisCitySelected(object sender, SelectionChangedEventArgs e)
-        {
-            string state;
-            if (AnalysisCityBox.SelectedIndex != -1)
-            {
-                if (city2state.TryGetValue(AnalysisCityBox.SelectedItem.ToString(), out state))
-                {
-                    AnalysisStateBox.SelectedItem = state;
-                }
-            }
-        }
-
         private void AnalysisResetFieldsClicked(object sender, RoutedEventArgs e)
         {
             this.AnalysisResetBox();
@@ -297,6 +111,199 @@ namespace Health_Organizer
             RecordGrid.SelectedItem = null;
         }
 
+        private void AnalysisItemClicked(object sender, ItemClickEventArgs e)
+        {
+            AnalysisSampleDataItem clickedItem = e.ClickedItem as AnalysisSampleDataItem;
+
+            if (this.Frame != null && clickedItem != null)
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), clickedItem.UniqueId);
+            }
+        }
+
+        private async void AnalysisExportListClicked(object sender, RoutedEventArgs e)
+        {
+            this.AnalysisValidateFields();
+            this.AnalysisSetFlags();
+            this.updateView();
+            RecordGrid.SelectedItem = null;
+
+            FileSavePicker savePicker = new FileSavePicker();
+
+            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+
+            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
+            // Default file name if the user does not type one in or select a file to replace
+
+            savePicker.SuggestedFileName = "New Document";
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+
+
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+
+                string data = "";
+                string columnSeparator = ", ";
+
+                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "\r\n";
+
+                foreach (AnalysisSampleDataItem item in resultList)
+                {
+                    data += item.Name + columnSeparator;
+                    data += item.BloodGroup + columnSeparator;
+                    data += item.Sex + columnSeparator;
+                    data += ExtraModules.getMartialStatus(item.Married) + columnSeparator;
+                    data += item.Occupation + columnSeparator;
+                    data += "\r\n";
+                }
+
+                // write to file
+                await FileIO.WriteTextAsync(file, data);
+
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                if (status == FileUpdateStatus.Complete)
+                {
+                    Debug.WriteLine("File " + file.Name + " was saved.");
+                }
+                else
+                {
+                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
+                }
+            }
+        }
+
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+
+            if (this.Frame != null && selectedItem != null)
+            {
+                this.Frame.Navigate(typeof(ProfileDetailsPage), selectedItem.UniqueId);
+            }
+
+        }
+
+        private async void ExportProfileClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+
+            FileSavePicker savePicker = new FileSavePicker();
+
+            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+
+            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
+            // Default file name if the user does not type one in or select a file to replace
+
+            savePicker.SuggestedFileName = selectedItem.Name;
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+
+
+            if (file != null && selectedItem != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+
+                string data = "";
+                string columnSeparator = ", ";
+                string lineSeparator = "\r\n";
+
+                data += "Name" + columnSeparator;
+                data += selectedItem.Name + columnSeparator + lineSeparator;
+                data += "Blood Group" + columnSeparator;
+                data += selectedItem.BloodGroup + columnSeparator + lineSeparator;
+                data += "Sex " + columnSeparator;
+                data += selectedItem.Sex + columnSeparator + lineSeparator;
+                data += "Martial Status " + columnSeparator;
+                data += ExtraModules.getMartialStatus(selectedItem.Married) + columnSeparator + lineSeparator;
+                data += "Occupation" + columnSeparator;
+                data += selectedItem.Occupation + columnSeparator + lineSeparator;
+
+                data += lineSeparator + "Allergies";
+
+                foreach (string allergy in selectedItem.Allergy)
+                {
+                    data += columnSeparator;
+                    data += allergy + columnSeparator + lineSeparator;
+                }
+
+                data += lineSeparator + "Addiction";
+                foreach (string addiction in selectedItem.Addiction)
+                {
+                    data += columnSeparator;
+                    data += addiction + columnSeparator + lineSeparator;
+                }
+
+                data += lineSeparator + "Operation";
+                foreach (string operation in selectedItem.Operation)
+                {
+                    data += columnSeparator;
+                    data += operation + columnSeparator + lineSeparator;
+                }
+
+                if (selectedItem.DatesVisited.Count > 0)
+                {
+                    data += lineSeparator + "Visits" + lineSeparator;
+
+                    foreach (string date in selectedItem.DatesVisited)
+                    {
+                        data += date + columnSeparator;
+                        string disease = "";
+                        selectedItem.Diseases.TryGetValue(date, out disease);
+                        string vaccine = "";
+                        selectedItem.Vaccines.TryGetValue(date, out vaccine);
+                        data += disease + columnSeparator + vaccine + lineSeparator;
+                    }
+                }
+
+                // write to file
+                await FileIO.WriteTextAsync(file, data);
+
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                if (status == FileUpdateStatus.Complete)
+                {
+                    Debug.WriteLine("File " + file.Name + " was saved.");
+                }
+                else
+                {
+                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
+                }
+            }
+        }
+
+        private void AnalysisCitySelected(object sender, SelectionChangedEventArgs e)
+        {
+            string state;
+            if (AnalysisCityBox.SelectedIndex != -1)
+            {
+                if (city2state.TryGetValue(AnalysisCityBox.SelectedItem.ToString(), out state))
+                {
+                    AnalysisStateBox.SelectedItem = state;
+                }
+            }
+        }
+
+        private void AnalysisNewItemSelected(object sender, SelectionChangedEventArgs e)
+        {
+            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+            if (selectedItem != null)
+            {
+                AnalysisPageCmdbar.IsOpen = true;
+                this.enableCommandBarButtons();
+            }
+            else
+            {
+                AnalysisPageCmdbar.IsOpen = false;
+                this.disableCommandBarButtons();
+            }
+
+        }
+        
         private void updateView()
         {
             resultList = new List<AnalysisSampleDataItem>();
@@ -474,6 +481,193 @@ namespace Health_Organizer
             this.DefaultViewModel["Items"] = resultList;
         }
 
+        private void AnalysisAllChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = 0;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisFemaleCheck.IsChecked = false;
+        }
+
+        private void AnalysisMaleChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = 1;
+            AnalysisFemaleCheck.IsChecked = false;
+            AnalysisAllCheck.IsChecked = false;
+        }
+
+        private void AnalysisFemaleChecked(object sender, RoutedEventArgs e)
+        {
+            sexMale = -1;
+            AnalysisMaleCheck.IsChecked = false;
+            AnalysisAllCheck.IsChecked = false;
+        }
+
+        private void AnalysisAllCatChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = 0;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisUnmarriedCheck.IsChecked = false;
+        }
+
+        private void AnalysisMarriedChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = 1;
+            AnalysisUnmarriedCheck.IsChecked = false;
+            AnalysisAllCatCheck.IsChecked = false;
+        }
+
+        private void AnalysisUnmarriedChecked(object sender, RoutedEventArgs e)
+        {
+            isMarried = -1;
+            AnalysisMarriedCheck.IsChecked = false;
+            AnalysisAllCatCheck.IsChecked = false;
+        }
+
+        private void AnalysisByDateChecked(object sender, RoutedEventArgs e)
+        {
+            ByDateFlag = true;
+            this.AnalysisDateBoxEnable();
+        }
+
+        private void AnalysisValidateFields()
+        {
+            DateTime toDate = new DateTime(Convert.ToInt16(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisToDayComboBox.SelectedItem));
+            DateTime fromDate = new DateTime(Convert.ToInt16(AnalysisFromYearComboBox.SelectedItem), AnalysisFromMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisFromDayComboBox.SelectedItem));
+
+            if (toDate < fromDate)
+            {
+                AnalysisFromDayComboBox.SelectedItem = AnalysisToDayComboBox.SelectedItem;
+                AnalysisFromMonthComboBox.SelectedIndex = AnalysisToMonthComboBox.SelectedIndex;
+                AnalysisFromYearComboBox.SelectedItem = AnalysisToYearComboBox.SelectedItem;
+            }
+        }
+
+        private void fillAllLists()
+        {
+            cityList = new List<string>();
+            city2state = new Dictionary<string, string>();
+            diseaseList = new List<string>();
+            allergyList = new List<string>();
+            addictionList = new List<string>();
+            vaccinationList = new List<string>();
+            operationList = new List<string>();
+
+            //Adding city and corrosponding State to Lists
+            foreach (AnalysisSampleDataItem item in mainItemList)
+            {
+                if (!cityList.Contains(item.City))
+                {
+                    cityList.Add(item.City);
+
+                    if (!city2state.ContainsValue(item.State))
+                    {
+                        city2state.Add(item.City, item.State);
+                    }
+
+                }
+
+                //Adding disease to list
+                foreach (string diseases in item.Diseases.Values)
+                {
+                    if (!diseaseList.Contains(diseases))
+                    {
+                        diseaseList.Add(diseases);
+                    }
+                }
+
+                //Adding allergies to list
+                foreach (string allergy in item.Allergy)
+                {
+                    if (!allergyList.Contains(allergy))
+                    {
+                        allergyList.Add(allergy);
+                    }
+                }
+
+                //Adding addictions to list
+                foreach (string addiction in item.Addiction)
+                {
+                    if (!addictionList.Contains(addiction))
+                    {
+                        addictionList.Add(addiction);
+                    }
+                }
+
+                foreach (string vaccine in item.Vaccines.Values)
+                {
+                    if (!vaccinationList.Contains(vaccine))
+                    {
+                        vaccinationList.Add(vaccine);
+                    }
+                }
+
+                foreach (string operation in item.Operation)
+                {
+                    if (!operationList.Contains(operation))
+                    {
+                        operationList.Add(operation);
+                    }
+                }
+
+            }
+        }
+
+        private void fillAllComboBox()
+        {
+            AnalysisAllCheck.IsChecked = true;
+            AnalysisAllCatCheck.IsChecked = true;
+
+            for (Int16 i = 0; i < 31; i++)
+            {
+                AnalysisFromDayComboBox.Items.Add(i + 1);
+                AnalysisToDayComboBox.Items.Add(i + 1);
+            }
+
+            for (Int16 i = 1980; i < DateTime.Now.Year; i++)
+            {
+                AnalysisFromYearComboBox.Items.Add(i + 1);
+                AnalysisToYearComboBox.Items.Add(i + 1);
+            }
+
+            this.AnalysisResetDateBox();
+
+            foreach (string city in cityList)
+            {
+                AnalysisCityBox.Items.Add(city);
+            }
+
+            foreach (string state in city2state.Values)
+            {
+                AnalysisStateBox.Items.Add(state);
+            }
+
+            foreach (string disease in diseaseList)
+            {
+                AnalysisDiseaseBox.Items.Add(disease);
+            }
+
+            foreach (string allergy in allergyList)
+            {
+                AnalysisAllergyBox.Items.Add(allergy);
+            }
+
+            foreach (string addiction in addictionList)
+            {
+                AnalysisAddictionBox.Items.Add(addiction);
+            }
+
+            foreach (string vaccine in vaccinationList)
+            {
+                AnalysisVaccinationBox.Items.Add(vaccine);
+            }
+
+            foreach (string operation in operationList)
+            {
+                AnalysisOperationsBox.Items.Add(operation);
+            }
+
+        }
+
         private void AnalysisResetBox()
         {
             AnalysisCityBox.SelectedIndex = -1;
@@ -518,19 +712,6 @@ namespace Health_Organizer
             AddictionFlag = false;
             VaccineFlag = false;
             OperationFlag = false;
-        }
-
-        private void AnalysisValidateFields()
-        {
-            DateTime toDate = new DateTime(Convert.ToInt16(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisToDayComboBox.SelectedItem));
-            DateTime fromDate = new DateTime(Convert.ToInt16(AnalysisFromYearComboBox.SelectedItem), AnalysisFromMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisFromDayComboBox.SelectedItem));
-
-            if (toDate < fromDate)
-            {
-                AnalysisFromDayComboBox.SelectedItem = AnalysisToDayComboBox.SelectedItem;
-                AnalysisFromMonthComboBox.SelectedIndex = AnalysisToMonthComboBox.SelectedIndex;
-                AnalysisFromYearComboBox.SelectedItem = AnalysisToYearComboBox.SelectedItem;
-            }
         }
 
         private void AnalysisSetFlags()
@@ -596,188 +777,7 @@ namespace Health_Organizer
             AnalysisToMonthComboBox.IsEnabled = true;
             AnalysisToYearComboBox.IsEnabled = true;
         }
-
-        private void AnalysisItemClicked(object sender, ItemClickEventArgs e)
-        {
-            AnalysisSampleDataItem clickedItem = e.ClickedItem as AnalysisSampleDataItem;
-
-            if (this.Frame != null && clickedItem != null)
-            {
-                this.Frame.Navigate(typeof(CreateNewVisit), clickedItem.UniqueId);
-            }
-        }
-
-        private async void AnalysisExportListClicked(object sender, RoutedEventArgs e)
-        {
-            this.AnalysisValidateFields();
-            this.AnalysisSetFlags();
-            this.updateView();
-            RecordGrid.SelectedItem = null;
-
-            FileSavePicker savePicker = new FileSavePicker();
-
-            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            // Dropdown of file types the user can save the file as
-
-            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
-            // Default file name if the user does not type one in or select a file to replace
-
-            savePicker.SuggestedFileName = "New Document";
-
-            StorageFile file = await savePicker.PickSaveFileAsync();
-
-
-            if (file != null)
-            {
-                CachedFileManager.DeferUpdates(file);
-
-                string data = "";
-                string columnSeparator = ", ";
-
-                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "\r\n";
-
-                foreach (AnalysisSampleDataItem item in resultList)
-                {
-                    data += item.Name + columnSeparator;
-                    data += item.BloodGroup + columnSeparator;
-                    data += item.Sex + columnSeparator;
-                    data += ExtraModules.getMartialStatus(item.Married) + columnSeparator;
-                    data += item.Occupation + columnSeparator;
-                    data += "\r\n";
-                }
-
-                // write to file
-                await FileIO.WriteTextAsync(file, data);
-
-                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-
-                if (status == FileUpdateStatus.Complete)
-                {
-                    Debug.WriteLine("File " + file.Name + " was saved.");
-                }
-                else
-                {
-                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
-                }
-            }
-        }
-
-        private void ViewProfileClicked(object sender, RoutedEventArgs e)
-        {
-            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
-
-            if (this.Frame != null && selectedItem != null)
-            {
-                this.Frame.Navigate(typeof(ProfileDetailsPage), selectedItem.UniqueId);
-            }
-
-        }
-
-        private async void ExportProfileClicked(object sender, RoutedEventArgs e)
-        {
-            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
-            
-            FileSavePicker savePicker = new FileSavePicker();
-
-            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            // Dropdown of file types the user can save the file as
-
-            savePicker.FileTypeChoices.Add("Tabular Data", new List<string>() { ".csv" });
-            // Default file name if the user does not type one in or select a file to replace
-
-            savePicker.SuggestedFileName = selectedItem.Name;
-
-            StorageFile file = await savePicker.PickSaveFileAsync();
-
-
-            if (file != null && selectedItem != null)
-            {
-                CachedFileManager.DeferUpdates(file);
-
-                string data = "";
-                string columnSeparator = ", ";
-                string lineSeparator = "\r\n";
-
-                data += "Name" + columnSeparator;
-                data += selectedItem.Name + columnSeparator + lineSeparator;
-                data += "Blood Group" + columnSeparator;
-                data += selectedItem.BloodGroup + columnSeparator + lineSeparator;
-                data += "Sex " + columnSeparator;
-                data += selectedItem.Sex + columnSeparator + lineSeparator;
-                data += "Martial Status " + columnSeparator;
-                data += ExtraModules.getMartialStatus(selectedItem.Married) + columnSeparator + lineSeparator;
-                data += "Occupation" + columnSeparator;
-                data += selectedItem.Occupation + columnSeparator + lineSeparator;
-                
-                data += lineSeparator + "Allergies";
-
-                foreach (string allergy in selectedItem.Allergy)
-                {
-                    data += columnSeparator;
-                    data += allergy + columnSeparator + lineSeparator;
-                }
-
-                data += lineSeparator + "Addiction";
-                foreach (string addiction in selectedItem.Addiction)
-                {
-                    data += columnSeparator;
-                    data += addiction + columnSeparator + lineSeparator;
-                }
-
-                data += lineSeparator+ "Operation";
-                foreach (string operation in selectedItem.Operation)
-                {
-                    data += columnSeparator;
-                    data += operation + columnSeparator + lineSeparator;
-                }
-
-                if (selectedItem.DatesVisited.Count > 0)
-                {
-                    data += lineSeparator + "Visits" + lineSeparator;
-
-                    foreach (string date in selectedItem.DatesVisited)
-                    {
-                        data += date + columnSeparator;
-                        string disease = "";
-                        selectedItem.Diseases.TryGetValue(date, out disease);
-                        string vaccine = "";
-                        selectedItem.Vaccines.TryGetValue(date, out vaccine);
-                        data += disease + columnSeparator + vaccine + lineSeparator;
-                    }
-                }
-
-                // write to file
-                await FileIO.WriteTextAsync(file, data);
-
-                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-
-                if (status == FileUpdateStatus.Complete)
-                {
-                    Debug.WriteLine("File " + file.Name + " was saved.");
-                }
-                else
-                {
-                    Debug.WriteLine("File " + file.Name + " couldn't be saved.");
-                }
-            }
-        }
-
-        private void AnalysisNewItemSelected(object sender, SelectionChangedEventArgs e)
-        {
-            AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
-            if (selectedItem != null)
-            {
-                AnalysisPageCmdbar.IsOpen = true;
-                this.enableCommandBarButtons();
-            }
-            else
-            {
-                AnalysisPageCmdbar.IsOpen = false;
-                this.disableCommandBarButtons();
-            }
-            
-        }
-
+        
         private void enableCommandBarButtons()
         {
             ViewProfile.IsEnabled = true;
