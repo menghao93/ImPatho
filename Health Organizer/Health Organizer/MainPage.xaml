@@ -9,6 +9,31 @@
     mc:Ignorable="d"
     KeyUp="SignInEnterPressed">
     <Page.Resources>
+        <Storyboard x:Name="HomeScreenImageAnimation">
+            <DoubleAnimation Storyboard.TargetName="imageTrans" 
+                                Storyboard.TargetProperty="(TranslateY)"
+                                From="100"
+                                Duration="0:0:1" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <!--<DoubleAnimation Duration="0:0:1"
+             Storyboard.TargetProperty="(ScaleY)"
+             Storyboard.TargetName="imageTrans"
+              From="0.8" To="1">
+            </DoubleAnimation>
+            <DoubleAnimation Duration="0:0:1"
+             Storyboard.TargetProperty="(ScaleX)"
+             Storyboard.TargetName="imageTrans"
+              From="0.8" To="1">
+            </DoubleAnimation>-->
+            <DoubleAnimation Duration="0:0:1"
+             Storyboard.TargetProperty="(Opacity)"
+             Storyboard.TargetName="HomeScreenScrollViewer"
+              From="0" To="1">
+            </DoubleAnimation>
+        </Storyboard>
         <Style x:Key="ButtonStyleEdited" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
             <Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
@@ -85,9 +110,14 @@
     </Page.Resources>
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" >
-        <Image Source="Assets/logo_homescreen.png" Height="400" Width="800"></Image>
+        <Image Name="HomePageImage" Source="Assets/logo_homescreen.png" Height="339" Margin="390,0,364,0">
+            <Image.RenderTransform>
+                <CompositeTransform x:Name="imageTrans"></CompositeTransform>
+            </Image.RenderTransform>
+           
+        </Image>
         <Border Padding="10">
-            <ScrollViewer IsTabStop="True" VerticalScrollBarVisibility="Disabled">
+            <ScrollViewer IsTabStop="True" Name="HomeScreenScrollViewer" VerticalScrollBarVisibility="Disabled" >
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
                         <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
@@ -95,15 +125,15 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
-                        <TextBox Style="{StaticResource TextBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
+                        <PasswordBox Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
                     </StackPanel>
                     <Border>
                         <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="400,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
                     </Border>
                 </StackPanel>
-                
+
             </ScrollViewer>
         </Border>
-        
+
     </StackPanel>
 </Page>

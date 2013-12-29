@@ -24,6 +24,7 @@ namespace Health_Organizer
         public MainPage()
         {
             this.InitializeComponent();
+            HomeScreenImageAnimation.Begin();
             //await this.InitializeDB();
         }
 
@@ -50,6 +51,5 @@ namespace Health_Organizer
                 }
             }
         }
-
     }
 }
