@@ -1,4 +1,4 @@
-﻿using Health_Organizer.Common;
+﻿using Health_Organizer.Data;
 using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
@@ -26,14 +26,12 @@ namespace Health_Organizer
     {
 
         private NavigationHelper navigationHelper;
-        private DBConnect connection;
-        private string decodedImage = null;
         private Database database;
         private int PID = 0;
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
         Boolean check = true;
-        int counterComma = 0;
+        
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -51,11 +49,29 @@ namespace Health_Organizer
             this.InitializeVisitDetialsComboBox();
         }
 
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
+        }
+
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            navigationHelper.OnNavigatedTo(e);
+            this.PID = Int32.Parse(e.Parameter as string);
+            this.InitializeDB(this.PID);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            navigationHelper.OnNavigatedFrom(e);
+        }
+
         private async void InitializeDB(int pid)
         {
-            this.connection = new DBConnect();
-            await this.connection.InitializeDatabase(DBConnect.ORG_HOME_DB);
-            database = this.connection.GetConnection();
+            this.database = App.database;
 
             string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(query);
@@ -63,36 +79,21 @@ namespace Health_Organizer
             statement.EnableColumnsProperty();
             while (await statement.StepAsync())
             {
-                //Debug.WriteLine(statement.Columns["DateVisited"]);
                 this.ocString.Add(statement.Columns["DateVisited"]);
             }
 
-            this.loadPatientDetails(pid);
+            await this.loadPatientDetails(pid);
             if (this.ocString.Count() > 0)
             {
                 VisitListBox.SelectedIndex = 0;
             }
             else
             {
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
+                this.collapseStackPanels();
             }
+            //this.queryDB();
         }
 
-        private async void loadPatientDetails(int pid)
-        {
-            string q = "SELECT * FROM Patient WHERE PID = @pid";
-            Statement s = await this.database.PrepareStatementAsync(q);
-            s.BindIntParameterWithName("@pid", pid);
-            s.EnableColumnsProperty();
-            if (await s.StepAsync())
-            {
-                //Debug.WriteLine(s.Columns["PID"]);
-                VisitPatientName.Text = s.Columns["FirstName"] + " " + s.Columns["LastName"];
-                VisitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
-            }
-        }
 
         private void InitializeVisitDetialsComboBox()
         {
@@ -114,132 +115,163 @@ namespace Health_Organizer
             VisitYearComboBox.SelectedItem = DateTime.Now.Year;
         }
 
-
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void queryDB()
         {
+            string query = "SELECT * FROM Patient";
+            Statement statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"]);
+            }
+
+            query = "SELECT * FROM Address";
+            statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["Street"]);
+            }
+
+            query = "SELECT * FROM (Address NATURAL JOIN AddressZIP) ORDER BY City";
+            statement = await database.PrepareStatementAsync(query);
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
+            }
         }
 
-        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        private async Task<int> loadPatientDetails(int pid)
         {
-        }
+            try
+            {
+                string q = "SELECT * FROM Patient WHERE PID = @pid";
+                Statement s = await this.database.PrepareStatementAsync(q);
+                s.BindIntParameterWithName("@pid", pid);
+                s.EnableColumnsProperty();
+                if (await s.StepAsync())
+                {
+                    VisitPatientName.Text = s.Columns["FirstName"] + " " + s.Columns["LastName"];
+                    VisitPatientPhoto.Source = await ImageMethods.Base64StringToBitmap(s.Columns["Image"]);
+                }
 
-        #region NavigationHelper registration
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedTo(e);
-            this.PID = Int32.Parse(e.Parameter as string);
-            this.InitializeDB(this.PID);
-        }
+                return DBConnect.RESULT_OK;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---LOAD_PATIENT_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedFrom(e);
-        }
-
-        #endregion
-
-        private void ClearAllFields()
-        {
-            VisitSymptoms.Text = "";
-            VisitDiseasesDiagnosed.Text = "";
-            VisitMedicineGiven.Text = "";
-            VisitBloodGlucose.Text = "";
-            VisitSystolicBP.Text = "";
-            VisitDiastolicBP.Text = "";
-            VisitVaccine.Text = "";
-            VisitHeightFeet.SelectedItem = null;
-            VisitHeightInch.SelectedItem = null;
-            VisitWeight.Text = "";
-            isUpdating = false;
+                return DBConnect.RESULT_ERROR;
+            }
         }
 
         private void AddVisitClicked(object sender, RoutedEventArgs e)
         {
             VisitFormCmdbar.IsOpen = false;
             VisitFormBar.IsOpen = true;
-            counterComma = 0;
         }
 
         private async void EditVisitClicked(object sender, RoutedEventArgs e)
         {
-            counterComma = 0;
             VisitFormCmdbar.IsOpen = false;
             if (VisitListBox.SelectedItem != null)
             {
                 VisitFormBar.IsOpen = true;
-                string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
-                Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-                if (await statement.StepAsync())
+
+                try
                 {
-                    Debug.WriteLine(statement.Columns["DiastolicBP"] + statement.Columns["PID"]);
-                    string[] dv = statement.Columns["DateVisited"].Split('-');
-                    string[] height = statement.Columns["Height"].ToString().Split('.');
-
-                    double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
-                    double inchHeight = totalInchHeight % 12;
-                    double feetHeight = (totalInchHeight - inchHeight) / 12;
-
-                    VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
-                    VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
-                    VisitYearComboBox.SelectedIndex = VisitYearComboBox.Items.IndexOf(Int32.Parse(dv[0]));
-                    VisitSymptoms.Text = statement.Columns["Symptoms"];
-                    VisitDiseasesDiagnosed.Text = statement.Columns["DiseaseFound"];
-
-                    int itemFeetHeight = Convert.ToInt32(Math.Round(feetHeight));
-                    int itemInchHeight = Convert.ToInt32(Math.Round(inchHeight));
-
-                    if (itemInchHeight == 12)
+                    string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+                    if (await statement.StepAsync())
                     {
-                        itemFeetHeight += 1;
-                        itemInchHeight = 0;
+                        string[] dv = statement.Columns["DateVisited"].Split('-');
+                        string[] height = statement.Columns["Height"].ToString().Split('.');
+
+                        double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
+                        double inchHeight = totalInchHeight % 12;
+                        double feetHeight = (totalInchHeight - inchHeight) / 12;
+
+                        VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
+                        VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
+                        VisitYearComboBox.SelectedIndex = VisitYearComboBox.Items.IndexOf(Int32.Parse(dv[0]));
+                        VisitSymptoms.Text = statement.Columns["Symptoms"];
+                        VisitDiseasesDiagnosed.Text = statement.Columns["DiseaseFound"];
+
+                        int itemFeetHeight = Convert.ToInt32(Math.Round(feetHeight));
+                        int itemInchHeight = Convert.ToInt32(Math.Round(inchHeight));
+
+                        if (itemInchHeight == 12)
+                        {
+                            itemFeetHeight += 1;
+                            itemInchHeight = 0;
+                        }
+
+                        VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
+                        VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
+                        VisitWeight.Text = statement.Columns["Weight"];
+                        VisitSystolicBP.Text = statement.Columns["SystolicBP"];
+                        VisitDiastolicBP.Text = statement.Columns["DiastolicBP"];
+                        VisitBloodGlucose.Text = statement.Columns["BloodGlucose"];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---EDIT_VISIT_CLICKED---MEDIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    string query = "SELECT Medicine FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+                    VisitMedicineGiven.Text = "";
+                    while (await statement.StepAsync())
+                    {
+                        VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
                     }
 
-                    VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
-                    VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
-                    VisitWeight.Text = statement.Columns["Weight"];
-                    VisitSystolicBP.Text = statement.Columns["SystolicBP"];
-                    VisitDiastolicBP.Text = statement.Columns["DiastolicBP"];
-                    VisitBloodGlucose.Text = statement.Columns["BloodGlucose"];
+                    if (!VisitMedicineGiven.Text.Equals(""))
+                    {
+                        VisitMedicineGiven.Text = VisitMedicineGiven.Text.Substring(0, VisitMedicineGiven.Text.Length - 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---EDIT_VISIT_CLICKED---MEDIC_DETAILS_MEDICINE" + "\n" + ex.Message + "\n" + result.ToString());
                 }
 
-                statement.Reset();
-                //VisitMedicineGiven.IsEnabled = false;
-                query = "SELECT Medicine FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-                VisitMedicineGiven.Text = "";
-                while (await statement.StepAsync())
+                try
                 {
-                    VisitMedicineGiven.Text += statement.Columns["Medicine"] + ",";
-                }
+                    string query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+                    VisitVaccine.Text = "";
+                    while (await statement.StepAsync())
+                    {
+                        //Debug.WriteLine(statement.Columns["Vaccine"]);
+                        VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
+                    }
 
-                if (!VisitMedicineGiven.Text.Equals(""))
-                {
-                    VisitMedicineGiven.Text = VisitMedicineGiven.Text.Substring(0, VisitMedicineGiven.Text.Length - 1);
+                    if (!VisitVaccine.Text.Equals(""))
+                    {
+                        VisitVaccine.Text = VisitVaccine.Text.Substring(0, VisitVaccine.Text.Length - 1);
+                    }
                 }
-
-                statement.Reset();
-                //VisitVaccine.IsEnabled = false;
-                query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-                VisitVaccine.Text = "";
-                while (await statement.StepAsync())
+                catch (Exception ex)
                 {
-                    //Debug.WriteLine(statement.Columns["Vaccine"]);
-                    VisitVaccine.Text += statement.Columns["Vaccine"] + ",";
-                }
-
-                if (!VisitVaccine.Text.Equals(""))
-                {
-                    VisitVaccine.Text = VisitVaccine.Text.Substring(0, VisitVaccine.Text.Length - 1);
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---EDIT_VISIT_CLICKED---MEDIC_DETAILS_VACCINE" + "\n" + ex.Message + "\n" + result.ToString());
                 }
 
                 isUpdating = true;
@@ -252,39 +284,60 @@ namespace Health_Organizer
             if (VisitListBox.SelectedItem != null)
             {
                 string DateVisited = VisitListBox.Items[VisitListBox.SelectedIndex].ToString();
-                string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
-                Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                await statement.StepAsync();
-                this.ocString.Remove(DateVisited);
 
-                statement.Reset();
-                deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(deleteQuery);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                while (await statement.StepAsync())
+                try
                 {
-                    Debug.WriteLine(statement.Columns["Vaccine"]);
+                    string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    await statement.StepAsync();
+                    this.ocString.Remove(DateVisited);
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---DEL_VISIT_CLICKED---MEDIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
                 }
 
-                statement.Reset();
-                deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(deleteQuery);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", DateVisited);
-                while (await statement.StepAsync())
+                try
                 {
-                    Debug.WriteLine(statement.Columns["Medicine"]);
+                    string deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    while (await statement.StepAsync())
+                    {
+                        Debug.WriteLine(statement.Columns["Vaccine"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---EDIT_VISIT_CLICKED---MEDIC_DETAILS_VACCINE" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    string deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    while (await statement.StepAsync())
+                    {
+                        Debug.WriteLine(statement.Columns["Medicine"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---EDIT_VISIT_CLICKED---MEDIC_DETAILS_MEDICINE" + "\n" + ex.Message + "\n" + result.ToString());
                 }
             }
 
             if (this.ocString.Count() <= 0)
             {
-                EditVisit.IsEnabled = false;
-                DeleteVisit.IsEnabled = false;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                this.collapseStackPanels();
             }
             else
             {
@@ -297,118 +350,45 @@ namespace Health_Organizer
             check = false;
             if (await this.CheckIfFilled())
             {
-                try
+                if (isUpdating)
                 {
-                    if (isUpdating)
-                    {
-                        await this.UpdateDetails();
-                    }
-                    else
-                    {
-                        await this.InsertDetails();
-                    }
+                    await this.UpdateDetails();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine(ex);
+                    await this.InsertDetails();
                 }
+
                 VisitFormBar.IsOpen = false;
             }
             else
             {
-                Debug.WriteLine(check);
                 if (check)
                 {
-                    var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
+                    var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form correctly before saving it.", "Error!");
                     messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                     var dialogResult = await messageDialog.ShowAsync();
                 }
             }
+
+            this.resetAllBorders();
         }
 
-        private async Task<int> UpdateDetails()
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
         {
-            double height = ((VisitHeightFeet.SelectedIndex + 1) * 12 + VisitHeightInch.SelectedIndex) * 0.0254;
-            int weight = Int32.Parse(VisitWeight.Text.ToString());
-            string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
-            double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
-
-            string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
-            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", DateVisited);
-            statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
-            statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
-            statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
-            statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
-            statement.BindDoubleParameterWithName("@height", height);
-            statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
-            statement.BindDoubleParameterWithName("@bmi", bmi);
-
-            await statement.StepAsync();
-
-            //statement.Reset();
-            //string insertBMI = "UPDATE MedicalDetailsBMI SET BMI = @bmi WHERE Height = @height AND Weight = @weight";
-            //statement = await this.database.PrepareStatementAsync(insertBMI);
-            //statement.BindDoubleParameterWithName("@height", height);
-            //statement.BindIntParameterWithName("@weight", weight);
-            //statement.BindDoubleParameterWithName("@bmi", bmi);
-
-            //await statement.StepAsync();
-
-            statement.Reset();
-            string deleteMedicine = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
-            statement = await this.database.PrepareStatementAsync(deleteMedicine);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", DateVisited);
-            await statement.StepAsync();
-
-            string deleteVaccine = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
-            statement = await this.database.PrepareStatementAsync(deleteVaccine);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", DateVisited);
-            await statement.StepAsync();
-
-            statement.Reset();
-            string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
-            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
+            if (this.Frame != null)
             {
-                if (str != "")
-                {
-                    statement = await this.database.PrepareStatementAsync(insertMedicine);
-                    statement.BindIntParameterWithName("@pid", this.PID);
-                    statement.BindTextParameterWithName("@dv", DateVisited);
-                    statement.BindTextParameterWithName("@medicine", str);
-
-                    await statement.StepAsync();
-                    statement.Reset();
-                }
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
             }
+        }
 
-            string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
-
-            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
-            {
-                if (str != "")
-                {
-                    statement = await this.database.PrepareStatementAsync(insertVaccine);
-                    statement.BindIntParameterWithName("@pid", this.PID);
-                    statement.BindTextParameterWithName("@dv", DateVisited);
-                    statement.BindTextParameterWithName("@vaccine", str);
-
-                    await statement.StepAsync();
-                    statement.Reset();
-                }
-            }
-
+        private void VisitCancelClicked(object sender, RoutedEventArgs e)
+        {
             this.ClearAllFields();
-            isUpdating = false;
-            //VisitMedicineGiven.IsEnabled = true;
-            //VisitVaccine.IsEnabled = true;
-            this.UpdateEditedDetails();
-
-            return 1;
+            this.resetAllBorders();
+            VisitMedicineGiven.IsEnabled = true;
+            VisitVaccine.IsEnabled = true;
+            VisitFormBar.IsOpen = false;
         }
 
         private async Task<int> InsertDetails()
@@ -418,162 +398,374 @@ namespace Health_Organizer
             string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
             double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
 
-            string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
-                                 "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
-            Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-            statement.BindIntParameterWithName("@pid", this.PID);
-            statement.BindTextParameterWithName("@dv", DateVisited);
-            statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
-            statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
-            if (!VisitDiastolicBP.Text.ToString().Equals(""))
+            try
             {
-                statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
-            }
-            if (!VisitSystolicBP.Text.ToString().Equals(""))
-            {
-                statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
-            }
-            statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
-            statement.BindDoubleParameterWithName("@height", height);
-            statement.BindIntParameterWithName("@weight", weight);
-            statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
-            statement.BindDoubleParameterWithName("@bmi", bmi);
+                string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
+                                     "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
+                Statement statement = await this.database.PrepareStatementAsync(insertQuery);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
+                statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
+                if (!VisitDiastolicBP.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
+                }
+                if (!VisitSystolicBP.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+                }
+                statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
+                statement.BindDoubleParameterWithName("@height", height);
+                statement.BindIntParameterWithName("@weight", weight);
+                statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
+                statement.BindDoubleParameterWithName("@bmi", bmi);
 
-            await statement.StepAsync();
+                await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---INSERT_DETAILS---MEDIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
+                foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
+                {
+                    Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    statement.BindTextParameterWithName("@medicine", str);
+
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---INSERT_DETAILS---MEDIC_DETAILS_MEDICINE" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
+
+                foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
+                {
+                    Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", DateVisited);
+                    statement.BindTextParameterWithName("@vaccine", str);
+
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+                this.ocString.Add(DateVisited);
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS_VACCINE" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            this.ClearAllFields();
+            VisitListBox.SelectedIndex = this.ocString.IndexOf(DateVisited);
+
+            if (this.ocString.Count() == 1)
+            {
+                this.visibleStackPanels();
+            }
+
+            return DBConnect.RESULT_OK;
+        }
+
+        private async Task<int> UpdateDetails()
+        {
+            double height = ((VisitHeightFeet.SelectedIndex + 1) * 12 + VisitHeightInch.SelectedIndex) * 0.0254;
+            int weight = Int32.Parse(VisitWeight.Text.ToString());
+            string DateVisited = VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex].ToString() + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex].ToString() + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex].ToString();
+            double bmi = ExtraModules.CalculateBMI(VisitHeightFeet.SelectedIndex + 1, VisitHeightInch.SelectedIndex, weight);
+
+            try
+            {
+                string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
+                Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@dv", DateVisited);
+                statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
+                statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
+                statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+                statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
+                statement.BindDoubleParameterWithName("@height", height);
+                statement.BindIntParameterWithName("@weight", weight);
+                statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
+                statement.BindDoubleParameterWithName("@bmi", bmi);
+
+                await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
 
             //statement.Reset();
-            //double bmi = 1.0 * height / weight;
-            //string insertBMI = "INSERT INTO MedicalDetailsBMI (Height, Weight, BMI) VALUES (@height, @weight, @bmi)";
+            //string insertBMI = "UPDATE MedicalDetailsBMI SET BMI = @bmi WHERE Height = @height AND Weight = @weight";
             //statement = await this.database.PrepareStatementAsync(insertBMI);
             //statement.BindDoubleParameterWithName("@height", height);
             //statement.BindIntParameterWithName("@weight", weight);
             //statement.BindDoubleParameterWithName("@bmi", bmi);
             //await statement.StepAsync();
 
-            statement.Reset();
-            string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
-            Debug.WriteLine("upar");
-            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
+            try
             {
-                statement = await this.database.PrepareStatementAsync(insertMedicine);
+                string deleteMedicine = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                Statement statement = await this.database.PrepareStatementAsync(deleteMedicine);
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@medicine", str);
-
                 await statement.StepAsync();
-                statement.Reset();
             }
-            string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
-            foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(VisitVaccine.Text)).Split(','))
+            catch (Exception ex)
             {
-                statement = await this.database.PrepareStatementAsync(insertVaccine);
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS_DEL" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string deleteVaccine = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                Statement statement = await this.database.PrepareStatementAsync(deleteVaccine);
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindTextParameterWithName("@vaccine", str);
-
                 await statement.StepAsync();
-                statement.Reset();
             }
-            this.ocString.Add(DateVisited);
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS_VACCINE_DEL" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
+
+                foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
+                {
+                    if (str != "")
+                    {
+                        Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
+                        statement.BindIntParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@dv", DateVisited);
+                        statement.BindTextParameterWithName("@medicine", str);
+
+                        await statement.StepAsync();
+                        statement.Reset();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS_MEDICINE_INSERT" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
+
+                foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
+                {
+                    if (str != "")
+                    {
+                        Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
+                        statement.BindIntParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@dv", DateVisited);
+                        statement.BindTextParameterWithName("@vaccine", str);
+
+                        await statement.StepAsync();
+                        statement.Reset();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_DETAILS---MEDIC_DETAILS_VACCINE_INSERT" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
             this.ClearAllFields();
-            VisitListBox.SelectedIndex = this.ocString.IndexOf(DateVisited);
+            isUpdating = false;
+            this.UpdateEditedDetails();
 
-            if (this.ocString.Count() == 1)
+            return DBConnect.RESULT_OK;
+        }
+
+        private async void UpdateEditedDetails()
+        {
+            if (VisitListBox.SelectedItem != null)
             {
-                EditVisit.IsEnabled = true;
-                DeleteVisit.IsEnabled = true;
-                VisitMainGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }
+                try
+                {
+                    string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+                    if (await statement.StepAsync())
+                    {
 
-            return 1;
+                        VisitSymptomsPanel.Children.Clear();
+
+                        foreach (string str in statement.Columns["Symptoms"].Split(','))
+                        {
+                            StackPanel VisitSymptomsStackPanels = new StackPanel();
+                            VisitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                            VisitSymptomsStackPanels.Orientation = Orientation.Horizontal;
+
+                            TextBlock dot = new TextBlock();
+                            dot.Width = 10;
+                            dot.FontSize = 15;
+                            dot.Text = "•";
+                            VisitSymptomsStackPanels.Children.Add(dot);
+
+                            TextBlock vaccineName = new TextBlock();
+                            vaccineName.Width = 280;
+                            vaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(str));
+                            vaccineName.TextWrapping = TextWrapping.Wrap;
+                            vaccineName.FontSize = 15;
+                            VisitSymptomsStackPanels.Children.Add(vaccineName);
+
+                            VisitSymptomsPanel.Children.Add(VisitSymptomsStackPanels);
+                        }
+
+                        VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
+                        VisitTextBG.Text = statement.Columns["BloodGlucose"];
+                        VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
+
+                        double BMIDouble = Convert.ToDouble(statement.Columns["BMI"]);
+                        Double BMIRounded3 = Math.Round(BMIDouble, 3);
+                        VisitTextBMI.Text = BMIRounded3.ToString();
+
+                        VisitTextWeight.Text = statement.Columns["Weight"];
+                        VisitTextHeight.Text = statement.Columns["Height"];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_EDITED_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    string query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+
+                    VisitTextMedicines.Children.Clear();
+                    while (await statement.StepAsync())
+                    {
+                        StackPanel VisitMedicineStackPanels = new StackPanel();
+                        VisitMedicineStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                        VisitMedicineStackPanels.Orientation = Orientation.Horizontal;
+
+                        TextBlock dot = new TextBlock();
+                        dot.Width = 10;
+                        dot.FontSize = 15;
+                        dot.Text = "•";
+                        VisitMedicineStackPanels.Children.Add(dot);
+
+                        TextBlock medicineName = new TextBlock();
+                        medicineName.Width = 280;
+                        medicineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Medicine"]));
+                        medicineName.TextWrapping = TextWrapping.Wrap;
+                        medicineName.FontSize = 15;
+                        VisitMedicineStackPanels.Children.Add(medicineName);
+
+                        VisitTextMedicines.Children.Add(VisitMedicineStackPanels);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_EDITED_DETAILS---MEDICINE" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                try
+                {
+                    string query = "SELECT * FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
+                    Statement statement = await this.database.PrepareStatementAsync(query);
+                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
+                    statement.EnableColumnsProperty();
+
+                    VisitTextVaccine.Children.Clear();
+                    while (await statement.StepAsync())
+                    {
+                        if (statement.Columns["Vaccine"].Equals(""))
+                        {
+                            break;
+                        }
+
+                        StackPanel VisitVaccineStackPanels = new StackPanel();
+                        VisitVaccineStackPanels.Margin = new Thickness(0, 15, 0, 0);
+                        VisitVaccineStackPanels.Orientation = Orientation.Horizontal;
+
+                        TextBlock dot = new TextBlock();
+                        dot.Width = 10;
+                        dot.FontSize = 15;
+                        dot.Text = "•";
+                        VisitVaccineStackPanels.Children.Add(dot);
+
+                        TextBlock VaccineName = new TextBlock();
+                        VaccineName.Width = 280;
+                        VaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Vaccine"]));
+                        VaccineName.TextWrapping = TextWrapping.Wrap;
+                        VaccineName.FontSize = 15;
+                        VisitVaccineStackPanels.Children.Add(VaccineName);
+
+                        VisitTextVaccine.Children.Add(VisitVaccineStackPanels);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("CREATE_NEW_VISIT---UPDATE_EDITED_DETAILS---VACCINE" + "\n" + ex.Message + "\n" + result.ToString());
+                }
+
+                this.visibleStackPanels();
+            }
         }
 
         private async Task<int> GetPatientAge(int p)
         {
-            string query = "SELECT Birthday FROM Patient WHERE PID = @pid";
-            Statement statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@pid", p);
-            statement.EnableColumnsProperty();
-            if (await statement.StepAsync())
+            try
             {
-                Debug.WriteLine(Int32.Parse(statement.Columns["Birthday"].Split('-')[0]));
-                int age = DateTime.Now.Year - Int32.Parse(statement.GetTextAt(0).Split('-')[0]);
-                return age;
+                string query = "SELECT Birthday FROM Patient WHERE PID = @pid";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", p);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    //Debug.WriteLine(Int32.Parse(statement.Columns["Birthday"].Split('-')[0]));
+                    int age = DateTime.Now.Year - Int32.Parse(statement.GetTextAt(0).Split('-')[0]);
+                    return age;
+                }
+
+                return DBConnect.RESULT_ERROR;
             }
-            return -1;
-        }
-
-        private async Task<bool> CheckIfFilled()
-        {
-            VisitDiseasesDiagnosed.ClearValue(BorderBrushProperty);
-            VisitSymptoms.ClearValue(BorderBrushProperty);
-            VisitMedicineGiven.ClearValue(BorderBrushProperty);
-            VisitWeight.ClearValue(BorderBrushProperty);
-            VisitHeightFeet.ClearValue(BorderBrushProperty);
-            VisitHeightInch.ClearValue(BorderBrushProperty);
-            VisitMonthComboBox.ClearValue(BorderBrushProperty);
-            VisitDayComboBox.ClearValue(BorderBrushProperty);
-            VisitYearComboBox.ClearValue(BorderBrushProperty);
-
-            if (VisitDiseasesDiagnosed.Text.Equals("") || VisitSymptoms.Text.Equals("") ||
-                VisitMedicineGiven.Text.Equals("") || VisitWeight.Text.Equals("") || VisitHeightFeet.SelectedItem == null || VisitHeightInch.SelectedItem == null ||
-                ((ocString.Contains(VisitYearComboBox.SelectedItem + "-" + VisitMonthComboBox.SelectedItem + "-" + VisitDayComboBox.SelectedItem) && !isUpdating)))
+            catch (Exception ex)
             {
-                if (!isUpdating && (ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
-                {
-                    check = false;
-                    var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
-                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
-                    var dialogResult = await messageDialog.ShowAsync();
-                    VisitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    VisitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                    VisitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---GET_PATIENT_AGE" + "\n" + ex.Message + "\n" + result.ToString());
 
-                    return false;
-                }
-                else
-                {
-                    check = true;
-                }
-                if (VisitDiseasesDiagnosed.Text.Equals(""))
-                {
-                    VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitSymptoms.Text.Equals(""))
-                {
-                    VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitMedicineGiven.Text.Equals(""))
-                {
-                    VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitWeight.Text.Equals(""))
-                {
-                    VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                if (VisitHeightFeet.SelectedItem == null)
-                {
-                    VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-
-                }
-                if (VisitHeightInch.SelectedItem == null)
-                {
-                    VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                }
-                return false;
+                return DBConnect.RESULT_ERROR;
             }
-            else
-            {
-                return true;
-            }
-        }
-
-        private void VisitCancelClicked(object sender, RoutedEventArgs e)
-        {
-            this.ClearAllFields();
-            VisitMedicineGiven.IsEnabled = true;
-            VisitVaccine.IsEnabled = true;
-            VisitFormBar.IsOpen = false;
         }
 
         private void visitSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -581,146 +773,7 @@ namespace Health_Organizer
             if (e.AddedItems.Count() < 0)
                 return;
 
-
             this.UpdateEditedDetails();
-        }
-
-        private async void UpdateEditedDetails()
-        {
-            if (VisitListBox.SelectedItem != null)
-            {
-                string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
-                Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-                if (await statement.StepAsync())
-                {
-
-                    VisitSymptomsPanel.Children.Clear();
-
-                    foreach (string str in statement.Columns["Symptoms"].Split(','))
-                    {
-                        StackPanel VisitSymptomsStackPanels = new StackPanel();
-                        VisitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
-                        VisitSymptomsStackPanels.Orientation = Orientation.Horizontal;
-
-                        TextBlock dot = new TextBlock();
-                        dot.Width = 10;
-                        dot.FontSize = 15;
-                        dot.Text = "•";
-                        VisitSymptomsStackPanels.Children.Add(dot);
-
-                        TextBlock vaccineName = new TextBlock();
-                        vaccineName.Width = 280;
-                        vaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(str));
-                        vaccineName.TextWrapping = TextWrapping.Wrap;
-                        vaccineName.FontSize = 15;
-                        VisitSymptomsStackPanels.Children.Add(vaccineName);
-
-                        VisitSymptomsPanel.Children.Add(VisitSymptomsStackPanels);
-                    }
-
-                    VisitTextDisease.Text = "\n" + statement.Columns["DiseaseFound"];
-                    VisitTextBG.Text = statement.Columns["BloodGlucose"];
-                    VisitTextBP.Text = statement.Columns["SystolicBP"] + "/" + statement.Columns["DiastolicBP"];
-
-                    double BMIDouble = Convert.ToDouble(statement.Columns["BMI"]);
-                    Double BMIRounded3 = Math.Round(BMIDouble, 3);
-                    VisitTextBMI.Text = BMIRounded3.ToString();
-
-                    VisitTextWeight.Text = statement.Columns["Weight"];
-                    Debug.WriteLine(statement.Columns["Height"]);
-                    VisitTextHeight.Text = statement.Columns["Height"];
-                }
-
-                statement.Reset();
-                query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-
-                VisitTextMedicines.Children.Clear();
-                while (await statement.StepAsync())
-                {
-                    StackPanel VisitMedicineStackPanels = new StackPanel();
-                    VisitMedicineStackPanels.Margin = new Thickness(0, 15, 0, 0);
-                    VisitMedicineStackPanels.Orientation = Orientation.Horizontal;
-
-                    TextBlock dot = new TextBlock();
-                    dot.Width = 10;
-                    dot.FontSize = 15;
-                    dot.Text = "•";
-                    VisitMedicineStackPanels.Children.Add(dot);
-
-                    TextBlock medicineName = new TextBlock();
-                    medicineName.Width = 280;
-                    medicineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Medicine"]));
-                    medicineName.TextWrapping = TextWrapping.Wrap;
-                    medicineName.FontSize = 15;
-                    VisitMedicineStackPanels.Children.Add(medicineName);
-
-                    VisitTextMedicines.Children.Add(VisitMedicineStackPanels);
-                }
-
-                statement.Reset();
-                query = "SELECT * FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
-                statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
-                statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
-                statement.EnableColumnsProperty();
-
-                VisitTextVaccine.Children.Clear();
-                while (await statement.StepAsync())
-                {
-                    StackPanel VisitVaccineStackPanels = new StackPanel();
-                    VisitVaccineStackPanels.Margin = new Thickness(0, 15, 0, 0);
-                    VisitVaccineStackPanels.Orientation = Orientation.Horizontal;
-
-                    TextBlock dot = new TextBlock();
-                    dot.Width = 10;
-                    dot.FontSize = 15;
-                    dot.Text = "•";
-                    VisitVaccineStackPanels.Children.Add(dot);
-
-                    TextBlock VaccineName = new TextBlock();
-                    VaccineName.Width = 280;
-                    VaccineName.Text = ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringSpace(statement.Columns["Vaccine"]));
-                    VaccineName.TextWrapping = TextWrapping.Wrap;
-                    VaccineName.FontSize = 15;
-                    VisitVaccineStackPanels.Children.Add(VaccineName);
-
-                    VisitTextVaccine.Children.Add(VisitVaccineStackPanels);
-                }
-            }
-        }
-        //Validation for numeric entries in weight, bp and glucose
-        private void numberValidation_decimal(object sender, KeyRoutedEventArgs e)
-        {
-            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
-          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab || (uint)e.Key == (uint)Windows.System.VirtualKey.Decimal)
-            {
-                e.Handled = false;
-            }
-            else e.Handled = true;
-        }
-        private void numberValidation_integer(object sender, KeyRoutedEventArgs e)
-        {
-            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
-          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
-            {
-                e.Handled = false;
-            }
-            else e.Handled = true;
-        }
-
-        private void ViewProfileClicked(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
-            }
         }
 
         //For sorting the date
@@ -756,6 +809,7 @@ namespace Health_Organizer
         {
             List<string> searchList = ocString.ToList();
             List<DateTime> dateList = new List<DateTime>();
+
             for (int i = 0; i < searchList.Count(); i++)
             {
                 dateList.Add(Convert.ToDateTime(searchList.ElementAt(i)));
@@ -779,5 +833,163 @@ namespace Health_Organizer
             searchList.Clear();
             this.VisitListBox.ItemsSource = this.ocString;
         }
+
+        //Validation for numeric entries in weight, bp and glucose
+        private void numberValidation_decimal(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab || (uint)e.Key == (uint)Windows.System.VirtualKey.Decimal)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+      
+        private void numberValidation_integer(object sender, KeyRoutedEventArgs e)
+        {
+            if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
+          && (uint)e.Key <= (uint)Windows.System.VirtualKey.Number9) || ((uint)e.Key >= (uint)Windows.System.VirtualKey.NumberPad0 && (uint)e.Key <= (uint)Windows.System.VirtualKey.NumberPad9) || (uint)e.Key == (uint)Windows.System.VirtualKey.Tab)
+            {
+                e.Handled = false;
+            }
+            else e.Handled = true;
+        }
+
+        private async Task<bool> CheckIfFilled()
+        {
+            int temp;
+            bool ret = true;
+            VisitDiseasesDiagnosed.ClearValue(BorderBrushProperty);
+            VisitSymptoms.ClearValue(BorderBrushProperty);
+            VisitMedicineGiven.ClearValue(BorderBrushProperty);
+            VisitWeight.ClearValue(BorderBrushProperty);
+            VisitHeightFeet.ClearValue(BorderBrushProperty);
+            VisitHeightInch.ClearValue(BorderBrushProperty);
+            VisitMonthComboBox.ClearValue(BorderBrushProperty);
+            VisitDayComboBox.ClearValue(BorderBrushProperty);
+            VisitYearComboBox.ClearValue(BorderBrushProperty);
+
+            if (!isUpdating && (ocString.Contains(VisitYearComboBox.Items[VisitYearComboBox.SelectedIndex] + "-" + VisitMonthComboBox.Items[VisitMonthComboBox.SelectedIndex] + "-" + VisitDayComboBox.Items[VisitDayComboBox.SelectedIndex])))
+            {
+                check = false;
+                var messageDialog = new Windows.UI.Popups.MessageDialog("You cannot select the same date again.", "Error!");
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
+                var dialogResult = await messageDialog.ShowAsync();
+                VisitDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                VisitYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                VisitMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+
+                return false;
+            }
+            else
+            {
+                check = true;
+            }
+
+            if (VisitDiseasesDiagnosed.Text.Equals(""))
+            {
+                VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitSymptoms.Text.Equals(""))
+            {
+                VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitMedicineGiven.Text.Equals(""))
+            {
+                VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitWeight.Text.ToString(), out temp))
+            {
+                VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitSystolicBP.Text.ToString(), out temp))
+            {
+                VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitDiastolicBP.Text.ToString(), out temp))
+            {
+                VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitBloodGlucose.Text.ToString(), out temp))
+            {
+                VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitHeightFeet.SelectedItem == null)
+            {
+                VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            if (VisitHeightInch.SelectedItem == null)
+            {
+                VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ret = false;
+            }
+            return ret;
+        }
+
+        public void collapseStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            EditVisit.IsEnabled = false;
+            DeleteVisit.IsEnabled = false;
+
+        }
+
+        public void visibleStackPanels()
+        {
+            VisitStackPanel1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel2.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisitStackPanel3.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            EditVisit.IsEnabled = true;
+            DeleteVisit.IsEnabled = true;
+        }
+
+        private void resetAllBorders()
+        {
+            VisitDiseasesDiagnosed.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitSymptoms.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitMedicineGiven.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+            VisitHeightInch.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+        }
+
+        private void ClearAllFields()
+        {
+            VisitSymptoms.Text = "";
+            VisitDiseasesDiagnosed.Text = "";
+            VisitMedicineGiven.Text = "";
+            VisitBloodGlucose.Text = "";
+            VisitSystolicBP.Text = "";
+            VisitDiastolicBP.Text = "";
+            VisitVaccine.Text = "";
+            VisitHeightFeet.SelectedItem = null;
+            VisitHeightInch.SelectedItem = null;
+            VisitWeight.Text = "";
+            isUpdating = false;
+        }
+
     }
 }

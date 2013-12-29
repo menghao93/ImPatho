@@ -15,6 +15,8 @@ namespace Health_Organizer.Database_Connet_Classes
     {
         public const int ORG_HOME_DB = 0;
         public const int DOC_KIT_DB = 1;
+        public const int RESULT_OK = 3;
+        public const int RESULT_ERROR = -1;
         
         SQLiteAsyncConnection conn;
         Database database;
@@ -26,7 +28,7 @@ namespace Health_Organizer.Database_Connet_Classes
         }
 
         //This used to connect to the Tables or Create Tables.All the tables we need to add in future would be mentioned here.
-        public async Task InitializeDatabase(int database_name) {
+        public async Task<int> InitializeDatabase(int database_name) {
             if (database_name == DOC_KIT_DB)
             {
                 await conn.CreateTableAsync<BasicDiseases>();
@@ -37,6 +39,7 @@ namespace Health_Organizer.Database_Connet_Classes
                 await database.OpenAsync();
                 await CreateTableAsync(); 
             }
+            return 1;
         }
 
         public SQLiteAsyncConnection GetAsyncConnection()
@@ -64,6 +67,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
         private async Task CreateTableAsync()
         {
+            //DATE format = "yyyy MMM ddd";
             string query1 = "CREATE TABLE IF NOT EXISTS Patient (" +
                             "PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                             "FirstName TEXT NOT NULL, " +
@@ -79,7 +83,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FamilyBackground TEXT, " +
                             "Email TEXT NOT NULL, " +
                             "Mobile UNSIGNED BIG INT NOT NULL, " +
-                            "EmMobile INTEGER, " +
+                            "EmMobile UNSIGNED BIG INT NOT NULL, " +
                             "PID INTEGER PRIMARY KEY NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
@@ -140,13 +144,13 @@ namespace Health_Organizer.Database_Connet_Classes
                              "PRIMARY KEY(PID, DateVisited)" +
                              "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
-            string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
-                             "Height REAL NOT NULL, " +
-                             "Weight INTEGER NOT NULL, " +
-                             "BMI REAL NOT NULL, " +
-                             "UNIQUE(Height, Weight), " +
-                             "PRIMARY KEY(Height, Weight), " +
-                             "FOREIGN KEY(Height, Weight) REFERENCES MedicalDetails(Height, Weight) ON DELETE CASCADE);";
+            //string query11 = "CREATE TABLE IF NOT EXISTS MedicalDetailsBMI (" +
+            //                 "Height REAL NOT NULL, " +
+            //                 "Weight INTEGER NOT NULL, " +
+            //                 "BMI REAL NOT NULL, " +
+            //                 "UNIQUE(Height, Weight), " +
+            //                 "PRIMARY KEY(Height, Weight), " +
+            //                 "FOREIGN KEY(Height, Weight) REFERENCES MedicalDetails(Height, Weight) ON DELETE CASCADE);";
 
             string query12 = "CREATE TABLE IF NOT EXISTS MedicalDetailsMedicine (" +
                              "PID INTEGER NOT NULL, " +

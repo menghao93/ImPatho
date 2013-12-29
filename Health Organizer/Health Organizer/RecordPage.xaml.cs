@@ -1,6 +1,7 @@
-﻿using Health_Organizer.Common;
+﻿using Health_Organizer.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,15 +15,16 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using Health_Organizer.Data_Model_Classes;
 
 namespace Health_Organizer
 {
     public sealed partial class RecordPage : Page
     {
-        private int PID = 1;
+        private int PID = -1;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        bool justLanded = true;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -51,28 +53,24 @@ namespace Health_Organizer
         {
         }
 
-        #region NavigationHelper registration
+        
 
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// 
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="GridCS.Common.NavigationHelper.LoadState"/>
-        /// and <see cref="GridCS.Common.NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            var sample = await HomePageDataSoure.GetGroupsAsync();
+            this.DefaultViewModel["Groups"] = sample;
+            
+            RecordGrid.SelectedItem = null;
+            this.disableAppButtons();
+
+            (SemanticZoomGrid.ZoomedOutView as ListViewBase).ItemsSource = groupedItemsViewSource.View.CollectionGroups;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
         }
-
-        #endregion
 
         private void AddNewEntryForm(object sender, RoutedEventArgs e)
         {
@@ -83,12 +81,85 @@ namespace Health_Organizer
             }
         }
 
-        private void CreateNewVisit(object sender, RoutedEventArgs e)
+        private void recordGridViewClicked(object sender, ItemClickEventArgs e)
+        {
+            this.PID = Int32.Parse(((SampleDataItem)e.ClickedItem).UniqueId);
+
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), ((SampleDataItem)e.ClickedItem).UniqueId);
+            }
+        }
+
+        private void RecordPageNewItemClicked(object sender, SelectionChangedEventArgs e)
+        {
+            if (RecordGrid.SelectedItem != null && !justLanded)
+            {
+                this.enableAppButtons();
+                SampleDataItem clickedItem = RecordGrid.SelectedItem as SampleDataItem;
+                this.PID = Int32.Parse(clickedItem.UniqueId);
+                RecordPageCmdbar.IsOpen = true;
+                this.enableAppButtons();
+            }
+            else
+            {
+                this.disableAppButtons();
+                justLanded = false;  
+            }  
+        }
+
+        private void ViewProfileClicked(object sender, RoutedEventArgs e)
         {
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
             }
         }
+
+        private void ProfileDetailsEditBut(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
+            }
+        }
+
+        private async void recordGridHeader(object sender, RoutedEventArgs e)
+        {
+            TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
+
+            if (clickedItem.Text.ToString() != "")
+            {
+                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                foreach (SampleDataGroup sample in samples)
+                {
+                    if (sample.Title.Equals(clickedItem.Text.ToString()))
+                    {
+                        if (this.Frame != null)
+                        {
+                            this.Frame.Navigate(typeof(DetailedLocationPage), sample.UniqueId);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void disableAppButtons()
+        {
+            RecordPageViewProfile.IsEnabled = false;
+            RecordPageEditBut.IsEnabled = false;
+        }
+
+        private void enableAppButtons()
+        {
+            RecordPageViewProfile.IsEnabled = true;
+            RecordPageEditBut.IsEnabled = true;
+        }
+
+        private void SemanticZoomButClicked(object sender, RoutedEventArgs e)
+        {
+            SemanticZoomGrid.ToggleActiveView();
+            RecordPageCmdbar.IsOpen = false;
+        }  
     }
 }

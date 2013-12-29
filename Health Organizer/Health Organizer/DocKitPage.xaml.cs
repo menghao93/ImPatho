@@ -1,4 +1,4 @@
-﻿using Health_Organizer.Common;
+﻿using Health_Organizer.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,13 +14,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
-using Health_Organizer.Data_Model_Classes;
 using Health_Organizer.Database_Connet_Classes;
 using Health_Organizer.DML_Method_Classes;
 using System.Threading.Tasks;
 using SQLite;
 using Windows.UI.Popups;
 using System.Collections.ObjectModel;
+using Health_Organizer.Data_Model_Classes;
 
 namespace Health_Organizer
 {
@@ -577,7 +577,6 @@ namespace Health_Organizer
                 this.ocSearchList.Clear();
             foreach (string i in searchList)
             {
-                Debug.WriteLine(i);
                 this.ocSearchList.Add(i);
             }
             isSearching = true;
@@ -595,13 +594,10 @@ namespace Health_Organizer
 
             if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
-                Debug.WriteLine(countEnter);
                 countEnter++;
             }
             if (countEnter > 1 && (uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
-                Debug.WriteLine("avo");
-
                 t.AcceptsReturn = false;
             }
 
