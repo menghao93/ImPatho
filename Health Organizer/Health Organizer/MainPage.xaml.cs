@@ -22,6 +22,7 @@ namespace Health_Organizer
         {
             this.InitializeComponent();
             this.InitializeDB();
+            HomeScreenImageAnimation.Begin();
         }
 
         private async void InitializeDB()
@@ -52,6 +53,5 @@ namespace Health_Organizer
                 }
             }
         }
-
     }
 }

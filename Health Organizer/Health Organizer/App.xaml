@@ -74,7 +74,11 @@
                         <Setter Property="TextAlignment" Value="Left"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                     </Style>
-                    
+
+                    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+                        <Setter Property="SelectionHighlightColor" Value="#00A2E8"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
                     <Style x:Key="TextBoxDocKitForm" TargetType="TextBox">
                         <Setter Property="SelectionHighlightColor" Value="#00A2E8"/>
                         <Setter Property="IsSpellCheckEnabled" Value="True"/>
