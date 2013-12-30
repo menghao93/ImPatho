@@ -53,7 +53,6 @@ namespace Health_Organizer
             get { return this.navigationHelper; }
         }
 
-
         public AnalysisPage()
         {
             this.InitializeComponent();
@@ -148,7 +147,7 @@ namespace Health_Organizer
                 string data = "";
                 string columnSeparator = ", ";
 
-                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "City,  "  + "State,    " + "Addiction, " + "Operation, " + "Vaccination,   " + "Family Background" + "\r\n";
+                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "City,  " + "State,    " + "Addiction, " + "Operation, " + "Vaccination,   " + "Family Background" + "\r\n";
 
                 foreach (AnalysisSampleDataItem item in resultList)
                 {
@@ -178,8 +177,8 @@ namespace Health_Organizer
                     }
                     data += columnSeparator;
 
-                    data += item.FamilyBG.Replace("," , "; ") + columnSeparator;
-                    
+                    data += item.FamilyBG.Replace(",", "; ") + columnSeparator;
+
                     data += "\r\n";
                 }
 
@@ -210,6 +209,11 @@ namespace Health_Organizer
 
         }
 
+        private void ShareProfileClicked(object sender, RoutedEventArgs e)
+        {
+            EmailInfoForm.IsOpen = true;
+        }
+
         private async void ExportProfileClicked(object sender, RoutedEventArgs e)
         {
             AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
@@ -231,60 +235,8 @@ namespace Health_Organizer
             {
                 CachedFileManager.DeferUpdates(file);
 
-                string data = "";
-                string columnSeparator = ", ";
-                string lineSeparator = "\r\n";
-
-                data += "Name" + columnSeparator;
-                data += selectedItem.Name + columnSeparator + lineSeparator;
-                data += "Blood Group" + columnSeparator;
-                data += selectedItem.BloodGroup + columnSeparator + lineSeparator;
-                data += "Sex " + columnSeparator;
-                data += selectedItem.Sex + columnSeparator + lineSeparator;
-                data += "Martial Status " + columnSeparator;
-                data += ExtraModules.getMartialStatus(selectedItem.Married) + columnSeparator + lineSeparator;
-                data += "Occupation" + columnSeparator;
-                data += selectedItem.Occupation + columnSeparator + lineSeparator;
-
-                data += lineSeparator + "Allergies";
-
-                foreach (string allergy in selectedItem.Allergy)
-                {
-                    data += columnSeparator;
-                    data += allergy + columnSeparator + lineSeparator;
-                }
-
-                data += lineSeparator + "Addiction";
-                foreach (string addiction in selectedItem.Addiction)
-                {
-                    data += columnSeparator;
-                    data += addiction + columnSeparator + lineSeparator;
-                }
-
-                data += lineSeparator + "Operation";
-                foreach (string operation in selectedItem.Operation)
-                {
-                    data += columnSeparator;
-                    data += operation + columnSeparator + lineSeparator;
-                }
-
-                if (selectedItem.DatesVisited.Count > 0)
-                {
-                    data += lineSeparator + "Visits" + lineSeparator;
-
-                    foreach (string date in selectedItem.DatesVisited)
-                    {
-                        data += date + columnSeparator;
-                        string disease = "";
-                        selectedItem.Diseases.TryGetValue(date, out disease);
-                        string vaccine = "";
-                        selectedItem.Vaccines.TryGetValue(date, out vaccine);
-                        data += disease + columnSeparator + vaccine + lineSeparator;
-                    }
-                }
-
                 // write to file
-                await FileIO.WriteTextAsync(file, data);
+                await FileIO.WriteTextAsync(file, ExtraModules.getFileDataForAnalysisItem(selectedItem));
 
                 FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
 
@@ -297,6 +249,40 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
+        }
+
+        private async void SendMailClicked(object sender, RoutedEventArgs e)
+        {
+            if (isEmailInfoFilled())
+            {
+                AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
+
+                if (selectedItem != null)
+                {
+                    Windows.Storage.StorageFolder temporaryFolder = ApplicationData.Current.TemporaryFolder;
+                    StorageFile sampleFile = await temporaryFolder.CreateFileAsync(selectedItem.Name.Trim() + ".csv", CreationCollisionOption.ReplaceExisting);
+
+                    EmailInfoForm.IsOpen = false;
+
+                    await FileIO.WriteTextAsync(sampleFile, ExtraModules.getFileDataForAnalysisItem(selectedItem));
+
+                    await ExtraModules.Send_Email(FromEmail.Text, FromPassword.Password, ToEmail.Text, Subject.Text, "Check from Health Organiser", sampleFile.Path);
+
+                    await sampleFile.DeleteAsync(StorageDeleteOption.PermanentDelete);
+
+                    this.clearEmailInfoFields();
+                }
+                else
+                {
+                    EmailInfoForm.IsOpen = false;
+                }
+            }
+        }
+
+        private void CancleMailClicked(object sender, RoutedEventArgs e)
+        {
+            EmailInfoForm.IsOpen = false;
+            this.clearEmailInfoFields();
         }
 
         private void AnalysisCitySelected(object sender, SelectionChangedEventArgs e)
@@ -326,7 +312,7 @@ namespace Health_Organizer
             }
 
         }
-        
+
         private void updateView()
         {
             resultList = new List<AnalysisSampleDataItem>();
@@ -806,17 +792,52 @@ namespace Health_Organizer
             AnalysisToMonthComboBox.IsEnabled = true;
             AnalysisToYearComboBox.IsEnabled = true;
         }
-        
+
         private void enableCommandBarButtons()
         {
             ViewProfile.IsEnabled = true;
+            ShareProfile.IsEnabled = true;
             ExportProfile.IsEnabled = true;
         }
 
         private void disableCommandBarButtons()
         {
             ViewProfile.IsEnabled = false;
+            ShareProfile.IsEnabled = false;
             ExportProfile.IsEnabled = false;
+        }
+
+        private bool isEmailInfoFilled()
+        {
+            bool flag = true;
+            if (!ExtraModules.isEmail(FromEmail.Text))
+            {
+                FromEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                FromEmail.PlaceholderText = "Invalid Email";
+                FromEmail.Text = "";
+                flag = false;
+            }
+
+            if (!ExtraModules.isEmail(ToEmail.Text))
+            {
+                ToEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                ToEmail.PlaceholderText = "Invalid Email";
+                ToEmail.Text = "";
+                flag = false;
+            }
+
+            return flag;
+        }
+
+        private void clearEmailInfoFields()
+        {
+            FromEmail.Text = "";
+            ToEmail.Text = "";
+            FromPassword.Password = "";
+
+            FromEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            ToEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            
         }
 
     }

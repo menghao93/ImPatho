@@ -267,6 +267,9 @@
     <Reference Include="Callisto">
       <HintPath>..\packages\Callisto.1.4.0\lib\netcore451\Callisto.dll</HintPath>
     </Reference>
+    <Reference Include="EASendMailRT">
+      <HintPath>C:\Program Files (x86)\EASendMail\windows81.winmd\EASendMailRT.winmd</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Synchronization.ClientServices.Win8">
       <HintPath>..\packages\SyncClient.SQLite.3.8.0.3\lib\netcore45\Microsoft.Synchronization.ClientServices.Win8.dll</HintPath>
     </Reference>

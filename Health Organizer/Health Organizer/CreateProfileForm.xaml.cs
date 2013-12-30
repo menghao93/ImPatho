@@ -1056,7 +1056,7 @@ namespace Health_Organizer
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
                 profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
-                || (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z"))
+                || (!ExtraModules.isEmail(profileEmailAddress.Text))
                 || profileBloodGroup.SelectedItem == null)
             {
                 if (profileFirstName.Text.Equals(""))
@@ -1119,7 +1119,7 @@ namespace Health_Organizer
                 }
                 else
                 {
-                    if (!Regex.IsMatch(profileEmailAddress.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z"))
+                    if (!ExtraModules.isEmail(profileEmailAddress.Text))
                     {
                         profileEmailAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                         profileEmailAddress.PlaceholderText = "Invalid Email";
