@@ -23,7 +23,7 @@ namespace Health_Organizer.Data_Model_Classes
             this.DatesVisited = new List<string>();
         }
 
-        public AnalysisSampleDataItem(string uniqueID, string name, string bloodGroup, char sex, bool married, BitmapImage bmp, string occupation, string[] allergy, string[] addiction, string[] operation, string city, string state, string country, string[] dateVisited)
+        public AnalysisSampleDataItem(string uniqueID, string name, string bloodGroup, char sex, bool married, BitmapImage bmp, string occupation, string familyBG, string[] allergy, string[] addiction, string[] operation, string city, string state, string country, string[] dateVisited)
         {
             this.UniqueId = uniqueID;
             this.Name = name;
@@ -32,6 +32,7 @@ namespace Health_Organizer.Data_Model_Classes
             this.Married = married;
             this.Image = bmp;
             this.Occupation = occupation;
+            this.FamilyBG = familyBG;
             this.Allergy = new List<string>(allergy);
             this.Addiction = new List<string>(addiction);
             this.Operation = new List<string>(operation);
@@ -50,6 +51,7 @@ namespace Health_Organizer.Data_Model_Classes
         public char Sex { get; set; }
         public bool Married { get; set; }
         public string Occupation { get; set; }
+        public string FamilyBG { get; set; }
         public List<string> Allergy { get; set; }
         public List<string> Addiction { get; set; }
         public List<string> Operation { get; set; }
@@ -138,6 +140,7 @@ namespace Health_Organizer.Data_Model_Classes
                         }
 
                         newItem.Occupation = statement.Columns["Occupation"];
+                        newItem.FamilyBG = statement.Columns["FamilyBackground"];
                         newItem.City = statement.Columns["City"];
                         newItem.State = statement.Columns["State"];
                         newItem.Country = statement.Columns["Country"];

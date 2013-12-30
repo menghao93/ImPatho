@@ -148,7 +148,7 @@ namespace Health_Organizer
                 string data = "";
                 string columnSeparator = ", ";
 
-                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "\r\n";
+                data += "Name,  " + "Blood Group,    " + "Sex,   " + "Martial Status,   " + "Occupation,    " + "City,  "  + "State,    " + "Addiction, " + "Operation, " + "Vaccination,   " + "Family Background" + "\r\n";
 
                 foreach (AnalysisSampleDataItem item in resultList)
                 {
@@ -157,6 +157,29 @@ namespace Health_Organizer
                     data += item.Sex + columnSeparator;
                     data += ExtraModules.getMartialStatus(item.Married) + columnSeparator;
                     data += item.Occupation + columnSeparator;
+                    data += item.City + columnSeparator;
+                    data += item.State + columnSeparator;
+
+                    foreach (string addiction in item.Addiction)
+                    {
+                        data += addiction + "; ";
+                    }
+                    data += columnSeparator;
+
+                    foreach (string operation in item.Operation)
+                    {
+                        data += operation + "; ";
+                    }
+                    data += columnSeparator;
+
+                    foreach (string vaccine in item.Vaccines.Values)
+                    {
+                        data += vaccine + "; ";
+                    }
+                    data += columnSeparator;
+
+                    data += item.FamilyBG.Replace("," , "; ") + columnSeparator;
+                    
                     data += "\r\n";
                 }
 
@@ -527,6 +550,12 @@ namespace Health_Organizer
         {
             ByDateFlag = true;
             this.AnalysisDateBoxEnable();
+        }
+
+        private void AnalysisByDateUnChecked(object sender, RoutedEventArgs e)
+        {
+            ByDateFlag = false;
+            this.AnalysisDateBoxDisable();
         }
 
         private void AnalysisValidateFields()

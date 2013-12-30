@@ -16,7 +16,7 @@
             ItemsPath="TopItems"
             Source="{Binding Items}"/>
 
-        <x:String x:Key="AppName">Advanced Search</x:String>
+        <x:String x:Key="AppName">Analysis</x:String>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -27,7 +27,7 @@
         </Grid.ChildrenTransitions>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="430"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -60,8 +60,8 @@
                 </Grid.RowDefinitions>
                 
                 <StackPanel Grid.Row="0" Margin="50,-10,0,0">
-                    
-                    <RadioButton Name="AnalysisByDate" Checked="AnalysisByDateChecked" Content="Choose Timeline" FontSize="15" />
+
+                    <CheckBox Name="AnalysisByDate" Checked="AnalysisByDateChecked" Unchecked="AnalysisByDateUnChecked" Content="Choose Timeline" FontSize="15" />
 
                     <TextBlock Text="Records from date" FontSize="15" Margin="0,10,0,0"/>
                     <!--Analysis From date-->
@@ -148,7 +148,7 @@
 
                 </StackPanel>
 
-                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,50,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                     <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
                     <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button> 
                     <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
