@@ -335,7 +335,7 @@ namespace Health_Organizer
             }
             else
             {
-                var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form before saving it.", "Error!");
+                var messageDialog = new Windows.UI.Popups.MessageDialog("Please complete the form correctly before saving it.", "Error!");
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("Okay", null));
                 var dialogResult = await messageDialog.ShowAsync();
             }
@@ -1053,10 +1053,24 @@ namespace Health_Organizer
             profileEmailAddress.ClearValue(BorderBrushProperty);
             profileOccupation.ClearValue(BorderBrushProperty);
 
+            string dob = profileDayComboBox.SelectedItem.ToString() + "-" + (profileMonthComboBox.SelectedIndex + 1).ToString() + "-" + profileYearComboBox.SelectedItem.ToString();
+            string pattern = "dd-MM-yyyy";
+            DateTime DOB;
+
+            if (!DateTime.TryParseExact(dob, pattern, null, System.Globalization.DateTimeStyles.None, out DOB))
+            {
+                profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                profileMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+            
+            Int32 catchInt32;
+            Int64 catchInt64;
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
                 profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
-                || (!ExtraModules.isEmail(profileEmailAddress.Text))
+                || !ExtraModules.isEmail(profileEmailAddress.Text) || !Int32.TryParse(profileZip.Text, out catchInt32) || !Int64.TryParse(profileContactNumber.Text, out catchInt64) || !Int64.TryParse(profileEmergencyNumber.Text, out catchInt64)
                 || profileBloodGroup.SelectedItem == null)
             {
                 if (profileFirstName.Text.Equals(""))
@@ -1096,13 +1110,17 @@ namespace Health_Organizer
                 {
                     profileCity.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
-                if (profileZip.Text.Equals(""))
+                if (profileZip.Text.Equals("") || !Int32.TryParse(profileZip.Text, out catchInt32))
                 {
                     profileZip.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
-                if (profileContactNumber.Text.Equals(""))
+                if (profileContactNumber.Text.Equals("") || !Int64.TryParse(profileContactNumber.Text, out catchInt64))
                 {
                     profileContactNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                }
+                if (!Int64.TryParse(profileEmergencyNumber.Text, out catchInt64))
+                {
+                    profileEmergencyNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileState.Text.Equals(""))
                 {
