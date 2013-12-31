@@ -69,19 +69,20 @@
                                 <TextBlock
                                 x:Name="LocationName"
                                 Text="{Binding Group.Title}"
-                                FontFamily="Segoe UI" FontWeight="Light"
+                                FontFamily="Segoe UI" FontWeight="SemiBold"
                                 Foreground="White"
                                 FontSize="24"/>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                         <GridView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <VariableSizedWrapGrid  ItemWidth="{Binding ElementName=LocationName, Path=ItemWidth}" MaximumRowsOrColumns="1"/>
+                                <VariableSizedWrapGrid ItemWidth="{Binding ElementName=LocationName, Path=ItemWidth}" MaximumRowsOrColumns="1"/>
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
                                 <Setter Property="Margin" Value="4" />
+                                <Setter Property="Background" Value="#00A2E8" />
                                 <Setter Property="Padding" Value="10" />
                                 <Setter Property="BorderBrush" Value="Gray" />
                                 <Setter Property="BorderThickness" Value="1" />
