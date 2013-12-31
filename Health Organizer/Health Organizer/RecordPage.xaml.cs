@@ -58,9 +58,9 @@ namespace Health_Organizer
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            var sample = await HomePageDataSoure.GetGroupsAsync();
+            var sample = await HomePageDataSoure.GetLimitedGroupsAsync();
             this.DefaultViewModel["Groups"] = sample;
-            
+
             RecordGrid.SelectedItem = null;
             this.disableAppButtons();
 

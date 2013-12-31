@@ -43,6 +43,13 @@ namespace Health_Organizer.Data
             this.Items = new ObservableCollection<SampleDataItem>();
         }
 
+        public SampleDataGroup(string uniqueId, string title, List<SampleDataItem> items)
+        {
+            this.UniqueId = uniqueId;
+            this.Title = title;
+            this.Items = new ObservableCollection<SampleDataItem>(items);
+        }
+
         public string UniqueId { get; private set; }
         public string Title { get; private set; }
         public ObservableCollection<SampleDataItem> Items { get; private set; }
@@ -55,6 +62,7 @@ namespace Health_Organizer.Data
 
     public sealed class HomePageDataSoure
     {
+        private const int GROUP_ITEMS_LIMIT = 10;
         public static HomePageDataSoure _sampleDataSource = new HomePageDataSoure();
         private Database db = null;
         public ObservableCollection<SampleDataGroup> _groups = new ObservableCollection<SampleDataGroup>();
@@ -68,6 +76,28 @@ namespace Health_Organizer.Data
             await _sampleDataSource.GetSampleDataAsync();
 
             return _sampleDataSource.Groups;
+        }
+
+        public static async Task<IEnumerable<SampleDataGroup>> GetLimitedGroupsAsync()
+        {
+            await _sampleDataSource.GetSampleDataAsync();
+
+            var sampleLimited = _sampleDataSource.Groups;
+
+            ObservableCollection<SampleDataGroup> limitedItemsGroup = new ObservableCollection<SampleDataGroup>();
+
+            SampleDataGroup temp;
+
+            if (sampleLimited != null)
+            {
+                foreach (SampleDataGroup xgroup in sampleLimited)
+                {
+                    temp = new SampleDataGroup(xgroup.UniqueId, xgroup.Title, xgroup.Items.Take(GROUP_ITEMS_LIMIT).ToList());
+                    limitedItemsGroup.Add(temp);
+                }
+            }
+
+            return limitedItemsGroup.AsEnumerable();
         }
 
         public static async Task<SampleDataGroup> GetGroupAsync(string uniqueId)
@@ -91,17 +121,19 @@ namespace Health_Organizer.Data
             await _sampleDataSource.GetSampleDataAsync();
 
             SampleDataItem xItem = await GetItemAsync(uniqueId);
-            foreach (SampleDataGroup sample in _sampleDataSource.Groups) {
+            foreach (SampleDataGroup sample in _sampleDataSource.Groups)
+            {
                 if (sample.Items.Contains(xItem))
                 {
                     sample.Items.Remove(xItem);
 
-                    if (sample.Items.Count() < 1) {
+                    if (sample.Items.Count() < 1)
+                    {
                         _sampleDataSource.Groups.Remove(sample);
                     }
                     return 1;
                 }
-                
+
             }
             return -1;
         }
@@ -110,7 +142,7 @@ namespace Health_Organizer.Data
         {
             if (this._groups.Count != 0)
                 return;
-            
+
             try
             {
                 this.db = App.database;
