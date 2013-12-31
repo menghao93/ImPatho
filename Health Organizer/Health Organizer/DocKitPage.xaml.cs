@@ -141,9 +141,11 @@ namespace Health_Organizer
             if (isDiseaseSelected)
             {
                 docKitDialog.IsOpen = true;
+                docKitCustomDialogAnimation.Begin();
             }
             else
             {
+                docKitCustomDialogAnimationFA.Begin();
                 docKitDialogFirstAid.IsOpen = true;
             }
             docKitCmdbar.IsOpen = false;
@@ -167,6 +169,7 @@ namespace Health_Organizer
                     decodedImage = tempDisease.Image;
                     isUpdating = true;
                     docKitDName.IsReadOnly = true;
+                    docKitCustomDialogAnimation.Begin();
                 }
                 else
                 {
@@ -179,6 +182,7 @@ namespace Health_Organizer
                     decodedImage = tempFirstAid.Image;
                     isUpdating = true;
                     docKitFAName.IsReadOnly = true;
+                    docKitCustomDialogAnimationFA.Begin();
                 }
             }
         }

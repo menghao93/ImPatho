@@ -241,6 +241,7 @@ namespace Health_Organizer
         private void ShareProfileClicked(object sender, RoutedEventArgs e)
         {
             EmailInfoForm.IsOpen = true;
+            AnalysisCustomDialogAnimation.Begin();
         }
 
         private async void ExportProfileClicked(object sender, RoutedEventArgs e)
@@ -983,16 +984,22 @@ namespace Health_Organizer
                 window = CoreWindow.GetForCurrentThread();
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
-                    Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
+                    if (resultList.Count() != 0)
+                    {
+                        Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
+                        Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
+                    }
                 });
 
                 //display married pie chart
-                x = resultList.Count(i => i.Married == true);
+                int y = resultList.Count(i => i.Married == true);
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
-                    Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - x) * 100 / resultList.Count()) });
+                    if (resultList.Count() != 0)
+                    {
+                        Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)y * 100 / resultList.Count()) });
+                        Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - y) * 100 / resultList.Count()) });
+                    }
                 });
 
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate

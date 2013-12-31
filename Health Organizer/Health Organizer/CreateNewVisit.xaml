@@ -310,6 +310,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--custom dialog animation-->
+        <Storyboard x:Name="VisitCustomDialogAnimation">
+            <DoubleAnimation Storyboard.TargetName="customDialogTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -452,6 +463,9 @@
         <callisto:CustomDialog Name="VisitFormBar" 
                                 Title="Add Medical Details" 
                                 Background="#0064A0" >
+            <callisto:CustomDialog.RenderTransform>
+                <TranslateTransform x:Name="customDialogTrans"/>
+            </callisto:CustomDialog.RenderTransform>
             <!--Actual Medical form Starts Here-->
             <StackPanel Width="500" >
 
