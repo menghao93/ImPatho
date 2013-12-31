@@ -476,7 +476,7 @@
                             <TextBox Header="Address" Height="120" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap" AcceptsReturn="True"/>
                             <StackPanel Orientation="Horizontal" >
                                 <TextBox Header="City" Name="profileCity" Width="150" Margin="20,0,20,15"/>
-                                <TextBox Header="Zip" Name="profileZip" Width="150" Margin="20,0,20,15" InputScope="Number" KeyDown="numberValidation"/>
+                                    <TextBox Header="Zip" Name="profileZip" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber" MaxLength="9" KeyDown="numberValidation"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Header="State" Name="profileState" Width="150" Margin="20,0,20,15"/>

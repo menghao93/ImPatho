@@ -351,6 +351,8 @@ namespace Health_Organizer
             {
                 if (ByDateFlag)
                 {
+                    this.checkSelectedDates();
+
                     int lastDateOn = item.DatesVisited.Count;
 
                     if (lastDateOn > 0)
@@ -576,6 +578,8 @@ namespace Health_Organizer
 
         private void AnalysisValidateFields()
         {
+            this.checkSelectedDates();
+
             DateTime toDate = new DateTime(Convert.ToInt16(AnalysisToYearComboBox.SelectedItem), AnalysisToMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisToDayComboBox.SelectedItem));
             DateTime fromDate = new DateTime(Convert.ToInt16(AnalysisFromYearComboBox.SelectedItem), AnalysisFromMonthComboBox.SelectedIndex + 1, Convert.ToInt16(AnalysisFromDayComboBox.SelectedItem));
 
@@ -677,39 +681,96 @@ namespace Health_Organizer
 
             this.AnalysisResetDateBox();
 
-            foreach (string city in cityList)
+            if (cityList.Count() > 0)
             {
-                AnalysisCityBox.Items.Add(city);
+                AnalysisCityBox.IsEnabled = true;
+                foreach (string city in cityList)
+                {
+                    AnalysisCityBox.Items.Add(city);
+                }
+            }
+            else
+            {
+                AnalysisCityBox.IsEnabled = false;
             }
 
-            foreach (string state in city2state.Values)
+            if (city2state.Values.Count() > 0)
             {
-                AnalysisStateBox.Items.Add(state);
+                AnalysisStateBox.IsEnabled = true;
+                foreach (string state in city2state.Values)
+                {
+                    AnalysisStateBox.Items.Add(state);
+                }
+            }
+            else
+            {
+                AnalysisStateBox.IsEnabled = false;
             }
 
-            foreach (string disease in diseaseList)
+            if (diseaseList.Count() > 0)
             {
-                AnalysisDiseaseBox.Items.Add(disease);
+                AnalysisDiseaseBox.IsEnabled = true;
+                foreach (string disease in diseaseList)
+                {
+                    AnalysisDiseaseBox.Items.Add(disease);
+                }
+            }
+            else
+            {
+                AnalysisDiseaseBox.IsEnabled = false;
             }
 
-            foreach (string allergy in allergyList)
+
+            if (allergyList.Count() > 0)
             {
-                AnalysisAllergyBox.Items.Add(allergy);
+                AnalysisAllergyBox.IsEnabled = true;
+                foreach (string allergy in allergyList)
+                {
+                    AnalysisAllergyBox.Items.Add(allergy);
+                }
+            }
+            else
+            {
+                AnalysisAllergyBox.IsEnabled = false;
             }
 
-            foreach (string addiction in addictionList)
+            if (addictionList.Count() > 0)
             {
-                AnalysisAddictionBox.Items.Add(addiction);
+                AnalysisAddictionBox.IsEnabled = true;
+                foreach (string addiction in addictionList)
+                {
+                    AnalysisAddictionBox.Items.Add(addiction);
+                }
+            }
+            else
+            {
+                AnalysisAddictionBox.IsEnabled = false;
             }
 
-            foreach (string vaccine in vaccinationList)
+            if (vaccinationList.Count() > 0)
             {
-                AnalysisVaccinationBox.Items.Add(vaccine);
+                AnalysisVaccinationBox.IsEnabled = true;
+                foreach (string vaccine in vaccinationList)
+                {
+                    AnalysisVaccinationBox.Items.Add(vaccine);
+                }
+            }
+            else
+            {
+                AnalysisVaccinationBox.IsEnabled = false;
             }
 
-            foreach (string operation in operationList)
+            if (operationList.Count() > 0)
             {
-                AnalysisOperationsBox.Items.Add(operation);
+                AnalysisOperationsBox.IsEnabled = true;
+                foreach (string operation in operationList)
+                {
+                    AnalysisOperationsBox.Items.Add(operation);
+                }
+            }
+            else
+            {
+                AnalysisOperationsBox.IsEnabled = false;
             }
 
         }
@@ -887,7 +948,6 @@ namespace Health_Organizer
                 List<String> operationListRepeatedValues = new List<string>();
                 List<String> cityListRepeatedValues = new List<string>();
 
-                Debug.WriteLine("fUCK YEAH!");
                 //Sex = new ObservableCollection<TestClass>();
                 //Married = new ObservableCollection<TestClass>();
                 //Disease = new ObservableCollection<TestClass>();
@@ -1063,6 +1123,31 @@ namespace Health_Organizer
 
             FromEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
             ToEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+
+        }
+
+        private void checkSelectedDates()
+        {
+            string FROM = AnalysisFromDayComboBox.SelectedItem.ToString() + "-" + (AnalysisFromMonthComboBox.SelectedIndex + 1).ToString() + "-" + AnalysisFromYearComboBox.SelectedItem.ToString();
+            string pattern = "dd-MM-yyyy";
+            DateTime from;
+
+            if (!DateTime.TryParseExact(FROM, pattern, null, System.Globalization.DateTimeStyles.None, out from))
+            {
+                AnalysisFromDayComboBox.SelectedIndex = 0;
+                AnalysisFromMonthComboBox.SelectedIndex = 0;
+                AnalysisFromYearComboBox.SelectedIndex = 0;
+            }
+
+            string TO = AnalysisToDayComboBox.SelectedItem.ToString() + "-" + (AnalysisToMonthComboBox.SelectedIndex + 1).ToString() + "-" + AnalysisToYearComboBox.SelectedItem.ToString();
+            DateTime to;
+
+            if (!DateTime.TryParseExact(TO, pattern, null, System.Globalization.DateTimeStyles.None, out to))
+            {
+                AnalysisToDayComboBox.SelectedIndex = DateTime.Now.Day - 1;
+                AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
+                AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
+            }
 
         }
     }
