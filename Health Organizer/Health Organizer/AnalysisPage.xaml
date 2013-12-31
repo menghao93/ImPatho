@@ -19,6 +19,10 @@
             Source="{Binding Items}"/>
 
         <x:String x:Key="AppName">Analysis</x:String>
+        <Style x:Key="MinimalChartStyle" TargetType="chart:ChartBase">
+            <Setter Property="Width" Value="500"/>
+            <Setter Property="Height" Value="500"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -230,7 +234,8 @@
                             <chart:RadialGaugeChart ChartTitle="Gender distribution"
                                             ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                            Height="260" Width="330" Margin="10,10,0,0">
+                                            Height="260" Width="330" Margin="10,10,0,0"
+                                                    Style="{StaticResource MinimalChartStyle}">
                                 <chart:RadialGaugeChart.Series>
                                     <chart:ChartSeries
                                         SeriesTitle="Sex"
@@ -242,7 +247,8 @@
                             <chart:RadialGaugeChart ChartTitle="Marital status"
                                             ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="260" Width="330" Margin="10,10,0,0">
+                                            Height="260" Width="330" Margin="10,10,0,0"
+                                                    Style="{StaticResource MinimalChartStyle}">
                                 <chart:RadialGaugeChart.Series>
                                     <chart:ChartSeries
                                         SeriesTitle="Married"
@@ -255,7 +261,8 @@
                         <chart:PieChart ChartTitle="Cities"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0">
+                                            Height="490" Width="490" Margin="10,-30,0,0"
+                                        Style="{StaticResource MinimalChartStyle}">
                             <chart:PieChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Cities"
@@ -267,7 +274,8 @@
                         <chart:PieChart ChartTitle="Blood group"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0">
+                                            Height="490" Width="490" Margin="10,-30,0,0"
+                                        Style="{StaticResource MinimalChartStyle}">
                             <chart:PieChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Blood group"
@@ -279,7 +287,8 @@
                         <chart:ClusteredColumnChart ChartTitle="Diseases"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0">
+                                            Height="490" Width="490" Margin="10,-30,0,0"
+                                                    Style="{StaticResource MinimalChartStyle}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Diseases"
@@ -291,7 +300,8 @@
                         <chart:ClusteredColumnChart ChartTitle="Addiction"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0">
+                                            Height="490" Width="490" Margin="10,-30,0,0"
+                                                    Style="{StaticResource MinimalChartStyle}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Addictions"
@@ -305,7 +315,8 @@
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
                                              Height="490" Width="490" Margin="10,-30,0,0"
-                                             InnerRadiusRatio="0.6">
+                                             InnerRadiusRatio="0.6"
+                                             Style="{StaticResource MinimalChartStyle}">
                             <chart:DoughnutChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Operations"
@@ -318,7 +329,8 @@
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
                                              Height="490" Width="490" Margin="10,-30,0,0"
-                                             InnerRadiusRatio="0.6">
+                                             InnerRadiusRatio="0.6"
+                                             Style="{StaticResource MinimalChartStyle}">
                             <chart:DoughnutChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Vaccinations"
@@ -332,7 +344,8 @@
                                              ChartSubTitle=""
                                              InnerRadiusRatio="0.6"
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                             Height="530" Width="490" Margin="10,10,10,0" VerticalAlignment="Top">
+                                             Height="530" Width="490" Margin="10,10,10,0" VerticalAlignment="Top"
+                                             Style="{StaticResource MinimalChartStyle}">
                             <chart:DoughnutChart.Series>
                                 <chart:ChartSeries
                                         SeriesTitle="Allergies"
