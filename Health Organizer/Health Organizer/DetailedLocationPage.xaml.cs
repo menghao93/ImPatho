@@ -76,8 +76,9 @@ namespace Health_Organizer
         {
             navigationHelper.OnNavigatedTo(e);
             var group = await HomePageDataSoure.GetGroupAsync((String)e.Parameter);
-            this.DefaultViewModel["Group"] = group;
-            this.DefaultViewModel["Items"] = group.Items;
+            //this.DefaultViewModel["Group"] = group;
+            //this.DefaultViewModel["Items"] = group.Items;
+            gridViewSource.Source = group.Items;
             pageTitle.Text = group.Title;
 
             this.disableAppButtons();
@@ -267,6 +268,8 @@ namespace Health_Organizer
                     var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                     Debug.WriteLine("DETAILED_LOCATION_PAGE---PROFILE_DELETE_BUT_CLICKED---Patient" + "\n" + ex.Message + "\n" + result.ToString());
                 }
+
+                await HomePageDataSoure.DelItemAsync(PID.ToString());
             }
 
         }
