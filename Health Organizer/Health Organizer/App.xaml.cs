@@ -88,7 +88,7 @@ namespace Health_Organizer
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("Cannot initialize DB");
+                Debug.WriteLine("Cannot initialize DB\n" + ex.Message);
                 return DBConnect.RESULT_ERROR;
             }
         }
