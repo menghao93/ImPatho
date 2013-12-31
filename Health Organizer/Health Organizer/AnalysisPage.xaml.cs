@@ -22,6 +22,7 @@ using System.Collections.ObjectModel;
 using De.TorstenMandelkow.MetroChart;
 using System.Threading.Tasks;
 using Windows.System.Threading;
+using Windows.UI.Core;
 
 namespace Health_Organizer
 {
@@ -46,6 +47,7 @@ namespace Health_Organizer
 
         Int16 sexMale = 0;
         Int16 isMarried = 0;
+        private TestPageViewModel testPageObject;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -80,7 +82,6 @@ namespace Health_Organizer
             this.disableCommandBarButtons();
 
             this.DataContext = new TestPageViewModel();
-
             (this.DataContext as TestPageViewModel).UpdateGraphView();
 
             RecordGrid.SelectedItem = null;
@@ -107,6 +108,7 @@ namespace Health_Organizer
             this.AnalysisResetDateBox();
             this.AnalysisDateBoxDisable();
             gridViewSource.Source = mainItemList;
+            this.UpdateView();
             (this.DataContext as TestPageViewModel).UpdateGraphView();
             RecordGrid.SelectedItem = null;
         }
@@ -875,14 +877,36 @@ namespace Health_Organizer
                 Vaccine = new ObservableCollection<TestClass>();
             }
 
-            public void UpdateGraphView()
+            public async void UpdateGraphView()
             {
-
                 List<String> diseaseListRepeatedValues = new List<string>();
                 List<String> allergyListRepeatedValues = new List<string>();
                 List<String> addictionListRepeatedValues = new List<string>();
                 List<String> vaccinationListRepeatedValues = new List<string>();
                 List<String> operationListRepeatedValues = new List<string>();
+                List<String> cityListRepeatedValues = new List<string>();
+
+                Debug.WriteLine("fUCK YEAH!");
+                //Sex = new ObservableCollection<TestClass>();
+                //Married = new ObservableCollection<TestClass>();
+                //Disease = new ObservableCollection<TestClass>();
+                //City = new ObservableCollection<TestClass>();
+                //Blood = new ObservableCollection<TestClass>();
+                //Addiction = new ObservableCollection<TestClass>();
+                //Allergy = new ObservableCollection<TestClass>();
+                //Operation = new ObservableCollection<TestClass>();
+                //Vaccine = new ObservableCollection<TestClass>();
+
+                Sex.Clear();
+                City.Clear();
+                Married.Clear();
+                Addiction.Clear();
+                Allergy.Clear();
+                Addiction.Clear();
+                Operation.Clear();
+                Vaccine.Clear();
+                Disease.Clear();
+
                 foreach (var i in resultList)
                 {
                     diseaseListRepeatedValues.AddRange(i.Diseases.Values.ToList());
@@ -890,63 +914,95 @@ namespace Health_Organizer
                     operationListRepeatedValues.AddRange(i.Operation);
                     addictionListRepeatedValues.AddRange(i.Addiction);
                     vaccinationListRepeatedValues.AddRange(i.Vaccines.Values.ToList());
+                    cityListRepeatedValues.Add(i.City);
                 }
+
 
                 //displaying sex pie chart
                 int x = resultList.Count(i => i.Sex == 'M');
-                Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
-                Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
+                window = CoreWindow.GetForCurrentThread();
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
+                {
+                    Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
+                    Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
+                });
 
                 //display married pie chart
                 x = resultList.Count(i => i.Married == true);
-                Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
-                Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - x) * 100 / resultList.Count()) });
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
+                {
+                    Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
+                    Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - x) * 100 / resultList.Count()) });
+                });
 
-                //display cities graph
-                foreach (var i in cityList.Distinct())
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    City.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.City.Equals(i.ToString())) });
-                }
+                    //display cities graph
+                    foreach (var i in cityListRepeatedValues.Distinct())
+                    {
+                        City.Add(new TestClass() { Category = i, Number = cityListRepeatedValues.Count(j => j.Equals(i)) });
+                    }
+                });
 
-                //display blood group chart
-                List<String> bloodgrp = new List<string>();
-                foreach (var i in resultList)
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    bloodgrp.Add(i.BloodGroup);
-                }
-                foreach (var i in bloodgrp.Distinct())
-                {
-                    Blood.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.BloodGroup.Equals(i.ToString())) });
-                }
+                    //display blood group chart
+                    List<String> bloodgrp = new List<string>();
+                    foreach (var i in resultList)
+                    {
+                        bloodgrp.Add(i.BloodGroup);
+                    }
+                    foreach (var i in bloodgrp.Distinct())
+                    {
+                        Blood.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.BloodGroup.Equals(i.ToString())) });
+                    }
+                });
 
-                //display disease graph
-                foreach (var i in diseaseList)
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Disease.Add(new TestClass() { Category = i.ToString(), Number = diseaseListRepeatedValues.Count(j => j.Equals(i)) });
-                }
-                //display addictions graph
-                foreach (var i in addictionList)
+                    //display disease graph
+                    foreach (var i in diseaseListRepeatedValues.Distinct())
+                    {
+                        Disease.Add(new TestClass() { Category = i.ToString(), Number = diseaseListRepeatedValues.Count(j => j.Equals(i)) });
+                    }
+                });
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Addiction.Add(new TestClass() { Category = i.ToString(), Number = addictionListRepeatedValues.Count(j => j.Equals(i)) });
-                }
+                    //display addictions graph
+                    foreach (var i in addictionListRepeatedValues.Distinct())
+                    {
+                        Addiction.Add(new TestClass() { Category = i.ToString(), Number = addictionListRepeatedValues.Count(j => j.Equals(i)) });
+                    }
+                });
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
+                {
+                    //display addictions graph
+                    //display operations graph
+                    foreach (var i in operationListRepeatedValues.Distinct())
+                    {
+                        Operation.Add(new TestClass() { Category = i.ToString(), Number = operationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                    }
+                });
 
-                //display operations graph
-                foreach (var i in operationList)
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Operation.Add(new TestClass() { Category = i.ToString(), Number = operationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
-                }
-                //display vaccine graph
-                foreach (var i in vaccinationList)
+                    foreach (var i in allergyListRepeatedValues.Distinct())
+                    {
+                        Allergy.Add(new TestClass() { Category = i.ToString(), Number = allergyListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                    }
+                });
+                window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
-                    Vaccine.Add(new TestClass() { Category = i.ToString(), Number = vaccinationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
-                }
-                foreach (var i in allergyList)
-                {
-                    Allergy.Add(new TestClass() { Category = i.ToString(), Number = allergyListRepeatedValues.Count(j => j.Equals(i.ToString())) });
-                }
+                    //display vaccine graph
+                    foreach (var i in vaccinationListRepeatedValues.Distinct())
+                    {
+                        Vaccine.Add(new TestClass() { Category = i.ToString(), Number = vaccinationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                    }
+                });
             }
 
             private object selectedItem = null;
+            private CoreWindow window;
 
             public object SelectedItem
             {
@@ -1000,7 +1056,7 @@ namespace Health_Organizer
 
             FromEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
             ToEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
-            
+
         }
     }
 }
