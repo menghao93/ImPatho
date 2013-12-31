@@ -88,7 +88,7 @@ namespace Health_Organizer.Data
 
             SampleDataGroup temp;
 
-            if (sampleLimited != null)
+            if (sampleLimited.Count() > 0)
             {
                 foreach (SampleDataGroup xgroup in sampleLimited)
                 {
@@ -179,7 +179,11 @@ namespace Health_Organizer.Data
                         }
                         prevGroup = currentGroup;
                     }
-                    this.Groups.Add(groups);
+                    
+                    if (groups != null)
+                    {
+                        this.Groups.Add(groups);
+                    }
                 }
             }
             catch (Exception ex)
