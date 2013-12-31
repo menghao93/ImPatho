@@ -73,6 +73,26 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
+        <Storyboard x:Name="docKitCustomDialogAnimation">
+            <DoubleAnimation Storyboard.TargetName="customDialogTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="docKitCustomDialogAnimationFA">
+            <DoubleAnimation Storyboard.TargetName="customDialogTransFA" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
 
     <!--
@@ -105,7 +125,10 @@
             <!-- This is an inbuilt Library used to make CustomDialog Box ==== FOR COMMON DISEASES-->
             <callisto:CustomDialog Name="docKitDialog" 
                                 Title="Add Common Disease" 
-                                Background="#0064A0" >
+                                Background="#0064A0">
+                <callisto:CustomDialog.RenderTransform>
+                    <TranslateTransform x:Name="customDialogTrans"/>
+                </callisto:CustomDialog.RenderTransform>
                 <StackPanel>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDName" Header="Disease Name" PlaceholderText="Eg. Malaria" />
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitDDescription" Header="Disease Description" PlaceholderText="Enter necessary Details related to diseases..." Height="200" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="newLineCheck" KeyDown="keyDown_newline"/>
@@ -126,6 +149,9 @@
             <callisto:CustomDialog Name="docKitDialogFirstAid" 
                                 Title="Add common First Aid" 
                                 Background="#0064A0" >
+                <callisto:CustomDialog.RenderTransform>
+                    <TranslateTransform x:Name="customDialogTransFA"/>
+                </callisto:CustomDialog.RenderTransform>
                 <StackPanel>
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFAName" Header="Situation" PlaceholderText="Describe in a word or two. Eg. Burning" />
                     <TextBox Style="{StaticResource TextBoxDocKitForm}" Name="docKitFADescription" Header="First Aid Procedure" PlaceholderText="Enter detailed step wise procedure for first Aid ..." Height="200" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="newLineCheck" KeyDown="keyDown_newline"/>

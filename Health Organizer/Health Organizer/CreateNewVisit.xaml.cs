@@ -171,11 +171,13 @@ namespace Health_Organizer
         {
             VisitFormCmdbar.IsOpen = false;
             VisitFormBar.IsOpen = true;
+            VisitCustomDialogAnimation.Begin();
         }
 
         private async void EditVisitClicked(object sender, RoutedEventArgs e)
         {
             VisitFormCmdbar.IsOpen = false;
+            VisitCustomDialogAnimation.Begin();
             if (VisitListBox.SelectedItem != null)
             {
                 VisitFormBar.IsOpen = true;
