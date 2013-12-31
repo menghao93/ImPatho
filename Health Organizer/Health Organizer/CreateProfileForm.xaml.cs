@@ -348,7 +348,6 @@ namespace Health_Organizer
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
                 bool groupExist = false;
 
-                IEnumerable<SampleDataGroup> grp = await HomePageDataSoure.GetGroupsAsync();
                 IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
                 foreach (SampleDataGroup sample in samples)
                 {
