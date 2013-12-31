@@ -59,7 +59,8 @@ namespace Health_Organizer
         {
             navigationHelper.OnNavigatedTo(e);
             var sample = await HomePageDataSoure.GetLimitedGroupsAsync();
-            this.DefaultViewModel["Groups"] = sample;
+            //this.DefaultViewModel["Groups"] = sample;
+            groupedItemsViewSource.Source = sample;
 
             RecordGrid.SelectedItem = null;
             this.disableAppButtons();

@@ -348,8 +348,8 @@ namespace Health_Organizer
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
                 bool groupExist = false;
 
-                IEnumerable<SampleDataGroup> grp = await HomePageDataSoure.GetGroupsAsync();
-                IEnumerable<SampleDataGroup> samples = await HomePageDataSoure.GetGroupsAsync();
+                IEnumerable<SampleDataGroup> samples = HomePageDataSoure._sampleDataSource.Groups;
+
                 foreach (SampleDataGroup sample in samples)
                 {
                     if (sample.Title.Equals(profileCity.Text.ToString()))

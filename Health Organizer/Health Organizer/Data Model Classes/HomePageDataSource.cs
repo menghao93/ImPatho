@@ -88,7 +88,7 @@ namespace Health_Organizer.Data
 
             SampleDataGroup temp;
 
-            if (sampleLimited != null)
+            if (sampleLimited.Count() > 0)
             {
                 foreach (SampleDataGroup xgroup in sampleLimited)
                 {
@@ -140,53 +140,77 @@ namespace Health_Organizer.Data
 
         private async Task GetSampleDataAsync()
         {
-            if (this._groups.Count != 0)
-                return;
-
-            try
+            if (this.Groups.Count() == 0)
             {
-                this.db = App.database;
-
-                if (this.db != null)
+                try
                 {
-                    string query = "SELECT * FROM (Patient NATURAL JOIN Address) NATURAL JOIN AddressZIP ORDER BY City";
-                    Statement statement = await db.PrepareStatementAsync(query);
-                    statement.EnableColumnsProperty();
-                    string prevGroup = "xxx";
-                    SampleDataGroup groups = null;
+                    this.db = App.database;
 
-                    //Check previous entered city and current city are same. if same -> add new item to same grp; if not -> create new grp and
-                    //add the new item to this new grp.
-                    while (await statement.StepAsync())
+                    if (this.db != null)
                     {
-                        //Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
-                        string currentGroup = statement.Columns["City"];
-                        if (currentGroup.Equals(prevGroup))
-                        {
-                            BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
-                            groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
-                        }
-                        else
-                        {
-                            if (groups != null)
-                            {
-                                this.Groups.Add(groups);
-                            }
+                        string query = "SELECT * FROM (Patient NATURAL JOIN (Address NATURAL JOIN AddressZIP));";
+                        Statement statement = await db.PrepareStatementAsync(query);
+                        statement.EnableColumnsProperty();
+                        List<SampleDataGroup> sampleList = new List<SampleDataGroup>();
+                        int edgeCaseCount = 0;
+                        //string prevGroup = "xxx";
+                        //SampleDataGroup groups = null;
 
+                        //Check previous entered city and current city are same. if same -> add new item to same grp; if not -> create new grp and
+                        //add the new item to this new grp.
+                        while (await statement.StepAsync())
+                        {
+                            //Debug.WriteLine(statement.Columns["PID"] + " " + statement.Columns["FirstName"] + " " + statement.Columns["LastName"] + " " + statement.Columns["ZIP"] + " " + statement.Columns["City"]);
+                            edgeCaseCount++;
                             BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
-                            groups = new SampleDataGroup(statement.Columns["City"], statement.Columns["City"]);
-                            groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+
+                            SampleDataGroup sampleGroup = Groups.ToList().Find(item => item.Title.Equals(statement.Columns["City"]));
+                            if (sampleGroup == null)
+                            {
+                                sampleGroup = new SampleDataGroup(statement.Columns["City"], statement.Columns["City"]);
+                                sampleGroup.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+                                Groups.Add(sampleGroup);
+                            }
+                            else
+                            {
+                                sampleGroup.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+                            }
+                            //string currentGroup = statement.Columns["City"];
+                            //if (currentGroup.Equals(prevGroup))
+                            //{
+                            //    BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
+                            //    groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+                            //}
+                            //else
+                            //{
+                            //    if (groups != null)
+                            //    {
+                            //        this.Groups.Add(groups);
+                            //    }
+
+                            //    BitmapImage bmp = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
+                            //    groups = new SampleDataGroup(statement.Columns["City"], statement.Columns["City"]);
+                            //    groups.Items.Add(new SampleDataItem(statement.Columns["PID"], statement.Columns["FirstName"] + " " + statement.Columns["LastName"], statement.Columns["Street"], bmp));
+                            //}
+                            //prevGroup = currentGroup;
                         }
-                        prevGroup = currentGroup;
+                        //foreach (SampleDataGroup group in sampleList)
+                        //{
+                        //    this.Groups.Add(group);
+                        //}
+                        //if (groups != null)
+                        //{
+                        //    this.Groups.Add(groups);
+                        //}
                     }
-                    this.Groups.Add(groups);
+                }
+                catch (Exception ex)
+                {
+                    var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                    Debug.WriteLine("HOME_PAGE_DATA_SOURCE---LOAD_GROUP_ASYNC" + "\n" + ex.Message + "\n" + result.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
-                Debug.WriteLine("HOME_PAGE_DATA_SOURCE---LOAD_GROUP_ASYNC" + "\n" + ex.Message + "\n" + result.ToString());
-            }
+            return;
         }
     }
 }

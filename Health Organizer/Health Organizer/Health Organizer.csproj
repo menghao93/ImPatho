@@ -272,10 +272,10 @@
       <HintPath>..\packages\Callisto.1.4.0\lib\netcore451\Callisto.dll</HintPath>
     </Reference>
     <Reference Include="De.TorstenMandelkow.MetroChart">
-      <HintPath>bin\Debug\De.TorstenMandelkow.MetroChart.dll</HintPath>
+      <HintPath>..\..\Dependencies\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
     <Reference Include="EASendMailRT">
-      <HintPath>bin\Debug\EASendMailRT.winmd</HintPath>
+      <HintPath>..\..\Dependencies\EASendMailRT.winmd</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization.ClientServices.Win8">
       <HintPath>..\packages\SyncClient.SQLite.3.8.0.3\lib\netcore45\Microsoft.Synchronization.ClientServices.Win8.dll</HintPath>
