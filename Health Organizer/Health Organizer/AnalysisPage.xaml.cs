@@ -18,6 +18,10 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
+using System.Collections.ObjectModel;
+using De.TorstenMandelkow.MetroChart;
+using System.Threading.Tasks;
+using Windows.System.Threading;
 
 namespace Health_Organizer
 {
@@ -28,14 +32,14 @@ namespace Health_Organizer
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         public List<AnalysisSampleDataItem> mainItemList;
-        List<AnalysisSampleDataItem> resultList;
-        public List<string> cityList;
-        public List<string> diseaseList;
-        public List<string> allergyList;
-        public List<string> addictionList;
-        public List<string> vaccinationList;
-        public List<string> operationList;
-        public Dictionary<string, string> city2state;
+        public static List<AnalysisSampleDataItem> resultList;
+        public static List<string> cityList;
+        public static List<string> diseaseList;
+        public static List<string> allergyList;
+        public static List<string> addictionList;
+        public static List<string> vaccinationList;
+        public static List<string> operationList;
+        public static Dictionary<string, string> city2state;
 
         bool ByDateFlag, CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
             AddictionFlag, VaccineFlag, OperationFlag;
@@ -65,11 +69,9 @@ namespace Health_Organizer
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var sample = await AnalysisPageDataSoure.GetItemsAsync();
-            this.DefaultViewModel["Items"] = sample;
-
-            RecordGrid.SelectedItem = null;
-
+            gridViewSource.Source = sample;
             mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
+            resultList = mainItemList;
             fillAllLists();
             fillAllComboBox();
 
@@ -77,6 +79,12 @@ namespace Health_Organizer
             this.AnalysisResetFlag();
             this.AnalysisResetDateBox();
             this.disableCommandBarButtons();
+
+            this.DataContext = new TestPageViewModel();
+
+            (this.DataContext as TestPageViewModel).UpdateGraphView();
+
+            RecordGrid.SelectedItem = null;
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -99,7 +107,8 @@ namespace Health_Organizer
             this.AnalysisResetFlag();
             this.AnalysisResetDateBox();
             this.AnalysisDateBoxDisable();
-            this.DefaultViewModel["Items"] = mainItemList;
+            gridViewSource.Source = mainItemList;
+            (this.DataContext as TestPageViewModel).UpdateGraphView();
             RecordGrid.SelectedItem = null;
         }
 
@@ -107,10 +116,28 @@ namespace Health_Organizer
         {
             this.AnalysisValidateFields();
             this.AnalysisSetFlags();
-            this.updateView();
+            this.UpdateView();
             RecordGrid.SelectedItem = null;
+
+            (this.DataContext as TestPageViewModel).UpdateGraphView();
+            //AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            //AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
+        //public void AddNewGraph(ObservableCollection<TestClass> a)
+        //{
+        //    De.TorstenMandelkow.MetroChart.PieChart p = new De.TorstenMandelkow.MetroChart.PieChart();
+        //    p.Height = 400;
+        //    p.Width = 400;
+        //    p.Margin = new Thickness(10, 0, 0, 0);
+        //    AnalysisGraphStackPanel.Children.Add(p);
+        //    ChartSeries c = new ChartSeries();
+        //    c.ItemsSource = temp;
+        //    c.SeriesTitle = "temp";
+        //    c.DisplayMember = "Category";
+        //    c.ValueMember = "Number";
+        //    p.Series.Add(c);
+        //}
         private void AnalysisItemClicked(object sender, ItemClickEventArgs e)
         {
             AnalysisSampleDataItem clickedItem = e.ClickedItem as AnalysisSampleDataItem;
@@ -125,7 +152,7 @@ namespace Health_Organizer
         {
             this.AnalysisValidateFields();
             this.AnalysisSetFlags();
-            this.updateView();
+            this.UpdateView();
             RecordGrid.SelectedItem = null;
 
             FileSavePicker savePicker = new FileSavePicker();
@@ -303,8 +330,8 @@ namespace Health_Organizer
             }
 
         }
-        
-        private void updateView()
+
+        private void UpdateView()
         {
             resultList = new List<AnalysisSampleDataItem>();
 
@@ -478,7 +505,7 @@ namespace Health_Organizer
 
                 resultList.Add(item);
             }
-            this.DefaultViewModel["Items"] = resultList;
+            gridViewSource.Source = resultList;
         }
 
         private void AnalysisAllChecked(object sender, RoutedEventArgs e)
@@ -551,6 +578,7 @@ namespace Health_Organizer
             addictionList = new List<string>();
             vaccinationList = new List<string>();
             operationList = new List<string>();
+
 
             //Adding city and corrosponding State to Lists
             foreach (AnalysisSampleDataItem item in mainItemList)
@@ -777,7 +805,7 @@ namespace Health_Organizer
             AnalysisToMonthComboBox.IsEnabled = true;
             AnalysisToYearComboBox.IsEnabled = true;
         }
-        
+
         private void enableCommandBarButtons()
         {
             ViewProfile.IsEnabled = true;
@@ -790,5 +818,140 @@ namespace Health_Organizer
             ExportProfile.IsEnabled = false;
         }
 
+        private void AnalysisDefaultOptionClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisOptionsSubHeader.Text = "Default";
+        }
+
+        private void AnalysisGraphicalOptionClicked(object sender, RoutedEventArgs e)
+        {
+            AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AnalysisOptionsSubHeader.Text = "Graphical";
+        }
+
+
+        //for data binding in graph
+        public class TestPageViewModel
+        {
+            public ObservableCollection<TestClass> Sex { get; private set; }
+            public ObservableCollection<TestClass> Married { get; private set; }
+            public ObservableCollection<TestClass> City { get; private set; }
+            public ObservableCollection<TestClass> Blood { get; private set; }
+            public ObservableCollection<TestClass> Disease { get; private set; }
+            public ObservableCollection<TestClass> Addiction { get; private set; }
+            public ObservableCollection<TestClass> Operation { get; private set; }
+            public ObservableCollection<TestClass> Allergy { get; private set; }
+            public ObservableCollection<TestClass> Vaccine { get; private set; }
+            public TestPageViewModel()
+            {
+                Sex = new ObservableCollection<TestClass>();
+                Married = new ObservableCollection<TestClass>();
+                Disease = new ObservableCollection<TestClass>();
+                City = new ObservableCollection<TestClass>();
+                Blood = new ObservableCollection<TestClass>();
+                Addiction = new ObservableCollection<TestClass>();
+                Allergy = new ObservableCollection<TestClass>();
+                Operation = new ObservableCollection<TestClass>();
+                Vaccine = new ObservableCollection<TestClass>();
+            }
+
+            public void UpdateGraphView()
+            {
+
+                List<String> diseaseListRepeatedValues = new List<string>();
+                List<String> allergyListRepeatedValues = new List<string>();
+                List<String> addictionListRepeatedValues = new List<string>();
+                List<String> vaccinationListRepeatedValues = new List<string>();
+                List<String> operationListRepeatedValues = new List<string>();
+                foreach (var i in resultList)
+                {
+                    diseaseListRepeatedValues.AddRange(i.Diseases.Values.ToList());
+                    allergyListRepeatedValues.AddRange(i.Allergy);
+                    operationListRepeatedValues.AddRange(i.Operation);
+                    addictionListRepeatedValues.AddRange(i.Addiction);
+                    vaccinationListRepeatedValues.AddRange(i.Vaccines.Values.ToList());
+                }
+
+                //displaying sex pie chart
+                int x = resultList.Count(i => i.Sex == 'M');
+                Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
+                Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
+
+                //display married pie chart
+                x = resultList.Count(i => i.Married == true);
+                Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
+                Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - x) * 100 / resultList.Count()) });
+
+                //display cities graph
+                foreach (var i in cityList.Distinct())
+                {
+                    City.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.City.Equals(i.ToString())) });
+                }
+
+                //display blood group chart
+                List<String> bloodgrp = new List<string>();
+                foreach (var i in resultList)
+                {
+                    bloodgrp.Add(i.BloodGroup);
+                }
+                foreach (var i in bloodgrp.Distinct())
+                {
+                    Blood.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.BloodGroup.Equals(i.ToString())) });
+                }
+
+                //display disease graph
+                foreach (var i in diseaseList)
+                {
+                    Disease.Add(new TestClass() { Category = i.ToString(), Number = diseaseListRepeatedValues.Count(j => j.Equals(i)) });
+                }
+                //display addictions graph
+                foreach (var i in addictionList)
+                {
+                    Addiction.Add(new TestClass() { Category = i.ToString(), Number = addictionListRepeatedValues.Count(j => j.Equals(i)) });
+                }
+
+                //display operations graph
+                foreach (var i in operationList)
+                {
+                    Operation.Add(new TestClass() { Category = i.ToString(), Number = operationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                }
+                //display vaccine graph
+                foreach (var i in vaccinationList)
+                {
+                    Vaccine.Add(new TestClass() { Category = i.ToString(), Number = vaccinationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                }
+                foreach (var i in allergyList)
+                {
+                    Allergy.Add(new TestClass() { Category = i.ToString(), Number = allergyListRepeatedValues.Count(j => j.Equals(i.ToString())) });
+                }
+            }
+
+            private object selectedItem = null;
+
+            public object SelectedItem
+            {
+                get
+                {
+                    return selectedItem;
+                }
+                set
+                {
+                    // selected item has changed
+                    selectedItem = value;
+                }
+            }
+        }
+
+        // class which represent a data point in the chart
+        public class TestClass
+        {
+            public string Category { get; set; }
+
+            public int Number { get; set; }
+        }
     }
+
 }

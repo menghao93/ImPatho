@@ -8,7 +8,8 @@
     xmlns:common="using:Health_Organizer.Data"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:chart="using:De.TorstenMandelkow.MetroChart">
     <Page.Resources>
 
         <CollectionViewSource
@@ -25,7 +26,7 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="480"/>
             <ColumnDefinition Width="*"/>
@@ -52,15 +53,15 @@
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="-10,0,0,50"/>
             </Grid>
-            
+
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="8*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Grid.Row="0" Margin="50,-10,0,0">
-                    
+
                     <RadioButton Name="AnalysisByDate" Checked="AnalysisByDateChecked" Content="Choose Timeline" FontSize="15" />
 
                     <TextBlock Text="Records from date" FontSize="15" Margin="0,10,0,0"/>
@@ -150,7 +151,7 @@
 
                 <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,50,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                     <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
-                    <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button> 
+                    <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button>
                     <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
                 </StackPanel>
             </Grid>
@@ -169,14 +170,27 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1.5*" />
                 </Grid.ColumnDefinitions>
-
+                <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
+                                    AutomationProperties.Name="Group Title"
+                                    Style="{StaticResource TextBlockButtonStyle}" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Layout" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" Margin="20,20,0,0" Padding="0,0,0,20"/>
+                        <TextBlock Text="&#xE26B;" Margin="10,20,0,0" FontFamily="Segoe UI Symbol" FontSize="28" FontWeight="ExtraLight" Padding="0,0,0,10" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                        <TextBlock Name="AnalysisOptionsSubHeader" Text="Default" FontSize="20" VerticalAlignment="Center" Margin="20,20,0,0" Padding="0,15,0,20" FontFamily="Segoe UI" FontWeight="ExtraLight"/>
+                    </StackPanel>
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Default" Click="AnalysisDefaultOptionClicked"/>
+                            <MenuFlyoutItem Text="Graphical" Click="AnalysisGraphicalOptionClicked"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
             </Grid>
-            
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Name="AnalysisDetailsGrid">
                 <GridView 
                       Padding="50"
                       Name="RecordGrid" 
@@ -208,8 +222,130 @@
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
-        </Grid>
+            <Grid Grid.Row="1" Name="AnalysisGraphGrid" Visibility="Collapsed">
+                <ScrollViewer Grid.Column="1" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <chart:RadialGaugeChart ChartTitle="Gender distribution"
+                                            ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                            Height="260" Width="330" Margin="10,10,0,0">
+                                <chart:RadialGaugeChart.Series>
+                                    <chart:ChartSeries
+                                        SeriesTitle="Sex"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Sex}" />
+                                </chart:RadialGaugeChart.Series>
+                            </chart:RadialGaugeChart>
+                            <chart:RadialGaugeChart ChartTitle="Marital status"
+                                            ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
+                                            Height="260" Width="330" Margin="10,10,0,0">
+                                <chart:RadialGaugeChart.Series>
+                                    <chart:ChartSeries
+                                        SeriesTitle="Married"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Married}" />
+                                </chart:RadialGaugeChart.Series>
+                            </chart:RadialGaugeChart>
+                        </StackPanel>
+                        <chart:PieChart ChartTitle="Cities"
+                                        ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
+                                            Height="490" Width="490" Margin="10,-30,0,0">
+                            <chart:PieChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Cities"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=City}" />
+                            </chart:PieChart.Series>
+                        </chart:PieChart>
+                        <chart:PieChart ChartTitle="Blood group"
+                                        ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
+                                            Height="490" Width="490" Margin="10,-30,0,0">
+                            <chart:PieChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Blood group"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Blood}" />
+                            </chart:PieChart.Series>
+                        </chart:PieChart>
+                        <chart:ClusteredColumnChart ChartTitle="Diseases"
+                                                    ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
+                                            Height="490" Width="490" Margin="10,-30,0,0">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Diseases"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Disease}" />
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
+                        <chart:ClusteredColumnChart ChartTitle="Addiction"
+                                                    ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
+                                            Height="490" Width="490" Margin="10,-30,0,0">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Addictions"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Addiction}" />
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
 
+                        <chart:DoughnutChart ChartTitle="Operations"
+                                                 ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                             Height="490" Width="490" Margin="10,-30,0,0"
+                                             InnerRadiusRatio="0.6">
+                            <chart:DoughnutChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Operations"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Operation}" />
+                            </chart:DoughnutChart.Series>
+                        </chart:DoughnutChart>
+                        <chart:DoughnutChart ChartTitle="Vaccinations"
+                                                 ChartSubTitle=""
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                             Height="490" Width="490" Margin="10,-30,0,0"
+                                             InnerRadiusRatio="0.6">
+                            <chart:DoughnutChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Vaccinations"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Vaccine}" />
+                            </chart:DoughnutChart.Series>
+                        </chart:DoughnutChart>
+
+                        <chart:DoughnutChart ChartTitle="Allergies"
+                                             ChartSubTitle=""
+                                             InnerRadiusRatio="0.6"
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                             Height="530" Width="490" Margin="10,10,10,0" VerticalAlignment="Top">
+                            <chart:DoughnutChart.Series>
+                                <chart:ChartSeries
+                                        SeriesTitle="Allergies"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Allergy}" />
+                            </chart:DoughnutChart.Series>
+                        </chart:DoughnutChart>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </Grid>
+
+        </Grid>
     </Grid>
 
     <Page.BottomAppBar>
