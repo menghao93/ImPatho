@@ -52,7 +52,7 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
         }
 
-        private async void InitializeCombos()
+        private void InitializeCombos()
         {
             //Adding days, months, and years to combobox in form
             for (int i = 0; i < 31; i++)
