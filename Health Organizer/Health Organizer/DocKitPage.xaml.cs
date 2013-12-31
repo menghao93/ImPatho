@@ -333,12 +333,13 @@ namespace Health_Organizer
             docKitDescription.Text = "\n" + tempDisease.Description;
             docKitImage.Source = await ImageMethods.Base64StringToBitmap(tempDisease.Image);
 
-            //  string tempSymptoms = "";
-
             docKitSymptomsPanel.Children.Clear();
             foreach (var i in tempDisease.Symptoms.Split(','))
             {
-                // tempSymptoms += "\n• " + ExtraModules.RemoveStringSpace(i);
+                if (i.Equals(""))
+                {
+                    continue;
+                }
 
                 StackPanel docKitSymptomsStackPanels = new StackPanel();
                 docKitSymptomsStackPanels.Margin = new Thickness(0, 15, 0, 0);
@@ -352,14 +353,13 @@ namespace Health_Organizer
 
                 TextBlock Symptom = new TextBlock();
                 Symptom.Width = 650;
-                Symptom.Text = ExtraModules.RemoveStringSpace(i);
+                Symptom.Text = ExtraModules.RemoveStringSpace(i).Replace(",","");
                 Symptom.TextWrapping = TextWrapping.Wrap;
                 Symptom.FontSize = 20;
                 docKitSymptomsStackPanels.Children.Add(Symptom);
 
                 docKitSymptomsPanel.Children.Add(docKitSymptomsStackPanels);
             }
-            //  docKitSymptoms.Text = tempSymptoms;
             return true;
         }
 

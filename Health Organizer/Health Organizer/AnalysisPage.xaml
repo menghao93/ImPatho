@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Health_Organizer"
+    xmlns:callisto="using:Callisto.Controls"
     xmlns:common="using:Health_Organizer.Data"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,7 +18,7 @@
             ItemsPath="TopItems"
             Source="{Binding Items}"/>
 
-        <x:String x:Key="AppName">Advanced Search</x:String>
+        <x:String x:Key="AppName">Analysis</x:String>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -28,7 +29,7 @@
         </Grid.ChildrenTransitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="430"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -62,8 +63,7 @@
 
                 <StackPanel Grid.Row="0" Margin="50,-10,0,0">
 
-                    <RadioButton Name="AnalysisByDate" Checked="AnalysisByDateChecked" Content="Choose Timeline" FontSize="15" />
-
+                    <CheckBox Name="AnalysisByDate" Checked="AnalysisByDateChecked" Unchecked="AnalysisByDateUnChecked" Content="Choose Timeline" FontSize="15" />
                     <TextBlock Text="Records from date" FontSize="15" Margin="0,10,0,0"/>
                     <!--Analysis From date-->
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
@@ -149,7 +149,7 @@
 
                 </StackPanel>
 
-                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,50,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                     <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
                     <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button>
                     <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
@@ -222,6 +222,7 @@
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
+
             <Grid Grid.Row="1" Name="AnalysisGraphGrid" Visibility="Collapsed">
                 <ScrollViewer Grid.Column="1" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                     <StackPanel Orientation="Horizontal">
@@ -342,15 +343,29 @@
                         </chart:DoughnutChart>
                     </StackPanel>
                 </ScrollViewer>
-
             </Grid>
-
         </Grid>
+
+        <callisto:CustomDialog Name="EmailInfoForm" 
+                                Title="Email" 
+                                Background="#0064A0" >
+            <StackPanel Orientation="Vertical" Width="350">
+                <TextBox Name="FromEmail" Header="From" Margin="0,10,0,0"/>
+                <PasswordBox Name="FromPassword" Header="Password" Margin="0,10,0,0" />
+                <TextBox Name="ToEmail" Header="To" Margin="0,10,0,0"/>
+                <TextBox Name="Subject" Header="Subject" Margin="0,10,0,0"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button Name="SendMail" Click="SendMailClicked" Width="100">Send</Button>
+                    <Button Name="Cancle" Click="CancleMailClicked" Width="100">Cancle</Button>
+                </StackPanel>
+            </StackPanel>
+        </callisto:CustomDialog>
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar Name="AnalysisPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
             <AppBarButton Name="ViewProfile" Click="ViewProfileClicked" Icon="Contact" Label="View Profile"></AppBarButton>
+            <AppBarButton Name="ShareProfile" Click="ShareProfileClicked" Icon="Mail" Label="Share Profile"></AppBarButton>
             <AppBarButton Name="ExportProfile" Click="ExportProfileClicked" Icon="Save" Label="Export Profile"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>

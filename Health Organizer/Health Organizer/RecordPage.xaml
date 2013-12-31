@@ -96,9 +96,9 @@
                 </SemanticZoom.ZoomedOutView>
                 <SemanticZoom.ZoomedInView>
                     <GridView 
-                      SelectionChanged="RecordPageNewItemClicked" 
-                      Padding="50,-50,0,0"
                       Name="RecordGrid" 
+                      SelectionChanged="RecordPageNewItemClicked" 
+                      Padding="50,0,0,0"
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
                       CanReorderItems="True" 
                       CanDragItems="True" 
@@ -119,11 +119,11 @@
                             </DataTemplate>
                         </GridView.ItemTemplate>
 
-                        <GridView.ItemsPanel>
+                        <!--<GridView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <VariableSizedWrapGrid  MaximumRowsOrColumns="2" MaxHeight="570"/>
+                                <VariableSizedWrapGrid MaximumRowsOrColumns="1" MaxHeight="600"/>
                             </ItemsPanelTemplate>
-                        </GridView.ItemsPanel>
+                        </GridView.ItemsPanel>-->
                         
                         <GridView.GroupStyle>
                             <GroupStyle>
