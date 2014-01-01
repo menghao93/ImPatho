@@ -26,126 +26,167 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Back button and page title -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+        <Grid Grid.Column="0" Background="#00A2E8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Back button and page title -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="Profile" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                <TextBlock x:Name="pageTitle" Text="Profile" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-            
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0" >
-                <AppBarButton Grid.Column="1" Label="Edit Profile" Icon="Edit" Click="profileDetailsEditBut"/>
-                <AppBarButton  Label="Help" Icon="Help" />
-                <AppBarButton  Label="Settings" Icon="Setting"  />
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.90*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid Grid.Column="0">
-                <Image Name="ProfileImage" Source="Assets/DefaultProfilePic.jpg" Height="250" Width="250" VerticalAlignment="Top" Margin="0,15,0,0"/>
             </Grid>
             
-            <ScrollViewer Grid.Column="1">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical" Width="450">
-                        
-                        <TextBlock Style="{StaticResource SubheaderTextBlockStyleInBody}" Name="ProfileBasicDetails" Text="Basic Details" Margin="0,0,0,20"/>
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="20" Width="150" Text="Name: " />
-                            <TextBlock Name="ProfileName" FontSize="20"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <TextBlock FontSize="20" Width="150" Text="Date of Birth: " />
-                            <TextBlock Name="ProfileDateOfBirth" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <TextBlock FontSize="20" Width="150" Text="Address: " />
-                            <TextBlock Name="ProfileAddress" Width="300"  TextWrapping="Wrap" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Contact: " />
-                            <TextBlock Name="ProfileContact" Width="300" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Emergency No: " />
-                            <TextBlock Name="ProfileEmContact" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <TextBlock FontSize="20" Width="150" Text="Email: " />
-                            <TextBlock Name="ProfileEmail" FontSize="20" Width="300" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Occupation: " />
-                            <TextBlock Name="ProfileOccupation" Width="300" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Marital Status: " />
-                            <TextBlock Name="ProfileMaritalStatus" FontSize="20" />
-                        </StackPanel>
+            <StackPanel Grid.Row="1">
+                <Image Name="ProfileImage" Source="Assets/DefaultProfilePic.jpg" Height="250" Width="250" VerticalAlignment="Top" Margin="0,15,0,0"/>
+                <StackPanel Name="VisitStackPanel1" Orientation="Vertical" HorizontalAlignment="Center" Width="180" Margin="0,20,0,0">
+                    <TextBlock FontSize="25" FontWeight="Light" Name="VisitGeneralDetails" FontFamily="Segoe UI" Text="General Details"  />
+                    <!--Height Detail-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Name="VisitTitleHeight"  Text="Height: " FontSize="15"/>
+                        <TextBlock Name="VisitTextHeight" FontSize="15" Margin="15,0,0,0" Text="NA"/>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Width="450">
-
-                        <TextBlock Style="{StaticResource SubheaderTextBlockStyleInBody}" Name="ProfileOtherDetails" Text="Other Details" Margin="0,0,0,20"/>
-
-                        <StackPanel Orientation="Horizontal" >
-                            <TextBlock FontSize="20" Width="150" Text="Age: " />
-                            <TextBlock Name="ProfileAge" Width="300" FontSize="20" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Blood Group: " />
-                            <TextBlock Name="ProfileBloodGroup" Width="300" FontSize="20"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Sex: " />
-                            <TextBlock Name="ProfileSex" FontSize="20"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Allergies: " />
-                            <TextBlock Name="ProfileAllergies" Width="300"  TextWrapping="Wrap" FontSize="20" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Addictions: " />
-                            <TextBlock Name="ProfileAddictions" FontSize="20" Width="300"  TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Family History: " />
-                            <TextBlock Name="ProfileFamilyHistory" Width="300"  TextWrapping="Wrap" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                            <TextBlock FontSize="20" Width="150" Text="Operations: " />
-                            <TextBlock Name="ProfileOperations" FontSize="20" Width="300"  TextWrapping="Wrap"/>
-                        </StackPanel>
+                    <!--Weight Detail-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Name="VisitTitleWeight"  Text="Weight: " FontSize="15" />
+                        <TextBlock Name="VisitTextWeight" FontSize="15" Margin="15,0,0,0" Text="NA"/>
+                    </StackPanel>
+                    <!--BMI Detail-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Name="VisitTitleBMI"  Text="BMI: " FontSize="15" />
+                        <TextBlock Name="VisitTextBMI" FontSize="15" Margin="15,0,0,0" Text="NA"/>
+                    </StackPanel>
+                    <!--Blood pressure Detail-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Name="VisitTitleBP"  Text="Blood Pressure: " FontSize="15" />
+                        <TextBlock Name="VisitTextBP" FontSize="15" Margin="15,0,0,0" Text="NA"/>
+                    </StackPanel>
+                    <!--Blood glucose detail-->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Name="VisitTitleBG"  Text="Blood Glucose: " FontSize="15" />
+                        <TextBlock Name="VisitTextBG" FontSize="15" Margin="15,0,0,0" Text="NA"/>
                     </StackPanel>
                 </StackPanel>
-            </ScrollViewer>
+            </StackPanel>
         </Grid>
+        
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0" >
+                    <AppBarButton Grid.Column="1" Label="Edit Profile" Icon="Edit" Click="profileDetailsEditBut"/>
+                    <AppBarButton  Label="Help" Icon="Help" />
+                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                </StackPanel>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+                <ScrollViewer Margin="20,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical" Width="450">
+
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyleInBody}" Name="ProfileBasicDetails" Text="Basic Details" Margin="0,0,0,20"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="20" Width="150" Text="Name: " />
+                                <TextBlock Name="ProfileName" FontSize="20"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock FontSize="20" Width="150" Text="Date of Birth: " />
+                                <TextBlock Name="ProfileDateOfBirth" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock FontSize="20" Width="150" Text="Address: " />
+                                <TextBlock Name="ProfileAddress" Width="300"  TextWrapping="Wrap" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Contact: " />
+                                <TextBlock Name="ProfileContact" Width="300" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Emergency No: " />
+                                <TextBlock Name="ProfileEmContact" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock FontSize="20" Width="150" Text="Email: " />
+                                <TextBlock Name="ProfileEmail" FontSize="20" Width="300" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Occupation: " />
+                                <TextBlock Name="ProfileOccupation" Width="300" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Marital Status: " />
+                                <TextBlock Name="ProfileMaritalStatus" FontSize="20" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Width="450">
+
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyleInBody}" Name="ProfileOtherDetails" Text="Other Details" Margin="0,0,0,20"/>
+
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock FontSize="20" Width="150" Text="Age: " />
+                                <TextBlock Name="ProfileAge" Width="300" FontSize="20" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Blood Group: " />
+                                <TextBlock Name="ProfileBloodGroup" Width="300" FontSize="20"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Sex: " />
+                                <TextBlock Name="ProfileSex" FontSize="20"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Allergies: " />
+                                <TextBlock Name="ProfileAllergies" Width="300"  TextWrapping="Wrap" FontSize="20" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Addictions: " />
+                                <TextBlock Name="ProfileAddictions" FontSize="20" Width="300"  TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Family History: " />
+                                <TextBlock Name="ProfileFamilyHistory" Width="300"  TextWrapping="Wrap" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <TextBlock FontSize="20" Width="150" Text="Operations: " />
+                                <TextBlock Name="ProfileOperations" FontSize="20" Width="300"  TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+       
     </Grid>
 </Page>

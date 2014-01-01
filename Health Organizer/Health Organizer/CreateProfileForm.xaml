@@ -339,214 +339,219 @@
         * Row 1 contains the rest of the page layout
     -->
     <Grid>
-    <Grid Name="profileMainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid Name="profileMainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid.ChildrenTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition/>
+                </TransitionCollection>
+            </Grid.ChildrenTransitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="140"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Back button and page title -->
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <!--Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"-->
-            <Button x:Name="backButton" Margin="39,59,39,0"  Click="GoBackNewProfile"
+            <!-- Back button and page title -->
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"-->
+                <Button x:Name="backButton" Margin="39,59,39,0"  Click="GoBackNewProfile"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-        </Grid>
 
-        <!--Actual form starts from here-->
-        <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,23,0,-23">
-            <Grid  Margin="20,0,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0">
+                    <AppBarButton  Label="Reset" Icon="Undo" Click="ResetNewProfile" />
+                    <AppBarButton  Label="Save" Icon="Save" Click="SaveNewProfile" />
+                </StackPanel>
+            </Grid>
 
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="0.5*"/>
-                        <RowDefinition Height="0.5*"/>
-                        <RowDefinition Height="0.25*"/>
-                    </Grid.RowDefinitions>
+            <!--Actual form starts from here-->
+            <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,23,0,-23">
+                <Grid  Margin="20,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Column="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="0.5*"/>
+                            <RowDefinition Height="0.5*"/>
+                            <RowDefinition Height="0.25*"/>
                         </Grid.RowDefinitions>
 
-                        <!--First Name Last Name Grid-->
                         <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
 
-                            <Grid Grid.Column="0">
-                                <TextBox Name="profileFirstName" Header="First Name" Margin="20,0,20,15"/>
+                            <!--First Name Last Name Grid-->
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
+                                    <TextBox Name="profileFirstName" Header="First Name" Margin="20,0,20,15"/>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBox Name="profileLastName" Header="Last Name" Margin="20,0,20,15"/>
+                                </Grid>
                             </Grid>
-                            <Grid Grid.Column="1">
-                                <TextBox Name="profileLastName" Header="Last Name" Margin="20,0,20,15"/>
+
+                            <!--Blood Group, Sex and Birthdate Grid-->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--Blood Group Combobox-->
+                                <StackPanel Orientation="Vertical" Grid.Column="0" Margin="20,0,20,15">
+                                    <TextBlock FontSize="15">Blood Group</TextBlock>
+                                    <ComboBox Name="profileBloodGroup" PlaceholderText="Select" AllowDrop="True" >
+                                        <x:String>A+</x:String>
+                                        <x:String>A-</x:String>
+                                        <x:String>B+</x:String>
+                                        <x:String>B-</x:String>
+                                        <x:String>AB+</x:String>
+                                        <x:String>AB-</x:String>
+                                        <x:String>O+</x:String>
+                                        <x:String>O-</x:String>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!--Sex type Combobox-->
+                                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,20,15">
+                                    <TextBlock FontSize="15">Sex</TextBlock>
+                                    <ComboBox Name="profileSexType" PlaceholderText="Select" AllowDrop="True">
+                                        <x:String>Male</x:String>
+                                        <x:String>Female</x:String>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!--Birthday Panel-->
+                                <StackPanel Orientation="Vertical" Grid.Column="3" Margin="20,0,20,15">
+                                    <TextBlock FontSize="15">Birthday</TextBlock>
+                                    <StackPanel Orientation="Horizontal" >
+
+                                        <ComboBox Name="profileDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
+                                        <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
+                                            <x:String>January</x:String>
+                                            <x:String>February</x:String>
+                                            <x:String>March</x:String>
+                                            <x:String>April</x:String>
+                                            <x:String>May</x:String>
+                                            <x:String>June</x:String>
+                                            <x:String>July</x:String>
+                                            <x:String>August</x:String>
+                                            <x:String>September</x:String>
+                                            <x:String>October</x:String>
+                                            <x:String>November</x:String>
+                                            <x:String>December</x:String>
+                                        </ComboBox>
+                                        <ComboBox Name="profileYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </Grid>
                         </Grid>
 
-                        <!--Blood Group, Sex and Birthdate Grid-->
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!--Blood Group Combobox-->
-                            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="20,0,20,15">
-                                <TextBlock FontSize="15">Blood Group</TextBlock>
-                                <ComboBox Name="profileBloodGroup" PlaceholderText="Select" AllowDrop="True" >
-                                    <x:String>A+</x:String>
-                                    <x:String>A-</x:String>
-                                    <x:String>B+</x:String>
-                                    <x:String>B-</x:String>
-                                    <x:String>AB+</x:String>
-                                    <x:String>AB-</x:String>
-                                    <x:String>O+</x:String>
-                                    <x:String>O-</x:String>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <!--Sex type Combobox-->
-                            <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,20,15">
-                                <TextBlock FontSize="15">Sex</TextBlock>
-                                <ComboBox Name="profileSexType" PlaceholderText="Select" AllowDrop="True">
-                                    <x:String>Male</x:String>
-                                    <x:String>Female</x:String>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <!--Birthday Panel-->
-                            <StackPanel Orientation="Vertical" Grid.Column="3" Margin="20,0,20,15">
-                                <TextBlock FontSize="15">Birthday</TextBlock>
+                            <!--Address, Contact, Status, Allergies, Addiction -->
+                            <StackPanel Grid.Column="0">
+                                <!--Address-->
+                                <TextBox Header="Address" Height="120" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap" AcceptsReturn="True"/>
                                 <StackPanel Orientation="Horizontal" >
-
-                                    <ComboBox Name="profileDayComboBox" AllowDrop="True" PlaceholderText="Date" Margin="0,0,0,20" HorizontalAlignment="Left"/>
-                                    <ComboBox Name="profileMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,20" HorizontalAlignment="Center">
-                                        <x:String>January</x:String>
-                                        <x:String>February</x:String>
-                                        <x:String>March</x:String>
-                                        <x:String>April</x:String>
-                                        <x:String>May</x:String>
-                                        <x:String>June</x:String>
-                                        <x:String>July</x:String>
-                                        <x:String>August</x:String>
-                                        <x:String>September</x:String>
-                                        <x:String>October</x:String>
-                                        <x:String>November</x:String>
-                                        <x:String>December</x:String>
-                                    </ComboBox>
-                                    <ComboBox Name="profileYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,20" HorizontalAlignment="Right"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!--Address, Contact, Status, Allergies, Addiction -->
-                        <StackPanel Grid.Column="0">
-                            <!--Address-->
-                            <TextBox Header="Address" Height="120" Name="profileAddress" Margin="20,0,20,15" TextWrapping="Wrap" AcceptsReturn="True"/>
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBox Header="City" Name="profileCity" Width="150" Margin="20,0,20,15"/>
+                                    <TextBox Header="City" Name="profileCity" Width="150" Margin="20,0,20,15"/>
                                     <TextBox Header="Zip" Name="profileZip" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber" MaxLength="9" KeyDown="numberValidation"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Header="State" Name="profileState" Width="150" Margin="20,0,20,15"/>
-                                <TextBox Header="Country" Name="profileCountry" Width="150" Margin="20,0,20,15"/>
-                            </StackPanel>
-                            <!--Contact-->
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
-                                <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
-                            </StackPanel>
-                            <TextBox Header="Email Address" Name="profileEmailAddress" Margin="20,0,20,15" />
-                            <!--Status-->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Header="Occupation" Name="profileOccupation" Width="150" Margin="20,0,20,15"/>
-                                <CheckBox Name="profileMarried" Content="Married" Margin="20,15,20,15"></CheckBox>
-                            </StackPanel>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Header="State" Name="profileState" Width="150" Margin="20,0,20,15"/>
+                                    <TextBox Header="Country" Name="profileCountry" Width="150" Margin="20,0,20,15"/>
+                                </StackPanel>
+                                <!--Contact-->
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBox Header="Contact Number" Name="profileContactNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
+                                    <TextBox Header="Emergency Number" Name="profileEmergencyNumber" Width="150" Margin="20,0,20,15" InputScope="TelephoneNumber"  MaxLength="10" KeyDown="numberValidation"/>
+                                </StackPanel>
+                                <TextBox Header="Email Address" Name="profileEmailAddress" Margin="20,0,20,15" />
+                                <!--Status-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Header="Occupation" Name="profileOccupation" Width="150" Margin="20,0,20,15"/>
+                                    <CheckBox Name="profileMarried" Content="Married" Margin="20,15,20,15"></CheckBox>
+                                </StackPanel>
 
-                        </StackPanel>
-                    </Grid>
+                            </StackPanel>
+                        </Grid>
 
-                    <Grid Grid.Row="2">
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <!--Allergies-->
-                            <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy"/>
-                            <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine"/>
+                        <Grid Grid.Row="2">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--Allergies-->
+                                <TextBox Grid.Column="0" Header="Allergies" Height="90" Name="profileAllergies" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Peanut allergy, Syrup allergy"/>
+                                <!--Addiction-->
+                                <TextBox Grid.Column="1" Header="Addictions" Height="90" Name="profileAddictions" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Alcohol, Nicotine"/>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="3">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--Allergies-->
+                                <TextBox Grid.Column="0" Header="Family History" Height="90" Name="profileFamilyHistory" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Mother is suffering from HIV" />
+                                <!--Addiction-->
+                                <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast"/>
+                            </Grid>
+
+                        </Grid>
+
+                        <Grid Grid.Row="4">
+                            <StackPanel Orientation="Horizontal" Margin="20,0,20,15">
+                                <Button Name="profileSaveProfile" Width="150" Click="SaveNewProfile" Margin="0,0,20,15">Save</Button>
+                                <Button Name="profileReset" Width="150"  Click="ResetNewProfile" Margin="0,0,20,15">Reset</Button>
+                            </StackPanel>
                         </Grid>
                     </Grid>
 
-                    <Grid Grid.Row="3">
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <!--Allergies-->
-                            <TextBox Grid.Column="0" Header="Family History" Height="90" Name="profileFamilyHistory" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Mother is suffering from HIV" />
-                            <!--Addiction-->
-                            <TextBox Grid.Column="1" Header="Operations" Height="90" Name="profileOperations" Margin="20,0,20,15" TextWrapping="Wrap" PlaceholderText="Eg. Biopsy Liver, Biopsy Breast"/>
-                        </Grid>
+                    <Grid Grid.Column="1">
+
+                        <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Name="profilePic" Height="175" Width="175" HorizontalAlignment="Center" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                                <Button Name="profileBrowseImage" Click="BrowseImage" Margin="0,0,10,0">Browse</Button>
+                                <Button Name="profileCameraImage" Click="CameraImage" Margin="10,0,0,0" >Camera</Button>
+                            </StackPanel>
+                        </StackPanel>
 
                     </Grid>
-
-                    <Grid Grid.Row="4">
-                        <StackPanel Orientation="Horizontal" Margin="20,0,20,15">
-                            <Button Name="profileSaveProfile" Width="150" Click="SaveNewProfile" Margin="0,0,20,15">Save</Button>
-                            <Button Name="profileReset" Width="150"  Click="ResetNewProfile" Margin="0,0,20,15">Reset</Button>
-                        </StackPanel>
-                    </Grid>
                 </Grid>
+            </ScrollViewer>
 
-                <Grid Grid.Column="1">
-
-                    <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Name="profilePic" Height="175" Width="175" HorizontalAlignment="Center" VerticalAlignment="Top" Source="Assets/DefaultProfilePic.jpg"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
-                            <Button Name="profileBrowseImage" Click="BrowseImage" Margin="0,0,10,0">Browse</Button>
-                            <Button Name="profileCameraImage" Click="CameraImage" Margin="10,0,0,0" >Camera</Button>
-                        </StackPanel>
-                    </StackPanel>
-
-                </Grid>
-            </Grid>
-        </ScrollViewer>
-        
-    </Grid>
+        </Grid>
         <ProgressRing Name="profileProgressRing" Foreground="#0064A0" Width="50" Height="50"></ProgressRing>
     </Grid>
 </Page>
