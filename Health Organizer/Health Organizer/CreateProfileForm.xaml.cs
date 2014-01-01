@@ -1091,7 +1091,7 @@ namespace Health_Organizer
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
                 profileState.Text.Equals("") || profileCity.Text.Equals("") || profileZip.Text.Equals("") || profileContactNumber.Text.Equals("") ||
                 profileEmailAddress.Equals("") || profileOccupation.Text.Equals("") || profileSexType.SelectedItem == null || profileDayComboBox.SelectedItem == null || profileYearComboBox.SelectedItem == null || profileMonthComboBox.SelectedItem == null
-                || !ExtraModules.isEmail(profileEmailAddress.Text) || !Int32.TryParse(profileZip.Text, out catchInt32) || !Int64.TryParse(profileContactNumber.Text, out catchInt64) || !Int64.TryParse(profileEmergencyNumber.Text, out catchInt64)
+                || !ExtraModules.isEmail(profileEmailAddress.Text) || !Int32.TryParse(profileZip.Text, out catchInt32) || !Int64.TryParse(profileContactNumber.Text, out catchInt64) || (!profileEmergencyNumber.Text.Equals("") && !Int64.TryParse(profileEmergencyNumber.Text, out catchInt64))
                 || profileBloodGroup.SelectedItem == null)
             {
                 if (profileFirstName.Text.Equals(""))
@@ -1139,7 +1139,7 @@ namespace Health_Organizer
                 {
                     profileContactNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
-                if (!Int64.TryParse(profileEmergencyNumber.Text, out catchInt64))
+                if (!profileEmergencyNumber.Text.Equals("") && !Int64.TryParse(profileEmergencyNumber.Text, out catchInt64))
                 {
                     profileEmergencyNumber.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }

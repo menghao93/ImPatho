@@ -41,6 +41,10 @@ namespace Health_Organizer
         public static List<string> vaccinationList;
         public static List<string> operationList;
         public static Dictionary<string, string> city2state;
+        public static RadialGaugeChart sexGraph, marriedGraph;
+        public static PieChart cityGraph, bloodGraph;
+        public static ClusteredColumnChart diseaseGraph, addictionGraph;
+        public static DoughnutChart allergyGraph, vaccineGraph, operationGraph;
 
         bool ByDateFlag, CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
             AddictionFlag, VaccineFlag, OperationFlag;
@@ -65,15 +69,30 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            sexGraph = AnalysisSexGraph;
+            marriedGraph = AnalysisMarriedGraph;
+            cityGraph = AnalysisCityGraph;
+            bloodGraph = AnalysisBloodGraph;
+            diseaseGraph = AnalysisDiseaseGraph;
+            addictionGraph = AnalysisAddictionGraph;
+            allergyGraph = AnalysisAllergyGraph;
+            operationGraph = AnalysisOperationGraph;
+            vaccineGraph = AnalysisVaccineGraph;
         }
 
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisProgressRing.IsActive = true;
+            AnalysisProgressGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             var sample = await AnalysisPageDataSoure.GetItemsAsync();
             AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisProgressRing.IsActive = false;
+            AnalysisProgressGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            AnalysisResetFields.IsEnabled = true;
+            AnalysisExportFields.IsEnabled = true;
+            AnalysisSearch.IsEnabled = true;
 
             gridViewSource.Source = sample;
             mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
@@ -199,19 +218,28 @@ namespace Health_Organizer
 
                     foreach (string addiction in item.Addiction)
                     {
-                        data += addiction + "; ";
+                        if (!addiction.Equals(""))
+                        {
+                            data += addiction + "; ";
+                        }
                     }
                     data += columnSeparator;
 
                     foreach (string operation in item.Operation)
                     {
-                        data += operation + "; ";
+                        if (!operation.Equals(""))
+                        {
+                            data += operation + "; ";
+                        }
                     }
                     data += columnSeparator;
 
                     foreach (string vaccine in item.Vaccines.Values)
                     {
-                        data += vaccine + "; ";
+                        if (!vaccine.Equals(""))
+                        {
+                            data += vaccine + "; ";
+                        }
                     }
                     data += columnSeparator;
 
@@ -910,7 +938,7 @@ namespace Health_Organizer
 
         private void AnalysisDefaultOptionClicked(object sender, RoutedEventArgs e)
         {
-            AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AnalysisGraphGridScrollViewer.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisOptionsSubHeader.Text = "Default";
             AnalysisDetailsGridAnimation.Begin();
@@ -918,7 +946,7 @@ namespace Health_Organizer
 
         private void AnalysisGraphicalOptionClicked(object sender, RoutedEventArgs e)
         {
-            AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisGraphGridScrollViewer.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisOptionsSubHeader.Text = "Graphical";
             (this.DataContext as TestPageViewModel).UpdateGraphView();
@@ -960,22 +988,12 @@ namespace Health_Organizer
                 List<String> operationListRepeatedValues = new List<string>();
                 List<String> cityListRepeatedValues = new List<string>();
 
-                //Sex = new ObservableCollection<TestClass>();
-                //Married = new ObservableCollection<TestClass>();
-                //Disease = new ObservableCollection<TestClass>();
-                //City = new ObservableCollection<TestClass>();
-                //Blood = new ObservableCollection<TestClass>();
-                //Addiction = new ObservableCollection<TestClass>();
-                //Allergy = new ObservableCollection<TestClass>();
-                //Operation = new ObservableCollection<TestClass>();
-                //Vaccine = new ObservableCollection<TestClass>();
-
                 Sex.Clear();
                 City.Clear();
+                Blood.Clear();
                 Married.Clear();
                 Addiction.Clear();
                 Allergy.Clear();
-                Addiction.Clear();
                 Operation.Clear();
                 Vaccine.Clear();
                 Disease.Clear();
@@ -1001,6 +1019,10 @@ namespace Health_Organizer
                         Sex.Add(new TestClass() { Category = "Male", Number = (int)Math.Round((double)x * 100 / resultList.Count()) });
                         Sex.Add(new TestClass() { Category = "Female", Number = (int)Math.Round((double)100 * (resultList.Count() - x) / resultList.Count()) });
                     }
+                    else
+                    {
+                        sexGraph.ChartSubTitle = "No results found";
+                    }
                 });
 
                 //display married pie chart
@@ -1012,6 +1034,10 @@ namespace Health_Organizer
                         Married.Add(new TestClass() { Category = "Married", Number = (int)Math.Round((double)y * 100 / resultList.Count()) });
                         Married.Add(new TestClass() { Category = "Unmarried", Number = (int)Math.Round(((double)resultList.Count() - y) * 100 / resultList.Count()) });
                     }
+                    else
+                    {
+                        marriedGraph.ChartSubTitle = "No results found";
+                    }
                 });
 
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
@@ -1021,6 +1047,8 @@ namespace Health_Organizer
                     {
                         City.Add(new TestClass() { Category = i, Number = cityListRepeatedValues.Count(j => j.Equals(i)) });
                     }
+                    if (City.Count == 0)
+                        cityGraph.ChartSubTitle = "No results found";
                 });
 
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
@@ -1035,6 +1063,8 @@ namespace Health_Organizer
                     {
                         Blood.Add(new TestClass() { Category = i.ToString(), Number = resultList.Count(j => j.BloodGroup.Equals(i.ToString())) });
                     }
+                    if (Blood.Count == 0)
+                        bloodGraph.ChartSubTitle = "No results found";
                 });
 
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
@@ -1044,6 +1074,8 @@ namespace Health_Organizer
                     {
                         Disease.Add(new TestClass() { Category = i.ToString(), Number = diseaseListRepeatedValues.Count(j => j.Equals(i)) });
                     }
+                    if (Disease.Count == 0)
+                        diseaseGraph.ChartSubTitle = "No diseases found";
                 });
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
@@ -1052,6 +1084,8 @@ namespace Health_Organizer
                     {
                         Addiction.Add(new TestClass() { Category = i.ToString(), Number = addictionListRepeatedValues.Count(j => j.Equals(i)) });
                     }
+                    if (Addiction.Count == 0)
+                        addictionGraph.ChartSubTitle = "No addictions found";
                 });
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
@@ -1061,6 +1095,8 @@ namespace Health_Organizer
                     {
                         Operation.Add(new TestClass() { Category = i.ToString(), Number = operationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
                     }
+                    if (Operation.Count == 0)
+                        operationGraph.ChartSubTitle = "No operations found";
                 });
 
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
@@ -1069,6 +1105,8 @@ namespace Health_Organizer
                     {
                         Allergy.Add(new TestClass() { Category = i.ToString(), Number = allergyListRepeatedValues.Count(j => j.Equals(i.ToString())) });
                     }
+                    if (Allergy.Count == 0)
+                        allergyGraph.ChartSubTitle = "No allergies found";
                 });
                 window.Dispatcher.RunAsync(CoreDispatcherPriority.Low, delegate
                 {
@@ -1077,6 +1115,8 @@ namespace Health_Organizer
                     {
                         Vaccine.Add(new TestClass() { Category = i.ToString(), Number = vaccinationListRepeatedValues.Count(j => j.Equals(i.ToString())) });
                     }
+                    if (Vaccine.Count == 0)
+                        vaccineGraph.ChartSubTitle = "No vaccinations found";
                 });
             }
 
@@ -1160,7 +1200,6 @@ namespace Health_Organizer
                 AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
                 AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
             }
-
         }
     }
 }
