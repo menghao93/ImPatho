@@ -263,8 +263,8 @@
                             </GridView.ItemTemplate>
                         </GridView>
                     </Grid>
-                    <ScrollViewer Grid.Row="1" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                        <Grid Grid.Column="1" Name="AnalysisGraphGrid" Visibility="Collapsed">
+                    <ScrollViewer Grid.Row="1" Name="AnalysisGraphGridScrollViewer" Visibility="Collapsed" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                        <Grid Grid.Column="1">
                             <Grid.RenderTransform>
                                 <TranslateTransform x:Name="AnalysisGraphGridTrans"/>
                             </Grid.RenderTransform>
@@ -272,6 +272,7 @@
                                 <StackPanel>
                                     <chart:RadialGaugeChart ChartTitle="Gender distribution"
                                             ChartSubTitle=""
+                                            Name="AnalysisSexGraph"
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
                                                     Style="{StaticResource MinimalChartStyle}"
                                                     Margin="10,10,0,10"
@@ -286,7 +287,7 @@
                                         />
                                         </chart:RadialGaugeChart.Series>
                                     </chart:RadialGaugeChart>
-                                    <chart:RadialGaugeChart ChartTitle="Marital status"
+                                    <chart:RadialGaugeChart Name="AnalysisMarriedGraph" ChartTitle="Marital status"
                                             ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                                                     Style="{StaticResource MinimalChartStyle}"
@@ -302,7 +303,7 @@
                                         </chart:RadialGaugeChart.Series>
                                     </chart:RadialGaugeChart>
                                 </StackPanel>
-                                <chart:PieChart ChartTitle="Cities"
+                                <chart:PieChart Name="AnalysisCityGraph" ChartTitle="Cities"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                                         Style="{StaticResource MinimalChartStyle}"
@@ -318,7 +319,7 @@
                                         ItemsSource="{Binding Path=City}" />
                                     </chart:PieChart.Series>
                                 </chart:PieChart>
-                                <chart:PieChart ChartTitle="Blood group"
+                                <chart:PieChart Name="AnalysisBloodGraph" ChartTitle="Blood group"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                                         Style="{StaticResource MinimalChartStyle}"
@@ -334,7 +335,7 @@
                                         ItemsSource="{Binding Path=Blood}" />
                                     </chart:PieChart.Series>
                                 </chart:PieChart>
-                                <chart:ClusteredColumnChart ChartTitle="Diseases"
+                                <chart:ClusteredColumnChart Name="AnalysisDiseaseGraph" ChartTitle="Diseases"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                                                     Style="{StaticResource MinimalChartStyle}"
@@ -350,7 +351,7 @@
                                         ItemsSource="{Binding Path=Disease}" />
                                     </chart:ClusteredColumnChart.Series>
                                 </chart:ClusteredColumnChart>
-                                <chart:ClusteredColumnChart ChartTitle="Addiction"
+                                <chart:ClusteredColumnChart Name="AnalysisAddictionGraph" ChartTitle="Addiction"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                                                     Style="{StaticResource MinimalChartStyle}"
@@ -367,7 +368,7 @@
                                     </chart:ClusteredColumnChart.Series>
                                 </chart:ClusteredColumnChart>
 
-                                <chart:DoughnutChart ChartTitle="Operations"
+                                <chart:DoughnutChart Name="AnalysisOperationGraph" ChartTitle="Operations"
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
                                              InnerRadiusRatio="0.6"
@@ -384,7 +385,7 @@
                                         ItemsSource="{Binding Path=Operation}" />
                                     </chart:DoughnutChart.Series>
                                 </chart:DoughnutChart>
-                                <chart:DoughnutChart ChartTitle="Vaccinations"
+                                <chart:DoughnutChart Name="AnalysisVaccineGraph" ChartTitle="Vaccinations"
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
                                              InnerRadiusRatio="0.6"
@@ -402,7 +403,7 @@
                                     </chart:DoughnutChart.Series>
                                 </chart:DoughnutChart>
 
-                                <chart:DoughnutChart ChartTitle="Allergies"
+                                <chart:DoughnutChart Name="AnalysisAllergyGraph" ChartTitle="Allergies"
                                              ChartSubTitle=""
                                              InnerRadiusRatio="0.6"
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
@@ -443,7 +444,7 @@
                     </StackPanel>
                 </callisto:CustomDialog>
             </Grid>
-            <Grid>
+            <Grid Name="AnalysisProgressGrid" Visibility="Collapsed">
                 <ProgressRing Name="AnalysisProgressRing" Height="50" Width="50"/>
             </Grid>
         </Grid>
