@@ -69,7 +69,12 @@ namespace Health_Organizer
 
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisProgressRing.IsActive = true;
             var sample = await AnalysisPageDataSoure.GetItemsAsync();
+            AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AnalysisProgressRing.IsActive = false;
+
             gridViewSource.Source = sample;
             mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
             resultList = mainItemList;
@@ -85,6 +90,7 @@ namespace Health_Organizer
             (this.DataContext as TestPageViewModel).UpdateGraphView();
 
             RecordGrid.SelectedItem = null;
+            AnalysisResultsFound.Text = "\"Found " + resultList.Count() + " results.\"";
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -110,7 +116,9 @@ namespace Health_Organizer
             gridViewSource.Source = mainItemList;
             this.UpdateView();
             (this.DataContext as TestPageViewModel).UpdateGraphView();
+            AnalysisResultsFound.Text = "\"Found " + resultList.Count() + " results.\"";
             RecordGrid.SelectedItem = null;
+            AnalysisGraphGridAnimation.Begin();
         }
 
         private void AnalysisSearchClicked(object sender, RoutedEventArgs e)
@@ -119,8 +127,9 @@ namespace Health_Organizer
             this.AnalysisSetFlags();
             this.UpdateView();
             RecordGrid.SelectedItem = null;
-
+            AnalysisGraphGridAnimation.Begin();
             (this.DataContext as TestPageViewModel).UpdateGraphView();
+            AnalysisResultsFound.Text = "\"Found " + resultList.Count() + " results.\"";
             //AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             //AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
@@ -904,6 +913,7 @@ namespace Health_Organizer
             AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisOptionsSubHeader.Text = "Default";
+            AnalysisDetailsGridAnimation.Begin();
         }
 
         private void AnalysisGraphicalOptionClicked(object sender, RoutedEventArgs e)
@@ -911,6 +921,8 @@ namespace Health_Organizer
             AnalysisGraphGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisOptionsSubHeader.Text = "Graphical";
+            (this.DataContext as TestPageViewModel).UpdateGraphView();
+            AnalysisGraphGridAnimation.Begin();
         }
 
 

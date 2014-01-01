@@ -48,7 +48,7 @@
         </ResourceDictionary>
     </local:ResourceDictionaryCollection>
 
-    <SolidColorBrush x:Key="ChartBackground" Color="#99FFFFFF" />
+    <SolidColorBrush x:Key="ChartBackground" Color="Black" />
     <SolidColorBrush x:Key="ChartForeground" Color="#FF666666" />
 
     <Style x:Key="BaseTextStyle" TargetType="TextBlock">
@@ -59,6 +59,7 @@
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontFamily" Value="Segoe UI Light"/>
         <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Foreground" Value="LightGray"/>
     </Style>
     <Style x:Key="ChartSubTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextStyle}">
         <Setter Property="FontSize" Value="14"/>

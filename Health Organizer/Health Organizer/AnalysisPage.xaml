@@ -33,179 +33,206 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
+        <Storyboard x:Name="AnalysisGraphGridAnimation">
+            <DoubleAnimation Storyboard.TargetName="AnalysisGraphGridTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        
+        <Storyboard x:Name="AnalysisDetailsGridAnimation">
+            <DoubleAnimation Storyboard.TargetName="detailsGridTrans" 
+                                Storyboard.TargetProperty="X"
+                                From="100"
+                                Duration="0:0:0.5" To="0" >
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
+        <Grid>
+            <Grid>
+                <Grid.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </Grid.ChildrenTransitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="430"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" Background="#00A2E8">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="150"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Back button and page title -->
-            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="430"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+
+                <Grid Grid.Column="0" Background="#00A2E8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Back button and page title -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
+                        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="-10,0,0,50"/>
-            </Grid>
+                    </Grid>
 
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Margin="50,-10,0,0">
+                        <StackPanel Grid.Row="0" Margin="50,-10,0,0">
 
-                    <CheckBox Name="AnalysisByDate" Checked="AnalysisByDateChecked" Unchecked="AnalysisByDateUnChecked" Content="Choose Timeline" FontSize="15" />
-                    <TextBlock Text="Records from date" FontSize="15" Margin="0,10,0,0"/>
-                    <!--Analysis From date-->
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                        <ComboBox Name="AnalysisFromDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
-                        <ComboBox Name="AnalysisFromMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
-                            <x:String>January</x:String>
-                            <x:String>February</x:String>
-                            <x:String>March</x:String>
-                            <x:String>April</x:String>
-                            <x:String>May</x:String>
-                            <x:String>June</x:String>
-                            <x:String>July</x:String>
-                            <x:String>August</x:String>
-                            <x:String>September</x:String>
-                            <x:String>October</x:String>
-                            <x:String>November</x:String>
-                            <x:String>December</x:String>
-                        </ComboBox>
-                        <ComboBox Name="AnalysisFromYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
-                    </StackPanel>
+                            <CheckBox Name="AnalysisByDate" Checked="AnalysisByDateChecked" Unchecked="AnalysisByDateUnChecked" Content="Choose Timeline" FontSize="15" />
+                            <TextBlock Text="Records from date" FontSize="15" Margin="0,10,0,0"/>
+                            <!--Analysis From date-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <ComboBox Name="AnalysisFromDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
+                                <ComboBox Name="AnalysisFromMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
+                                    <x:String>January</x:String>
+                                    <x:String>February</x:String>
+                                    <x:String>March</x:String>
+                                    <x:String>April</x:String>
+                                    <x:String>May</x:String>
+                                    <x:String>June</x:String>
+                                    <x:String>July</x:String>
+                                    <x:String>August</x:String>
+                                    <x:String>September</x:String>
+                                    <x:String>October</x:String>
+                                    <x:String>November</x:String>
+                                    <x:String>December</x:String>
+                                </ComboBox>
+                                <ComboBox Name="AnalysisFromYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+                            </StackPanel>
 
-                    <TextBlock Text="Records Upto date" FontSize="15" Margin="0,15,0,0"/>
-                    <!--Analysis To Date-->
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                        <ComboBox Name="AnalysisToDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
-                        <ComboBox Name="AnalysisToMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
-                            <x:String>January</x:String>
-                            <x:String>February</x:String>
-                            <x:String>March</x:String>
-                            <x:String>April</x:String>
-                            <x:String>May</x:String>
-                            <x:String>June</x:String>
-                            <x:String>July</x:String>
-                            <x:String>August</x:String>
-                            <x:String>September</x:String>
-                            <x:String>October</x:String>
-                            <x:String>November</x:String>
-                            <x:String>December</x:String>
-                        </ComboBox>
-                        <ComboBox Name="AnalysisToYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
-                    </StackPanel>
+                            <TextBlock Text="Records Upto date" FontSize="15" Margin="0,15,0,0"/>
+                            <!--Analysis To Date-->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                                <ComboBox Name="AnalysisToDayComboBox" AllowDrop="True" PlaceholderText="Date" HorizontalAlignment="Left"/>
+                                <ComboBox Name="AnalysisToMonthComboBox" AllowDrop="True" PlaceholderText="Month" Width="125" Margin="20,0,0,0" HorizontalAlignment="Center">
+                                    <x:String>January</x:String>
+                                    <x:String>February</x:String>
+                                    <x:String>March</x:String>
+                                    <x:String>April</x:String>
+                                    <x:String>May</x:String>
+                                    <x:String>June</x:String>
+                                    <x:String>July</x:String>
+                                    <x:String>August</x:String>
+                                    <x:String>September</x:String>
+                                    <x:String>October</x:String>
+                                    <x:String>November</x:String>
+                                    <x:String>December</x:String>
+                                </ComboBox>
+                                <ComboBox Name="AnalysisToYearComboBox" AllowDrop="True" PlaceholderText="Year" Width="125" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <ComboBox Name="AnalysisCityBox" Header="City" PlaceholderText="All" Width="150" SelectionChanged="AnalysisCitySelected"/>
-                        <ComboBox Name="AnalysisStateBox" Header="State" PlaceholderText="All" Width="150" Margin="20,0,0,0"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <ComboBox Name="AnalysisCityBox" Header="City" PlaceholderText="All" Width="150" SelectionChanged="AnalysisCitySelected"/>
+                                <ComboBox Name="AnalysisStateBox" Header="State" PlaceholderText="All" Width="150" Margin="20,0,0,0"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <RadioButton Name="AnalysisAllCheck" Checked="AnalysisAllChecked" Content="All" FontSize="15" />
-                        <RadioButton Name="AnalysisMaleCheck" Checked="AnalysisMaleChecked" Content="Male" FontSize="15" Margin="20,0,0,0" />
-                        <RadioButton Name="AnalysisFemaleCheck" Checked="AnalysisFemaleChecked" Content="Female" FontSize="15" Margin="20,0,0,0"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <RadioButton Name="AnalysisAllCheck" Checked="AnalysisAllChecked" Content="All" FontSize="15" />
+                                <RadioButton Name="AnalysisMaleCheck" Checked="AnalysisMaleChecked" Content="Male" FontSize="15" Margin="20,0,0,0" />
+                                <RadioButton Name="AnalysisFemaleCheck" Checked="AnalysisFemaleChecked" Content="Female" FontSize="15" Margin="20,0,0,0"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <RadioButton Name="AnalysisAllCatCheck" Checked="AnalysisAllCatChecked" Content="All" FontSize="15" />
-                        <RadioButton Name="AnalysisUnmarriedCheck" Checked="AnalysisUnmarriedChecked" Content="Not Married" FontSize="15" Margin="20,0,0,0" />
-                        <RadioButton Name="AnalysisMarriedCheck" Checked="AnalysisMarriedChecked" Content="Married" FontSize="15" Margin="20,0,0,0"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <RadioButton Name="AnalysisAllCatCheck" Checked="AnalysisAllCatChecked" Content="All" FontSize="15" />
+                                <RadioButton Name="AnalysisUnmarriedCheck" Checked="AnalysisUnmarriedChecked" Content="Not Married" FontSize="15" Margin="20,0,0,0" />
+                                <RadioButton Name="AnalysisMarriedCheck" Checked="AnalysisMarriedChecked" Content="Married" FontSize="15" Margin="20,0,0,0"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <ComboBox Name="AnalysisBloodGroupBox" Header="Blood Group" PlaceholderText="All" Width="130" AllowDrop="True" >
-                            <x:String>A+</x:String>
-                            <x:String>A-</x:String>
-                            <x:String>B+</x:String>
-                            <x:String>B-</x:String>
-                            <x:String>AB+</x:String>
-                            <x:String>AB-</x:String>
-                            <x:String>O+</x:String>
-                            <x:String>O-</x:String>
-                        </ComboBox>
-                        <ComboBox Name="AnalysisDiseaseBox" Header="Disease" PlaceholderText="All" Width="160" Margin="15,0,0,0" AllowDrop="True"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <ComboBox Name="AnalysisBloodGroupBox" Header="Blood Group" PlaceholderText="All" Width="130" AllowDrop="True" >
+                                    <x:String>A+</x:String>
+                                    <x:String>A-</x:String>
+                                    <x:String>B+</x:String>
+                                    <x:String>B-</x:String>
+                                    <x:String>AB+</x:String>
+                                    <x:String>AB-</x:String>
+                                    <x:String>O+</x:String>
+                                    <x:String>O-</x:String>
+                                </ComboBox>
+                                <ComboBox Name="AnalysisDiseaseBox" Header="Disease" PlaceholderText="All" Width="160" Margin="15,0,0,0" AllowDrop="True"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <ComboBox Name="AnalysisAllergyBox" Header="Allergy" PlaceholderText="All" Width="175" AllowDrop="True" />
-                        <ComboBox Name="AnalysisAddictionBox" Header="Addiction" PlaceholderText="All" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <ComboBox Name="AnalysisAllergyBox" Header="Allergy" PlaceholderText="All" Width="175" AllowDrop="True" />
+                                <ComboBox Name="AnalysisAddictionBox" Header="Addiction" PlaceholderText="All" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
+                            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <ComboBox Name="AnalysisVaccinationBox" Header="Vaccination" PlaceholderText="All" Width="175" AllowDrop="True" />
-                        <ComboBox Name="AnalysisOperationsBox" Header="Operations" PlaceholderText="All" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <ComboBox Name="AnalysisVaccinationBox" Header="Vaccination" PlaceholderText="All" Width="175" AllowDrop="True" />
+                                <ComboBox Name="AnalysisOperationsBox" Header="Operations" PlaceholderText="All" Width="175" Margin="15,0,0,0" AllowDrop="True"/>
+                            </StackPanel>
 
-                </StackPanel>
+                        </StackPanel>
 
-                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
-                    <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
-                    <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button>
-                    <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
-                </StackPanel>
-            </Grid>
+                        <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                            <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
+                            <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button>
+                            <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
+                        </StackPanel>
+                    </Grid>
 
-        </Grid>
+                </Grid>
 
-        <!--Black portion of page-->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="150"/>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+                <!--Black portion of page-->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1.5*" />
-                </Grid.ColumnDefinitions>
-                <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.5*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}"
                                     AutomationProperties.Name="Group Title"
                                     Style="{StaticResource TextBlockButtonStyle}" >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Layout" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" Margin="20,20,0,0" Padding="0,0,0,20"/>
-                        <TextBlock Text="&#xE26B;" Margin="10,20,0,0" FontFamily="Segoe UI Symbol" FontSize="28" FontWeight="ExtraLight" Padding="0,0,0,10" VerticalAlignment="Center" TextWrapping="NoWrap" />
-                    </StackPanel>
-                    <Button.Flyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem Text="Default" Click="AnalysisDefaultOptionClicked"/>
-                            <MenuFlyoutItem Text="Graphical" Click="AnalysisGraphicalOptionClicked"/>
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
-                <TextBlock Name="AnalysisOptionsSubHeader" Text="Default" FontSize="20" VerticalAlignment="Center" Margin="150,20,0,0" Padding="10" FontFamily="Segoe UI" FontWeight="ExtraLight"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                    <AppBarButton  Label="Help" Icon="Help" />
-                    <AppBarButton  Label="Settings" Icon="Setting"  />
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1" Name="AnalysisDetailsGrid">
-                <GridView 
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Layout" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" Margin="20,20,0,0" Padding="0,0,0,20"/>
+                                <TextBlock Text="&#xE26B;" Margin="10,20,0,0" FontFamily="Segoe UI Symbol" FontSize="28" FontWeight="ExtraLight" Padding="0,0,0,10" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                            </StackPanel>
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Default" Click="AnalysisDefaultOptionClicked"/>
+                                    <MenuFlyoutItem Text="Graphical" Click="AnalysisGraphicalOptionClicked"/>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                        <TextBlock Name="AnalysisOptionsSubHeader" Text="Default" FontSize="20" VerticalAlignment="Center" Margin="125,20,0,0" Padding="10" FontFamily="Segoe UI" FontWeight="ExtraLight"/>
+                        <TextBlock Name="AnalysisResultsFound" Style="{StaticResource SubheaderTextBlockStyle}" Margin="250,20,0,15"  VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                            <AppBarButton  Label="Help" Icon="Help" />
+                            <AppBarButton  Label="Settings" Icon="Setting"  />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1" Name="AnalysisDetailsGrid">
+                        <Grid.RenderTransform>
+                            <TranslateTransform x:Name="detailsGridTrans"/>
+                        </Grid.RenderTransform>
+                        <GridView 
                       Padding="50"
                       Name="RecordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
@@ -216,176 +243,213 @@
                       ItemClick="AnalysisItemClicked"
                     SelectionChanged="AnalysisNewItemSelected"
                       >
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Width="300" Height="70">
-                                <Border Height="40" Width="40" Margin="10,10,0,10">
-                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                </Border>
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
-                                    <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Width="300" Height="70">
+                                        <Border Height="40" Width="40" Margin="10,10,0,10">
+                                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
+                                            <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
                        Width="180" Height="20" HorizontalAlignment="Left" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Description}" 
+                                            <TextBlock Text="{Binding Description}" 
                        Margin="10,2,0,0" Width="180" Height="42" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap" 
                        HorizontalAlignment="Left" Opacity="0.49"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </Grid>
-
-            <Grid Grid.Row="1" Name="AnalysisGraphGrid" Visibility="Collapsed">
-                <ScrollViewer Grid.Column="1" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel>
-                            <chart:RadialGaugeChart ChartTitle="Gender distribution"
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </Grid>
+                    <ScrollViewer Grid.Row="1" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                        <Grid Grid.Column="1" Name="AnalysisGraphGrid" Visibility="Collapsed">
+                            <Grid.RenderTransform>
+                                <TranslateTransform x:Name="AnalysisGraphGridTrans"/>
+                            </Grid.RenderTransform>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <chart:RadialGaugeChart ChartTitle="Gender distribution"
                                             ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                            Height="260" Width="330" Margin="10,10,0,0"
-                                                    Style="{StaticResource MinimalChartStyle}">
-                                <chart:RadialGaugeChart.Series>
-                                    <chart:ChartSeries
+                                                    Style="{StaticResource MinimalChartStyle}"
+                                                    Margin="10,10,0,10"
+                                        Height="270"
+                                        Width="350">
+                                        <chart:RadialGaugeChart.Series>
+                                            <chart:ChartSeries
                                         SeriesTitle="Sex"
                                         DisplayMember="Category"
                                         ValueMember="Number"
-                                        ItemsSource="{Binding Path=Sex}" />
-                                </chart:RadialGaugeChart.Series>
-                            </chart:RadialGaugeChart>
-                            <chart:RadialGaugeChart ChartTitle="Marital status"
+                                        ItemsSource="{Binding Path=Sex}" 
+                                        />
+                                        </chart:RadialGaugeChart.Series>
+                                    </chart:RadialGaugeChart>
+                                    <chart:RadialGaugeChart ChartTitle="Marital status"
                                             ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="260" Width="330" Margin="10,10,0,0"
-                                                    Style="{StaticResource MinimalChartStyle}">
-                                <chart:RadialGaugeChart.Series>
-                                    <chart:ChartSeries
+                                                    Style="{StaticResource MinimalChartStyle}"
+                                                        Margin="10,0,0,10"
+                                        Height="270"
+                                        Width="350">
+                                        <chart:RadialGaugeChart.Series>
+                                            <chart:ChartSeries
                                         SeriesTitle="Married"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Married}" />
-                                </chart:RadialGaugeChart.Series>
-                            </chart:RadialGaugeChart>
-                        </StackPanel>
-                        <chart:PieChart ChartTitle="Cities"
+                                        </chart:RadialGaugeChart.Series>
+                                    </chart:RadialGaugeChart>
+                                </StackPanel>
+                                <chart:PieChart ChartTitle="Cities"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0"
-                                        Style="{StaticResource MinimalChartStyle}">
-                            <chart:PieChart.Series>
-                                <chart:ChartSeries
+                                        Style="{StaticResource MinimalChartStyle}"
+                                        VerticalAlignment="Top"
+                                            Height="540"
+                                            Width="540"
+                                        Margin="10,10,0,0">
+                                    <chart:PieChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Cities"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=City}" />
-                            </chart:PieChart.Series>
-                        </chart:PieChart>
-                        <chart:PieChart ChartTitle="Blood group"
+                                    </chart:PieChart.Series>
+                                </chart:PieChart>
+                                <chart:PieChart ChartTitle="Blood group"
                                         ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0"
-                                        Style="{StaticResource MinimalChartStyle}">
-                            <chart:PieChart.Series>
-                                <chart:ChartSeries
+                                        Style="{StaticResource MinimalChartStyle}"
+                                        VerticalAlignment="Top"
+                                        Margin="10,10,0,0"
+                                            Height="540"
+                                            Width="540">
+                                    <chart:PieChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Blood group"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Blood}" />
-                            </chart:PieChart.Series>
-                        </chart:PieChart>
-                        <chart:ClusteredColumnChart ChartTitle="Diseases"
+                                    </chart:PieChart.Series>
+                                </chart:PieChart>
+                                <chart:ClusteredColumnChart ChartTitle="Diseases"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0"
-                                                    Style="{StaticResource MinimalChartStyle}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
+                                                    Style="{StaticResource MinimalChartStyle}"
+                                                    VerticalAlignment="Top"
+                                                    Margin="10,10,0,0"
+                                                        Height="540"
+                                            Width="540">
+                                    <chart:ClusteredColumnChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Diseases"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Disease}" />
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
-                        <chart:ClusteredColumnChart ChartTitle="Addiction"
+                                    </chart:ClusteredColumnChart.Series>
+                                </chart:ClusteredColumnChart>
+                                <chart:ClusteredColumnChart ChartTitle="Addiction"
                                                     ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
-                                            Height="490" Width="490" Margin="10,-30,0,0"
-                                                    Style="{StaticResource MinimalChartStyle}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
+                                                    Style="{StaticResource MinimalChartStyle}"
+                                                    VerticalAlignment="Top"
+                                                    Margin="10,10,0,0"
+                                                        Height="540"
+                                            Width="540">
+                                    <chart:ClusteredColumnChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Addictions"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Addiction}" />
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
+                                    </chart:ClusteredColumnChart.Series>
+                                </chart:ClusteredColumnChart>
 
-                        <chart:DoughnutChart ChartTitle="Operations"
+                                <chart:DoughnutChart ChartTitle="Operations"
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                             Height="490" Width="490" Margin="10,-30,0,0"
                                              InnerRadiusRatio="0.6"
-                                             Style="{StaticResource MinimalChartStyle}">
-                            <chart:DoughnutChart.Series>
-                                <chart:ChartSeries
+                                             Style="{StaticResource MinimalChartStyle}"
+                                             VerticalAlignment="Top"
+                                             Margin="10,10,0,0"
+                                                 Height="540"
+                                            Width="540">
+                                    <chart:DoughnutChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Operations"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Operation}" />
-                            </chart:DoughnutChart.Series>
-                        </chart:DoughnutChart>
-                        <chart:DoughnutChart ChartTitle="Vaccinations"
+                                    </chart:DoughnutChart.Series>
+                                </chart:DoughnutChart>
+                                <chart:DoughnutChart ChartTitle="Vaccinations"
                                                  ChartSubTitle=""
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                             Height="490" Width="490" Margin="10,-30,0,0"
                                              InnerRadiusRatio="0.6"
-                                             Style="{StaticResource MinimalChartStyle}">
-                            <chart:DoughnutChart.Series>
-                                <chart:ChartSeries
+                                             Style="{StaticResource MinimalChartStyle}"
+                                             VerticalAlignment="Top"
+                                             Margin="10,10,0,0"
+                                                 Height="540"
+                                            Width="540">
+                                    <chart:DoughnutChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Vaccinations"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Vaccine}" />
-                            </chart:DoughnutChart.Series>
-                        </chart:DoughnutChart>
+                                    </chart:DoughnutChart.Series>
+                                </chart:DoughnutChart>
 
-                        <chart:DoughnutChart ChartTitle="Allergies"
+                                <chart:DoughnutChart ChartTitle="Allergies"
                                              ChartSubTitle=""
                                              InnerRadiusRatio="0.6"
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                             Height="530" Width="490" Margin="10,10,10,0" VerticalAlignment="Top"
-                                             Style="{StaticResource MinimalChartStyle}">
-                            <chart:DoughnutChart.Series>
-                                <chart:ChartSeries
+                                             VerticalAlignment="Top"
+                                             Style="{StaticResource MinimalChartStyle}"
+                                             Margin="10,10,0,0"
+                                                 Height="540"
+                                            Width="540">
+                                    <chart:DoughnutChart.Series>
+                                        <chart:ChartSeries
                                         SeriesTitle="Allergies"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=Allergy}" />
-                            </chart:DoughnutChart.Series>
-                        </chart:DoughnutChart>
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
-        </Grid>
+                                    </chart:DoughnutChart.Series>
+                                </chart:DoughnutChart>
+                            </StackPanel>
 
-        <callisto:CustomDialog Name="EmailInfoForm" 
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+
+                <callisto:CustomDialog Name="EmailInfoForm" 
                                 Title="Email" 
                                 Background="#0064A0" >
-            <callisto:CustomDialog.RenderTransform>
-                <TranslateTransform x:Name="customDialogTrans"/>
-            </callisto:CustomDialog.RenderTransform>
-            <StackPanel Orientation="Vertical" Width="350">
-                <TextBox Name="FromEmail" Header="From" Margin="0,10,0,0"/>
-                <PasswordBox Name="FromPassword" Header="Password" Margin="0,10,0,0" />
-                <TextBox Name="ToEmail" Header="To" Margin="0,10,0,0"/>
-                <TextBox Name="Subject" Header="Subject" Margin="0,10,0,0"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                    <Button Name="SendMail" Click="SendMailClicked" Width="100">Send</Button>
-                    <Button Name="Cancle" Click="CancleMailClicked" Width="100">Cancle</Button>
-                </StackPanel>
-            </StackPanel>
-        </callisto:CustomDialog>
+                    <callisto:CustomDialog.RenderTransform>
+                        <TranslateTransform x:Name="customDialogTrans"/>
+                    </callisto:CustomDialog.RenderTransform>
+                    <StackPanel Orientation="Vertical" Width="350">
+                        <TextBox Name="FromEmail" Header="From" Margin="0,10,0,0"/>
+                        <PasswordBox Name="FromPassword" Header="Password" Margin="0,10,0,0" />
+                        <TextBox Name="ToEmail" Header="To" Margin="0,10,0,0"/>
+                        <TextBox Name="Subject" Header="Subject" Margin="0,10,0,0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Name="SendMail" Click="SendMailClicked" Width="100">Send</Button>
+                            <Button Name="Cancle" Click="CancleMailClicked" Width="100">Cancle</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </callisto:CustomDialog>
+            </Grid>
+            <Grid>
+                <ProgressRing Name="AnalysisProgressRing" Height="50" Width="50"/>
+            </Grid>
+        </Grid>
+        <Grid>
+            <ProgressRing Name="AnalysisGraphProgressRing" Width="50" Height="50"/>
+        </Grid>
     </Grid>
 
     <Page.BottomAppBar>

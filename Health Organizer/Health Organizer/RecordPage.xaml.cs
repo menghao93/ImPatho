@@ -58,7 +58,11 @@ namespace Health_Organizer
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            RecordProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            RecordProgressRing.IsActive = true;
             var sample = await HomePageDataSoure.GetLimitedGroupsAsync();
+            RecordProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            RecordProgressRing.IsActive = false;
             //this.DefaultViewModel["Groups"] = sample;
             groupedItemsViewSource.Source = sample;
 
