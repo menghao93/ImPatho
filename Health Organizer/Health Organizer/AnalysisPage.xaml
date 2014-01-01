@@ -187,9 +187,9 @@
                         </StackPanel>
 
                         <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
-                            <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100">Reset</Button>
-                            <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100">Export</Button>
-                            <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100">Search</Button>
+                            <Button Name="AnalysisResetFields" Click="AnalysisResetFieldsClicked" Width="100" IsEnabled="False">Reset</Button>
+                            <Button Name="AnalysisExportFields" Click="AnalysisExportListClicked" Width="100" IsEnabled="False">Export</Button>
+                            <Button Name="AnalysisSearch" Click="AnalysisSearchClicked" Width="100" IsEnabled="False">Search</Button>
                         </StackPanel>
                     </Grid>
 

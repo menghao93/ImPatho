@@ -90,6 +90,10 @@ namespace Health_Organizer
             AnalysisProgressRing.IsActive = false;
             AnalysisProgressGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
+            AnalysisResetFields.IsEnabled = true;
+            AnalysisExportFields.IsEnabled = true;
+            AnalysisSearch.IsEnabled = true;
+
             gridViewSource.Source = sample;
             mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
             resultList = mainItemList;
@@ -214,19 +218,28 @@ namespace Health_Organizer
 
                     foreach (string addiction in item.Addiction)
                     {
-                        data += addiction + "; ";
+                        if (!addiction.Equals(""))
+                        {
+                            data += addiction + "; ";
+                        }
                     }
                     data += columnSeparator;
 
                     foreach (string operation in item.Operation)
                     {
-                        data += operation + "; ";
+                        if (!operation.Equals(""))
+                        {
+                            data += operation + "; ";
+                        }
                     }
                     data += columnSeparator;
 
                     foreach (string vaccine in item.Vaccines.Values)
                     {
-                        data += vaccine + "; ";
+                        if (!vaccine.Equals(""))
+                        {
+                            data += vaccine + "; ";
+                        }
                     }
                     data += columnSeparator;
 
@@ -1187,7 +1200,6 @@ namespace Health_Organizer
                 AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
                 AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
             }
-
         }
     }
 }
