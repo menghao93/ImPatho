@@ -1129,7 +1129,7 @@ namespace Health_Organizer
         private void checkSelectedDates()
         {
             string FROM = AnalysisFromDayComboBox.SelectedItem.ToString() + "-" + (AnalysisFromMonthComboBox.SelectedIndex + 1).ToString() + "-" + AnalysisFromYearComboBox.SelectedItem.ToString();
-            string pattern = "dd-M-yyyy";
+            string pattern = "d-M-yyyy";
             DateTime from;
 
             if (!DateTime.TryParseExact(FROM, pattern, null, System.Globalization.DateTimeStyles.None, out from))

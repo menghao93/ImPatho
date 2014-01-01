@@ -1054,7 +1054,7 @@ namespace Health_Organizer
             profileOccupation.ClearValue(BorderBrushProperty);
 
             string dob = profileDayComboBox.SelectedItem.ToString() + "-" + (profileMonthComboBox.SelectedIndex + 1).ToString() + "-" + profileYearComboBox.SelectedItem.ToString();
-            string pattern = "dd-M-yyyy";
+            string pattern = "d-M-yyyy";
             DateTime DOB;
             Debug.WriteLine("Date: " + dob);
             if (!DateTime.TryParseExact(dob, pattern, null, System.Globalization.DateTimeStyles.None, out DOB))
