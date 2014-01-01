@@ -87,7 +87,7 @@ namespace Health_Organizer
                     ProfileName.Text = statement.Columns["LastName"] + " " + statement.Columns["FirstName"];
                     ProfileImage.Source = await ImageMethods.Base64StringToBitmap(statement.Columns["Image"]);
                     ProfileDateOfBirth.Text = statement.Columns["Birthday"];
-                    ProfileAge.Text = (DateTime.Now.Year - Convert.ToInt32(statement.Columns["Birthday"].Substring(0, statement.Columns["Birthday"].IndexOf("-")))).ToString(); 
+                    ProfileAge.Text = (DateTime.Now.Year - Convert.ToInt32(statement.Columns["Birthday"].Substring(0, statement.Columns["Birthday"].IndexOf("-")))).ToString();
                     ProfileBloodGroup.Text = statement.Columns["BloodGroup"];
                     ProfileSex.Text = statement.Columns["Sex"];
                 }
@@ -287,6 +287,56 @@ namespace Health_Organizer
             {
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                 Debug.WriteLine("PROFILE_DETAILS_PAGE---LOAD_DETAILS---MUTABLE_DETAILS_ADDICTION" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+            try
+            {
+                string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
+                Statement statement = await database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+                double height = -1;
+                double bmi = -1;
+                Int32 weight = -1;
+                Int32 bg = -1;
+                Int32 sbp = -1;
+                Int32 dbp = -1;
+                while (await statement.StepAsync())
+                {
+                    height = Double.Parse(statement.Columns["Height"]);
+                    weight = Int32.Parse(statement.Columns["Weight"]);
+                    bmi = Convert.ToDouble(statement.Columns["BMI"]);
+                    bmi = Math.Round(bmi, 3);
+                    bg = Int32.Parse(statement.Columns["BloodGlucose"]);
+                    sbp = Int32.Parse(statement.Columns["SystolicBP"]);
+                    dbp = Int32.Parse(statement.Columns["DiastolicBP"]);
+                }
+
+                if (height > 0)
+                {
+                    VisitTextHeight.Text = height.ToString();
+                }
+                if (weight > 0)
+                {
+                    VisitTextWeight.Text = weight.ToString();
+                }
+                if (bmi > 0)
+                {
+                    VisitTextBMI.Text = bmi.ToString();
+                }
+                if (bg > 0)
+                {
+                    VisitTextBG.Text = bg.ToString();
+                }
+                if (dbp > 0 && sbp > 0)
+                {
+                    VisitTextBP.Text = sbp.ToString() + "/" + dbp.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---Add_Visit_Clicked" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
 
