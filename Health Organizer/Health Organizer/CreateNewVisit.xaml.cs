@@ -31,7 +31,7 @@ namespace Health_Organizer
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
         Boolean check = true;
-        
+
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -113,6 +113,7 @@ namespace Health_Organizer
             VisitDayComboBox.SelectedItem = DateTime.Now.Day;
             VisitMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
             VisitYearComboBox.SelectedItem = DateTime.Now.Year;
+
         }
 
         private async void queryDB()
@@ -167,11 +168,40 @@ namespace Health_Organizer
             }
         }
 
-        private void AddVisitClicked(object sender, RoutedEventArgs e)
+        private async void AddVisitClicked(object sender, RoutedEventArgs e)
         {
             VisitFormCmdbar.IsOpen = false;
             VisitFormBar.IsOpen = true;
             VisitCustomDialogAnimation.Begin();
+
+            try
+            {
+                string query = "SELECT Height, Weight FROM MedicalDetails WHERE PID = @pid";
+                Statement statement = await database.PrepareStatementAsync(query);
+                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.EnableColumnsProperty();
+                double height = -1;
+                Int32 weight = -1;
+                while (await statement.StepAsync())
+                {
+                    height = Double.Parse(statement.Columns["Height"]);
+                    weight = Int32.Parse(statement.Columns["Weight"]);
+                }
+
+                if (height != -1)
+                {
+                    this.setHeightBoxFromMeterHeight(height);
+                }
+                if (weight != -1)
+                {
+                    VisitWeight.Text = weight.ToString(); 
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_NEW_VISIT---Add_Visit_Clicked" + "\n" + ex.Message + "\n" + result.ToString());
+            }
         }
 
         private async void EditVisitClicked(object sender, RoutedEventArgs e)
@@ -192,11 +222,8 @@ namespace Health_Organizer
                     if (await statement.StepAsync())
                     {
                         string[] dv = statement.Columns["DateVisited"].Split('-');
-                        string[] height = statement.Columns["Height"].ToString().Split('.');
 
-                        double totalInchHeight = Convert.ToDouble(statement.Columns["Height"]) * 39.3701;
-                        double inchHeight = totalInchHeight % 12;
-                        double feetHeight = (totalInchHeight - inchHeight) / 12;
+                        this.setHeightBoxFromMeterHeight(Convert.ToDouble(statement.Columns["Height"]));
 
                         VisitDayComboBox.SelectedIndex = VisitDayComboBox.Items.IndexOf(Int32.Parse(dv[2]));
                         VisitMonthComboBox.SelectedIndex = VisitMonthComboBox.Items.IndexOf(dv[1]);
@@ -204,17 +231,6 @@ namespace Health_Organizer
                         VisitSymptoms.Text = statement.Columns["Symptoms"];
                         VisitDiseasesDiagnosed.Text = statement.Columns["DiseaseFound"];
 
-                        int itemFeetHeight = Convert.ToInt32(Math.Round(feetHeight));
-                        int itemInchHeight = Convert.ToInt32(Math.Round(inchHeight));
-
-                        if (itemInchHeight == 12)
-                        {
-                            itemFeetHeight += 1;
-                            itemInchHeight = 0;
-                        }
-
-                        VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
-                        VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
                         VisitWeight.Text = statement.Columns["Weight"];
                         VisitSystolicBP.Text = statement.Columns["SystolicBP"];
                         VisitDiastolicBP.Text = statement.Columns["DiastolicBP"];
@@ -408,14 +424,29 @@ namespace Health_Organizer
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
-                statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
+                if (!VisitBloodGlucose.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindIntParameterWithName("@bg", 0);
+                }
                 if (!VisitDiastolicBP.Text.ToString().Equals(""))
                 {
                     statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
                 }
+                else
+                {
+                    statement.BindIntParameterWithName("@dbp", 0);
+                }
                 if (!VisitSystolicBP.Text.ToString().Equals(""))
                 {
                     statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindIntParameterWithName("@sbp", 0);
                 }
                 statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
                 statement.BindDoubleParameterWithName("@height", height);
@@ -497,9 +528,30 @@ namespace Health_Organizer
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
-                statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
-                statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
-                statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+                if (!VisitBloodGlucose.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@bg", Int32.Parse(VisitBloodGlucose.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindIntParameterWithName("@bg", 0);
+                }
+                if (!VisitDiastolicBP.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@dbp", Int32.Parse(VisitDiastolicBP.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindIntParameterWithName("@dbp", 0);
+                }
+                if (!VisitSystolicBP.Text.ToString().Equals(""))
+                {
+                    statement.BindIntParameterWithName("@sbp", Int32.Parse(VisitSystolicBP.Text.ToString()));
+                }
+                else
+                {
+                    statement.BindIntParameterWithName("@sbp", 0);
+                }
                 statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
                 statement.BindDoubleParameterWithName("@height", height);
                 statement.BindIntParameterWithName("@weight", weight);
@@ -846,7 +898,7 @@ namespace Health_Organizer
             }
             else e.Handled = true;
         }
-      
+
         private void numberValidation_integer(object sender, KeyRoutedEventArgs e)
         {
             if (((uint)e.Key >= (uint)Windows.System.VirtualKey.Number0
@@ -908,21 +960,21 @@ namespace Health_Organizer
                 VisitWeight.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 ret = false;
             }
-            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitSystolicBP.Text.ToString(), out temp))
-            {
-                VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                ret = false;
-            }
-            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitDiastolicBP.Text.ToString(), out temp))
-            {
-                VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                ret = false;
-            }
-            if (VisitWeight.Text.Equals("") || !int.TryParse(VisitBloodGlucose.Text.ToString(), out temp))
-            {
-                VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                ret = false;
-            }
+            //if (VisitSystolicBP.Text.Equals("") || !int.TryParse(VisitSystolicBP.Text.ToString(), out temp))
+            //{
+            //    VisitSystolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    ret = false;
+            //}
+            //if (VisitDiastolicBP.Text.Equals("") || !int.TryParse(VisitDiastolicBP.Text.ToString(), out temp))
+            //{
+            //    VisitDiastolicBP.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    ret = false;
+            //}
+            //if (VisitBloodGlucose.Text.Equals("") || !int.TryParse(VisitBloodGlucose.Text.ToString(), out temp))
+            //{
+            //    VisitBloodGlucose.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    ret = false;
+            //}
             if (VisitHeightFeet.SelectedItem == null)
             {
                 VisitHeightFeet.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -993,5 +1045,23 @@ namespace Health_Organizer
             isUpdating = false;
         }
 
+        private void setHeightBoxFromMeterHeight(double meter)
+        {
+            double totalInchHeight = meter * 39.3701;
+            double inchHeight = totalInchHeight % 12;
+            double feetHeight = (totalInchHeight - inchHeight) / 12;
+
+            int itemFeetHeight = Convert.ToInt32(Math.Round(feetHeight));
+            int itemInchHeight = Convert.ToInt32(Math.Round(inchHeight));
+
+            if (itemInchHeight == 12)
+            {
+                itemFeetHeight += 1;
+                itemInchHeight = 0;
+            }
+
+            VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
+            VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
+        }
     }
 }

@@ -382,7 +382,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                    <AppBarButton Name="ViewProfileVisit" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Center"/>
+                    <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"/>
                     <AppBarButton  Label="Help" Icon="Help" />
                     <AppBarButton  Label="Settings" Icon="Setting"  />
                 </StackPanel>
@@ -548,9 +548,9 @@
 
     <Page.BottomAppBar>
         <CommandBar Name="VisitFormCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
-            <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"></AppBarButton>
-            <AppBarButton Name="EditVisit" Label="Edit Disease" Icon="Edit" Click="EditVisitClicked" HorizontalAlignment="Right"></AppBarButton>
-            <AppBarButton Name="DeleteVisit" Label="Remove Disease" Icon="Cancel" Click="DeleteVisitClicked" HorizontalAlignment="Center"></AppBarButton>
+            <AppBarButton Name="ViewProfileVisit" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" />
+            <AppBarButton Name="EditVisit" Label="Edit Visi" Icon="Edit" Click="EditVisitClicked" />
+            <AppBarButton Name="DeleteVisit" Label="Remove Visit" Icon="Cancel" Click="DeleteVisitClicked"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Name="SortVisit" Label="Sort"  HorizontalAlignment="Left" Icon="Sort">
                     <AppBarButton.Flyout>
