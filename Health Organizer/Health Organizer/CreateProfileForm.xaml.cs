@@ -1074,18 +1074,8 @@ namespace Health_Organizer
             profileEmailAddress.ClearValue(BorderBrushProperty);
             profileOccupation.ClearValue(BorderBrushProperty);
 
-            string dob = profileDayComboBox.SelectedItem.ToString() + "-" + (profileMonthComboBox.SelectedIndex + 1).ToString() + "-" + profileYearComboBox.SelectedItem.ToString();
-            string pattern = "d-M-yyyy";
-            DateTime DOB;
-            Debug.WriteLine("Date: " + dob);
-            if (!DateTime.TryParseExact(dob, pattern, null, System.Globalization.DateTimeStyles.None, out DOB))
-            {
-                profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                profileMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                return false;
-            }
-            
+            bool dateFilled = true;
+
             Int32 catchInt32;
             Int64 catchInt64;
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||
@@ -1113,20 +1103,24 @@ namespace Health_Organizer
                 }
                 if (profileDayComboBox.SelectedItem == null)
                 {
+                    dateFilled = false;
                     profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileMonthComboBox.SelectedItem == null)
                 {
+                    dateFilled = false;
                     profileMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileYearComboBox.SelectedItem == null)
                 {
+                    dateFilled = false;
                     profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
                 if (profileAddress.Text.Equals(""))
                 {
                     profileAddress.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 }
+                
                 if (profileCity.Text.Equals(""))
                 {
                     profileCity.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -1174,6 +1168,19 @@ namespace Health_Organizer
             }
             else
             {
+                if (dateFilled)
+                {
+                    string dob = profileDayComboBox.SelectedItem.ToString() + "-" + (profileMonthComboBox.SelectedIndex + 1).ToString() + "-" + profileYearComboBox.SelectedItem.ToString();
+                    string pattern = "d-M-yyyy";
+                    DateTime DOB;
+                    if (!DateTime.TryParseExact(dob, pattern, null, System.Globalization.DateTimeStyles.None, out DOB))
+                    {
+                        profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                        profileMonthComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                        profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                        return false;
+                    }
+                }
                 return true;
             }
         }
