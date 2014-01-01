@@ -1054,9 +1054,9 @@ namespace Health_Organizer
             profileOccupation.ClearValue(BorderBrushProperty);
 
             string dob = profileDayComboBox.SelectedItem.ToString() + "-" + (profileMonthComboBox.SelectedIndex + 1).ToString() + "-" + profileYearComboBox.SelectedItem.ToString();
-            string pattern = "dd-MM-yyyy";
+            string pattern = "d-M-yyyy";
             DateTime DOB;
-
+            Debug.WriteLine("Date: " + dob);
             if (!DateTime.TryParseExact(dob, pattern, null, System.Globalization.DateTimeStyles.None, out DOB))
             {
                 profileDayComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
