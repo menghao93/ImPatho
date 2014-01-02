@@ -91,7 +91,7 @@ namespace Health_Organizer
             {
                 this.collapseStackPanels();
             }
-            //this.queryDB();
+            this.queryDB();
         }
 
 
@@ -418,9 +418,10 @@ namespace Health_Organizer
 
             try
             {
-                string insertQuery = "INSERT INTO MedicalDetails (PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
-                                     "VALUES (@pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
+                string insertQuery = "INSERT INTO MedicalDetails (TimeStamp ,PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
+                                     "VALUES (@ts, @pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
@@ -464,10 +465,11 @@ namespace Health_Organizer
 
             try
             {
-                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
+                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (TimeStamp, PID, DateVisited, Medicine) VALUES (@ts, @pid, @dv, @medicine)";
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                     statement.BindIntParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     statement.BindTextParameterWithName("@medicine", str);
@@ -484,11 +486,12 @@ namespace Health_Organizer
 
             try
             {
-                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
+                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (TimeStamp, PID, DateVisited, Vaccine) VALUES (@ts, @pid, @dv, @vaccine)";
 
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                     statement.BindIntParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     statement.BindTextParameterWithName("@vaccine", str);
@@ -524,8 +527,9 @@ namespace Health_Organizer
 
             try
             {
-                string updateQuery = "UPDATE MedicalDetails SET BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
+                string updateQuery = "UPDATE MedicalDetails SET TimeStamp = @ts, BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindIntParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 if (!VisitBloodGlucose.Text.ToString().Equals(""))
@@ -604,13 +608,14 @@ namespace Health_Organizer
 
             try
             {
-                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (PID, DateVisited, Medicine) VALUES (@pid, @dv, @medicine)";
+                string insertMedicine = "INSERT INTO MedicalDetailsMedicine (TimeStamp, PID, DateVisited, Medicine) VALUES (@ts, @pid, @dv, @medicine)";
 
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
                 {
                     if (str != "")
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                         statement.BindIntParameterWithName("@pid", this.PID);
                         statement.BindTextParameterWithName("@dv", DateVisited);
                         statement.BindTextParameterWithName("@medicine", str);
@@ -628,13 +633,14 @@ namespace Health_Organizer
 
             try
             {
-                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (PID, DateVisited, Vaccine) VALUES (@pid, @dv, @vaccine)";
+                string insertVaccine = "INSERT INTO MedicalDetailsVaccine (TimeStamp, PID, DateVisited, Vaccine) VALUES (@ts, @pid, @dv, @vaccine)";
 
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
                 {
                     if (str != "")
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                         statement.BindIntParameterWithName("@pid", this.PID);
                         statement.BindTextParameterWithName("@dv", DateVisited);
                         statement.BindTextParameterWithName("@vaccine", str);

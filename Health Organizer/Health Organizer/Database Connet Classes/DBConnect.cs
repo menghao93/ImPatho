@@ -69,6 +69,7 @@ namespace Health_Organizer.Database_Connet_Classes
         {
             //DATE format = "yyyy MMM ddd";
             string query1 = "CREATE TABLE IF NOT EXISTS Patient (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                             "FirstName TEXT NOT NULL, " +
                             "LastName TEXT NOT NULL, " +
@@ -78,6 +79,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "Image TEXT);";
 
             string query2 = "CREATE TABLE IF NOT EXISTS MutableDetails (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "Married VARCHAR(2) NOT NULL, " +
                             "Occupation TEXT NOT NULL, " +
                             "FamilyBackground TEXT, " +
@@ -88,6 +90,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
             string query3 = "CREATE TABLE IF NOT EXISTS MutableDetailsAllergy (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "PID INTEGER NOT NULL, " +
                             "Allergy TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Allergy), " +
@@ -95,6 +98,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
 
            string query4 = "CREATE TABLE IF NOT EXISTS MutableDetailsAddiction (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "PID INTEGER NOT NULL, " +
                             "Addiction TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Addiction), " +
@@ -102,6 +106,7 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
 
             string query5 = "CREATE TABLE IF NOT EXISTS MutableDetailsOperation (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "PID INTEGER NOT NULL," +
                             "Operation TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Operation), " +
@@ -109,27 +114,32 @@ namespace Health_Organizer.Database_Connet_Classes
                             "FOREIGN KEY(PID) REFERENCES MutableDetails(PID) ON DELETE CASCADE);";
 
             string query6 = "CREATE TABLE IF NOT EXISTS Address (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "PID INTEGER PRIMARY KEY NOT NULL," +
                             "ZIP INTEGER NOT NULL, " +
                             "Street TEXT NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
             string query7 = "CREATE TABLE IF NOT EXISTS AddressZIP (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "ZIP INTEGER PRIMARY KEY NOT NULL, " +
                             "City TEXT NOT NULL, " +
                             "FOREIGN KEY(ZIP) REFERENCES Address(ZIP) ON DELETE CASCADE);";
 
             string query8 = "CREATE TABLE IF NOT EXISTS AddressCity (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "City TEXT PRIMARY KEY NOT NULL, " +
                             "State TEXT NOT NULL, " +
                             "FOREIGN KEY(City) REFERENCES AddressZIP(City) ON DELETE CASCADE);";
 
             string query9 = "CREATE TABLE IF NOT EXISTS AddressState (" +
+                            "TimeStamp TEXT NOT NULL," +
                             "State TEXT PRIMARY KEY NOT NULL, " +
                             "Country TEXT NOT NULL, " +
                             "FOREIGN KEY(State) REFERENCES AddressCity(State) ON DELETE CASCADE);";
 
             string query10 = "CREATE TABLE IF NOT EXISTS MedicalDetails (" +
+                             "TimeStamp TEXT NOT NULL," +
                              "PID INTEGER NOT NULL, " +
                              "DateVisited TEXT NOT NULL, " +
                              "Age INTEGER NOT NULL, " +
@@ -153,6 +163,7 @@ namespace Health_Organizer.Database_Connet_Classes
             //                 "FOREIGN KEY(Height, Weight) REFERENCES MedicalDetails(Height, Weight) ON DELETE CASCADE);";
 
             string query12 = "CREATE TABLE IF NOT EXISTS MedicalDetailsMedicine (" +
+                             "TimeStamp TEXT NOT NULL," +
                              "PID INTEGER NOT NULL, " +
                              "DateVisited TEXT NOT NULL, " +
                              "Medicine TEXT NOT NULL, " +
@@ -161,6 +172,7 @@ namespace Health_Organizer.Database_Connet_Classes
                              "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
 
             string query13 = "CREATE TABLE IF NOT EXISTS MedicalDetailsVaccine (" +
+                             "TimeStamp TEXT NOT NULL," +
                              "PID INTEGER NOT NULL, " +
                              "DateVisited DATE NOT NULL, " +
                              "Vaccine TEXT NOT NULL, " +
