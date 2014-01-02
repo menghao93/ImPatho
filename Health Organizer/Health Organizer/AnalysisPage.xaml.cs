@@ -330,6 +330,7 @@ namespace Health_Organizer
                     StorageFile sampleFile = await temporaryFolder.CreateFileAsync(selectedItem.Name.Trim() + ".csv", CreationCollisionOption.ReplaceExisting);
 
                     EmailInfoForm.IsOpen = false;
+                    AnalysisPageCmdbar.IsOpen = false;
 
                     await FileIO.WriteTextAsync(sampleFile, ExtraModules.getFileDataForAnalysisItem(selectedItem));
 
@@ -344,11 +345,14 @@ namespace Health_Organizer
                     EmailInfoForm.IsOpen = false;
                 }
             }
+
+            AnalysisPageCmdbar.IsOpen = false;
         }
 
         private void CancleMailClicked(object sender, RoutedEventArgs e)
         {
             EmailInfoForm.IsOpen = false;
+            AnalysisPageCmdbar.IsOpen = false;
             this.clearEmailInfoFields();
         }
 

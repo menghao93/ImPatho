@@ -255,6 +255,14 @@ namespace Health_Organizer
             catch (Exception ep)
             {
                 Result = String.Format("Failed to send email with the following error: {0}", ep.Message);
+                if (ep.Message.Contains("Password"))
+                {
+                    Result = "Failed to send Email: Incorrect Username or Password";
+                }
+                if (ep.Message.Contains("such host"))
+                {
+                    Result = "Failed to send Email: No Internet Connection";
+                }
             }
 
             // Display Result by Diaglog box
