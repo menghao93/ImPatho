@@ -16,6 +16,7 @@ using Health_Organizer.Data;
 using System.Diagnostics;
 using SQLiteWinRT;
 using Health_Organizer.Database_Connet_Classes;
+using Health_Organizer.Data_Model_Classes;
 using System.Text.RegularExpressions;
 
 namespace Health_Organizer
@@ -270,6 +271,7 @@ namespace Health_Organizer
                 }
 
                 await HomePageDataSoure.DelItemAsync(PID.ToString());
+                await AnalysisPageDataSoure.DelItemAsync(PID.ToString());
             }
 
         }

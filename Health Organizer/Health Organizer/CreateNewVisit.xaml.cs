@@ -91,7 +91,7 @@ namespace Health_Organizer
             {
                 this.collapseStackPanels();
             }
-            this.queryDB();
+            //this.queryDB();
         }
 
 

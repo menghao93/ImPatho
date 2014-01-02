@@ -358,14 +358,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <!--Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"-->
-                <Button x:Name="backButton" Margin="39,59,39,0"  Click="GoBackNewProfile"
+                <Button x:Name="backButton" Click="GoBackNewProfile"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0">
                     <AppBarButton  Label="Reset" Icon="Undo" Click="ResetNewProfile" />

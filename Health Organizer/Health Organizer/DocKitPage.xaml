@@ -168,16 +168,21 @@
                 </StackPanel>
             </callisto:CustomDialog>
 
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="backButton" VerticalAlignment="Center" Margin="30,-10,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="backButton" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
 
-                <TextBlock Name="pageTitle" VerticalAlignment="Center"  Text="{StaticResource docKitTitle}"  Style="{StaticResource SubheaderTextBlockStyle}" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" Margin="30,-25,0,0"/>
-            </StackPanel>
+                <TextBlock Name="pageTitle" Grid.Column="1" VerticalAlignment="Center"  Text="{StaticResource docKitTitle}"  Style="{StaticResource SubheaderTextBlockStyle}"
+                        IsHitTestVisible="false" TextWrapping="NoWrap" FontSize="45" Padding="0,0,0,10" />
+            </Grid>
             
             <ComboBox Name="docKitCombo"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="350" PlaceholderText="Please Select how could we help you......." RequestedTheme="Dark" SelectionChanged="docKitComboBox">
                 <ComboBoxItem Content="Common Diseases" />

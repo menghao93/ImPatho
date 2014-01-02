@@ -350,14 +350,15 @@
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                <Button x:Name="backButton" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
                 <TextBlock x:Name="pageTitle" Text="Visits" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,0,50"/>
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center"/>
             </Grid>
             
             <ListBox Grid.Row="1" Name="VisitListBox" ItemContainerStyle="{ThemeResource ListBoxItemStyle}" Width="402" SelectionChanged="visitSelectionChanged"/>
@@ -549,7 +550,7 @@
     <Page.BottomAppBar>
         <CommandBar Name="VisitFormCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
             <AppBarButton Name="ViewProfileVisit" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" />
-            <AppBarButton Name="EditVisit" Label="Edit Visi" Icon="Edit" Click="EditVisitClicked" />
+            <AppBarButton Name="EditVisit" Label="Edit Visit" Icon="Edit" Click="EditVisitClicked" />
             <AppBarButton Name="DeleteVisit" Label="Remove Visit" Icon="Cancel" Click="DeleteVisitClicked"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Name="SortVisit" Label="Sort"  HorizontalAlignment="Left" Icon="Sort">

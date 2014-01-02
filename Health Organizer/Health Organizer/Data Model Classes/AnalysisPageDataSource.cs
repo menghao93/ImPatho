@@ -42,7 +42,7 @@ namespace Health_Organizer.Data_Model_Classes
             {
                 this.Allergy = new List<string>();
             }
-            
+
             if (addiction != null)
             {
                 this.Addiction = new List<string>(addiction);
@@ -133,6 +133,20 @@ namespace Health_Organizer.Data_Model_Classes
             var matches = _sampleDataSource.Groups.Where((group) => group.UniqueId.Equals(uniqueId));
             if (matches.Count() == 1) return matches.First();
             return null;
+        }
+
+        public static async Task<int> DelItemAsync(string uniqueId)
+        {
+            try
+            {
+                AnalysisSampleDataItem sampleItem = await GetItemAsync(uniqueId);
+                _sampleDataSource.Groups.Remove(sampleItem);
+                return 1;
+            }
+            catch
+            {
+                return -1;
+            }
         }
 
         private async Task GetSampleDataAsync()

@@ -84,14 +84,15 @@
                                     <ColumnDefinition Width="120"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                                <Button x:Name="backButton" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
                                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource SubheaderTextBlockStyle}" FontSize="50" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="-10,0,0,50"/>
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center"/>
                             </Grid>
 
                             <Grid Grid.Row="1">
@@ -232,10 +233,10 @@
                             </Grid>
                             <Grid Grid.Row="1" Name="AnalysisDetailsGrid">
                                 <Grid>
-                                <Grid.RenderTransform>
-                                    <TranslateTransform x:Name="detailsGridTrans"/>
-                                </Grid.RenderTransform>
-                                <GridView 
+                                    <Grid.RenderTransform>
+                                        <TranslateTransform x:Name="detailsGridTrans"/>
+                                    </Grid.RenderTransform>
+                                    <GridView 
                       Padding="50"
                       Name="RecordGrid" 
                       ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
@@ -246,26 +247,26 @@
                       ItemClick="AnalysisItemClicked"
                     SelectionChanged="AnalysisNewItemSelected"
                       >
-                                    <GridView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" Width="300" Height="70">
-                                                <Border Height="40" Width="40" Margin="10,10,0,10">
-                                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                                </Border>
-                                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
-                                                    <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Width="300" Height="70">
+                                                    <Border Height="40" Width="40" Margin="10,10,0,10">
+                                                        <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                                    </Border>
+                                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
+                                                        <TextBlock Text="{Binding Name}" Margin="10,0,0,0" 
                        Width="180" Height="20" HorizontalAlignment="Left" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
-                                                    <TextBlock Text="{Binding Description}" 
+                                                        <TextBlock Text="{Binding Description}" 
                        Margin="10,2,0,0" Width="180" Height="42" 
                        TextTrimming="WordEllipsis" TextWrapping="Wrap" 
                        HorizontalAlignment="Left" Opacity="0.49"/>
+                                                    </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridView.ItemTemplate>
-                                </GridView>
-                            </Grid>
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+                                    </GridView>
+                                </Grid>
                             </Grid>
                             <ScrollViewer Grid.Row="1" Name="AnalysisGraphGridScrollViewer" Visibility="Collapsed" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                                 <Grid Grid.Column="1">
@@ -428,13 +429,13 @@
 
                                 </Grid>
                             </ScrollViewer>
-                        
+
                             <Grid Grid.Row="1">
                                 <ProgressRing Name="AnalysisProgressRing" Height="50" Width="50"/>
-                            </Grid>                       
-                            
-                                
-                            
+                            </Grid>
+
+
+
                         </Grid>
                         <callisto:CustomDialog Name="EmailInfoForm" 
                                 Title="Email" 
@@ -458,7 +459,7 @@
             </Grid>
         </Grid>
         <Grid>
-        <ProgressRing Grid.Row="1" Height="50" Width="50" Name="AnalysisExportProgressRing"/>
+            <ProgressRing Grid.Row="1" Height="50" Width="50" Name="AnalysisExportProgressRing"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
