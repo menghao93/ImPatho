@@ -84,12 +84,10 @@ namespace Health_Organizer
         {
             AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AnalysisProgressRing.IsActive = true;
-            AnalysisProgressGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+           
             var sample = await AnalysisPageDataSoure.GetItemsAsync();
             AnalysisProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             AnalysisProgressRing.IsActive = false;
-            AnalysisProgressGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
             AnalysisResetFields.IsEnabled = true;
             AnalysisExportFields.IsEnabled = true;
             AnalysisSearch.IsEnabled = true;
@@ -181,6 +179,11 @@ namespace Health_Organizer
         {
             AnalysisExportProgressRing.IsActive = true;
             AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            //if (AnalysisDetailsGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            //    AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            //if (AnalysisGraphGridScrollViewer.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            //    AnalysisGraphGridScrollViewer.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             this.AnalysisValidateFields();
             this.AnalysisSetFlags();
             this.UpdateView();
@@ -266,6 +269,14 @@ namespace Health_Organizer
             }
             AnalysisExportProgressRing.IsActive = false;
             AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AnalysisMainGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            //if (AnalysisDetailsGrid.Visibility == Windows.UI.Xaml.Visibility.Collapsed)
+            //AnalysisDetailsGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            //if (AnalysisGraphGridScrollViewer.Visibility == Windows.UI.Xaml.Visibility.Collapsed)
+            //    AnalysisGraphGridScrollViewer.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AnalysisDetailsGridAnimation.Begin();
+            AnalysisGraphGridAnimation.Begin();
+            Debug.WriteLine("hi");
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
