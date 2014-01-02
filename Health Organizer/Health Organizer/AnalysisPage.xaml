@@ -58,6 +58,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
+        <Grid>
             <Grid>
                 <Grid.ChildrenTransitions>
                     <TransitionCollection>
@@ -448,8 +449,9 @@
                 <ProgressRing Name="AnalysisProgressRing" Height="50" Width="50"/>
             </Grid>
         </Grid>
+        </Grid>
         <Grid>
-            <ProgressRing Name="AnalysisGraphProgressRing" Width="50" Height="50"/>
+            <ProgressRing Height="50" Width="50" Name="AnalysisExportProgressRing"/>
         </Grid>
     </Grid>
 
