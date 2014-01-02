@@ -313,11 +313,13 @@ namespace Health_Organizer
         {
             if (! args.QueryText.ToString().Equals(""))
             {
-                this.DefaultViewModel["Items"] = Search(args.QueryText.ToString());                
+                this.gridViewSource.Source = Search(args.QueryText.ToString()); 
+                //this.DefaultViewModel["Items"] = Search(args.QueryText.ToString());                
             }
             else
             {
-                this.DefaultViewModel["Items"] = ListOfAllItem;
+                this.gridViewSource.Source = ListOfAllItem;
+                //this.DefaultViewModel["Items"] = ListOfAllItem;
             }
 
             itemGridView.SelectedItem = null;
