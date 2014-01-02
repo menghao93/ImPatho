@@ -286,7 +286,7 @@ namespace Health_Organizer
         }
 
         private async void ExportProfileClicked(object sender, RoutedEventArgs e)
-        {           
+        {
             AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
 
             FileSavePicker savePicker = new FileSavePicker();
@@ -298,7 +298,7 @@ namespace Health_Organizer
             // Default file name if the user does not type one in or select a file to replace
 
             savePicker.SuggestedFileName = selectedItem.Name;
-            
+
             StorageFile file = await savePicker.PickSaveFileAsync();
 
 
@@ -323,7 +323,7 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
-            
+
         }
 
         private async void SendMailClicked(object sender, RoutedEventArgs e)

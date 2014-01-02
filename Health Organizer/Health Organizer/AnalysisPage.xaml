@@ -434,9 +434,9 @@
                         <TranslateTransform x:Name="customDialogTrans"/>
                     </callisto:CustomDialog.RenderTransform>
                     <StackPanel Orientation="Vertical" Width="350">
-                        <TextBox Name="FromEmail" Header="From" Margin="0,10,0,0"/>
+                            <TextBox Name="FromEmail" Header="From" Margin="0,10,0,0" />
                         <PasswordBox Name="FromPassword" Header="Password" Margin="0,10,0,0" />
-                        <TextBox Name="ToEmail" Header="To" Margin="0,10,0,0"/>
+                        <TextBox Name="ToEmail" Header="To" Margin="0,10,0,0" />
                         <TextBox Name="Subject" Header="Subject" Margin="0,10,0,0"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                             <Button Name="SendMail" Click="SendMailClicked" Width="100">Send</Button>
