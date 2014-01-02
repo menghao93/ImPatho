@@ -297,7 +297,7 @@ namespace Health_Organizer
         }
 
         private async void ExportProfileClicked(object sender, RoutedEventArgs e)
-        {           
+        {
             AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
 
             FileSavePicker savePicker = new FileSavePicker();
@@ -309,7 +309,7 @@ namespace Health_Organizer
             // Default file name if the user does not type one in or select a file to replace
 
             savePicker.SuggestedFileName = selectedItem.Name;
-            
+
             StorageFile file = await savePicker.PickSaveFileAsync();
 
 
@@ -334,7 +334,7 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
-            
+
         }
 
         private async void SendMailClicked(object sender, RoutedEventArgs e)
@@ -349,13 +349,17 @@ namespace Health_Organizer
                     StorageFile sampleFile = await temporaryFolder.CreateFileAsync(selectedItem.Name.Trim() + ".csv", CreationCollisionOption.ReplaceExisting);
 
                     EmailInfoForm.IsOpen = false;
+                    AnalysisPageCmdbar.IsOpen = false;
 
                     await FileIO.WriteTextAsync(sampleFile, ExtraModules.getFileDataForAnalysisItem(selectedItem));
 
+                    AnalysisExportProgressRing.IsActive = true;
+                    AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     await ExtraModules.Send_Email(FromEmail.Text, FromPassword.Password, ToEmail.Text, Subject.Text, "Check from Health Organiser", sampleFile.Path);
 
                     await sampleFile.DeleteAsync(StorageDeleteOption.PermanentDelete);
-
+                    AnalysisExportProgressRing.IsActive = false;
+                    AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     this.clearEmailInfoFields();
                 }
                 else
@@ -363,11 +367,14 @@ namespace Health_Organizer
                     EmailInfoForm.IsOpen = false;
                 }
             }
+
+            AnalysisPageCmdbar.IsOpen = false;
         }
 
         private void CancleMailClicked(object sender, RoutedEventArgs e)
         {
             EmailInfoForm.IsOpen = false;
+            AnalysisPageCmdbar.IsOpen = false;
             this.clearEmailInfoFields();
         }
 

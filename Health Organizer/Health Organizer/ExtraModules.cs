@@ -235,26 +235,41 @@ namespace Health_Organizer
                 oMail.Subject = subj;
                 oMail.TextBody = body;
 
-                // Your SMTP server address
-                SmtpServer oServer = new SmtpServer("smtp.gmail.com");
+                if (!getSMTPserver(from).Equals(""))
+                {
+                    // Your SMTP server address
+                    SmtpServer oServer = new SmtpServer(getSMTPserver(from));
 
-                // User and password for SMTP authentication            
-                oServer.User = from;
-                oServer.Password = password;
+                    // User and password for SMTP authentication            
+                    oServer.User = from;
+                    oServer.Password = password;
 
-                // If your SMTP server requires TLS connection on 25 port, please add this line
-                // oServer.ConnectType = SmtpConnectType.ConnectSSLAuto;
+                    // If your SMTP server requires TLS connection on 25 port, please add this line
+                    // oServer.ConnectType = SmtpConnectType.ConnectSSLAuto;
 
-                // If your SMTP server requires SSL connection on 465 port, please add this line
-                oServer.Port = 465;
-                oServer.ConnectType = SmtpConnectType.ConnectSSLAuto; // or SmtpConnectType.ConnectDirectSSL;
+                    // If your SMTP server requires SSL connection on 465 port, please add this line
+                    oServer.Port = 465;
+                    oServer.ConnectType = SmtpConnectType.ConnectSSLAuto; // or SmtpConnectType.ConnectDirectSSL;
 
-                await oSmtp.SendMailAsync(oServer, oMail);
-                Result = "Email was sent successfully!";
+                    await oSmtp.SendMailAsync(oServer, oMail);
+                    Result = "Email was sent successfully!";
+                }
+                else
+                {
+                    Result = "Host not found";
+                }
             }
             catch (Exception ep)
             {
                 Result = String.Format("Failed to send email with the following error: {0}", ep.Message);
+                if (ep.Message.Contains("Password"))
+                {
+                    Result = "Failed to send Email: Incorrect Username or Password";
+                }
+                if (ep.Message.Contains("such host"))
+                {
+                    Result = "Failed to send Email: No Internet Connection";
+                }
             }
 
             // Display Result by Diaglog box
@@ -262,6 +277,30 @@ namespace Health_Organizer
                 Windows.UI.Popups.MessageDialog(Result);
 
             await dlg.ShowAsync();
+        }
+
+        public static string getSMTPserver(string email)
+        {
+            string emailType = email.Substring(email.IndexOf("@"));
+
+            if (emailType.Contains("gmail.com"))
+            {
+                return "smtp.gmail.com";
+            }
+            if (emailType.Contains("yahoo"))
+            {
+                return "smtp.mail.yahoo.com";
+            }
+            if (emailType.Contains("rediff"))
+            {
+                return "smtp.rediffmail.com";
+            }
+            if (emailType.Contains("live") || emailType.Contains("hotmail"))
+            {
+                return "smtp.live.com";
+            }
+
+            return "";
         }
     }
 }
