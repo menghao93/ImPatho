@@ -33,15 +33,49 @@ namespace Health_Organizer.Data_Model_Classes
             this.Image = bmp;
             this.Occupation = occupation;
             this.FamilyBG = familyBG;
-            this.Allergy = new List<string>(allergy);
-            this.Addiction = new List<string>(addiction);
-            this.Operation = new List<string>(operation);
+
+            if (allergy != null)
+            {
+                this.Allergy = new List<string>(allergy);
+            }
+            else
+            {
+                this.Allergy = new List<string>();
+            }
+            
+            if (addiction != null)
+            {
+                this.Addiction = new List<string>(addiction);
+            }
+            else
+            {
+                this.Addiction = new List<string>();
+            }
+
+            if (operation != null)
+            {
+                this.Operation = new List<string>(operation);
+            }
+            else
+            {
+                this.Operation = new List<string>();
+            }
+
             this.City = city;
             this.State = state;
             this.Country = country;
+
             this.Diseases = new Dictionary<string, string>();
             this.Vaccines = new Dictionary<string, string>();
-            this.DatesVisited = new List<string>();
+
+            if (dateVisited != null)
+            {
+                this.DatesVisited = new List<string>(dateVisited);
+            }
+            else
+            {
+                this.DatesVisited = new List<string>();
+            }
         }
 
         public string UniqueId { get; set; }
