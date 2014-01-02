@@ -179,6 +179,8 @@ namespace Health_Organizer
 
         private async void AnalysisExportListClicked(object sender, RoutedEventArgs e)
         {
+            AnalysisExportProgressRing.IsActive = true;
+            AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             this.AnalysisValidateFields();
             this.AnalysisSetFlags();
             this.UpdateView();
@@ -262,6 +264,8 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
+            AnalysisExportProgressRing.IsActive = false;
+            AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void ViewProfileClicked(object sender, RoutedEventArgs e)
@@ -282,7 +286,7 @@ namespace Health_Organizer
         }
 
         private async void ExportProfileClicked(object sender, RoutedEventArgs e)
-        {
+        {           
             AnalysisSampleDataItem selectedItem = RecordGrid.SelectedItem as AnalysisSampleDataItem;
 
             FileSavePicker savePicker = new FileSavePicker();
@@ -294,7 +298,7 @@ namespace Health_Organizer
             // Default file name if the user does not type one in or select a file to replace
 
             savePicker.SuggestedFileName = selectedItem.Name;
-
+            
             StorageFile file = await savePicker.PickSaveFileAsync();
 
 
@@ -303,8 +307,11 @@ namespace Health_Organizer
                 CachedFileManager.DeferUpdates(file);
 
                 // write to file
+                AnalysisExportProgressRing.IsActive = true;
+                AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 await FileIO.WriteTextAsync(file, ExtraModules.getFileDataForAnalysisItem(selectedItem));
-
+                AnalysisExportProgressRing.IsActive = false;
+                AnalysisExportProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
 
                 if (status == FileUpdateStatus.Complete)
@@ -316,6 +323,7 @@ namespace Health_Organizer
                     Debug.WriteLine("File " + file.Name + " couldn't be saved.");
                 }
             }
+            
         }
 
         private async void SendMailClicked(object sender, RoutedEventArgs e)
