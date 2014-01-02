@@ -31,12 +31,12 @@
         </Grid.RowDefinitions>
 
         <!-- Page title and settings panel -->
-        <Grid Margin="-10,0,10,0">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid Grid.Column="1">
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
@@ -47,28 +47,90 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        
-        <Grid x:Name="mainMenuGrid" MinWidth="1000" MinHeight="500" Margin="-10,53,10,0" Grid.Row="1"  Background="Black">
-            <Button Click="test_Button_Click" Background="#000000" HorizontalAlignment="Left" Margin="117,80,0,0" VerticalAlignment="Top" Width="200" Height="200">
-                <Image Source="Assets/Blood_Test.png" />
-            </Button>
-            <Button Click="doctor_Click" Background="#000000"  HorizontalAlignment="Left" Margin="762,80,0,0" VerticalAlignment="Top" Width="200" Height="200">
-                <Image Source="Assets/Doctors_Kit.png" />
-            </Button>
-            <Button Click="health_Click" Background="#000000" HorizontalAlignment="Left" Margin="117,336,0,0" VerticalAlignment="Top" Width="200" Height="200">
-                <Image Source="Assets/On_Survey.png" />
-            </Button>
-            <Button Click="analysis_Click" Background="#000000"  HorizontalAlignment="Left" Margin="762,336,0,0" VerticalAlignment="Top" Width="200" Height="200">
-                <Image Source="Assets/Analysis.png" />
-            </Button>
-            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" Margin="355,78,0,0" TextWrapping="Wrap" Text="Virtual Blood Test" VerticalAlignment="Top" Width="330" Height="76" TextAlignment="Left"/>
-            <TextBlock Name="bloodTestDes" FontSize="16" HorizontalAlignment="Left" Margin="355,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="93" Width="330"/>
-            <TextBlock Name="recordSurveyDes" FontSize="16" HorizontalAlignment="Left" Margin="355,401,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="330" Height="117"/>
-            <TextBlock Name="analysisDes" FontSize="16" HorizontalAlignment="Left" Margin="995,401,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" Height="117"/>
-            <TextBlock Name="docKitDes" FontSize="16" HorizontalAlignment="Left" Margin="995,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="137" Width="330"/>
-            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" Margin="995,83,0,0" TextWrapping="Wrap" Text="Doctor's Kit" VerticalAlignment="Top" Width="330" Height="76" TextAlignment="Left"/>
-            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" Margin="995,339,0,0" TextWrapping="Wrap" Text="Statistics &amp; Analysis" VerticalAlignment="Top" Width="330" Height="76" TextAlignment="Left"/>
-            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" Margin="355,339,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="330" Height="76" TextAlignment="Left" Text="Record Surveys"/>
+
+        <Grid Name="mainMenuGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="2.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Click="test_Button_Click" Background="#000000" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200">
+                        <Image Source="Assets/Blood_Test.png" />
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Height="220" Margin="15,0,15,0">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Virtual Blood Test" TextAlignment="Left"/>
+                        <TextBlock Name="bloodTestDes" FontSize="16" HorizontalAlignment="Left" TextWrapping="Wrap" TextAlignment="Left" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="2.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Click="health_Click" Background="#000000" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200">
+                        <Image Source="Assets/On_Survey.png" />
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Height="220" Margin="15,0,15,0">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Left" Text="Record Surveys"/>
+                        <TextBlock Name="recordSurveyDes" FontSize="16" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="2.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Click="doctor_Click" Background="#000000"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200">
+                        <Image Source="Assets/Doctors_Kit.png" />
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Height="220" Margin="15,0,15,0">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Doctor's Kit" VerticalAlignment="Top" TextAlignment="Left"/>
+                        <TextBlock Name="docKitDes" FontSize="16" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,20,0,0" />
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="2.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Click="analysis_Click" Background="#000000"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200">
+                        <Image Source="Assets/Analysis.png" />
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Height="220" Margin="15,0,15,0">
+                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" FontSize="36" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Statistics &amp; Analysis" VerticalAlignment="Top" TextAlignment="Left"/>
+                        <TextBlock Name="analysisDes" FontSize="16" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" Margin="0,20,0,0" />
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
         </Grid>
     </Grid>
 </Page>
