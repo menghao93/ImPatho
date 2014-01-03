@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Windows.Data.Json;
+using Windows.UI.Popups;
 
 namespace Health_Organizer
 {
@@ -37,7 +38,15 @@ namespace Health_Organizer
 
         private async void sign_in_click(object sender, RoutedEventArgs e)
         {
+            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRing.IsActive = true;
             bool temp = await checkLogin();
+            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            MainPageProgressRing.IsActive = false;
             if (temp == true)
             {
                 if (this.Frame != null)
@@ -47,18 +56,30 @@ namespace Health_Organizer
                 }
 
             }
+            else
+            {
+                MainPagePassword.Password = "";
+            }
         }
 
         private void sign_up_click(object sender, RoutedEventArgs e)
         {
-
+            MainPageCustomDialog.IsOpen = true;
         }
 
         private async void SignInEnterPressed(object sender, KeyRoutedEventArgs e)
         {
             if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
+                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRing.IsActive = true;
                 bool temp=await checkLogin();
+                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.IsActive = false;
+                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 if (temp==true) 
                 {
                     if (this.Frame != null)
@@ -66,7 +87,11 @@ namespace Health_Organizer
 
                         this.Frame.Navigate(typeof(MainMenuPage));
                     }
-                    
+
+                }
+                else
+                {
+                    MainPagePassword.Password = "";
                 }
             }
         }
@@ -85,6 +110,12 @@ namespace Health_Organizer
                 if (output.Equals("success"))
                 {
                     return true;
+                }
+                else
+                {
+                    var messageDialog = new MessageDialog(output, "Error");
+                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
+                    var dialogResult = await messageDialog.ShowAsync();
                 }
             }
             return false;
@@ -113,6 +144,11 @@ namespace Health_Organizer
 
             }
             return "Check internet Connection";
+        }
+
+        private void sign_up_click_customdialog(object sender, RoutedEventArgs e)
+        {
+            MainPageCustomDialog.IsOpen = false;
         }
 
 

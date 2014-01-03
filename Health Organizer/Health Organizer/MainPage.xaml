@@ -7,7 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    KeyUp="SignInEnterPressed">
+    KeyUp="SignInEnterPressed"
+    xmlns:callisto="using:Callisto.Controls">
     <Page.Resources>
         <Storyboard x:Name="HomeScreenImageAnimation">
             <DoubleAnimation Storyboard.TargetName="imageTrans" 
@@ -108,32 +109,65 @@
             </Setter>
         </Style>
     </Page.Resources>
+    <Grid>
+        <Grid Name="MainPageGrid">
+            <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" >
+                <Image Name="HomePageImage" Source="Assets/logo_homescreen.png" Height="339" Margin="390,0,364,0">
+                    <Image.RenderTransform>
+                        <CompositeTransform x:Name="imageTrans"></CompositeTransform>
+                    </Image.RenderTransform>
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Orientation="Vertical" Height="768" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1346" Margin="10,0" >
-        <Image Name="HomePageImage" Source="Assets/logo_homescreen.png" Height="339" Margin="390,0,364,0">
-            <Image.RenderTransform>
-                <CompositeTransform x:Name="imageTrans"></CompositeTransform>
-            </Image.RenderTransform>
-           
-        </Image>
-        <Border Padding="10">
-            <ScrollViewer IsTabStop="True" Name="HomeScreenScrollViewer" VerticalScrollBarVisibility="Disabled" >
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
-                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
-                        <TextBox x:Name="MainPageUsername" Style="{StaticResource TextBoxStyle}"  Margin="25,0,0,0" Width="450" Height="45" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  PlaceholderText="Please Enter your user name" Padding="10"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
-                        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
-                        <PasswordBox x:Name="MainPagePassword" Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
-                    </StackPanel>
-                    <Border>
-                        <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="400,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
-                    </Border>
+                </Image>
+                <Border Padding="10">
+                    <ScrollViewer IsTabStop="True" Name="HomeScreenScrollViewer" VerticalScrollBarVisibility="Disabled" >
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
+                                <TextBox x:Name="MainPageUsername" Style="{StaticResource TextBoxStyle}"  Margin="25,0,0,0" Width="450" Height="45" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
+                                <PasswordBox x:Name="MainPagePassword" Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border>
+                                    <Button Background="#00A2E8" Content="Sign Up" Width="180" HorizontalAlignment="Center" Margin="595,20,0,0" Padding="10" Click="sign_up_click" Style="{StaticResource ButtonStyleEdited}"/>
+                                </Border>
+                                <Border>
+                                    <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="0,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </ScrollViewer>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Please Wait" FontSize="20" Name="MainPageProgressRingTextBlock" Margin="0,10,15,0" Visibility="Collapsed"/>
+                <ProgressRing Name="MainPageProgressRing" Height="40" Width="40"/>
+            </StackPanel>
+        </Grid>
+        <callisto:CustomDialog Background="#0064A0" Name="MainPageCustomDialog" Title="Sign Up">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Organization" FontSize="25" Margin="0,-5,0,0" />
+                    <TextBox x:Name="MainPageSignUpNGOName" Style="{StaticResource TextBoxStyle}"  Margin="15,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter Organization Name" Padding="10"/>
                 </StackPanel>
-
-            </ScrollViewer>
-        </Border>
-
-    </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
+                    <TextBox x:Name="MainPageSignUpUsername" Style="{StaticResource TextBoxStyle}"  Margin="45,0,0,0" Width="450" Height="45"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
+                    <PasswordBox x:Name="MainPageSignUpPassword" Style="{StaticResource PasswordBoxStyle}" Margin="50,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" Padding="10"/>
+                </StackPanel>
+                <Border>
+                    <Button Background="#00A2E8" Content="Sign Up" Width="180" HorizontalAlignment="Center" Margin="420,20,0,0" Padding="10" Click="sign_up_click_customdialog" Style="{StaticResource ButtonStyleEdited}"/>
+                </Border>
+            </StackPanel>
+        </callisto:CustomDialog>
+    </Grid>
 </Page>
