@@ -121,11 +121,11 @@
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
                         <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
-                        <TextBox Style="{StaticResource TextBoxStyle}"  Margin="25,0,0,0" Width="450" Height="45" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                        <TextBox x:Name="MainPageUsername" Style="{StaticResource TextBoxStyle}"  Margin="25,0,0,0" Width="450" Height="45" ToolTipService.ToolTip="Eg: John is username in John@abc.com"  PlaceholderText="Please Enter your user name" Padding="10"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
-                        <PasswordBox Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
+                        <PasswordBox x:Name="MainPagePassword" Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
                     </StackPanel>
                     <Border>
                         <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="400,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
