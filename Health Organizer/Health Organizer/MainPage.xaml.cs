@@ -118,7 +118,8 @@ namespace Health_Organizer
                     var dialogResult = await messageDialog.ShowAsync();
                 }
             }
-            return false;
+            //return false;  this shud be uncommented for running with server
+            return true;
             
         }
 
