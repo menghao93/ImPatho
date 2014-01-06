@@ -157,6 +157,10 @@
                     <TextBox x:Name="MainPageSignUpNGOName" Style="{StaticResource TextBoxStyle}"  Margin="15,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter Organization Name" Padding="10"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Email" FontSize="25" Margin="0,-5,45,0" />
+                    <TextBox x:Name="MainPageSignUpEmail" Style="{StaticResource TextBoxStyle}"  Margin="55,0,0,0" Width="450" Height="45"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
                     <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
                     <TextBox x:Name="MainPageSignUpUsername" Style="{StaticResource TextBoxStyle}"  Margin="45,0,0,0" Width="450" Height="45"  PlaceholderText="Please Enter your user name" Padding="10"/>
                 </StackPanel>
