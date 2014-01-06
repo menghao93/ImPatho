@@ -1,10 +1,5 @@
 ﻿using Health_Organizer.Data;
-using System.Globalization;
-using Windows.ApplicationModel.Resources;
-using Windows.ApplicationModel.Resources.Core;
-using Windows.UI.Xaml.Controls;
-using System.Resources;
-using System.Threading;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -25,7 +21,7 @@ namespace Health_Organizer
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class MainMenuPage : Page
+    public sealed partial class UniversalSearchPage : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -49,28 +45,12 @@ namespace Health_Organizer
         }
 
 
-        public MainMenuPage()
+        public UniversalSearchPage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-
-            this.loadDescriptionStrings();
-        }
-
-        private void loadDescriptionStrings()
-        {
-            //outputBlock.Text += String.Format("\nThe current culture is {0}.\n", CultureInfo.CurrentCulture.Name);
-            ResourceLoader rm = new ResourceLoader();
-            string description = rm.GetString("DESCRIPTION_TEST");
-            bloodTestDes.Text = description;
-            description = rm.GetString("DESCRIPTION_DOC_KIT");
-            docKitDes.Text = description;
-            description = rm.GetString("DESCRIPTION_SURVEY");
-            recordSurveyDes.Text = description;
-            description = rm.GetString("DESCRIPTION_ANALYSIS");
-            analysisDes.Text = description;
         }
 
         /// <summary>
@@ -114,6 +94,7 @@ namespace Health_Organizer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            UniversalPageGridAnimation.Begin();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -122,52 +103,5 @@ namespace Health_Organizer
         }
 
         #endregion
-
-        private void test_Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(DiseaseTestPage));
-            }
-        }
-
-        private void doctor_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(DocKitPage));
-            }
-        }
-
-        private void health_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(RecordPage));
-            }
-        }
-
-        private void analysis_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(AnalysisPage));
-            }
-        }
-
-        private void UniversalSearchClick(object sender, RoutedEventArgs e)
-        {
-            MainMenuGridAnimation.Begin();
-           
-        }
-
-        private void MainPageAnimationCompleted(object sender, object e)
-        {
-            if (this.Frame != null)
-            {
-
-                this.Frame.Navigate(typeof(UniversalSearchPage));
-            }
-        }
     }
 }
