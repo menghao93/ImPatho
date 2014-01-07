@@ -118,8 +118,8 @@ namespace Health_Organizer
                     var dialogResult = await messageDialog.ShowAsync();
                 }
             }
-            //return false;  this shud be uncommented for running with server
-            return true;
+            return false;  //this shud be uncommented for running with server
+            //return true;
             
         }
 
@@ -147,11 +147,57 @@ namespace Health_Organizer
             return "Check internet Connection";
         }
 
-        private void sign_up_click_customdialog(object sender, RoutedEventArgs e)
+        private async void sign_up_click_customdialog(object sender, RoutedEventArgs e)
         {
             MainPageCustomDialog.IsOpen = false;
+
+            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRing.IsActive = true;
+            await signup_new_user();
+            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            MainPageProgressRing.IsActive = false;
+            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            
         }
 
+        private async Task signup_new_user()
+        {
+            if (ExtraModules.IsInternet())
+            {
+                var data = new List<KeyValuePair<string, string>>
+                     {
+                         new KeyValuePair<string, string>("username", MainPageSignUpUsername.Text),
+                         new KeyValuePair<string, string>("password", MainPageSignUpPassword.Password.ToString()),
+                         new KeyValuePair<string, string>("organisation",MainPageSignUpNGOName.Text),
+                         new KeyValuePair<string, string>("email",MainPageSignUpEmail.Text)
+                      };
+                string output = await SignupServer(data);
+                
+                    var messageDialog = new MessageDialog(output, "");
+                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
+                    var dialogResult = await messageDialog.ShowAsync();
+                
+            }
+            return;
+        }
+
+        private async Task<string> SignupServer(List<KeyValuePair<string, string>> values)
+        {
+            if (ExtraModules.IsInternet())
+            {
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/signup.php", new FormUrlEncodedContent(values));
+                var responseString = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Signup Output" + responseString);
+                JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                string error = root.GetNamedString("error");
+                return error;
+            }
+            return "Check internet Connection";
+        }
 
     }
 }
