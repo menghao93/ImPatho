@@ -134,7 +134,7 @@ namespace Health_Organizer
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
                 string error = root.GetNamedString("error");
                 if (error.Equals("Success"))
-                {
+                { 
                     string username = root.GetNamedString("Username");
                     string userid = root.GetNamedString("UserId").ToString();
                     return "success";
