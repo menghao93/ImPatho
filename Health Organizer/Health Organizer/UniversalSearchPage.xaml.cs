@@ -1,4 +1,5 @@
 ﻿using Health_Organizer.Data;
+using Health_Organizer.Data_Model_Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        public List<AnalysisSampleDataItem> mainItemList, resultList;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -64,8 +65,14 @@ namespace Health_Organizer
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            ShowProgress();
+            var sample = await AnalysisPageDataSoure.GetItemsAsync();
+            HideProgress();
+            gridViewSource.Source = sample;
+            mainItemList = RecordGrid.Items.OfType<AnalysisSampleDataItem>().ToList();
+            RecordGrid.SelectedItem = null;
         }
 
         /// <summary>
@@ -103,5 +110,96 @@ namespace Health_Organizer
         }
 
         #endregion
+
+        private void UniversalSearchClicked(object sender, RoutedEventArgs e)
+        {
+            ShowProgress();
+            resultList = new List<AnalysisSampleDataItem>();
+            String searchQuery = UniversalSearchBox.Text;
+            if (!searchQuery.Equals(""))
+            {
+                foreach (AnalysisSampleDataItem item in mainItemList)
+                {
+                    if (item.Name.ToLower().Contains(searchQuery))
+                    {
+                        resultList.Add(item);
+                    }
+                    if (item.City.ToLower().Contains(searchQuery))
+                    {
+                        resultList.Add(item);
+                    }
+
+                    if (item.State.ToLower().Contains(searchQuery))
+                    {
+                        resultList.Add(item);
+                    }
+
+                    if (item.Occupation.ToLower().Contains(searchQuery))
+                    {
+                        resultList.Add(item);
+                    }
+                    foreach (string disease in item.Diseases.Values)
+                    {
+                        if (disease.ToLower().Contains(searchQuery))
+                        {
+                            resultList.Add(item);
+                        }
+                    }
+
+                    foreach (string allergy in item.Allergy)
+                    {
+                        if (allergy.ToLower().Contains(searchQuery))
+                        {
+                            resultList.Add(item);
+                        }
+                    }
+
+                    foreach (string addiction in item.Addiction)
+                    {
+                        if (addiction.ToLower().Contains(searchQuery))
+                        {
+                            resultList.Add(item);
+                        }
+                    }
+
+                    foreach (string vaccine in item.Vaccines.Values)
+                    {
+                        if (vaccine.ToLower().Contains(searchQuery))
+                        {
+                            resultList.Add(item);
+                        }
+                    }
+
+                    foreach (string operation in item.Operation)
+                    {
+                        if (operation.ToLower().Contains(searchQuery))
+                        {
+                            resultList.Add(item);
+                        }
+                    }
+
+                }
+                gridViewSource.Source = resultList;
+            }
+            HideProgress();
+        }
+
+        private void UniversalResetClicked(object sender, RoutedEventArgs e)
+        {
+            ShowProgress();
+            gridViewSource.Source = mainItemList;
+            HideProgress();
+            RecordGrid.SelectedItem = null;
+        }
+        public void ShowProgress()
+        {
+            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            UniversalProgressRing.IsActive = true;
+        }
+        public void HideProgress()
+        {
+            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            UniversalProgressRing.IsActive = false;
+        }
     }
 }
