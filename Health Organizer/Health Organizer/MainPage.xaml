@@ -129,19 +129,23 @@
                                 <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
                                 <PasswordBox x:Name="MainPagePassword" Style="{StaticResource PasswordBoxStyle}" Margin="37,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" ToolTipService.ToolTip="Eg: You need your password to Enter" Padding="10"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Border>
-                                    <Button Background="#00A2E8" Content="Sign Up" Width="180" HorizontalAlignment="Center" Margin="595,20,0,0" Padding="10" Click="sign_up_click" Style="{StaticResource ButtonStyleEdited}"/>
-                                </Border>
-                                <Border>
-                                    <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="0,20,0,0" Padding="10" Click="sign_in_click" Style="{StaticResource ButtonStyleEdited}"/>
+                                    <Button Background="#00A2E8" Content="Sign In" Width="180" HorizontalAlignment="Center" Margin="400,20,0,0" Padding="10" Click="SignInClicked" Style="{StaticResource ButtonStyleEdited}"/>
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-
                     </ScrollViewer>
                 </Border>
+            </StackPanel>
 
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40,0,0,40">
+                <TextBlock Name="SignUpTextBlock" FontSize="17" Text="Sign up for Health Organiser" Tapped="SignUpClicked" Width="215" PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock FontSize="17" Text="Forgot Password" Margin="0,0,15,0" PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                    <TextBlock FontSize="17" Text="|"/>
+                    <TextBlock FontSize="17" Text="Help Center" Margin="15,0,0,0"  PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <Grid>
@@ -153,24 +157,25 @@
         <callisto:CustomDialog Background="#0064A0" Name="MainPageCustomDialog" Title="Sign Up">
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
-                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Organization" FontSize="25" Margin="0,-5,0,0" />
-                    <TextBox x:Name="MainPageSignUpNGOName" Style="{StaticResource TextBoxStyle}"  Margin="15,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter Organization Name" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Organization" FontSize="22.5" Margin="0,-5,0,0" Width="150"/>
+                    <TextBox x:Name="MainPageSignUpNGOName" Style="{StaticResource TextBoxStyle}" Width="450" Height="45" PlaceholderText="Please Enter Organization Name" Padding="10"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Email" FontSize="25" Margin="0,-5,45,0" />
-                    <TextBox x:Name="MainPageSignUpEmail" Style="{StaticResource TextBoxStyle}"  Margin="55,0,0,0" Width="450" Height="45"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Email" FontSize="22.5" Margin="0,-5,0,0" Width="150" />
+                    <TextBox x:Name="MainPageSignUpEmail" Style="{StaticResource TextBoxStyle}" Width="450" Height="45"  PlaceholderText="Please Enter Organization's Email" Padding="10"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="25" Margin="0,-5,0,0" />
-                    <TextBox x:Name="MainPageSignUpUsername" Style="{StaticResource TextBoxStyle}"  Margin="45,0,0,0" Width="450" Height="45"  PlaceholderText="Please Enter your user name" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Username" FontSize="22.5" Margin="0,-5,0,0" Width="150" />
+                    <TextBox x:Name="MainPageSignUpUsername" Style="{StaticResource TextBoxStyle}" Width="450" Height="45"  PlaceholderText="Please User name" Padding="10"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="25" Margin="0,-5,0,0" />
-                    <PasswordBox x:Name="MainPageSignUpPassword" Style="{StaticResource PasswordBoxStyle}" Margin="50,0,0,0" Width="450" Height="45" PlaceholderText="Please Enter the password" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="Wrap" Text="Password" FontSize="22.5" Margin="0,-5,0,0" Width="150" />
+                    <PasswordBox x:Name="MainPageSignUpPassword" Style="{StaticResource PasswordBoxStyle}" Width="450" Height="45" PlaceholderText="Please Enter the password" Padding="10"/>
                 </StackPanel>
-                <Border>
-                    <Button Background="#00A2E8" Content="Sign Up" Width="180" HorizontalAlignment="Center" Margin="420,20,0,0" Padding="10" Click="sign_up_click_customdialog" Style="{StaticResource ButtonStyleEdited}"/>
-                </Border>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="360,10,0,0">
+                    <Button Background="#00A2E8" Content="Sign Up" Width="125" HorizontalAlignment="Center" Padding="8" Click="SignUpClickedCallisto" Style="{StaticResource ButtonStyleEdited}"/>
+                    <Button Background="#00A2E8" Content="Cancle" Width="125" Padding="8" Click="CancleSignUpClicked" Style="{StaticResource ButtonStyleEdited}"/>
+                </StackPanel>
             </StackPanel>
         </callisto:CustomDialog>
     </Grid>
