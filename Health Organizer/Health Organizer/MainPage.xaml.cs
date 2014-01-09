@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Windows.Data.Json;
 using Windows.UI.Popups;
+using Windows.UI;
 
 namespace Health_Organizer
 {
@@ -36,13 +37,14 @@ namespace Health_Organizer
             await App.InitializeDB();
         }
 
-        private async void sign_in_click(object sender, RoutedEventArgs e)
+        private async void SignInClicked(object sender, RoutedEventArgs e)
         {
             MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
             MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
             MainPageProgressRing.IsActive = true;
-            bool temp = await checkLogin();
+            //bool temp = await checkLogin();
+            bool temp = true;
             MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -54,7 +56,6 @@ namespace Health_Organizer
 
                     this.Frame.Navigate(typeof(MainMenuPage));
                 }
-
             }
             else
             {
@@ -62,7 +63,7 @@ namespace Health_Organizer
             }
         }
 
-        private void sign_up_click(object sender, RoutedEventArgs e)
+        private void SignUpClicked(object sender, RoutedEventArgs e)
         {
             MainPageCustomDialog.IsOpen = true;
         }
@@ -75,19 +76,17 @@ namespace Health_Organizer
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRing.IsActive = true;
-                bool temp=await checkLogin();
+                bool temp = await checkLogin();
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 MainPageProgressRing.IsActive = false;
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                if (temp==true) 
+                if (temp == true)
                 {
                     if (this.Frame != null)
                     {
-
                         this.Frame.Navigate(typeof(MainMenuPage));
                     }
-
                 }
                 else
                 {
@@ -106,7 +105,7 @@ namespace Health_Organizer
                          new KeyValuePair<string, string>("username", MainPageUsername.Text.ToString()),
                          new KeyValuePair<string, string>("password", MainPagePassword.Password.ToString())
                       };
-                string output=await LoginServer(data);
+                string output = await LoginServer(data);
                 if (output.Equals("success"))
                 {
                     return true;
@@ -120,7 +119,6 @@ namespace Health_Organizer
             }
             return false;  //this shud be uncommented for running with server
             //return true;
-            
         }
 
         private async Task<string> LoginServer(List<KeyValuePair<string, string>> values)
@@ -130,40 +128,54 @@ namespace Health_Organizer
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/login.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine("MainPage"+responseString);
+                Debug.WriteLine("MainPage" + responseString);
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
                 string error = root.GetNamedString("error");
                 if (error.Equals("Success"))
-                { 
+                {
                     string username = root.GetNamedString("Username");
                     string userid = root.GetNamedString("UserId").ToString();
                     return "success";
                 }
-                else {
-                        return error;
-                    }
+                else
+                {
+                    return error;
+                }
 
             }
             return "Check internet Connection";
         }
 
-        private async void sign_up_click_customdialog(object sender, RoutedEventArgs e)
+        private async void SignUpClickedCallisto(object sender, RoutedEventArgs e)
         {
-            MainPageCustomDialog.IsOpen = false;
+            this.setAllSignUpFieldsWhite();
+            if (checkSignUpFields())
+            {
+                MainPageCustomDialog.IsOpen = false;
 
-            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRing.IsActive = true;
-            await signup_new_user();
-            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            MainPageProgressRing.IsActive = false;
-            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            
+                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRing.IsActive = true;
+                await SignUpNewUser();
+                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.IsActive = false;
+                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
         }
 
-        private async Task signup_new_user()
+        private void CancleSignUpClicked(object sender, RoutedEventArgs e)
+        {
+            MainPageCustomDialog.IsOpen = false;
+            this.setAllSignUpFieldsWhite();
+            MainPageSignUpNGOName.Text = "";
+            MainPageSignUpEmail.Text = "";
+            MainPageSignUpUsername.Text = "";
+            MainPageSignUpPassword.Password = "";
+        }
+
+        private async Task SignUpNewUser()
         {
             if (ExtraModules.IsInternet())
             {
@@ -175,11 +187,10 @@ namespace Health_Organizer
                          new KeyValuePair<string, string>("email",MainPageSignUpEmail.Text)
                       };
                 string output = await SignupServer(data);
-                
-                    var messageDialog = new MessageDialog(output, "");
-                    messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
-                    var dialogResult = await messageDialog.ShowAsync();
-                
+
+                var messageDialog = new MessageDialog(output, "");
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
+                var dialogResult = await messageDialog.ShowAsync();
             }
             return;
         }
@@ -199,5 +210,57 @@ namespace Health_Organizer
             return "Check internet Connection";
         }
 
+        private void PointerEnteredEvent(object sender, PointerRoutedEventArgs e)
+        {
+            TextBlock block = sender as TextBlock;
+            block.Foreground = new SolidColorBrush(Colors.SkyBlue);
+        }
+
+        private void PointerExitedEvent(object sender, PointerRoutedEventArgs e)
+        {
+            TextBlock block = sender as TextBlock;
+            block.Foreground = new SolidColorBrush(Colors.White);
+        }
+
+        private void setAllSignUpFieldsWhite()
+        {
+            MainPageSignUpNGOName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            MainPageSignUpEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            MainPageSignUpUsername.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            MainPageSignUpPassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+        }
+
+        private bool checkSignUpFields()
+        {
+            if (MainPageSignUpNGOName.Text.Equals(""))
+            {
+                MainPageSignUpNGOName.Focus(FocusState.Keyboard);
+                MainPageSignUpNGOName.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            if (MainPageSignUpEmail.Text.Equals(""))
+            {
+                MainPageSignUpEmail.Focus(FocusState.Keyboard);
+                MainPageSignUpEmail.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            if (MainPageSignUpUsername.Text.Equals(""))
+            {
+                MainPageSignUpUsername.Focus(FocusState.Keyboard);
+                MainPageSignUpUsername.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            if (MainPageSignUpPassword.Password.ToString() == "")
+            {
+                MainPageSignUpPassword.Focus(FocusState.Keyboard);
+                MainPageSignUpPassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
