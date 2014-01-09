@@ -138,6 +138,15 @@
                     </ScrollViewer>
                 </Border>
             </StackPanel>
+
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40,0,0,40">
+                <TextBlock Name="SignUpTextBlock" FontSize="17" Text="Sign up for Health Organiser" Tapped="SignUpClicked" Width="215" PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock FontSize="17" Text="Forgot Password" Margin="0,0,15,0" PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                    <TextBlock FontSize="17" Text="|"/>
+                    <TextBlock FontSize="17" Text="Help Center" Margin="15,0,0,0"  PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
+                </StackPanel>
+            </StackPanel>
         </Grid>
         <Grid>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -169,14 +178,5 @@
                 </StackPanel>
             </StackPanel>
         </callisto:CustomDialog>
-
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40,0,0,40">
-            <TextBlock Name="SignUpTextBlock" FontSize="17" Text="Sign up for Health Organiser" Tapped="SignUpClicked" Width="215" PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <TextBlock FontSize="17" Text="Forgot Password" Margin="0,0,15,0" Tapped="sign_up_click"  PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
-                <TextBlock FontSize="17" Text="|"/>
-                <TextBlock FontSize="17" Text="Help Center" Margin="15,0,0,0"  PointerEntered="PointerEnteredEvent" PointerExited="PointerExitedEvent"/>
-            </StackPanel>
-        </StackPanel>
     </Grid>
 </Page>

@@ -148,21 +148,43 @@ namespace Health_Organizer
 
         private async void SignUpClickedCallisto(object sender, RoutedEventArgs e)
         {
+            string error = "";
             this.setAllSignUpFieldsWhite();
-            if (checkSignUpFields())
+            try
             {
-                MainPageCustomDialog.IsOpen = false;
+                if (checkSignUpFields())
+                {
+                    MainPageCustomDialog.IsOpen = false;
 
-                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                MainPageProgressRing.IsActive = true;
-                await SignUpNewUser();
+                    MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    MainPageProgressRing.IsActive = true;
+                    await SignUpNewUser();
+                    MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    MainPageProgressRing.IsActive = false;
+                    MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("Exception in MainPage---SignUpClickedCallisto");
+                Debug.WriteLine(ex.Message.ToString());
+                error = ex.Message;
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 MainPageProgressRing.IsActive = false;
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
+
+            if (!error.Equals(""))
+            {
+                var messageDialog = new MessageDialog(error, "");
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
+                var dialogResult = await messageDialog.ShowAsync();
+            }
+            
         }
 
         private void CancleSignUpClicked(object sender, RoutedEventArgs e)
