@@ -39,27 +39,9 @@ namespace Health_Organizer
 
         private async void SignInClicked(object sender, RoutedEventArgs e)
         {
-            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRing.IsActive = true;
-            //bool temp = await checkLogin();
-            bool temp = true;
-            MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            MainPageProgressRing.IsActive = false;
-            if (temp == true)
+            if (checkSignInFields())
             {
-                if (this.Frame != null)
-                {
-
-                    this.Frame.Navigate(typeof(MainMenuPage));
-                }
-            }
-            else
-            {
-                MainPagePassword.Password = "";
+                this.SignIn();
             }
         }
 
@@ -72,15 +54,26 @@ namespace Health_Organizer
         {
             if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
             {
+                if (checkSignInFields())
+                {
+                    this.SignIn();
+                }
+            }
+        }
+
+        private async void SignIn()
+        {
+            string error = "";
+            try{
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRing.IsActive = true;
                 bool temp = await checkLogin();
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                MainPageProgressRing.IsActive = false;
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.IsActive = false;
                 if (temp == true)
                 {
                     if (this.Frame != null)
@@ -93,6 +86,30 @@ namespace Health_Organizer
                     MainPagePassword.Password = "";
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception in MainPage---SignIn");
+                Debug.WriteLine(ex.Message.ToString());
+                error = ex.Message;
+                MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                MainPageProgressRing.IsActive = false;
+                MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                //below code is to be commented when server is working
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MainMenuPage));
+                }
+            }
+
+            if (!error.Equals(""))
+            {
+                var messageDialog = new MessageDialog(error, "");
+                messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
+                var dialogResult = await messageDialog.ShowAsync();
+            }
+            
         }
 
 
@@ -167,7 +184,7 @@ namespace Health_Organizer
                     MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine("Exception in MainPage---SignUpClickedCallisto");
                 Debug.WriteLine(ex.Message.ToString());
@@ -184,7 +201,7 @@ namespace Health_Organizer
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
                 var dialogResult = await messageDialog.ShowAsync();
             }
-            
+
         }
 
         private void CancleSignUpClicked(object sender, RoutedEventArgs e)
@@ -252,6 +269,12 @@ namespace Health_Organizer
             MainPageSignUpPassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
         }
 
+        private void setAllSignInFieldsWhite()
+        {
+            MainPageUsername.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+            MainPagePassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.White);
+        }
+
         private bool checkSignUpFields()
         {
             if (MainPageSignUpNGOName.Text.Equals(""))
@@ -279,6 +302,26 @@ namespace Health_Organizer
             {
                 MainPageSignUpPassword.Focus(FocusState.Keyboard);
                 MainPageSignUpPassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool checkSignInFields()
+        {
+            this.setAllSignInFieldsWhite();
+            if (MainPageUsername.Text.Equals(""))
+            {
+                MainPageUsername.Focus(FocusState.Keyboard);
+                MainPageUsername.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+                return false;
+            }
+
+            if (MainPagePassword.Password.Equals(""))
+            {
+                MainPagePassword.Focus(FocusState.Keyboard);
+                MainPagePassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 return false;
             }
 
