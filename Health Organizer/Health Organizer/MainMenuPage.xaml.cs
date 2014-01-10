@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
+using System;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -30,7 +32,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        private SettingsFlyout settings;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -55,8 +57,8 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-
             this.loadDescriptionStrings();
+            settings = new SettingsFlyout();
         }
 
         private void loadDescriptionStrings()
@@ -158,7 +160,7 @@ namespace Health_Organizer
         private void UniversalSearchClick(object sender, RoutedEventArgs e)
         {
             MainMenuGridAnimation.Begin();
-           
+
         }
 
         private void MainPageAnimationCompleted(object sender, object e)
@@ -168,6 +170,17 @@ namespace Health_Organizer
 
                 this.Frame.Navigate(typeof(UniversalSearchPage));
             }
+        }
+
+        private void MenuSettingsClick(object sender, RoutedEventArgs e)
+        {
+            settings.Content = new Settings();
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.Title = "Settings";
+            settings.Show();
         }
     }
 }
