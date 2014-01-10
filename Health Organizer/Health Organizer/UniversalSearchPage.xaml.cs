@@ -19,27 +19,18 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Health_Organizer
 {
-    /// <summary>
-    /// A basic page that provides characteristics common to most applications.
-    /// </summary>
     public sealed partial class UniversalSearchPage : Page
     {
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         public List<AnalysisSampleDataItem> mainItemList, resultList;
-        /// <summary>
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
+
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
 
-        /// <summary>
-        /// NavigationHelper is used on each page to aid in navigation and 
-        /// process lifetime management
-        /// </summary>
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -54,17 +45,6 @@ namespace Health_Organizer
             this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
-        /// <summary>
-        /// Populates the page with content passed during navigation. Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             ShowProgress();
@@ -75,28 +55,11 @@ namespace Health_Organizer
             RecordGrid.SelectedItem = null;
         }
 
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
-        /// <param name="e">Event data that provides an empty dictionary to be populated with
-        /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
 
         #region NavigationHelper registration
-
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// 
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="GridCS.Common.NavigationHelper.LoadState"/>
-        /// and <see cref="GridCS.Common.NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -114,6 +77,7 @@ namespace Health_Organizer
         private void UniversalSearchClicked(object sender, RoutedEventArgs e)
         {
             ShowProgress();
+            bool addedFlag = false;
             resultList = new List<AnalysisSampleDataItem>();
             String searchQuery = UniversalSearchBox.Text;
             if (!searchQuery.Equals(""))
@@ -123,27 +87,39 @@ namespace Health_Organizer
                     if (item.Name.ToLower().Contains(searchQuery))
                     {
                         resultList.Add(item);
+                        continue;
                     }
                     if (item.City.ToLower().Contains(searchQuery))
                     {
                         resultList.Add(item);
+                        continue;
                     }
 
                     if (item.State.ToLower().Contains(searchQuery))
                     {
                         resultList.Add(item);
+                        continue;
                     }
 
                     if (item.Occupation.ToLower().Contains(searchQuery))
                     {
                         resultList.Add(item);
+                        continue;
                     }
+
                     foreach (string disease in item.Diseases.Values)
                     {
                         if (disease.ToLower().Contains(searchQuery))
                         {
                             resultList.Add(item);
+                            addedFlag = true;
+                            break;
                         }
+                    }
+
+                    if (addedFlag)
+                    {
+                        continue;
                     }
 
                     foreach (string allergy in item.Allergy)
@@ -151,7 +127,13 @@ namespace Health_Organizer
                         if (allergy.ToLower().Contains(searchQuery))
                         {
                             resultList.Add(item);
+                            addedFlag = true;
+                            break;
                         }
+                    }
+                    if (addedFlag)
+                    {
+                        continue;
                     }
 
                     foreach (string addiction in item.Addiction)
@@ -159,7 +141,13 @@ namespace Health_Organizer
                         if (addiction.ToLower().Contains(searchQuery))
                         {
                             resultList.Add(item);
+                            addedFlag = true;
+                            break;
                         }
+                    }
+                    if (addedFlag)
+                    {
+                        continue;
                     }
 
                     foreach (string vaccine in item.Vaccines.Values)
@@ -167,7 +155,13 @@ namespace Health_Organizer
                         if (vaccine.ToLower().Contains(searchQuery))
                         {
                             resultList.Add(item);
+                            addedFlag = true;
+                            break;
                         }
+                    }
+                    if (addedFlag)
+                    {
+                        continue;
                     }
 
                     foreach (string operation in item.Operation)
@@ -175,11 +169,19 @@ namespace Health_Organizer
                         if (operation.ToLower().Contains(searchQuery))
                         {
                             resultList.Add(item);
+                            addedFlag = true;
+                            break;
                         }
+                    }
+                    if (addedFlag)
+                    {
+                        continue;
                     }
 
                 }
                 gridViewSource.Source = resultList;
+                UniversalSearchBox.Focus(FocusState.Keyboard);
+                RecordGrid.SelectedItem = null;
             }
             HideProgress();
         }
@@ -188,6 +190,8 @@ namespace Health_Organizer
         {
             ShowProgress();
             gridViewSource.Source = mainItemList;
+            UniversalSearchBox.Text = "";
+            UniversalSearchBox.Focus(FocusState.Keyboard);
             HideProgress();
             RecordGrid.SelectedItem = null;
         }

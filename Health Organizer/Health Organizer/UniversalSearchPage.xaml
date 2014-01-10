@@ -68,10 +68,10 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <TextBox Name="UniversalSearchBox" PlaceholderText="Search" Width="400" Height="30" Margin="350,0,0,0"/>
-                <Button Name="UniversalSearchButton" Margin="50,0,0,0" Click="UniversalSearchClicked">Search</Button>
-                <Button Name="UniversalResetButton" Margin="20,0,0,0" Click="UniversalResetClicked">Reset</Button>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox Name="UniversalSearchBox" PlaceholderText="Search" Width="400" Height="30"/>
+                <Button Name="UniversalSearchButton" Margin="25,0,0,0" Width="100" Click="UniversalSearchClicked">Search</Button>
+                <Button Name="UniversalResetButton" Margin="15,0,0,0" Width="100" Click="UniversalResetClicked">Reset</Button>
             </StackPanel>
             <Grid Grid.Row="1">
             <GridView Padding="50"
