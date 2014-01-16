@@ -95,12 +95,12 @@ namespace Health_Organizer
                 MainPageProgressRing.IsActive = false;
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
 
-                //below code is to be commented when server is working
-                if (this.Frame != null)
-                {
-                    this.Frame.Navigate(typeof(MainMenuPage));
-                }
+            //below code is to be commented when server is working
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(MainMenuPage));
             }
 
             if (!error.Equals(""))
@@ -311,14 +311,14 @@ namespace Health_Organizer
         private bool checkSignInFields()
         {
             this.setAllSignInFieldsWhite();
-            if (MainPageUsername.Text.Equals(""))
+            if (MainPageUsername.Text.Trim().Equals(""))
             {
                 MainPageUsername.Focus(FocusState.Keyboard);
                 MainPageUsername.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 return false;
             }
 
-            if (MainPagePassword.Password.Equals(""))
+            if (MainPagePassword.Password.Trim().Equals(""))
             {
                 MainPagePassword.Focus(FocusState.Keyboard);
                 MainPagePassword.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);

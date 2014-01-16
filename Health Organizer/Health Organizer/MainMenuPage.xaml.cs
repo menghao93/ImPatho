@@ -17,6 +17,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System;
+using SQLiteWinRT;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -30,6 +34,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private Database database;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -158,7 +163,6 @@ namespace Health_Organizer
         private void UniversalSearchClick(object sender, RoutedEventArgs e)
         {
             MainMenuGridAnimation.Begin();
-           
         }
 
         private void MainPageAnimationCompleted(object sender, object e)
@@ -167,6 +171,54 @@ namespace Health_Organizer
             {
 
                 this.Frame.Navigate(typeof(UniversalSearchPage));
+            }
+        }
+
+        private void SettingsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public async void getFromServer(string BigQuery)
+        {
+            try
+            {
+                foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
+                {
+                    Statement statement = await this.database.PrepareStatementAsync(singleQuery);
+                    await statement.StepAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MainMenuPage---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+        }
+
+        public void sendToServer(string TimeStamp)
+        {
+        }
+
+        public async Task<string> getColumnames(string tableName)
+        {
+            string columnNames = "";
+            try
+            {
+                // read column names\
+                Statement statement = await database.PrepareStatementAsync("PRAGMA table_info(" + tableName + ")");
+                statement.EnableColumnsProperty();
+                while (await statement.StepAsync())
+                {
+                    columnNames += statement.Columns["name"] + ",";
+                }
+                return columnNames.Substring(0, columnNames.Length - 1);
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MainMenuPage---getColumnname" + "\n" + ex.Message + "\n" + result.ToString());
+                return "";
             }
         }
     }
