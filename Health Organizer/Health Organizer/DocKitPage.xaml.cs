@@ -511,6 +511,8 @@ namespace Health_Organizer
 
             if (docKitListBox.SelectedItem != null)
             {
+                docKitDelBut.IsEnabled = true;
+                docKitEditBut.IsEnabled = true;
                 //Check whether diseases or firstaid and then display selected Item's details
                 if (isDiseaseSelected)
                 {
@@ -546,6 +548,11 @@ namespace Health_Organizer
                     TitleTextBlockAnimation.Begin();
                     FirstAidGridAnimation.Begin();
                 }
+            }
+            else
+            {
+                docKitDelBut.IsEnabled = false;
+                docKitEditBut.IsEnabled = false;
             }
         }
 

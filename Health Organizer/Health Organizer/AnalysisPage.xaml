@@ -226,7 +226,7 @@
                                 <TextBlock Name="AnalysisOptionsSubHeader" Text="Default" FontSize="20" VerticalAlignment="Center" Margin="125,20,0,0" Padding="10" FontFamily="Segoe UI" FontWeight="ExtraLight"/>
                                 <TextBlock Name="AnalysisResultsFound" Style="{StaticResource SubheaderTextBlockStyle}" Margin="250,20,0,15"  VerticalAlignment="Center" />
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                                    <AppBarButton  Label="Export" Icon="Save"  Name="AnalysisExportFields" Click="AnalysisExportListClicked"/>
+                                    <AppBarButton  Label="Export all records" Icon="Save"  Name="AnalysisExportFields" Click="AnalysisExportListClicked"/>
                                     <AppBarButton  Label="Help" Icon="Help" />
                                     <AppBarButton  Label="Settings" Icon="Setting"  />
                                 </StackPanel>
@@ -465,8 +465,8 @@
     <Page.BottomAppBar>
         <CommandBar Name="AnalysisPageCmdbar" Background="#0C0C0C" BorderBrush="Transparent">
             <AppBarButton Name="ViewProfile" Click="ViewProfileClicked" Icon="Contact" Label="View Profile"></AppBarButton>
-            <AppBarButton Name="ShareProfile" Click="ShareProfileClicked" Icon="Mail" Label="Share Profile"></AppBarButton>
-            <AppBarButton Name="ExportProfile" Click="ExportProfileClicked" Icon="Save" Label="Export Profile"></AppBarButton>
+            <AppBarButton Name="ShareProfile" Click="ShareProfileClicked" Icon="Mail" Label="Share Selected Profile"></AppBarButton>
+            <AppBarButton Name="ExportProfile" Click="ExportProfileClicked" Icon="Save" Label="Export Selected Profile"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
