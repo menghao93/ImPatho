@@ -148,7 +148,8 @@ namespace Health_Organizer.Data
 
                     if (this.db != null)
                     {
-                        string query = "SELECT * FROM (Patient NATURAL JOIN (Address NATURAL JOIN AddressZIP));";
+                        //string query = "SELECT * FROM (Patient NATURAL JOIN (Address NATURAL JOIN AddressZIP));";
+                        string query = "SELECT Patient.PID, Patient.FirstName, Patient.LastName, Patient.BloodGroup, Patient.Sex, Patient.Birthday, Patient.Image, Address.ZIP, Address.Street, AddressZIP.City FROM ((Patient INNER JOIN Address ON Patient.PID = Address.PID) INNER JOIN AddressZIP ON AddressZIP.ZIP = Address.ZIP)";
                         Statement statement = await db.PrepareStatementAsync(query);
                         statement.EnableColumnsProperty();
                         List<SampleDataGroup> sampleList = new List<SampleDataGroup>();
