@@ -178,53 +178,11 @@ namespace Health_Organizer
             }
         }
 
-        private void SettingsClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public async void getFromServer(string BigQuery)
-        {
-            try
-            {
-                foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
-                {
-                    Statement statement = await this.database.PrepareStatementAsync(singleQuery);
-                    await statement.StepAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
-                Debug.WriteLine("MainMenuPage---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
-            }
-        }
-
-        public void sendToServer(string TimeStamp)
+        private  void SettingsClick(object sender, RoutedEventArgs e)
         {
         }
 
-        public async Task<string> getColumnames(string tableName)
-        {
-            string columnNames = "";
-            try
-            {
-                // read column names\
-                Statement statement = await database.PrepareStatementAsync("PRAGMA table_info(" + tableName + ")");
-                statement.EnableColumnsProperty();
-                while (await statement.StepAsync())
-                {
-                    columnNames += statement.Columns["name"] + ",";
-                }
-                return columnNames.Substring(0, columnNames.Length - 1);
-            }
-            catch (Exception ex)
-            {
-                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
-                Debug.WriteLine("MainMenuPage---getColumnname" + "\n" + ex.Message + "\n" + result.ToString());
-                return "";
-            }
-        }
+      
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
         {
