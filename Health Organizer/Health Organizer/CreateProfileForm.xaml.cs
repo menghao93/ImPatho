@@ -324,7 +324,7 @@ namespace Health_Organizer
                     int pid = await this.InsertBasicDetais();
                     await this.InsertAddress(pid);
                     await this.InsertMutableDetails(pid);
-                    await this.InsertIntoGridView(pid);
+                    await this.InsertIntoGridView(pid, false);
                 }
 
                 this.navigationHelper.GoBack();
@@ -343,12 +343,11 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<int> InsertIntoGridView(int pid)
+        private async Task<int> InsertIntoGridView(int pid, bool isUpdating)
         {
             try
             {
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
-
                 bool groupExist = false;
 
                 IEnumerable<SampleDataGroup> samples = HomePageDataSoure._sampleDataSource.Groups;
@@ -368,20 +367,25 @@ namespace Health_Organizer
                     HomePageDataSoure._sampleDataSource.Groups.Add(group);
                 }
 
-                await AnalysisPageDataSoure.GetItemsAsync();
-               
                 bool married;
                 if (profileMarried.IsChecked.Value)
-                { 
-                    married = true; 
+                {
+                    married = true;
                 }
                 else
                 {
                     married = false;
                 }
 
-                AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, profileCity.Text, profileState.Text, profileCountry.Text, null);
-                AnalysisPageDataSoure._sampleDataSource.Groups.Add(temp);
+                //This is used to see whether we are updating the Grid view or inserting into it. Incase we are updating then we don't need to 
+                //add new element in the grid view as this would create two same elements.
+                if (!isUpdating)
+                {
+                    await AnalysisPageDataSoure.GetItemsAsync();
+
+                    AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, profileCity.Text, profileState.Text, profileCountry.Text, null);
+                    AnalysisPageDataSoure._sampleDataSource.Groups.Add(temp);
+                }
 
                 return DBConnect.RESULT_OK;
             }
@@ -398,6 +402,7 @@ namespace Health_Organizer
             {
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
 
+                //This updates Grid View of NGO Home
                 SampleDataItem updateItem = await HomePageDataSoure.GetItemAsync(pid.ToString());
                 if (pastGridGroup != null)
                 {
@@ -410,10 +415,12 @@ namespace Health_Organizer
                     else
                     {
                         await HomePageDataSoure.DelItemAsync(pid.ToString());
-                        await this.InsertIntoGridView(pid);
+                        //is update is given to update all the grid views. 
+                        await this.InsertIntoGridView(pid, isUpdating);
                     }
                 }
 
+                //This updates Grid View of Analysis Page
                 AnalysisSampleDataItem updateAnalysisItem = await AnalysisPageDataSoure.GetItemAsync(pid.ToString());
                 if (profileBloodGroup.SelectedItem != null)
                 {
@@ -753,7 +760,7 @@ namespace Health_Organizer
             {
                 string insertQuery = "INSERT INTO Patient (TimeStamp, FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@ts, @fName, @lName, @bg, @sex, @bday, @image)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString()); 
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindTextParameterWithName("@fName", profileFirstName.Text);
                 statement.BindTextParameterWithName("@lName", profileLastName.Text);
                 statement.BindTextParameterWithName("@bg", profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString());
@@ -1123,7 +1130,7 @@ namespace Health_Organizer
                 profileYearComboBox.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 return false;
             }
-            
+
             Int32 catchInt32;
             Int64 catchInt64;
             if (profileFirstName.Text.Equals("") || profileLastName.Text.Equals("") || profileAddress.Text.Equals("") || profileCountry.Text.Equals("") ||

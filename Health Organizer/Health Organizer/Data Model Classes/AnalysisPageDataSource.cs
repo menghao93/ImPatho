@@ -162,7 +162,9 @@ namespace Health_Organizer.Data_Model_Classes
                 //Create a hashmap of (pid, item) and one by one query DB and add all the details to it.
                 try
                 {
-                    string query = "SELECT * FROM (Patient NATURAL JOIN MutableDetails) NATURAL JOIN (Address NATURAL JOIN (AddressZIP NATURAL JOIN (AddressCity NATURAL JOIN AddressState)))";
+                    //string query = "SELECT * FROM (Patient NATURAL JOIN MutableDetails) NATURAL JOIN (Address NATURAL JOIN (AddressZIP NATURAL JOIN (AddressCity NATURAL JOIN AddressState)))";
+                    string query = "SELECT Patient.PID, Patient.FirstName, Patient.LastName, Patient.BloodGroup, Patient.Sex, Patient.Birthday, Patient.Image, MutableDetails.Married, MutableDetails.Occupation, MutableDetails.FamilyBackground, MutableDetails.Email, MutableDetails.Mobile, MutableDetails.EmMobile, Address.ZIP, Address.Street, AddressCity.City, AddressCity.State, AddressState.Country FROM (((((Patient INNER JOIN MutableDetails ON Patient.PID = MutableDetails.PID) INNER JOIN Address ON MutableDetails.PID = Address.PID) INNER JOIN AddressZIP ON Address.ZIP = AddressZIP.ZIP) INNER JOIN AddressCity ON AddressZIP.CITY = AddressCity.CITY)  INNER JOIN AddressState ON AddressCity.STATE = AddressState.STATE)";
+
                     Statement statement = await db.PrepareStatementAsync(query);
                     statement.EnableColumnsProperty();
                     Dictionary<int, AnalysisSampleDataItem> group = new Dictionary<int, AnalysisSampleDataItem>();

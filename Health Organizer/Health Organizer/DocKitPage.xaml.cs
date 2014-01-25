@@ -220,6 +220,8 @@ namespace Health_Organizer
                     {
                         docKitDelBut.IsEnabled = false;
                         docKitEditBut.IsEnabled = false;
+                        this.hideDiseaseItems();
+                        this.hideFirstAidItems();
                     }
                 }
             }
@@ -401,8 +403,6 @@ namespace Health_Organizer
                                 tempDisease.Image = decodedImage;
                                 tempDisease.Symptoms = docKitDSymptoms.Text;
 
-
-
                                 docKitDSymptoms.Text = ExtraModules.RemoveExtraCommas(docKitDSymptoms.Text);
                                 tempDisease.Symptoms = docKitDSymptoms.Text;
 
@@ -425,6 +425,9 @@ namespace Health_Organizer
                                 docKitEditBut.IsEnabled = true;
                             }
                         }
+                        docKitDialog.IsOpen = false;
+                        //After everything is stored/Updated in database we need to reset all the fields.
+                        this.ClearFormFields();
                     }
                 }
             }
@@ -432,7 +435,7 @@ namespace Health_Organizer
             {
                 if (docKitFAName.Text.Equals("") || docKitFASymptoms.Text.Equals("") || docKitFADescription.Text.Equals("") || docKitFAImage.Text.Equals(""))
                 {
-                    docKitErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    docKitFAErrorDescription.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 }
                 else
                 {
@@ -467,10 +470,11 @@ namespace Health_Organizer
                             docKitEditBut.IsEnabled = true;
                         }
                     }
+                    docKitDialogFirstAid.IsOpen = false;
+                    //After everything is stored/Updated in database we need to reset all the fields.
+                    this.ClearFormFields();
                 }
             }
-            //After everything is stored/Updated in database we need to reset all the fields.
-            this.ClearFormFields();
         }
 
         private void docKitDialogCancel(object sender, RoutedEventArgs e)
@@ -511,6 +515,8 @@ namespace Health_Organizer
 
             if (docKitListBox.SelectedItem != null)
             {
+                docKitDelBut.IsEnabled = true;
+                docKitEditBut.IsEnabled = true;
                 //Check whether diseases or firstaid and then display selected Item's details
                 if (isDiseaseSelected)
                 {
@@ -547,21 +553,22 @@ namespace Health_Organizer
                     FirstAidGridAnimation.Begin();
                 }
             }
+            else
+            {
+                docKitDelBut.IsEnabled = false;
+                docKitEditBut.IsEnabled = false;
+            }
         }
 
         /////////////////////////This is used to clear all the Dialog Fields
         private void ClearFormFields()
         {
-            if (docKitDialog.IsOpen == true)
-                docKitDialog.IsOpen = false;
             docKitDName.Text = "";
             docKitDDescription.Text = "";
             docKitDSymptoms.Text = "";
             docKitDImage.Text = "";
             docKitDName.IsReadOnly = false;
 
-            if (docKitDialogFirstAid.IsOpen == true)
-                docKitDialogFirstAid.IsOpen = false;
             docKitFAName.Text = "";
             docKitFADescription.Text = "";
             docKitFASymptoms.Text = "";

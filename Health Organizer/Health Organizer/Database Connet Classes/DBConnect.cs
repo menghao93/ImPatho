@@ -23,8 +23,9 @@ namespace Health_Organizer.Database_Connet_Classes
 
         //This is the constructor wherein we get path of App and append HealthOrganizerDB to it. So dbPath becomes ../HealthOrganizerDb/<Tables>
         public DBConnect() {
-            conn = new SQLiteAsyncConnection(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "HealthOrganizerDB"));
-            database = new Database(Windows.Storage.ApplicationData.Current.LocalFolder, "HealthOrganizerDB");
+            //Debug.WriteLine(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "HealthOrganizerDB.db"));
+            conn = new SQLiteAsyncConnection(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "HealthOrganizerDB.db"));
+            database = new Database(Windows.Storage.ApplicationData.Current.LocalFolder, "HealthOrganizerDB.db");
         }
 
         //This used to connect to the Tables or Create Tables.All the tables we need to add in future would be mentioned here.
