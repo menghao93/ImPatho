@@ -91,11 +91,18 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
-                   Statement statement = await database.PrepareStatementAsync("SELECT * from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
+                   Statement statement = await database.PrepareStatementAsync("SELECT "+ columnanmes +" from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
-                        String values = String.Join(", ", statement.Columns.Select(x => x.Value));
+                        string[] seprated_columnnames = columnanmes.Split(new string[] { "," }, StringSplitOptions.None);
+                        //Debug.WriteLine("values: " + statement.Columns.SelectMany(x => x.Value));
+                        string[] temp = new string[seprated_columnnames.Length];
+                        for (int j = 0; j < seprated_columnnames.Length; j++)
+                        {
+                            temp[j] = "'"+statement.Columns[seprated_columnnames[j]]+"'";
+                        }
+                        String values = String.Join(", ",temp);
                         output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
                     }
                 }
@@ -121,7 +128,6 @@ namespace Health_Organizer
                 {
                     columnNames += statement.Columns["name"].ToString() + ",";
                 }
-                Debug.WriteLine("columnnames " + columnNames);
                 return columnNames.Substring(0, columnNames.Length - 1);
             }
             catch (Exception ex)
