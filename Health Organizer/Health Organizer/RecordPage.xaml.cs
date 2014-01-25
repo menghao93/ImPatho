@@ -121,14 +121,6 @@ namespace Health_Organizer
             }
         }
 
-        private void ProfileDetailsEditBut(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
-            }
-        }
-
         private async void recordGridHeader(object sender, RoutedEventArgs e)
         {
             TextBlock clickedItem = ((e.OriginalSource as Button).Content as StackPanel).Children[0] as TextBlock;
@@ -152,13 +144,11 @@ namespace Health_Organizer
         private void disableAppButtons()
         {
             RecordPageViewProfile.IsEnabled = false;
-            RecordPageEditBut.IsEnabled = false;
         }
 
         private void enableAppButtons()
         {
             RecordPageViewProfile.IsEnabled = true;
-            RecordPageEditBut.IsEnabled = true;
         }
 
         private void SemanticZoomButClicked(object sender, RoutedEventArgs e)
