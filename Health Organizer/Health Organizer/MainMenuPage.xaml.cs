@@ -234,7 +234,7 @@ namespace Health_Organizer
             settings.HeaderBackground = new SolidColorBrush(color);
             settings.Background = new SolidColorBrush(color);
             settings.Title = "Settings";
-            settings.Show();
+            settings.ShowIndependent();
         }
     }
 }

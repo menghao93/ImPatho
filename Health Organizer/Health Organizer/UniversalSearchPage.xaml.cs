@@ -76,6 +76,38 @@ namespace Health_Organizer
 
         private void UniversalSearchClicked(object sender, RoutedEventArgs e)
         {
+            search();
+        }
+
+        private void UniversalResetClicked(object sender, RoutedEventArgs e)
+        {
+            ShowProgress();
+            gridViewSource.Source = mainItemList;
+            UniversalSearchBox.Text = "";
+            UniversalSearchBox.Focus(FocusState.Keyboard);
+            HideProgress();
+            RecordGrid.SelectedItem = null;
+        }
+        public void ShowProgress()
+        {
+            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            UniversalProgressRing.IsActive = true;
+        }
+        public void HideProgress()
+        {
+            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            UniversalProgressRing.IsActive = false;
+        }
+
+        private void KeyPressed(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Enter)
+            {
+                search();
+            }
+        }
+        private void search()
+        {
             ShowProgress();
             bool addedFlag = false;
             resultList = new List<AnalysisSampleDataItem>();
@@ -186,24 +218,12 @@ namespace Health_Organizer
             HideProgress();
         }
 
-        private void UniversalResetClicked(object sender, RoutedEventArgs e)
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
         {
-            ShowProgress();
-            gridViewSource.Source = mainItemList;
-            UniversalSearchBox.Text = "";
-            UniversalSearchBox.Focus(FocusState.Keyboard);
-            HideProgress();
-            RecordGrid.SelectedItem = null;
-        }
-        public void ShowProgress()
-        {
-            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            UniversalProgressRing.IsActive = true;
-        }
-        public void HideProgress()
-        {
-            UniversalProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            UniversalProgressRing.IsActive = false;
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
         }
     }
 }

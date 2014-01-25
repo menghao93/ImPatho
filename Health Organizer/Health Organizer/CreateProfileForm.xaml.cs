@@ -1215,6 +1215,12 @@ namespace Health_Organizer
                 return true;
             }
         }
-
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
+        }
     }
 }

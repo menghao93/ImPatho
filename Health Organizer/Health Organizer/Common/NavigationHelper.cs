@@ -99,6 +99,12 @@ namespace Health_Organizer.Data
             };
         }
 
+        public NavigationHelper(Settings settings)
+        {
+            // TODO: Complete member initialization
+            this.settings = settings;
+        }
+
         #region Navigation support
 
         RelayCommand _goBackCommand;
@@ -282,6 +288,7 @@ namespace Health_Organizer.Data
         /// the navigaqtion cache.
         /// </summary>
         public event SaveStateEventHandler SaveState;
+        private Settings settings;
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.  

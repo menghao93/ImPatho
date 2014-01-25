@@ -978,6 +978,13 @@ namespace Health_Organizer
             (this.DataContext as TestPageViewModel).UpdateGraphView();
             AnalysisGraphGridAnimation.Begin();
         }
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
+        }
 
 
         //for data binding in graph
