@@ -166,7 +166,6 @@
                 <AppBarButton Name="RecordPageSemanticZoomBut" Icon="ViewAll" Label="View All Places" Click="SemanticZoomButClicked" HorizontalAlignment="Left" />
             </CommandBar.SecondaryCommands>
             <AppBarButton Name="RecordPageViewProfile" Label="View Profile" Icon="Contact" Click="ViewProfileClicked" HorizontalAlignment="Right"/>
-            <AppBarButton Name="RecordPageEditBut" Icon="Edit" Label="Edit Profile" Click="ProfileDetailsEditBut" HorizontalAlignment="Right" />
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
