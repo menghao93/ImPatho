@@ -147,7 +147,9 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
+
                     Statement statement = await database.PrepareStatementAsync("SELECT " + columnanmes + " from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
+
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
@@ -156,9 +158,11 @@ namespace Health_Organizer
                         string[] temp = new string[seprated_columnnames.Length];
                         for (int j = 0; j < seprated_columnnames.Length; j++)
                         {
+
                             temp[j] = "'" + statement.Columns[seprated_columnnames[j]] + "'";
                         }
                         String values = String.Join(", ", temp);
+
                         output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
                     }
                 }
