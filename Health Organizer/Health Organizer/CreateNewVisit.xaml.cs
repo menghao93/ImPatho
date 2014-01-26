@@ -1069,5 +1069,12 @@ namespace Health_Organizer
             VisitHeightFeet.SelectedIndex = VisitHeightFeet.Items.IndexOf(itemFeetHeight.ToString());
             VisitHeightInch.SelectedIndex = VisitHeightInch.Items.IndexOf(itemInchHeight.ToString());
         }
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
+        }
     }
 }

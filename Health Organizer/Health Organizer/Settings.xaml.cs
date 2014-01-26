@@ -1,5 +1,4 @@
-﻿using Health_Organizer.Data;
-using SQLiteWinRT;
+﻿using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,28 +10,85 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+// The Settings Flyout item template is documented at http://go.microsoft.com/fwlink/?LinkId=273769
 
 namespace Health_Organizer
 {
-    public sealed partial class Settings : UserControl
+    public sealed partial class SettingsFlyout1 : SettingsFlyout
     {
+        Popup _p;
+        static Border flyout_border;
         private Database database;
 
-        public Settings()
+        public SettingsFlyout1()
         {
             this.InitializeComponent();
             database = App.database;
+            BackClick += SettingsFlyout1_BackClick;
+            Unloaded += SettingsFlyout1_Unloaded;
+            Tapped += SettingsFlyout1_Tapped;
         }
 
+        void SettingsFlyout1_BackClick(object sender, BackClickEventArgs e)
+        {
+            flyout_border.Child = null;
+            
+        }
+
+        void SettingsFlyout1_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_p != null)
+            {
+                _p.IsOpen = false;
+            }
+        }
+
+        void SettingsFlyout1_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        public void ShowCustom()
+        {
+            _p = new Popup();
+            Border b = new Border();
+            flyout_border = b;
+            b.ChildTransitions = new TransitionCollection();
+
+            // TODO: if you support right-to-left builds, make sure to test all combinations of RTL operating
+            // system build (charms on left) and RTL flow direction for XAML app.  EdgeTransitionLocation.Left
+            // may need to be used for RTL (and HorizontalAlignment.Left on the SettingsFlyout below).
+            b.ChildTransitions.Add(new EdgeUIThemeTransition() { Edge = EdgeTransitionLocation.Right });
+
+            b.Background = new SolidColorBrush(Colors.Transparent);
+            b.Width = Window.Current.Bounds.Width;
+            b.Height = Window.Current.Bounds.Height;
+            b.Tapped += b_Tapped;
+
+            this.HorizontalAlignment = HorizontalAlignment.Right;
+            b.Child = this;
+
+            _p.Child = b;
+            _p.IsOpen = true;
+        }
+
+        void b_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Border b = (Border)sender;
+            b.Child = null;
+        }
+        //sync functions 
         private async void SettingsSynClicked(object sender, RoutedEventArgs e)
         {
             if (ExtraModules.IsInternet())
@@ -67,7 +123,7 @@ namespace Health_Organizer
                 var responseString = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    Debug.WriteLine("Sync Output" + responseString);
+                Debug.WriteLine("Sync Output" + responseString);
                    // JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
                    // string error = root.GetNamedString("error");
                 }
@@ -146,9 +202,11 @@ namespace Health_Organizer
                         string[] temp = new string[seprated_columnnames.Length];
                         for (int j = 0; j < seprated_columnnames.Length; j++)
                         {
-                            temp[j] = "'"+statement.Columns[seprated_columnnames[j]]+"'";
+
+                            temp[j] = "'" + statement.Columns[seprated_columnnames[j]] + "'";
                         }
-                        String values = String.Join(", ",temp);
+                        String values = String.Join(", ", temp);
+
                         output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
                     }
                 }
@@ -185,5 +243,9 @@ namespace Health_Organizer
             }
         }
 
+        private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
+        {
+
     }
+}
 }

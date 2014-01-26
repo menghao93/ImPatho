@@ -344,6 +344,12 @@ namespace Health_Organizer
             LocationPageSearchBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             isSearchBarVisible = false;
         }
-
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
+        }
     }
 }

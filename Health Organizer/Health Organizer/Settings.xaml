@@ -1,23 +1,42 @@
-﻿<UserControl
-    x:Class="Health_Organizer.Settings"
+﻿<SettingsFlyout
+    x:Class="Health_Organizer.SettingsFlyout1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Health_Organizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    IconSource="Assets/SmallLogo.png"
+    Title="Settings"
+    d:DesignWidth="346">
 
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Name="SettingsOrgName" FontSize="25" Foreground="White" TextWrapping="Wrap">Organization Name</TextBlock>
-            <TextBlock Name="SettingsUserName" FontSize="15" Foreground="White" TextWrapping="Wrap">Username</TextBlock>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="25" Text="Sync your data" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,10"/>
-                <Line X1="0" Y1="60" StrokeThickness="3" Stroke="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <AppBarButton  Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20,0">
+
+        <!-- The StackPanel(s) below define individual content sections -->
+        <StackPanel Orientation="Horizontal">
+            <!-- Content Section 1-->
+            <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,0,0">
+
+                <!-- Section 1 header -->
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" />
+
+                <!-- Section 1 body -->
+
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap" Text="Username"/>
+
             </StackPanel>
+            <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" HorizontalAlignment="Center" Icon="OtherUser"/>
         </StackPanel>
-    </Grid>
-</UserControl>
+
+        <!-- Define more Content Sections below as necessary -->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Sync your data" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,30,20"/>
+            <AppBarButton Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,30,20"/>
+            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,0,0" FontSize="12"/>
+        </StackPanel>
+    </StackPanel>
+</SettingsFlyout>

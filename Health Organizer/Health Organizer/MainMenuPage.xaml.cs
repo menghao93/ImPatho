@@ -38,7 +38,7 @@ namespace Health_Organizer
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Database database;
 
-        private SettingsFlyout settings;
+        private SettingsFlyout1 settings;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -64,7 +64,7 @@ namespace Health_Organizer
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
             this.loadDescriptionStrings();
-            settings = new SettingsFlyout();
+            settings = new SettingsFlyout1();
         }
 
         private void loadDescriptionStrings()
@@ -186,13 +186,13 @@ namespace Health_Organizer
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
         {
-            settings.Content = new Settings();
+           // settings.Content = new Settings();
             String hexaColor = "#00A2E8";
             Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
             settings.HeaderBackground = new SolidColorBrush(color);
             settings.Background = new SolidColorBrush(color);
-            settings.Title = "Settings";
-            settings.Show();
+            //settings.Title = "Settings";
+            settings.ShowCustom();
         }
     }
 }

@@ -79,6 +79,13 @@ namespace Health_Organizer
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
+        private void navigateBack(object sender, KeyRoutedEventArgs e)
+        {
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            {
+                NavigationHelper.GoBack();
+            }
+        }
 
         #region NavigationHelper registration
 
