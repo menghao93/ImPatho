@@ -99,7 +99,7 @@ namespace Health_Organizer.Data
             };
         }
 
-        public NavigationHelper(Settings settings)
+        public NavigationHelper(SettingsFlyout1 settings)
         {
             // TODO: Complete member initialization
             this.settings = settings;
@@ -288,7 +288,7 @@ namespace Health_Organizer.Data
         /// the navigaqtion cache.
         /// </summary>
         public event SaveStateEventHandler SaveState;
-        private Settings settings;
+        private SettingsFlyout1 settings;
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.  

@@ -1,5 +1,4 @@
-﻿using Health_Organizer.Data;
-using SQLiteWinRT;
+﻿using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,28 +10,85 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+// The Settings Flyout item template is documented at http://go.microsoft.com/fwlink/?LinkId=273769
 
 namespace Health_Organizer
 {
-    public sealed partial class Settings : UserControl
+    public sealed partial class SettingsFlyout1 : SettingsFlyout
     {
+        Popup _p;
+        static Border flyout_border;
         private Database database;
 
-        public Settings()
+        public SettingsFlyout1()
         {
             this.InitializeComponent();
             database = App.database;
+            BackClick += SettingsFlyout1_BackClick;
+            Unloaded += SettingsFlyout1_Unloaded;
+            Tapped += SettingsFlyout1_Tapped;
         }
 
+        void SettingsFlyout1_BackClick(object sender, BackClickEventArgs e)
+        {
+            flyout_border.Child = null;
+            
+        }
+
+        void SettingsFlyout1_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_p != null)
+            {
+                _p.IsOpen = false;
+            }
+        }
+
+        void SettingsFlyout1_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        public void ShowCustom()
+        {
+            _p = new Popup();
+            Border b = new Border();
+            flyout_border = b;
+            b.ChildTransitions = new TransitionCollection();
+
+            // TODO: if you support right-to-left builds, make sure to test all combinations of RTL operating
+            // system build (charms on left) and RTL flow direction for XAML app.  EdgeTransitionLocation.Left
+            // may need to be used for RTL (and HorizontalAlignment.Left on the SettingsFlyout below).
+            b.ChildTransitions.Add(new EdgeUIThemeTransition() { Edge = EdgeTransitionLocation.Right });
+
+            b.Background = new SolidColorBrush(Colors.Transparent);
+            b.Width = Window.Current.Bounds.Width;
+            b.Height = Window.Current.Bounds.Height;
+            b.Tapped += b_Tapped;
+
+            this.HorizontalAlignment = HorizontalAlignment.Right;
+            b.Child = this;
+
+            _p.Child = b;
+            _p.IsOpen = true;
+        }
+
+        void b_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Border b = (Border)sender;
+            b.Child = null;
+        }
+        //sync functions 
         private async void SettingsSynClicked(object sender, RoutedEventArgs e)
         {
             if (ExtraModules.IsInternet())
@@ -44,7 +100,7 @@ namespace Health_Organizer
                          new KeyValuePair<string, string>("auth_token", "28b60a16b55fd531047c"),
                          new KeyValuePair<string, string>("updatestatements",statements)
                       };
-               await  Uploadtoserver(data);
+                await Uploadtoserver(data);
             }
         }
 
@@ -82,8 +138,8 @@ namespace Health_Organizer
 
         public async Task<string> sendToServer(string TimeStamp)
         {
-            string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy", 
-                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
+            string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy",
+                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails",
                 "MedicalDetailsMedicine", "MedicalDetailsVaccine" };
             string output = "";
             try
@@ -91,11 +147,18 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
-                   Statement statement = await database.PrepareStatementAsync("SELECT * from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
+                    Statement statement = await database.PrepareStatementAsync("SELECT " + columnanmes + " from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
-                        String values = String.Join(", ", statement.Columns.Select(x => x.Value));
+                        string[] seprated_columnnames = columnanmes.Split(new string[] { "," }, StringSplitOptions.None);
+                        //Debug.WriteLine("values: " + statement.Columns.SelectMany(x => x.Value));
+                        string[] temp = new string[seprated_columnnames.Length];
+                        for (int j = 0; j < seprated_columnnames.Length; j++)
+                        {
+                            temp[j] = "'" + statement.Columns[seprated_columnnames[j]] + "'";
+                        }
+                        String values = String.Join(", ", temp);
                         output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
                     }
                 }
@@ -121,7 +184,6 @@ namespace Health_Organizer
                 {
                     columnNames += statement.Columns["name"].ToString() + ",";
                 }
-                Debug.WriteLine("columnnames " + columnNames);
                 return columnNames.Substring(0, columnNames.Length - 1);
             }
             catch (Exception ex)
@@ -132,5 +194,9 @@ namespace Health_Organizer
             }
         }
 
+        private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

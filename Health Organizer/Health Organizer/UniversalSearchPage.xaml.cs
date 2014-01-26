@@ -220,7 +220,7 @@ namespace Health_Organizer
 
         private void navigateBack(object sender, KeyRoutedEventArgs e)
         {
-            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back && UniversalSearchBox.FocusState==FocusState.Unfocused)
             {
                 NavigationHelper.GoBack();
             }

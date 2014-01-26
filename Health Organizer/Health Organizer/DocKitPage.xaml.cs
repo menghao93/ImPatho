@@ -683,10 +683,10 @@ namespace Health_Organizer
         }
         private void navigateBack(object sender, KeyRoutedEventArgs e)
         {
-            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
-            {
-                NavigationHelper.GoBack();
-            }
+            //if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back && docKitSearchBox.FocusState == FocusState.Unfocused)
+            //{
+            //    NavigationHelper.GoBack();
+            //}
         }
     }
 }
