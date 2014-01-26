@@ -460,7 +460,7 @@ namespace Health_Organizer
                                      "WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
                 statement.BindIntParameterWithName("@pid", pid);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 if (profileMarried.IsChecked.Value)
                 {
                     statement.BindTextParameterWithName("@married", "T");
@@ -469,8 +469,8 @@ namespace Health_Organizer
                 {
                     statement.BindTextParameterWithName("@married", "F");
                 }
-                statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
-                statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
+                statement.BindTextParameterWithName("@occupation", ExtraModules.removesemicolon(profileOccupation.Text.ToString()));
+                statement.BindTextParameterWithName("@email", ExtraModules.removesemicolon(profileEmailAddress.Text.ToString()));
                 statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
                 if (!profileEmergencyNumber.Text.ToString().Equals(""))
                 {
@@ -481,7 +481,7 @@ namespace Health_Organizer
                     statement.BindInt64ParameterWithName("@eMob", 0000000000);
                 }
 
-                statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
+                statement.BindTextParameterWithName("@fb", ExtraModules.removesemicolon(profileFamilyHistory.Text.ToString()));
 
                 await statement.StepAsync();
             }
@@ -526,9 +526,9 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindIntParameterWithName("@pid", pid);
-                        statement.BindTextParameterWithName("@allergy", str);
+                        statement.BindTextParameterWithName("@allergy", ExtraModules.removesemicolon(str));
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
                         statement.Reset();
@@ -551,8 +551,8 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindTextParameterWithName("@addiction", str);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                        statement.BindTextParameterWithName("@addiction", ExtraModules.removesemicolon(str));
                         statement.BindIntParameterWithName("@pid", pid);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
@@ -576,9 +576,9 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindIntParameterWithName("@pid", pid);
-                        statement.BindTextParameterWithName("@operation", str);
+                        statement.BindTextParameterWithName("@operation", ExtraModules.removesemicolon(str));
                         //await statement.StepAsync().AsTask().ConfigureAwait(false); 
                         await statement.StepAsync();
                         statement.Reset();
@@ -600,10 +600,10 @@ namespace Health_Organizer
             {
                 string updateQuery = "UPDATE Address SET TimeStamp = @ts, ZIP = @zip , Street = @street WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@pid", pid);
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                statement.BindTextParameterWithName("@street", profileAddress.Text.ToString());
+                statement.BindTextParameterWithName("@street", ExtraModules.removesemicolon(profileAddress.Text.ToString()));
 
                 await statement.StepAsync();
             }
@@ -624,9 +624,9 @@ namespace Health_Organizer
                     statement.Reset();
                     string insertCityQuery = "INSERT INTO AddressZIP (TimeStamp, ZIP, City) VALUES (@ts, @zip, @city)";
                     statement = await this.database.PrepareStatementAsync(insertCityQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                     statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -635,9 +635,9 @@ namespace Health_Organizer
                     statement.Reset();
                     string updateCityQuery = "UPDATE AddressZIP SET TimeStamp = @ts, City = @city WHERE ZIP = @zip";
                     statement = await this.database.PrepareStatementAsync(updateCityQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                     statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -658,9 +658,9 @@ namespace Health_Organizer
                 {
                     string insertStateQuery = "INSERT INTO AddressCity (TimeStamp, City, State) VALUES (@ts, @city, @state)";
                     statement = await this.database.PrepareStatementAsync(insertStateQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
+                    statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -669,9 +669,9 @@ namespace Health_Organizer
                     statement.Reset();
                     string updateStateQuery = "UPDATE AddressCity SET TimeStamp = @ts, State = @state WHERE City = @city";
                     statement = await this.database.PrepareStatementAsync(updateStateQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
+                    statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -692,9 +692,9 @@ namespace Health_Organizer
                 {
                     string insertCountryQuery = "INSERT INTO AddressState (TimeStamp, State, Country) VALUES (@ts, @state, @country)";
                     statement = await this.database.PrepareStatementAsync(insertCountryQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
-                    statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                    statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
+                    statement.BindTextParameterWithName("@country", ExtraModules.removesemicolon(profileCountry.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -703,9 +703,9 @@ namespace Health_Organizer
                     statement.Reset();
                     string updateCountryQuery = "UPDATE AddressState SET TimeStamp = @ts, Country = @country WHERE State = @state";
                     statement = await this.database.PrepareStatementAsync(updateCountryQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
-                    statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                    statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
+                    statement.BindTextParameterWithName("@country", ExtraModules.removesemicolon(profileCountry.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -729,10 +729,10 @@ namespace Health_Organizer
             {
                 string updateQuery = "UPDATE Patient SET TimeStamp = @ts, FirstName = @fName , LastName = @lName , BloodGroup = @bg , Sex = @sex , Birthday = @bday , Image = @image WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@pid", this.updatePID);
-                statement.BindTextParameterWithName("@fName", profileFirstName.Text);
-                statement.BindTextParameterWithName("@lName", profileLastName.Text);
+                statement.BindTextParameterWithName("@fName", ExtraModules.removesemicolon(profileFirstName.Text.ToString()));
+                statement.BindTextParameterWithName("@lName", ExtraModules.removesemicolon(profileLastName.Text.ToString()));
                 statement.BindTextParameterWithName("@bg", profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString());
                 statement.BindTextParameterWithName("@sex", profileSexType.Items[profileSexType.SelectedIndex].ToString());
                 statement.BindTextParameterWithName("@image", decodedImage);
@@ -760,9 +760,9 @@ namespace Health_Organizer
             {
                 string insertQuery = "INSERT INTO Patient (TimeStamp, FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@ts, @fName, @lName, @bg, @sex, @bday, @image)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindTextParameterWithName("@fName", profileFirstName.Text);
-                statement.BindTextParameterWithName("@lName", profileLastName.Text);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                statement.BindTextParameterWithName("@fName", ExtraModules.removesemicolon(profileFirstName.Text.ToString()));
+                statement.BindTextParameterWithName("@lName", ExtraModules.removesemicolon(profileLastName.Text.ToString()));
                 statement.BindTextParameterWithName("@bg", profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString());
                 statement.BindTextParameterWithName("@sex", profileSexType.Items[profileSexType.SelectedIndex].ToString());
                 statement.BindTextParameterWithName("@image", decodedImage);
@@ -805,10 +805,10 @@ namespace Health_Organizer
             {
                 string insertQuery = "INSERT INTO Address (TimeStamp, PID, ZIP, Street) VALUES (@ts, @pid, @zip, @street)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@pid", PID);
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                statement.BindTextParameterWithName("@street", profileAddress.Text.ToString());
+                statement.BindTextParameterWithName("@street", ExtraModules.removesemicolon(profileAddress.Text.ToString()));
 
                 await statement.StepAsync();
             }
@@ -822,9 +822,9 @@ namespace Health_Organizer
             {
                 string insertCityQuery = "INSERT INTO AddressZIP (TimeStamp, ZIP, City) VALUES (@ts, @zip, @city)";
                 Statement statement = await this.database.PrepareStatementAsync(insertCityQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
+                statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
 
                 await statement.StepAsync();
             }
@@ -840,9 +840,9 @@ namespace Health_Organizer
                 {
                     string insertStateQuery = "INSERT INTO AddressCity (TimeStamp, City, State) VALUES (@ts, @city, @state)";
                     Statement statement = await this.database.PrepareStatementAsync(insertStateQuery);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindTextParameterWithName("@city", profileCity.Text.ToString());
-                    statement.BindTextParameterWithName("@state", profileState.Text.ToString());
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
+                    statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
 
                     await statement.StepAsync();
                 }
@@ -858,9 +858,9 @@ namespace Health_Organizer
                     {
                         string insertCountryQuery = "INSERT INTO AddressState (TimeStamp, State, Country) VALUES (@ts, @state, @country)";
                         Statement statement = await this.database.PrepareStatementAsync(insertCountryQuery);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindTextParameterWithName("@state", profileState.Text.ToString());
-                        statement.BindTextParameterWithName("@country", profileCountry.Text.ToString());
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                        statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
+                        statement.BindTextParameterWithName("@country", ExtraModules.removesemicolon(profileCountry.Text.ToString()));
 
                         await statement.StepAsync();
                     }
@@ -882,7 +882,7 @@ namespace Health_Organizer
                                      "VALUES (@ts, @pid, @married, @occupation, @fb, @email, @mob, @eMob)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
                 statement.BindIntParameterWithName("@pid", PID);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 if (profileMarried.IsChecked.Value)
                 {
                     statement.BindTextParameterWithName("@married", "T");
@@ -891,8 +891,8 @@ namespace Health_Organizer
                 {
                     statement.BindTextParameterWithName("@married", "F");
                 }
-                statement.BindTextParameterWithName("@occupation", profileOccupation.Text.ToString());
-                statement.BindTextParameterWithName("@email", profileEmailAddress.Text.ToString());
+                statement.BindTextParameterWithName("@occupation", ExtraModules.removesemicolon(profileOccupation.Text.ToString()));
+                statement.BindTextParameterWithName("@email", ExtraModules.removesemicolon(profileEmailAddress.Text.ToString()));
                 statement.BindInt64ParameterWithName("@mob", Int64.Parse(profileContactNumber.Text.ToString()));
                 if (!profileEmergencyNumber.Text.Equals(""))
                 {
@@ -902,7 +902,7 @@ namespace Health_Organizer
                 {
                     statement.BindInt64ParameterWithName("@eMob", 0);
                 }
-                statement.BindTextParameterWithName("@fb", profileFamilyHistory.Text.ToString());
+                statement.BindTextParameterWithName("@fb", ExtraModules.removesemicolon(profileFamilyHistory.Text.ToString()));
 
                 await statement.StepAsync();
             }
@@ -922,9 +922,9 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindIntParameterWithName("@pid", PID);
-                        statement.BindTextParameterWithName("@allergy", str);
+                        statement.BindTextParameterWithName("@allergy", ExtraModules.removesemicolon(str));
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
                         statement.Reset();
@@ -947,8 +947,8 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindTextParameterWithName("@addiction", str);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                        statement.BindTextParameterWithName("@addiction", ExtraModules.removesemicolon(str));
                         statement.BindIntParameterWithName("@pid", PID);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
@@ -972,9 +972,9 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindIntParameterWithName("@pid", PID);
-                        statement.BindTextParameterWithName("@operation", str);
+                        statement.BindTextParameterWithName("@operation", ExtraModules.removesemicolon(str));
                         //await statement.StepAsync().AsTask().ConfigureAwait(false); 
                         await statement.StepAsync();
                         statement.Reset();

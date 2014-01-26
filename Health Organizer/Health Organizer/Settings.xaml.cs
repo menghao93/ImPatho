@@ -37,46 +37,92 @@ namespace Health_Organizer
         {
             if (ExtraModules.IsInternet())
             {
-                string statements = await sendToServer("1");
+                string timestamp = "1";//"1/25/2014 3:34:06 AM";
+                string userid = "14";
+                string auth_token = "28b60a16b55fd531047c";
+                string statements = await sendToServer(timestamp);
+                Debug.WriteLine(">>>>>>>>>>><<<<<<<<\n" + statements);
                 var data = new List<KeyValuePair<string, string>>
                      {
-                         new KeyValuePair<string, string>("userid","14"),
-                         new KeyValuePair<string, string>("auth_token", "28b60a16b55fd531047c"),
+                         new KeyValuePair<string, string>("userid",userid),
+                         new KeyValuePair<string, string>("auth_token", auth_token),
                          new KeyValuePair<string, string>("updatestatements",statements)
                       };
+                  var datatorecieve = new List<KeyValuePair<string, string>>
+                     {
+                         new KeyValuePair<string, string>("userid",userid),
+                         new KeyValuePair<string, string>("auth_token", auth_token)
+                      };
                await  Uploadtoserver(data);
+               await getfromserver(datatorecieve);
             }
         }
 
-        private async Task<string> Uploadtoserver(List<KeyValuePair<string, string>> values)
+        private async Task Uploadtoserver(List<KeyValuePair<string, string>> values)
         {
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/UpdateServerdata.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine("Sync Output" + responseString);
-                JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
-                string error = root.GetNamedString("error");
-                return error;
+                try
+                {
+                    Debug.WriteLine("Sync Output" + responseString);
+                   // JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                   // string error = root.GetNamedString("error");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Exception in Sync");
+                    Debug.WriteLine(ex.Message.ToString());
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Check internet Connection");
+            }
+        }   
+
+        private async Task<string> getfromserver(List<KeyValuePair<string, string>> values)
+        {
+            if (ExtraModules.IsInternet())
+            {
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/updatetomachine.php", new FormUrlEncodedContent(values));
+                var responseString = await response.Content.ReadAsStringAsync();
+                //Debug.WriteLine("Sync Output" + responseString);
+                string error = responseString.ToString();
+                //JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                //string error = root.GetNamedString("query");
+                await aftergetFromServer(error);
+                return "done";
             }
             return "Check internet Connection";
         }
 
-        public async void getFromServer(string BigQuery)
+        public async Task aftergetFromServer(string BigQuery)
         {
             try
             {
-                foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
+                int count = 0;
+                string[] singleQuery =BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
+                for (int i = 0; i < singleQuery.Length;i++ )
+                //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
                 {
-                    Statement statement = await this.database.PrepareStatementAsync(singleQuery);
+                    Debug.WriteLine(singleQuery[i] + ";");
+                    Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
+                    statement.EnableColumnsProperty();
                     await statement.StepAsync();
+                    Debug.WriteLine("query"+i);
+
+                    
                 }
+                Debug.WriteLine("sync complete");
             }
             catch (Exception ex)
             {
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
-                Debug.WriteLine("MainMenuPage---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
+                Debug.WriteLine("sync setting---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
 
@@ -91,7 +137,7 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
-                   Statement statement = await database.PrepareStatementAsync("SELECT "+ columnanmes +" from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
+                   Statement statement = await database.PrepareStatementAsync("SELECT "+ columnanmes +" from " + tableNames[i] + " where TimeStamp > '" + TimeStamp+"'");
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
@@ -107,6 +153,7 @@ namespace Health_Organizer
                     }
                 }
                 Debug.WriteLine("output: " + output);
+                return output;
             }
             catch (Exception ex)
             {
