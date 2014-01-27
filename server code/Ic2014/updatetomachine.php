@@ -42,7 +42,7 @@ $columns=array(1=>"PID,FirstName,LastName,BloodGroup,Sex,Birthday,Image,TimeStam
 12=>"TimeStamp,PID,DateVisited,Vaccine"
 );
   for($i=0;$i<12;$i++){
-  $query="Select ".$columns[$i+1]." FROM " . $tables[$i]." Where TimeStamp > '". $timestamp."' And Userid = ".$userid." ;";
+  $query="Select ".$columns[$i+1]." FROM " . $tables[$i]." Where ServerTimestamp > '". $timestamp."' And Userid = ".$userid." ;";
   $temp=explode(",",$columns[$i+1]);
 
   $result=mysqli_query($connection,$query);

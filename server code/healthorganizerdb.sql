@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 27, 2014 at 02:49 PM
+-- Generation Time: Jan 27, 2014 at 05:14 PM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   `Street` text NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `addresscity` (
   `State` text NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`City`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -62,15 +64,9 @@ CREATE TABLE IF NOT EXISTS `addressstate` (
   `Country` text NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`State`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `addressstate`
---
-
-INSERT INTO `addressstate` (`State`, `Country`, `Userid`, `TimeStamp`) VALUES
-('test', 'india', 14, '2014-01-27 07:55:37');
 
 -- --------------------------------------------------------
 
@@ -83,15 +79,9 @@ CREATE TABLE IF NOT EXISTS `addresszip` (
   `City` text NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ZIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `addresszip`
---
-
-INSERT INTO `addresszip` (`ZIP`, `City`, `Userid`, `TimeStamp`) VALUES
-(123456, 'test', 14, '2014-01-27 07:55:36');
 
 -- --------------------------------------------------------
 
@@ -113,6 +103,7 @@ CREATE TABLE IF NOT EXISTS `medicaldetails` (
   `BMI` double NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`DateVisited`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -128,6 +119,7 @@ CREATE TABLE IF NOT EXISTS `medicaldetailsmedicine` (
   `DateVisited` varchar(100) NOT NULL,
   `Medicine` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`DateVisited`,`Medicine`),
   UNIQUE KEY `PID` (`PID`,`DateVisited`,`Medicine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -144,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `medicaldetailsvaccine` (
   `DateVisited` varchar(100) NOT NULL,
   `Vaccine` varchar(200) NOT NULL,
   `Userid` int(11) NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`DateVisited`,`Vaccine`),
   UNIQUE KEY `PID` (`PID`,`DateVisited`,`Vaccine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -164,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetails` (
   `PID` int(11) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -178,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsaddiction` (
   `Addiction` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`Addiction`),
   UNIQUE KEY `PID` (`PID`,`Addiction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -193,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsallergy` (
   `Allergy` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`Allergy`),
   UNIQUE KEY `PID` (`PID`,`Allergy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -208,6 +204,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsoperation` (
   `Operation` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`,`Operation`),
   UNIQUE KEY `PID` (`PID`,`Operation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -228,6 +225,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `Image` text,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
+  `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -250,14 +248,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `Email_2` (`Email`),
   UNIQUE KEY `Organisation` (`Organisation`),
   FULLTEXT KEY `Password` (`Password`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`Userid`, `Username`, `Password`, `Email`, `Organisation`, `Auth_Token`, `Confirmation`) VALUES
-(14, 'test', '7288edd0fc3ffcbe93a0cf06e3568e28521687bc', 'test@test.com', 'test', '098f6bcd4621d373cade4e832627b4f6', 'true');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
