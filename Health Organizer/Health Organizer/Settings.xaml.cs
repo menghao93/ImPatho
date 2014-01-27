@@ -93,11 +93,10 @@ namespace Health_Organizer
         {
             if (ExtraModules.IsInternet())
             {
-                string timestamp = "1";//"1/25/2014 3:34:06 AM";
+                string timestamp = "2014-01-27 06:01:04";//"1/25/2014 3:34:06 AM";
                 string userid = "14";
-                string auth_token = "28b60a16b55fd531047c";
-                string statements = await sendToServer(timestamp);
-                Debug.WriteLine(">>>>>>>>>>><<<<<<<<\n" + statements);
+                string auth_token = "098f6bcd4621d373cade4e832627b4f6";
+                string statements = await sendToServer(timestamp,userid);
                 var data = new List<KeyValuePair<string, string>>
                      {
                          new KeyValuePair<string, string>("userid",userid),
@@ -107,7 +106,8 @@ namespace Health_Organizer
                   var datatorecieve = new List<KeyValuePair<string, string>>
                      {
                          new KeyValuePair<string, string>("userid",userid),
-                         new KeyValuePair<string, string>("auth_token", auth_token)
+                         new KeyValuePair<string, string>("auth_token", auth_token),
+                         new KeyValuePair<string, string>("timestamp",timestamp)
                       };
                await  Uploadtoserver(data);
                await getfromserver(datatorecieve);
@@ -160,7 +160,6 @@ namespace Health_Organizer
         {
             try
             {
-                int count = 0;
                 string[] singleQuery =BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
                 for (int i = 0; i < singleQuery.Length;i++ )
                 //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
@@ -168,10 +167,7 @@ namespace Health_Organizer
                     Debug.WriteLine(singleQuery[i] + ";");
                     Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
                     statement.EnableColumnsProperty();
-                    await statement.StepAsync();
-                    Debug.WriteLine("query"+i);
-
-                    
+                    await statement.StepAsync();                    
                 }
                 Debug.WriteLine("sync complete");
             }
@@ -182,7 +178,7 @@ namespace Health_Organizer
             }
         }
 
-        public async Task<string> sendToServer(string TimeStamp)
+        public async Task<string> sendToServer(string TimeStamp,string userid)
         {
             string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy", 
                 "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
@@ -198,7 +194,6 @@ namespace Health_Organizer
                     while (await statement.StepAsync())
                     {
                         string[] seprated_columnnames = columnanmes.Split(new string[] { "," }, StringSplitOptions.None);
-                        //Debug.WriteLine("values: " + statement.Columns.SelectMany(x => x.Value));
                         string[] temp = new string[seprated_columnnames.Length];
                         for (int j = 0; j < seprated_columnnames.Length; j++)
                         {
@@ -207,7 +202,7 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
+                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ","+userid+");";
                     }
                 }
                 Debug.WriteLine("output: " + output);
