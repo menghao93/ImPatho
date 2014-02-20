@@ -93,9 +93,9 @@ namespace Health_Organizer
         {
             if (ExtraModules.IsInternet())
             {
-                string timestamp = "2014-01-27 06:01:04";//"1/25/2014 3:34:06 AM";
-                string userid = "14";
-                string auth_token = "098f6bcd4621d373cade4e832627b4f6";
+                string timestamp = await getTimeStamp();//"1/25/2014 3:34:06 AM";
+                string userid = await getUserId();
+                string auth_token = await getAuthToken();
                 string statements = await sendToServer(timestamp,userid);
                 var data = new List<KeyValuePair<string, string>>
                      {
@@ -238,6 +238,79 @@ namespace Health_Organizer
             }
         }
 
+
+        private async Task<string> getUserId()
+        {
+            String userid="";
+            try{
+            Statement statement = await database.PrepareStatementAsync("SELECT UserId FROM UserDetails");
+            statement.EnableColumnsProperty();
+             while (await statement.StepAsync())
+                    {
+                       userid=statement.Columns["UserId"];
+                    }
+        }
+              catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---getuserid" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+             return userid;
+        }
+
+        private async Task<string> getAuthToken()
+        {
+            String auth_token = "";
+         try{
+            Statement statement = await database.PrepareStatementAsync("SELECT Auth_Token FROM UserDetails");
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                auth_token = statement.Columns["Auth_Token"];
+            }
+            } catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---getAuthtoken" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return auth_token;
+        }
+
+        private async Task<string> getTimeStamp()
+        {
+            String timestamp = "";
+            try{
+            Statement statement = await database.PrepareStatementAsync("SELECT TimeStamp FROM UserDetails");
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                timestamp = statement.Columns["TimeStamp"];
+            }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_PROFILE_FORM---UPDATE_MUTABLE_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return timestamp;
+        }
+
+        private async void updateTimeStamp(String Userid)
+        {
+            try{
+            String updateQuery = "Update UserDetails Set TimeStamp = @ts Where UserId = @userid";
+            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+            statement.BindTextParameterWithName("@userid",Userid);
+            statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+            await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---UPDATETIMESTAMP" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+        }
+      
         private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
 

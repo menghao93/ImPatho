@@ -19,22 +19,26 @@ using System.Diagnostics;
 using Windows.Data.Json;
 using Windows.UI.Popups;
 using Windows.UI;
+using SQLiteWinRT;
 
 namespace Health_Organizer
 {
     public sealed partial class MainPage : Page
     {
+        private Database database;
 
         public MainPage()
         {
             this.InitializeComponent();
             this.InitializeDB();
             HomeScreenImageAnimation.Begin();
+            database = App.database;
         }
 
         private async void InitializeDB()
         {
             await App.InitializeDB();
+
         }
 
         private async void SignInClicked(object sender, RoutedEventArgs e)
