@@ -69,9 +69,11 @@ namespace Health_Organizer.Database_Connet_Classes
         private async Task CreateTableAsync()
         {
             //DATE format = "yyyy MMM ddd";
+            //PID format = YYYY-MM-DD-HOUR-MINUTE-SECOND~MAC
             string query1 = "CREATE TABLE IF NOT EXISTS Patient (" +
                             "TimeStamp TEXT NOT NULL," +
-                            "PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                            //"PID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                            "PID TEXT PRIMARY KEY NOT NULL," +
                             "FirstName TEXT NOT NULL, " +
                             "LastName TEXT NOT NULL, " +
                             "BloodGroup TEXT NOT NULL, " +
@@ -87,12 +89,12 @@ namespace Health_Organizer.Database_Connet_Classes
                             "Email TEXT NOT NULL, " +
                             "Mobile UNSIGNED BIG INT NOT NULL, " +
                             "EmMobile UNSIGNED BIG INT NOT NULL, " +
-                            "PID INTEGER PRIMARY KEY NOT NULL, " +
+                            "PID TEXT PRIMARY KEY NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
 
             string query3 = "CREATE TABLE IF NOT EXISTS MutableDetailsAllergy (" +
                             "TimeStamp TEXT NOT NULL," +
-                            "PID INTEGER NOT NULL, " +
+                            "PID TEXT NOT NULL, " +
                             "Allergy TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Allergy), " +
                             "UNIQUE(PID, Allergy)" +
@@ -100,7 +102,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
            string query4 = "CREATE TABLE IF NOT EXISTS MutableDetailsAddiction (" +
                             "TimeStamp TEXT NOT NULL," +
-                            "PID INTEGER NOT NULL, " +
+                            "PID TEXT NOT NULL, " +
                             "Addiction TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Addiction), " +
                             "UNIQUE(PID, Addiction)" +
@@ -108,7 +110,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query5 = "CREATE TABLE IF NOT EXISTS MutableDetailsOperation (" +
                             "TimeStamp TEXT NOT NULL," +
-                            "PID INTEGER NOT NULL," +
+                            "PID TEXT NOT NULL," +
                             "Operation TEXT NOT NULL, " +
                             "PRIMARY KEY(PID, Operation), " +
                             "UNIQUE(PID, Operation), " +
@@ -116,7 +118,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query6 = "CREATE TABLE IF NOT EXISTS Address (" +
                             "TimeStamp TEXT NOT NULL," +
-                            "PID INTEGER PRIMARY KEY NOT NULL," +
+                            "PID TEXT PRIMARY KEY NOT NULL," +
                             "ZIP INTEGER NOT NULL, " +
                             "Street TEXT NOT NULL, " +
                             "FOREIGN KEY(PID) REFERENCES Patient(PID) ON DELETE CASCADE);";
@@ -141,7 +143,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query10 = "CREATE TABLE IF NOT EXISTS MedicalDetails (" +
                              "TimeStamp TEXT NOT NULL," +
-                             "PID INTEGER NOT NULL, " +
+                             "PID TEXT NOT NULL, " +
                              "DateVisited TEXT NOT NULL, " +
                              "Age INTEGER NOT NULL, " +
                              "BloodGlucose INTEGER, " +
@@ -165,7 +167,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query12 = "CREATE TABLE IF NOT EXISTS MedicalDetailsMedicine (" +
                              "TimeStamp TEXT NOT NULL," +
-                             "PID INTEGER NOT NULL, " +
+                             "PID TEXT NOT NULL, " +
                              "DateVisited TEXT NOT NULL, " +
                              "Medicine TEXT NOT NULL, " +
                              "UNIQUE(PID, DateVisited, Medicine), " +
@@ -174,7 +176,7 @@ namespace Health_Organizer.Database_Connet_Classes
 
             string query13 = "CREATE TABLE IF NOT EXISTS MedicalDetailsVaccine (" +
                              "TimeStamp TEXT NOT NULL," +
-                             "PID INTEGER NOT NULL, " +
+                             "PID TEXT NOT NULL, " +
                              "DateVisited DATE NOT NULL, " +
                              "Vaccine TEXT NOT NULL, " +
                              "UNIQUE(PID, DateVisited, Vaccine), " +

@@ -28,7 +28,7 @@ namespace Health_Organizer
         private Database database;
         Statement statement;
 
-        private int PID = -1;
+        private string PID = "-1";
         bool justLanded = true;
         bool isSearchBarVisible = false;
 
@@ -96,11 +96,11 @@ namespace Health_Organizer
         private void detailLocGridClicked(object sender, ItemClickEventArgs e)
         {
             SampleDataItem clickedItem = e.ClickedItem as SampleDataItem;
-            this.PID = Int32.Parse(clickedItem.UniqueId);
+            this.PID = (clickedItem.UniqueId);
 
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(CreateNewVisit), PID.ToString());
+                this.Frame.Navigate(typeof(CreateNewVisit), PID);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Health_Organizer
                 {
                     this.enableAppButtons();
                     SampleDataItem clickedItem = itemGridView.SelectedItem as SampleDataItem;
-                    this.PID = Int32.Parse(clickedItem.UniqueId);
+                    this.PID = (clickedItem.UniqueId);
                     LocationPageCmdbar.IsOpen = true;
                     this.enableAppButtons();
                 }
@@ -129,7 +129,7 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID);
             }
         }
 
@@ -137,19 +137,20 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(CreateProfileForm), this.PID.ToString());
+                this.Frame.Navigate(typeof(CreateProfileForm), this.PID);
             }
         }
 
         private async void ProfileDeleteButClicked(object sender, RoutedEventArgs e)
         {
-            if (itemGridView.SelectedItems != null && this.PID > 0)
+            //if (itemGridView.SelectedItems != null && this.PID > 0)
+            if (itemGridView.SelectedItems != null)
             {
                 try
                 {
                     string deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -163,7 +164,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -177,7 +178,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -191,7 +192,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM Address WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -205,7 +206,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MutableDetailsOperation WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -219,7 +220,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MutableDetailsAddiction WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -233,7 +234,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MutableDetailsAllergy WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -247,7 +248,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM MutableDetails WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)
@@ -261,7 +262,7 @@ namespace Health_Organizer
                     statement.Reset();
                     string deleteQuery = "DELETE FROM Patient WHERE PID = @pid";
                     statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     await statement.StepAsync();
                 }
                 catch (Exception ex)

@@ -21,7 +21,7 @@ namespace Health_Organizer
 {
     public sealed partial class RecordPage : Page
     {
-        private int PID = -1;
+        private string PID = "-1";
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         bool justLanded = true;
@@ -88,7 +88,7 @@ namespace Health_Organizer
 
         private void recordGridViewClicked(object sender, ItemClickEventArgs e)
         {
-            this.PID = Int32.Parse(((SampleDataItem)e.ClickedItem).UniqueId);
+            this.PID = ((SampleDataItem)e.ClickedItem).UniqueId;
 
             if (this.Frame != null)
             {
@@ -102,7 +102,7 @@ namespace Health_Organizer
             {
                 this.enableAppButtons();
                 SampleDataItem clickedItem = RecordGrid.SelectedItem as SampleDataItem;
-                this.PID = Int32.Parse(clickedItem.UniqueId);
+                this.PID = (clickedItem.UniqueId);
                 RecordPageCmdbar.IsOpen = true;
                 this.enableAppButtons();
             }
@@ -117,7 +117,7 @@ namespace Health_Organizer
         {
             if (this.Frame != null)
             {
-                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID.ToString());
+                this.Frame.Navigate(typeof(ProfileDetailsPage), this.PID);
             }
         }
 

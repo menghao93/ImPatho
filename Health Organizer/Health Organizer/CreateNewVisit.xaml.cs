@@ -27,7 +27,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private Database database;
-        private int PID = 0;
+        private string PID = "0";
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
         Boolean check = true;
@@ -60,7 +60,8 @@ namespace Health_Organizer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.PID = Int32.Parse(e.Parameter as string);
+            //this.PID = Int32.Parse(e.Parameter as string);
+            this.PID = (e.Parameter as string);
             this.InitializeDB(this.PID);
         }
 
@@ -69,13 +70,13 @@ namespace Health_Organizer
             navigationHelper.OnNavigatedFrom(e);
         }
 
-        private async void InitializeDB(int pid)
+        private async void InitializeDB(string pid)
         {
             this.database = App.database;
 
             string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
             Statement statement = await this.database.PrepareStatementAsync(query);
-            statement.BindIntParameterWithName("@pid", pid);
+            statement.BindTextParameterWithName("@pid", pid);
             statement.EnableColumnsProperty();
             while (await statement.StepAsync())
             {
@@ -143,13 +144,13 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<int> loadPatientDetails(int pid)
+        private async Task<int> loadPatientDetails(string pid)
         {
             try
             {
                 string q = "SELECT * FROM Patient WHERE PID = @pid";
                 Statement s = await this.database.PrepareStatementAsync(q);
-                s.BindIntParameterWithName("@pid", pid);
+                s.BindTextParameterWithName("@pid", pid);
                 s.EnableColumnsProperty();
                 if (await s.StepAsync())
                 {
@@ -178,7 +179,7 @@ namespace Health_Organizer
             {
                 string query = "SELECT Height, Weight FROM MedicalDetails WHERE PID = @pid";
                 Statement statement = await database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
                 double height = -1;
                 Int32 weight = -1;
@@ -216,7 +217,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
                     if (await statement.StepAsync())
@@ -247,7 +248,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT Medicine FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
                     VisitMedicineGiven.Text = "";
@@ -271,7 +272,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT Vaccine FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
                     VisitVaccine.Text = "";
@@ -307,7 +308,7 @@ namespace Health_Organizer
                 {
                     string deleteQuery = "DELETE FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     await statement.StepAsync();
                     this.ocString.Remove(DateVisited);
@@ -322,7 +323,7 @@ namespace Health_Organizer
                 {
                     string deleteQuery = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     while (await statement.StepAsync())
                     {
@@ -339,7 +340,7 @@ namespace Health_Organizer
                 {
                     string deleteQuery = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(deleteQuery);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     while (await statement.StepAsync())
                     {
@@ -422,7 +423,7 @@ namespace Health_Organizer
                                      "VALUES (@ts, @pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
                 if (!VisitBloodGlucose.Text.ToString().Equals(""))
@@ -470,7 +471,7 @@ namespace Health_Organizer
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
                     statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     statement.BindTextParameterWithName("@medicine", str);
 
@@ -492,7 +493,7 @@ namespace Health_Organizer
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
                     statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", DateVisited);
                     statement.BindTextParameterWithName("@vaccine", str);
 
@@ -530,7 +531,7 @@ namespace Health_Organizer
                 string updateQuery = "UPDATE MedicalDetails SET TimeStamp = @ts, BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 if (!VisitBloodGlucose.Text.ToString().Equals(""))
                 {
@@ -582,7 +583,7 @@ namespace Health_Organizer
             {
                 string deleteMedicine = "DELETE FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(deleteMedicine);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 await statement.StepAsync();
             }
@@ -596,7 +597,7 @@ namespace Health_Organizer
             {
                 string deleteVaccine = "DELETE FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(deleteVaccine);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 await statement.StepAsync();
             }
@@ -616,7 +617,7 @@ namespace Health_Organizer
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@pid", this.PID);
                         statement.BindTextParameterWithName("@dv", DateVisited);
                         statement.BindTextParameterWithName("@medicine", str);
 
@@ -641,7 +642,7 @@ namespace Health_Organizer
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@pid", this.PID);
                         statement.BindTextParameterWithName("@dv", DateVisited);
                         statement.BindTextParameterWithName("@vaccine", str);
 
@@ -671,7 +672,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT * FROM MedicalDetails WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
                     if (await statement.StepAsync())
@@ -723,7 +724,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT * FROM MedicalDetailsMedicine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
 
@@ -760,7 +761,7 @@ namespace Health_Organizer
                 {
                     string query = "SELECT * FROM MedicalDetailsVaccine WHERE PID = @pid AND DateVisited = @dv";
                     Statement statement = await this.database.PrepareStatementAsync(query);
-                    statement.BindIntParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@dv", VisitListBox.Items[VisitListBox.SelectedIndex].ToString());
                     statement.EnableColumnsProperty();
 
@@ -802,13 +803,13 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<int> GetPatientAge(int p)
+        private async Task<int> GetPatientAge(string p)
         {
             try
             {
                 string query = "SELECT Birthday FROM Patient WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", p);
+                statement.BindTextParameterWithName("@pid", p);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {

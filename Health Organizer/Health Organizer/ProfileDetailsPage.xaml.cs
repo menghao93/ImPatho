@@ -24,7 +24,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private int PID;
+        private string PID;
         private Database database;
 
         public ObservableDictionary DefaultViewModel
@@ -37,7 +37,7 @@ namespace Health_Organizer
             get { return this.navigationHelper; }
         }
 
-
+         
         public ProfileDetailsPage()
         {
             this.InitializeComponent();
@@ -57,7 +57,7 @@ namespace Health_Organizer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.PID = Int32.Parse(e.Parameter as string);
+            this.PID = (e.Parameter as string);
             this.InitializeDB();
         }
 
@@ -79,7 +79,7 @@ namespace Health_Organizer
             {
                 string query = "SELECT * FROM Patient WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindInt64ParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
 
                 if (await statement.StepAsync())
@@ -103,7 +103,7 @@ namespace Health_Organizer
             {
                 string query = "SELECT * FROM Address WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {
@@ -173,7 +173,7 @@ namespace Health_Organizer
             {
                 string queryDetails = "SELECT * FROM MutableDetails WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(queryDetails);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
 
                 if (await statement.StepAsync())
@@ -214,7 +214,7 @@ namespace Health_Organizer
                 ProfileAllergies.Text = "";
                 string allergyDetails = "SELECT * FROM MutableDetailsAllergy WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(allergyDetails);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
                 while (await statement.StepAsync())
                 {
@@ -240,7 +240,7 @@ namespace Health_Organizer
                 ProfileOperations.Text = "";
                 string operationDetails = "SELECT * FROM MutableDetailsOperation WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(operationDetails);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
 
                 while (await statement.StepAsync())
@@ -267,7 +267,7 @@ namespace Health_Organizer
                 ProfileAddictions.Text = "";
                 string addictionDetails = "SELECT * FROM MutableDetailsAddiction WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(addictionDetails);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
 
                 while (await statement.StepAsync())
@@ -293,7 +293,7 @@ namespace Health_Organizer
             {
                 string query = "SELECT * FROM MedicalDetails WHERE PID = @pid";
                 Statement statement = await database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@pid", this.PID);
                 statement.EnableColumnsProperty();
                 double height = -1;
                 double bmi = -1;

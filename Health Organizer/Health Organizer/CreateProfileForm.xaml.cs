@@ -34,7 +34,7 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private bool isUpdating = false;
-        private int updatePID = -1;
+        private string updatePID = "-1";
         private string pastGridGroup = null;
 
         public ObservableDictionary DefaultViewModel
@@ -82,7 +82,8 @@ namespace Health_Organizer
             if (Int32.Parse(e.Parameter as string) != -1)
             {
                 this.isUpdating = true;
-                this.updatePID = Int32.Parse(e.Parameter as string);
+                //this.updatePID = Int32.Parse(e.Parameter as string);
+                this.updatePID = (e.Parameter as string);
             }
 
             //If data us edited then we donot need to set the default Image.
@@ -98,13 +99,13 @@ namespace Health_Organizer
             }
         }
 
-        private async void LoadStoredDetails(int pid)
+        private async void LoadStoredDetails(string pid)
         {
             try
             {
                 string query = "SELECT * FROM Patient WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindInt64ParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {
@@ -130,7 +131,7 @@ namespace Health_Organizer
             {
                 string query = "SELECT * FROM Address WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(query);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {
@@ -200,7 +201,7 @@ namespace Health_Organizer
             {
                 string queryDetails = "SELECT * FROM MutableDetails WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(queryDetails);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
 
                 if (await statement.StepAsync())
@@ -240,7 +241,7 @@ namespace Health_Organizer
             {
                 string allergyDetails = "SELECT * FROM MutableDetailsAllergy WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(allergyDetails);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
                 while (await statement.StepAsync())
                 {
@@ -261,7 +262,7 @@ namespace Health_Organizer
             {
                 string operationDetails = "SELECT * FROM MutableDetailsOperation WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(operationDetails);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
 
                 while (await statement.StepAsync())
@@ -283,7 +284,7 @@ namespace Health_Organizer
             {
                 string addictionDetails = "SELECT * FROM MutableDetailsAddiction WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(addictionDetails);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.EnableColumnsProperty();
 
                 while (await statement.StepAsync())
@@ -321,7 +322,7 @@ namespace Health_Organizer
                 }
                 else
                 {
-                    int pid = await this.InsertBasicDetais();
+                    string pid = await this.InsertBasicDetais();
                     await this.InsertAddress(pid);
                     await this.InsertMutableDetails(pid);
                     await this.InsertIntoGridView(pid, false);
@@ -343,7 +344,7 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<int> InsertIntoGridView(int pid, bool isUpdating)
+        private async Task<int> InsertIntoGridView(string pid, bool isUpdating)
         {
             try
             {
@@ -356,14 +357,14 @@ namespace Health_Organizer
                 {
                     if (sample.Title.Equals(profileCity.Text.ToString()))
                     {
-                        sample.Items.Add(new SampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
+                        sample.Items.Add(new SampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
                         groupExist = true;
                     }
                 }
                 if (!groupExist)
                 {
                     SampleDataGroup group = new SampleDataGroup(profileCity.Text, profileCity.Text);
-                    group.Items.Add(new SampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
+                    group.Items.Add(new SampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
                     HomePageDataSoure._sampleDataSource.Groups.Add(group);
                 }
 
@@ -383,7 +384,7 @@ namespace Health_Organizer
                 {
                     await AnalysisPageDataSoure.GetItemsAsync();
 
-                    AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid.ToString(), profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, profileCity.Text, profileState.Text, profileCountry.Text, null);
+                    AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, profileCity.Text, profileState.Text, profileCountry.Text, null);
                     AnalysisPageDataSoure._sampleDataSource.Groups.Add(temp);
                 }
 
@@ -396,14 +397,14 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<int> UpdateGridView(int pid)
+        private async Task<int> UpdateGridView(string pid)
         {
             try
             {
                 BitmapImage bmp = await ImageMethods.Base64StringToBitmap(decodedImage);
 
                 //This updates Grid View of NGO Home
-                SampleDataItem updateItem = await HomePageDataSoure.GetItemAsync(pid.ToString());
+                SampleDataItem updateItem = await HomePageDataSoure.GetItemAsync(pid);
                 if (pastGridGroup != null)
                 {
                     if (pastGridGroup.Equals(profileCity))
@@ -414,14 +415,14 @@ namespace Health_Organizer
                     }
                     else
                     {
-                        await HomePageDataSoure.DelItemAsync(pid.ToString());
+                        await HomePageDataSoure.DelItemAsync(pid);
                         //is update is given to update all the grid views. 
                         await this.InsertIntoGridView(pid, isUpdating);
                     }
                 }
 
                 //This updates Grid View of Analysis Page
-                AnalysisSampleDataItem updateAnalysisItem = await AnalysisPageDataSoure.GetItemAsync(pid.ToString());
+                AnalysisSampleDataItem updateAnalysisItem = await AnalysisPageDataSoure.GetItemAsync(pid);
                 if (profileBloodGroup.SelectedItem != null)
                 {
                     updateAnalysisItem.BloodGroup = profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString();
@@ -452,14 +453,14 @@ namespace Health_Organizer
             }
         }
 
-        private async Task<bool> UpdateMutableDetails(int pid)
+        private async Task<bool> UpdateMutableDetails(string pid)
         {
             try
             {
                 string updateQuery = "UPDATE MutableDetails SET TimeStamp = @ts, Married = @married , Occupation = @occupation , FamilyBackground = @fb , Email = @email , Mobile = @mob , EmMobile = @eMob " +
                                      "WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 if (profileMarried.IsChecked.Value)
                 {
@@ -495,19 +496,19 @@ namespace Health_Organizer
             {
                 string deleteOperation = "DELETE FROM MutableDetailsOperation WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(deleteOperation);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 await statement.StepAsync();
 
                 statement.Reset();
                 string deleteAllergy = "DELETE FROM MutableDetailsAllergy WHERE PID = @pid";
                 statement = await this.database.PrepareStatementAsync(deleteAllergy);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 await statement.StepAsync();
 
                 statement.Reset();
                 string deleteAddiction = "DELETE FROM MutableDetailsAddiction WHERE PID = @pid";
                 statement = await this.database.PrepareStatementAsync(deleteAddiction);
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 await statement.StepAsync();
             }
             catch (Exception ex)
@@ -527,7 +528,7 @@ namespace Health_Organizer
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", pid);
+                        statement.BindTextParameterWithName("@pid", pid);
                         statement.BindTextParameterWithName("@allergy", str);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
@@ -553,7 +554,7 @@ namespace Health_Organizer
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                         statement.BindTextParameterWithName("@addiction", str);
-                        statement.BindIntParameterWithName("@pid", pid);
+                        statement.BindTextParameterWithName("@pid", pid);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
                         statement.Reset();
@@ -577,7 +578,7 @@ namespace Health_Organizer
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", pid);
+                        statement.BindTextParameterWithName("@pid", pid);
                         statement.BindTextParameterWithName("@operation", str);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false); 
                         await statement.StepAsync();
@@ -594,14 +595,14 @@ namespace Health_Organizer
             return true;
         }
 
-        private async Task<bool> UpdateAddress(int pid)
+        private async Task<bool> UpdateAddress(string pid)
         {
             try
             {
                 string updateQuery = "UPDATE Address SET TimeStamp = @ts, ZIP = @zip , Street = @street WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindIntParameterWithName("@pid", pid);
+                statement.BindTextParameterWithName("@pid", pid);
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
                 statement.BindTextParameterWithName("@street", profileAddress.Text.ToString());
 
@@ -730,7 +731,7 @@ namespace Health_Organizer
                 string updateQuery = "UPDATE Patient SET TimeStamp = @ts, FirstName = @fName , LastName = @lName , BloodGroup = @bg , Sex = @sex , Birthday = @bday , Image = @image WHERE PID = @pid";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindIntParameterWithName("@pid", this.updatePID);
+                statement.BindTextParameterWithName("@pid", this.updatePID);
                 statement.BindTextParameterWithName("@fName", profileFirstName.Text);
                 statement.BindTextParameterWithName("@lName", profileLastName.Text);
                 statement.BindTextParameterWithName("@bg", profileBloodGroup.Items[profileBloodGroup.SelectedIndex].ToString());
@@ -750,7 +751,7 @@ namespace Health_Organizer
             return true;
         }
 
-        private async Task<int> InsertBasicDetais()
+        private async Task<string> InsertBasicDetais()
         {
             profileMainGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             profileProgressRing.IsActive = true;
@@ -758,8 +759,11 @@ namespace Health_Organizer
 
             try
             {
-                string insertQuery = "INSERT INTO Patient (TimeStamp, FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@ts, @fName, @lName, @bg, @sex, @bday, @image)";
+                string insertQuery = "INSERT INTO Patient (PID, TimeStamp, FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@pid, @ts, @fName, @lName, @bg, @sex, @bday, @image)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
+                /*THIS IS THE ONLY REGION WHERE WE ARE SUPPOSED TO ENTER THE PID OF THE FORM - TIMESTAMP~MAC*/
+                /*HENCE CHANGE THE PID FROM ONLY DATE TIME TO DATETIME + MAC*/
+                statement.BindTextParameterWithName("@pid", DateTime.Now.ToString());
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindTextParameterWithName("@fName", profileFirstName.Text);
                 statement.BindTextParameterWithName("@lName", profileLastName.Text);
@@ -782,10 +786,10 @@ namespace Health_Organizer
                 string getPIDquery = "SELECT * FROM Patient";
                 Statement statement = await this.database.PrepareStatementAsync(getPIDquery);
                 statement.EnableColumnsProperty();
-                int pid = 0;
+                string pid = "0";
                 while (await statement.StepAsync())
                 {
-                    pid = Int32.Parse(statement.Columns["PID"]);
+                    pid = (statement.Columns["PID"]);
                 }
 
                 return pid;
@@ -795,18 +799,18 @@ namespace Health_Organizer
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                 Debug.WriteLine("CREATE_PROFILE_FORM---INSERT_BASIC_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
 
-                return -1;
+                return "ERROR";
             }
         }
 
-        private async Task<bool> InsertAddress(int PID)
+        private async Task<bool> InsertAddress(string PID)
         {
             try
             {
                 string insertQuery = "INSERT INTO Address (TimeStamp, PID, ZIP, Street) VALUES (@ts, @pid, @zip, @street)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                statement.BindIntParameterWithName("@pid", PID);
+                statement.BindTextParameterWithName("@pid", PID);
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
                 statement.BindTextParameterWithName("@street", profileAddress.Text.ToString());
 
@@ -874,14 +878,14 @@ namespace Health_Organizer
             return true;
         }
 
-        private async Task<bool> InsertMutableDetails(int PID)
+        private async Task<bool> InsertMutableDetails(string PID)
         {
             try
             {
                 string insertQuery = "INSERT INTO MutableDetails (TimeStamp, PID, Married, Occupation, FamilyBackground, Email, Mobile, EmMobile) " +
                                      "VALUES (@ts, @pid, @married, @occupation, @fb, @email, @mob, @eMob)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-                statement.BindIntParameterWithName("@pid", PID);
+                statement.BindTextParameterWithName("@pid", PID);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 if (profileMarried.IsChecked.Value)
                 {
@@ -923,7 +927,7 @@ namespace Health_Organizer
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", PID);
+                        statement.BindTextParameterWithName("@pid", PID);
                         statement.BindTextParameterWithName("@allergy", str);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
@@ -949,7 +953,7 @@ namespace Health_Organizer
                         Statement statement = await this.database.PrepareStatementAsync(insertAddictionString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                         statement.BindTextParameterWithName("@addiction", str);
-                        statement.BindIntParameterWithName("@pid", PID);
+                        statement.BindTextParameterWithName("@pid", PID);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false);
                         await statement.StepAsync();
                         statement.Reset();
@@ -973,7 +977,7 @@ namespace Health_Organizer
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertOperationString);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
-                        statement.BindIntParameterWithName("@pid", PID);
+                        statement.BindTextParameterWithName("@pid", PID);
                         statement.BindTextParameterWithName("@operation", str);
                         //await statement.StepAsync().AsTask().ConfigureAwait(false); 
                         await statement.StepAsync();
@@ -1222,12 +1226,12 @@ namespace Health_Organizer
                 return true;
             }
         }
-        private void navigateBack(object sender, KeyRoutedEventArgs e)
-        {
-            if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
-            {
-                NavigationHelper.GoBack();
-            }
-        }
+        //private void navigateBack(object sender, KeyRoutedEventArgs e)
+        //{
+        //    if ((uint)e.Key == (uint)Windows.System.VirtualKey.Back)
+        //    {
+        //        NavigationHelper.GoBack();
+        //    }
+        //}
     }
 }

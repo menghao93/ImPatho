@@ -167,7 +167,7 @@ namespace Health_Organizer.Data_Model_Classes
 
                     Statement statement = await db.PrepareStatementAsync(query);
                     statement.EnableColumnsProperty();
-                    Dictionary<int, AnalysisSampleDataItem> group = new Dictionary<int, AnalysisSampleDataItem>();
+                    Dictionary<string, AnalysisSampleDataItem> group = new Dictionary<string, AnalysisSampleDataItem>();
 
                     while (await statement.StepAsync())
                     {
@@ -194,7 +194,7 @@ namespace Health_Organizer.Data_Model_Classes
                         newItem.City = statement.Columns["City"];
                         newItem.State = statement.Columns["State"];
                         newItem.Country = statement.Columns["Country"];
-                        group.Add(Int32.Parse(statement.Columns["PID"]), newItem);
+                        group.Add((statement.Columns["PID"]), newItem);
                     }
 
                     //Now after adding the basic details and creating their HASHMAP get other details from DB & add it to the HASHMAP which later 
@@ -206,7 +206,7 @@ namespace Health_Organizer.Data_Model_Classes
 
                     while (await statement.StepAsync())
                     {
-                        List<string> sample = group[Int32.Parse(statement.Columns["PID"])].Allergy;
+                        List<string> sample = group[(statement.Columns["PID"])].Allergy;
                         if (sample != null)
                         {
                             sample.Add(statement.Columns["Allergy"]);
@@ -220,7 +220,7 @@ namespace Health_Organizer.Data_Model_Classes
 
                     while (await statement.StepAsync())
                     {
-                        List<string> sample = group[Int32.Parse(statement.Columns["PID"])].Addiction;
+                        List<string> sample = group[(statement.Columns["PID"])].Addiction;
                         if (sample != null)
                         {
                             sample.Add(statement.Columns["Addiction"]);
@@ -234,7 +234,7 @@ namespace Health_Organizer.Data_Model_Classes
 
                     while (await statement.StepAsync())
                     {
-                        List<string> sample = group[Int32.Parse(statement.Columns["PID"])].Operation;
+                        List<string> sample = group[(statement.Columns["PID"])].Operation;
                         if (sample != null)
                         {
                             sample.Add(statement.Columns["Operation"]);
@@ -248,9 +248,9 @@ namespace Health_Organizer.Data_Model_Classes
 
                     while (await statement.StepAsync())
                     {
-                        List<string> sampleDatesVisited = group[Int32.Parse(statement.Columns["PID"])].DatesVisited;
-                        Dictionary<string, string> sampleVaccines = group[Int32.Parse(statement.Columns["PID"])].Vaccines;
-                        Dictionary<string, string> sampleDiseases = group[Int32.Parse(statement.Columns["PID"])].Diseases;
+                        List<string> sampleDatesVisited = group[(statement.Columns["PID"])].DatesVisited;
+                        Dictionary<string, string> sampleVaccines = group[(statement.Columns["PID"])].Vaccines;
+                        Dictionary<string, string> sampleDiseases = group[(statement.Columns["PID"])].Diseases;
                         if (sampleDatesVisited != null && sampleDiseases != null && sampleVaccines != null)
                         {
                             sampleDatesVisited.Add(statement.Columns["DateVisited"]);
@@ -266,7 +266,7 @@ namespace Health_Organizer.Data_Model_Classes
 
                     while (await statement.StepAsync())
                     {
-                        Dictionary<string, string> sampleVaccines = group[Int32.Parse(statement.Columns["PID"])].Vaccines;
+                        Dictionary<string, string> sampleVaccines = group[(statement.Columns["PID"])].Vaccines;
                         if (sampleVaccines != null)
                         {
                             sampleVaccines[statement.Columns["DateVisited"]] = statement.Columns["Vaccine"];
@@ -274,7 +274,7 @@ namespace Health_Organizer.Data_Model_Classes
                     }
 
                     //After adding all the details add the items to GRID VIEW
-                    foreach (KeyValuePair<int, AnalysisSampleDataItem> sample in group)
+                    foreach (KeyValuePair<string, AnalysisSampleDataItem> sample in group)
                     {
                         Groups.Add(sample.Value);
                     }
