@@ -527,7 +527,6 @@ namespace Health_Organizer
                     {
                         //Debug.WriteLine(str);
                         Statement statement = await this.database.PrepareStatementAsync(insertAllergyString);
-
                         statement.BindTextParameterWithName("@pid", pid);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindTextParameterWithName("@allergy", ExtraModules.removesemicolon(str));
@@ -763,6 +762,7 @@ namespace Health_Organizer
             {
                 string insertQuery = "INSERT INTO Patient (PID, TimeStamp, FirstName, LastName, BloodGroup, Sex, Birthday, Image) VALUES (@pid, @ts, @fName, @lName, @bg, @sex, @bday, @image)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
+
                 /*THIS IS THE ONLY REGION WHERE WE ARE SUPPOSED TO ENTER THE PID OF THE FORM - TIMESTAMP~MAC*/
                 /*HENCE CHANGE THE PID FROM ONLY DATE TIME TO DATETIME + MAC*/
                 statement.BindTextParameterWithName("@pid", DateTime.Now.ToString());
@@ -811,7 +811,6 @@ namespace Health_Organizer
             {
                 string insertQuery = "INSERT INTO Address (TimeStamp, PID, ZIP, Street) VALUES (@ts, @pid, @zip, @street)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-
                 statement.BindTextParameterWithName("@pid", PID);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));

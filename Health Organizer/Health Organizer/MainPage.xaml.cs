@@ -38,7 +38,6 @@ namespace Health_Organizer
         private async void InitializeDB()
         {
             await App.InitializeDB();
-
         }
 
         private async void SignInClicked(object sender, RoutedEventArgs e)

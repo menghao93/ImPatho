@@ -492,7 +492,6 @@ namespace Health_Organizer
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
-
                     statement.BindTextParameterWithName("@pid", this.PID);
                     statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                     statement.BindTextParameterWithName("@dv", DateVisited);
@@ -617,7 +616,6 @@ namespace Health_Organizer
                     if (str != "")
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
-
                         statement.BindTextParameterWithName("@pid", this.PID);
                         statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindTextParameterWithName("@dv", DateVisited);

@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Networking.Connectivity;
+using Windows.Storage.Streams;
+using Windows.System.Profile;
 
 namespace Health_Organizer
 {
@@ -139,9 +142,9 @@ namespace Health_Organizer
             {
                 c_date = new DateTime(year, month, day);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("Date was not able to be converted: " + year + " " + month + " " + day );
+                Debug.WriteLine("Date was not able to be converted: " + year + " " + month + " " + day);
                 Debug.WriteLine(ex.ToString());
                 c_date = new DateTime(1980, 1, 1);
             }
@@ -315,7 +318,7 @@ namespace Health_Organizer
         {
             if (str.Contains(";"))
             {
-                str=str.Replace(";", ". ");
+                str = str.Replace(";", ". ");
             }
             return str;
         }
