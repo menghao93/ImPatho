@@ -183,6 +183,13 @@ namespace Health_Organizer.Database_Connet_Classes
                              "PRIMARY KEY(PID, DateVisited, Vaccine), " +
                              "FOREIGN KEY(PID, DateVisited) REFERENCES MedicalDetails(PID, DateVisited) ON DELETE CASCADE);";
 
+            string query14 = "CREATE TABLE IF NOT EXISTS UserDetails(" +
+                             "UserId TEXT NOT NULL," +
+                             "UserName TEXT NOT NULL," +
+                             "TimeStamp TEXT NOT NULL," +
+                             "Organisation TEXT NOT NULL," +
+                             "Auth_Token TEXT NOT NULL);";
+
             await database.ExecuteStatementAsync(query1);
             await database.ExecuteStatementAsync(query2);
             await database.ExecuteStatementAsync(query3);
@@ -196,6 +203,7 @@ namespace Health_Organizer.Database_Connet_Classes
             //await database.ExecuteStatementAsync(query11);
             await database.ExecuteStatementAsync(query12);
             await database.ExecuteStatementAsync(query13);
+            await database.ExecuteStatementAsync(query14);
         }
     }
 }

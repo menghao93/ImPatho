@@ -422,8 +422,8 @@ namespace Health_Organizer
                 string insertQuery = "INSERT INTO MedicalDetails (TimeStamp ,PID, DateVisited, Age, BloodGlucose, SystolicBP, DiastolicBP, DiseaseFound, Height, Weight, Symptoms, BMI) " +
                                      "VALUES (@ts, @pid, @dv, @age, @bg, @sbp, @dbp, @disease, @height, @weight, @symptoms, @bmi)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindTextParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 statement.BindIntParameterWithName("@age", await this.GetPatientAge(this.PID));
                 if (!VisitBloodGlucose.Text.ToString().Equals(""))
@@ -470,10 +470,10 @@ namespace Health_Organizer
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitMedicineGiven.Text.ToString())).Split(','))
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                     statement.BindTextParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                     statement.BindTextParameterWithName("@dv", DateVisited);
-                    statement.BindTextParameterWithName("@medicine", str);
+                    statement.BindTextParameterWithName("@medicine", ExtraModules.removesemicolon(str));
 
                     await statement.StepAsync();
                     statement.Reset();
@@ -492,10 +492,11 @@ namespace Health_Organizer
                 foreach (string str in ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitVaccine.Text.ToString())).Split(','))
                 {
                     Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
-                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+
                     statement.BindTextParameterWithName("@pid", this.PID);
+                    statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                     statement.BindTextParameterWithName("@dv", DateVisited);
-                    statement.BindTextParameterWithName("@vaccine", str);
+                    statement.BindTextParameterWithName("@vaccine", ExtraModules.removesemicolon(str));
 
                     await statement.StepAsync();
                     statement.Reset();
@@ -530,8 +531,8 @@ namespace Health_Organizer
             {
                 string updateQuery = "UPDATE MedicalDetails SET TimeStamp = @ts, BloodGlucose = @bg , SystolicBP = @sbp , DiastolicBP = @dbp , DiseaseFound = @disease , Height = @height , Weight = @weight , Symptoms = @symptoms , BMI = @bmi  WHERE PID = @pid AND DateVisited = @dv";
                 Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                 statement.BindTextParameterWithName("@pid", this.PID);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindTextParameterWithName("@dv", DateVisited);
                 if (!VisitBloodGlucose.Text.ToString().Equals(""))
                 {
@@ -557,10 +558,10 @@ namespace Health_Organizer
                 {
                     statement.BindIntParameterWithName("@sbp", 0);
                 }
-                statement.BindTextParameterWithName("@disease", VisitDiseasesDiagnosed.Text.ToString());
+                statement.BindTextParameterWithName("@disease",ExtraModules.removesemicolon(VisitDiseasesDiagnosed.Text.ToString()));
                 statement.BindDoubleParameterWithName("@height", height);
                 statement.BindIntParameterWithName("@weight", weight);
-                statement.BindTextParameterWithName("@symptoms", ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString())));
+                statement.BindTextParameterWithName("@symptoms", ExtraModules.removesemicolon(ExtraModules.RemoveExtraCommas(ExtraModules.RemoveStringNewLine(VisitSymptoms.Text.ToString()))));
                 statement.BindDoubleParameterWithName("@bmi", bmi);
 
                 await statement.StepAsync();
@@ -616,10 +617,11 @@ namespace Health_Organizer
                     if (str != "")
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertMedicine);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
+
                         statement.BindTextParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindTextParameterWithName("@dv", DateVisited);
-                        statement.BindTextParameterWithName("@medicine", str);
+                        statement.BindTextParameterWithName("@medicine", ExtraModules.removesemicolon(str));
 
                         await statement.StepAsync();
                         statement.Reset();
@@ -641,10 +643,10 @@ namespace Health_Organizer
                     if (str != "")
                     {
                         Statement statement = await this.database.PrepareStatementAsync(insertVaccine);
-                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString());
                         statement.BindTextParameterWithName("@pid", this.PID);
+                        statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                         statement.BindTextParameterWithName("@dv", DateVisited);
-                        statement.BindTextParameterWithName("@vaccine", str);
+                        statement.BindTextParameterWithName("@vaccine", ExtraModules.removesemicolon(str));
 
                         await statement.StepAsync();
                         statement.Reset();

@@ -93,53 +93,95 @@ namespace Health_Organizer
         {
             if (ExtraModules.IsInternet())
             {
-                string statements = await sendToServer("1");
+                string timestamp = await getTimeStamp();//"1/25/2014 3:34:06 AM";
+                string userid = await getUserId();
+                string auth_token = await getAuthToken();
+                string statements = await sendToServer(timestamp,userid);
                 var data = new List<KeyValuePair<string, string>>
                      {
-                         new KeyValuePair<string, string>("userid","14"),
-                         new KeyValuePair<string, string>("auth_token", "28b60a16b55fd531047c"),
+                         new KeyValuePair<string, string>("userid",userid),
+                         new KeyValuePair<string, string>("auth_token", auth_token),
                          new KeyValuePair<string, string>("updatestatements",statements)
                       };
-                await Uploadtoserver(data);
+                  var datatorecieve = new List<KeyValuePair<string, string>>
+                     {
+                         new KeyValuePair<string, string>("userid",userid),
+                         new KeyValuePair<string, string>("auth_token", auth_token),
+                         new KeyValuePair<string, string>("timestamp",timestamp)
+                      };
+               await  Uploadtoserver(data);
+               await getfromserver(datatorecieve);
             }
         }
 
-        private async Task<string> Uploadtoserver(List<KeyValuePair<string, string>> values)
+        private async Task Uploadtoserver(List<KeyValuePair<string, string>> values)
         {
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/UpdateServerdata.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
+                try
+                {
                 Debug.WriteLine("Sync Output" + responseString);
-                JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
-                string error = root.GetNamedString("error");
-                return error;
+                   // JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                   // string error = root.GetNamedString("error");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Exception in Sync");
+                    Debug.WriteLine(ex.Message.ToString());
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Check internet Connection");
+            }
+        }   
+
+        private async Task<string> getfromserver(List<KeyValuePair<string, string>> values)
+        {
+            if (ExtraModules.IsInternet())
+            {
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/updatetomachine.php", new FormUrlEncodedContent(values));
+                var responseString = await response.Content.ReadAsStringAsync();
+                //Debug.WriteLine("Sync Output" + responseString);
+                string error = responseString.ToString();
+                //JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                //string error = root.GetNamedString("query");
+                await aftergetFromServer(error);
+                return "done";
             }
             return "Check internet Connection";
         }
 
-        public async void getFromServer(string BigQuery)
+        public async Task aftergetFromServer(string BigQuery)
         {
             try
             {
-                foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
+                string[] singleQuery =BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
+                for (int i = 0; i < singleQuery.Length;i++ )
+                //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
                 {
-                    Statement statement = await this.database.PrepareStatementAsync(singleQuery);
-                    await statement.StepAsync();
+                    Debug.WriteLine(singleQuery[i] + ";");
+                    Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
+                    statement.EnableColumnsProperty();
+                    await statement.StepAsync();                    
                 }
+                Debug.WriteLine("sync complete");
             }
             catch (Exception ex)
             {
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
-                Debug.WriteLine("MainMenuPage---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
+                Debug.WriteLine("sync setting---forFromServer" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
 
-        public async Task<string> sendToServer(string TimeStamp)
+        public async Task<string> sendToServer(string TimeStamp,string userid)
         {
-            string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy",
-                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails",
+            string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy", 
+                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
                 "MedicalDetailsMedicine", "MedicalDetailsVaccine" };
             string output = "";
             try
@@ -147,14 +189,11 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
-
-                    Statement statement = await database.PrepareStatementAsync("SELECT " + columnanmes + " from " + tableNames[i] + " where TimeStamp > " + TimeStamp);
-
+                   Statement statement = await database.PrepareStatementAsync("SELECT "+ columnanmes +" from " + tableNames[i] + " where TimeStamp > '" + TimeStamp+"'");
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
                         string[] seprated_columnnames = columnanmes.Split(new string[] { "," }, StringSplitOptions.None);
-                        //Debug.WriteLine("values: " + statement.Columns.SelectMany(x => x.Value));
                         string[] temp = new string[seprated_columnnames.Length];
                         for (int j = 0; j < seprated_columnnames.Length; j++)
                         {
@@ -163,10 +202,11 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ",14);";
+                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ","+userid+");";
                     }
                 }
                 Debug.WriteLine("output: " + output);
+                return output;
             }
             catch (Exception ex)
             {
@@ -198,9 +238,82 @@ namespace Health_Organizer
             }
         }
 
+
+        private async Task<string> getUserId()
+        {
+            String userid="";
+            try{
+            Statement statement = await database.PrepareStatementAsync("SELECT UserId FROM UserDetails");
+            statement.EnableColumnsProperty();
+             while (await statement.StepAsync())
+                    {
+                       userid=statement.Columns["UserId"];
+                    }
+        }
+              catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---getuserid" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+             return userid;
+        }
+
+        private async Task<string> getAuthToken()
+        {
+            String auth_token = "";
+         try{
+            Statement statement = await database.PrepareStatementAsync("SELECT Auth_Token FROM UserDetails");
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                auth_token = statement.Columns["Auth_Token"];
+            }
+            } catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---getAuthtoken" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return auth_token;
+        }
+
+        private async Task<string> getTimeStamp()
+        {
+            String timestamp = "";
+            try{
+            Statement statement = await database.PrepareStatementAsync("SELECT TimeStamp FROM UserDetails");
+            statement.EnableColumnsProperty();
+            while (await statement.StepAsync())
+            {
+                timestamp = statement.Columns["TimeStamp"];
+            }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("CREATE_PROFILE_FORM---UPDATE_MUTABLE_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return timestamp;
+        }
+
+        private async void updateTimeStamp(String Userid)
+        {
+            try{
+            String updateQuery = "Update UserDetails Set TimeStamp = @ts Where UserId = @userid";
+            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+            statement.BindTextParameterWithName("@userid",Userid);
+            statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+            await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("Settings---UPDATETIMESTAMP" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+        }
+      
         private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
 
-        }
     }
+}
 }

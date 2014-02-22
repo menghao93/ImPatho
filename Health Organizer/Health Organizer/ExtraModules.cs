@@ -13,6 +13,7 @@ namespace Health_Organizer
 {
     class ExtraModules
     {
+        public static string datePatt = @"yyyy-MM-d hh:mm:ss";
         public static string RemoveStringSpace(String InputString)
         {
             String OutputString = "";
@@ -308,6 +309,15 @@ namespace Health_Organizer
             ConnectionProfile connections = NetworkInformation.GetInternetConnectionProfile();
             bool internet = connections != null && connections.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
             return internet;
+        }
+
+        public static string removesemicolon(string str)
+        {
+            if (str.Contains(";"))
+            {
+                str=str.Replace(";", ". ");
+            }
+            return str;
         }
     }
 }
