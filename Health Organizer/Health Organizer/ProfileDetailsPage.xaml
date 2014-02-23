@@ -98,7 +98,7 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,30,0,0" >
                     <AppBarButton Grid.Column="1" Label="Edit Profile" Icon="Edit" Click="profileDetailsEditBut"/>
                     <AppBarButton  Label="Help" Icon="Help" />
-                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                    <AppBarButton  Label="Settings" Icon="Setting"  Click="ProfileDetailsSettingsClicked"/>
                 </StackPanel>
             </Grid>
             

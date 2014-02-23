@@ -355,7 +355,7 @@ namespace Health_Organizer
 
                 foreach (SampleDataGroup sample in samples)
                 {
-                    if (sample.Title.Equals(profileCity.Text.ToString()))
+                    if (sample.Title.Equals(ExtraModules.stringFirstCapital(profileCity.Text.ToString())))
                     {
                         sample.Items.Add(new SampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
                         groupExist = true;
@@ -363,7 +363,7 @@ namespace Health_Organizer
                 }
                 if (!groupExist)
                 {
-                    SampleDataGroup group = new SampleDataGroup(profileCity.Text, profileCity.Text);
+                    SampleDataGroup group = new SampleDataGroup(ExtraModules.stringFirstCapital(profileCity.Text), ExtraModules.stringFirstCapital(profileCity.Text));
                     group.Items.Add(new SampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileAddress.Text, bmp));
                     HomePageDataSoure._sampleDataSource.Groups.Add(group);
                 }
@@ -384,7 +384,7 @@ namespace Health_Organizer
                 {
                     await AnalysisPageDataSoure.GetItemsAsync();
 
-                    AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, profileCity.Text, profileState.Text, profileCountry.Text, null);
+                    AnalysisSampleDataItem temp = new AnalysisSampleDataItem(pid, profileFirstName.Text + " " + profileLastName.Text, profileBloodGroup.SelectedItem.ToString(), profileSexType.SelectedItem.ToString().ToCharArray()[0], married, bmp, profileOccupation.Text, profileFamilyHistory.Text, null, null, null, ExtraModules.stringFirstCapital(profileCity.Text), profileState.Text, profileCountry.Text, null);
                     AnalysisPageDataSoure._sampleDataSource.Groups.Add(temp);
                 }
 
@@ -830,7 +830,7 @@ namespace Health_Organizer
                 Statement statement = await this.database.PrepareStatementAsync(insertCityQuery);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 statement.BindIntParameterWithName("@zip", Int32.Parse(profileZip.Text.ToString()));
-                statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
+                statement.BindTextParameterWithName("@city",ExtraModules.stringFirstCapital(ExtraModules.removesemicolon(profileCity.Text.ToString())));
 
                 await statement.StepAsync();
             }
@@ -847,7 +847,7 @@ namespace Health_Organizer
                     string insertStateQuery = "INSERT INTO AddressCity (TimeStamp, City, State) VALUES (@ts, @city, @state)";
                     Statement statement = await this.database.PrepareStatementAsync(insertStateQuery);
                     statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
-                    statement.BindTextParameterWithName("@city", ExtraModules.removesemicolon(profileCity.Text.ToString()));
+                    statement.BindTextParameterWithName("@city", ExtraModules.stringFirstCapital(ExtraModules.removesemicolon(profileCity.Text.ToString())));
                     statement.BindTextParameterWithName("@state", ExtraModules.removesemicolon(profileState.Text.ToString()));
 
                     await statement.StepAsync();

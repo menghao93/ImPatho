@@ -322,5 +322,12 @@ namespace Health_Organizer
             }
             return str;
         }
+        public static String stringFirstCapital(String input)
+        {
+            String output;
+            input = input.ToLower();
+            output = Char.ToUpper(input[0]) + input.Substring(1);
+            return output;
+        }
     }
 }

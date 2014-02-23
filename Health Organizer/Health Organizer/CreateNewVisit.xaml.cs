@@ -18,6 +18,7 @@ using Health_Organizer.Database_Connet_Classes;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Windows.UI;
 
 
 namespace Health_Organizer
@@ -31,6 +32,7 @@ namespace Health_Organizer
         ObservableCollection<string> ocString;
         private bool isUpdating = false;
         Boolean check = true;
+        private SettingsFlyout1 settings;
 
         public NavigationHelper NavigationHelper
         {
@@ -44,7 +46,7 @@ namespace Health_Organizer
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
             this.ocString = new ObservableCollection<string>();
-
+            settings = new SettingsFlyout1();
             VisitListBox.ItemsSource = this.ocString;
             this.InitializeVisitDetialsComboBox();
         }
@@ -1076,6 +1078,15 @@ namespace Health_Organizer
             {
                 NavigationHelper.GoBack();
             }
+        }
+
+        private void CreateNewVisitSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.ShowCustom();
         }
     }
 }

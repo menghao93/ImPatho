@@ -21,6 +21,7 @@ using SQLite;
 using Windows.UI.Popups;
 using System.Collections.ObjectModel;
 using Health_Organizer.Data_Model_Classes;
+using Windows.UI;
 
 namespace Health_Organizer
 {
@@ -36,6 +37,8 @@ namespace Health_Organizer
         private List<string> searchList;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         int countEnter = 0;
+        private SettingsFlyout1 settings;
+
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -63,6 +66,7 @@ namespace Health_Organizer
             this.ocString = new ObservableCollection<string>();
             //this.ocString.CollectionChanged += ocString_CollectionChanged;
             docKitListBox.ItemsSource = this.ocString;
+            settings = new SettingsFlyout1();
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -687,6 +691,15 @@ namespace Health_Organizer
             //{
             //    NavigationHelper.GoBack();
             //}
+        }
+
+        private void DocKitSettingsClick(object sender, RoutedEventArgs e)
+        {
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.ShowCustom();
         }
     }
 }

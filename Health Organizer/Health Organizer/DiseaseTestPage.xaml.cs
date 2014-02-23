@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +27,7 @@ namespace Health_Organizer
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private SettingsFlyout1 settings;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -51,6 +53,7 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            settings = new SettingsFlyout1();
         }
 
         /// <summary>
@@ -109,5 +112,14 @@ namespace Health_Organizer
         }
 
         #endregion
+
+        private void DiseaseTestPageSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.ShowCustom();
+        }
     }
 }

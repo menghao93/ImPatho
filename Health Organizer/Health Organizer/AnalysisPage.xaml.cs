@@ -23,6 +23,7 @@ using De.TorstenMandelkow.MetroChart;
 using System.Threading.Tasks;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using Windows.UI;
 
 namespace Health_Organizer
 {
@@ -45,6 +46,7 @@ namespace Health_Organizer
         public static PieChart cityGraph, bloodGraph;
         public static ClusteredColumnChart diseaseGraph, addictionGraph;
         public static DoughnutChart allergyGraph, vaccineGraph, operationGraph;
+        private SettingsFlyout1 settings;
 
         bool ByDateFlag, CityFlag, StateFlag, SexFlag, StatusFlag, BGFlag, DiseaseFlag, AllergyFlag,
             AddictionFlag, VaccineFlag, OperationFlag;
@@ -78,6 +80,7 @@ namespace Health_Organizer
             allergyGraph = AnalysisAllergyGraph;
             operationGraph = AnalysisOperationGraph;
             vaccineGraph = AnalysisVaccineGraph;
+            settings = new SettingsFlyout1();
         }
 
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -1233,6 +1236,15 @@ namespace Health_Organizer
                 AnalysisToMonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
                 AnalysisToYearComboBox.SelectedItem = DateTime.Now.Year;
             }
+        }
+
+        private void AnalysisPageSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.ShowCustom();
         }
     }
 }

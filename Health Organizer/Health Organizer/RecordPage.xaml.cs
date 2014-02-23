@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Health_Organizer.Data_Model_Classes;
+using Windows.UI;
 
 namespace Health_Organizer
 {
@@ -25,6 +26,7 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         bool justLanded = true;
+        private SettingsFlyout1 settings;
 
         public ObservableDictionary DefaultViewModel
         {
@@ -43,6 +45,7 @@ namespace Health_Organizer
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            settings = new SettingsFlyout1();
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -162,6 +165,15 @@ namespace Health_Organizer
             {
                 NavigationHelper.GoBack();
             }
+        }
+
+        private void RecordPageSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            String hexaColor = "#00A2E8";
+            Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
+            settings.HeaderBackground = new SolidColorBrush(color);
+            settings.Background = new SolidColorBrush(color);
+            settings.ShowCustom();
         }
     }
 }

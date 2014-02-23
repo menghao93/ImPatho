@@ -386,7 +386,7 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                     <AppBarButton Name ="AddVisit" Label="Add Visit" Icon="Add" Click="AddVisitClicked"/>
                     <AppBarButton  Label="Help" Icon="Help" />
-                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                    <AppBarButton  Label="Settings" Icon="Setting" Click="CreateNewVisitSettingsClicked" />
                 </StackPanel>
             </Grid>
 

@@ -229,7 +229,7 @@
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                                     <AppBarButton  Label="Export all records" Icon="Save"  Name="AnalysisExportFields" Click="AnalysisExportListClicked"/>
                                     <AppBarButton  Label="Help" Icon="Help" />
-                                    <AppBarButton  Label="Settings" Icon="Setting"  />
+                                    <AppBarButton  Label="Settings" Icon="Setting"  Click="AnalysisPageSettingsClicked"/>
                                 </StackPanel>
                             </Grid>
                             <Grid Grid.Row="1" Name="AnalysisDetailsGrid">

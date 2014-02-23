@@ -56,7 +56,7 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
                         <AppBarButton Name="AddNewEntry" Label="New Patient" Icon="Add" Click="AddNewEntryForm" HorizontalAlignment="Center"/>
                         <AppBarButton  Label="Help" Icon="Help" />
-                        <AppBarButton  Label="Settings" Icon="Setting"  />
+                        <AppBarButton  Label="Settings" Icon="Setting"  Click="RecordPageSettingsClicked"/>
                     </StackPanel>
                 </Grid>
             </Grid>

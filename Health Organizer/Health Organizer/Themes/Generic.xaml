@@ -48,7 +48,7 @@
         </ResourceDictionary>
     </local:ResourceDictionaryCollection>
 
-    <SolidColorBrush x:Key="ChartBackground" Color="Black" />
+    <SolidColorBrush x:Key="ChartBackground" Color="Gray" />
     <SolidColorBrush x:Key="ChartForeground" Color="#FF666666" />
 
     <Style x:Key="BaseTextStyle" TargetType="TextBlock">

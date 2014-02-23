@@ -186,12 +186,10 @@ namespace Health_Organizer
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
         {
-           // settings.Content = new Settings();
             String hexaColor = "#00A2E8";
             Color color = Color.FromArgb(255, Convert.ToByte(hexaColor.Substring(1, 2), 16), Convert.ToByte(hexaColor.Substring(3, 2), 16), Convert.ToByte(hexaColor.Substring(5, 2), 16));
             settings.HeaderBackground = new SolidColorBrush(color);
             settings.Background = new SolidColorBrush(color);
-            //settings.Title = "Settings";
             settings.ShowCustom();
         }
     }
