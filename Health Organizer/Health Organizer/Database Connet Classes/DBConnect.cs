@@ -188,6 +188,7 @@ namespace Health_Organizer.Database_Connet_Classes
                              "UserName TEXT NOT NULL," +
                              "TimeStamp TEXT NOT NULL," +
                              "Organisation TEXT NOT NULL," +
+                             "LoginTimeStamp TEXT NOT NULL," +
                              "Auth_Token TEXT NOT NULL);";
 
             await database.ExecuteStatementAsync(query1);

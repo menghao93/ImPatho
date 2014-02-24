@@ -119,7 +119,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/UpdateServerdata.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address + "/UpdateServerdata.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 try
                 {
@@ -144,7 +144,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/updatetomachine.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address + "/updatetomachine.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 //Debug.WriteLine("Sync Output" + responseString);
                 string error = responseString.ToString();

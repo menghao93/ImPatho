@@ -20,6 +20,7 @@ using Windows.Data.Json;
 using Windows.UI.Popups;
 using Windows.UI;
 using SQLiteWinRT;
+using System.Globalization;
 
 namespace Health_Organizer
 {
@@ -32,7 +33,7 @@ namespace Health_Organizer
             this.InitializeComponent();
             this.InitializeDB();
             HomeScreenImageAnimation.Begin();
-            database = App.database;
+            this.database = App.database;
         }
 
         private async void InitializeDB()
@@ -128,6 +129,7 @@ namespace Health_Organizer
                 string output = await LoginServer(data);
                 if (output.Equals("success"))
                 {
+
                     return true;
                 }
                 else
@@ -146,7 +148,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/login.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address+"/login.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("MainPage" + responseString);
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
@@ -155,6 +157,14 @@ namespace Health_Organizer
                 {
                     string username = root.GetNamedString("Username");
                     string userid = root.GetNamedString("UserId").ToString();
+                    string auth_token = root.GetNamedString("Auth_Token");
+                    string organisation = root.GetNamedString("Organisation");
+                    string login_time = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmssfff");
+
+                    this.database = App.database;
+
+                    await Insert_UserDetails_In_Database(userid, username, organisation, login_time, auth_token);
+
                     return "success";
                 }
                 else
@@ -242,7 +252,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:63342/Ic2014/signup.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address+"/signup.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("Signup Output" + responseString);
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
@@ -330,5 +340,30 @@ namespace Health_Organizer
 
             return true;
         }
+
+        private async Task Insert_UserDetails_In_Database(string userid,string username,string org,string lts,string auth )
+        {
+
+             try
+            {
+                string insertQuery = "INSERT INTO UserDetails (UserId,UserName,TimeStamp,Organisation,LoginTimeStamp,Auth_Token)VALUES (@userid, @username, @ts, @organisation, @logintimestamp, @authtoken)";
+                Statement statement = await this.database.PrepareStatementAsync(insertQuery);
+
+                statement.BindTextParameterWithName("@userid",userid);
+                statement.BindTextParameterWithName("@username", username );
+                statement.BindTextParameterWithName("@ts", "2011-01-01 12:00:00");
+                statement.BindTextParameterWithName("@organisation", org);
+                statement.BindTextParameterWithName("@logintimestamp", lts);
+                statement.BindTextParameterWithName("@authtoken", auth);
+                await statement.StepAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MAIN-PAGE---INSERT_USER_DETAILS" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+
+        }
+
     }
 }

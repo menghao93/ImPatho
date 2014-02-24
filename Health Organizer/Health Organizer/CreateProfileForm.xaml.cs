@@ -765,7 +765,7 @@ namespace Health_Organizer
 
                 /*THIS IS THE ONLY REGION WHERE WE ARE SUPPOSED TO ENTER THE PID OF THE FORM - TIMESTAMP~MAC*/
                 /*HENCE CHANGE THE PID FROM ONLY DATE TIME TO DATETIME + MAC*/
-                statement.BindTextParameterWithName("@pid", DateTime.Now.ToString());
+                statement.BindTextParameterWithName("@pid", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
                 statement.BindTextParameterWithName("@fName", profileFirstName.Text);
                 statement.BindTextParameterWithName("@lName", profileLastName.Text);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
