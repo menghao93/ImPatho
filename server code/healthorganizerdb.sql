@@ -3,12 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 27, 2014 at 05:14 PM
+-- Generation Time: Feb 24, 2014 at 12:15 PM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET time_zone = "+05:30";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -29,7 +29,7 @@ USE `healthorganizerdb`;
 --
 
 CREATE TABLE IF NOT EXISTS `address` (
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `ZIP` int(11) NOT NULL,
   `Street` text NOT NULL,
   `Userid` int(11) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `addresszip` (
 --
 
 CREATE TABLE IF NOT EXISTS `medicaldetails` (
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `DateVisited` varchar(100) NOT NULL,
   `Age` int(11) NOT NULL,
   `BloodGlucose` int(11) DEFAULT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `medicaldetails` (
 
 CREATE TABLE IF NOT EXISTS `medicaldetailsmedicine` (
   `TimeStamp` text NOT NULL,
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `DateVisited` varchar(100) NOT NULL,
   `Medicine` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `medicaldetailsmedicine` (
 
 CREATE TABLE IF NOT EXISTS `medicaldetailsvaccine` (
   `TimeStamp` text NOT NULL,
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `DateVisited` varchar(100) NOT NULL,
   `Vaccine` varchar(200) NOT NULL,
   `Userid` int(11) NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetails` (
   `Email` text NOT NULL,
   `Mobile` bigint(20) unsigned NOT NULL,
   `EmMobile` bigint(20) unsigned NOT NULL,
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
   `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetails` (
 --
 
 CREATE TABLE IF NOT EXISTS `mutabledetailsaddiction` (
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `Addiction` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsaddiction` (
 --
 
 CREATE TABLE IF NOT EXISTS `mutabledetailsallergy` (
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200) NOT NULL,
   `Allergy` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsallergy` (
 --
 
 CREATE TABLE IF NOT EXISTS `mutabledetailsoperation` (
-  `PID` int(11) NOT NULL,
+  `PID` varchar(200)NOT NULL,
   `Operation` varchar(500) NOT NULL,
   `Userid` int(11) NOT NULL,
   `TimeStamp` text NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `mutabledetailsoperation` (
 --
 
 CREATE TABLE IF NOT EXISTS `patient` (
-  `PID` int(11) NOT NULL AUTO_INCREMENT,
+  `PID` varchar(200)NOT NULL,
   `FirstName` text NOT NULL,
   `LastName` text NOT NULL,
   `BloodGroup` text NOT NULL,
@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `TimeStamp` text NOT NULL,
   `ServerTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2147483647 ;
 
 -- --------------------------------------------------------
 
@@ -248,7 +248,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `Email_2` (`Email`),
   UNIQUE KEY `Organisation` (`Organisation`),
   FULLTEXT KEY `Password` (`Password`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`Userid`, `Username`, `Password`, `Email`, `Organisation`, `Auth_Token`, `Confirmation`) VALUES
+(1, 'abc', 'a9993e364706816aba3e25717850c26c9cd0d89d', 'abc@abc.com', 'abc', 'c20ad4d76fe97759aa27a0c99bff6710', 'true');
 
 --
 -- Constraints for dumped tables

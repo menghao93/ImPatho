@@ -26,8 +26,9 @@ else if(!empty($username)&&(!empty($password))){
         //the log-in is OK so set the username and user ID cookies and redirect to the home page
         $row = mysqli_fetch_array($result);
         if($row['Confirmation']=='true'){
-                $data=array('error'=>'Success','UserId'=>$row['Userid'],'Username'=>$row['Username']);
-                echo json_encode($data);
+            $data=array('error'=>'Success','UserId'=>$row['Userid'],'Username'=>$row['Username'],'Auth_Token'=>$row['Auth_Token'],
+                'Organisation' => $row['Organisation']);
+            echo json_encode($data);
         }else{
             $data=array('error'=>'Please verify your email address');
             echo json_encode($data);
