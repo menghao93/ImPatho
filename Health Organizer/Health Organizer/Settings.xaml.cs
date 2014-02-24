@@ -151,6 +151,8 @@ namespace Health_Organizer
                 //JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
                 //string error = root.GetNamedString("query");
                 await aftergetFromServer(error);
+                string userid = await getUserId();
+                updateTimeStamp(userid);
                 return "done";
             }
             return "Check internet Connection";
