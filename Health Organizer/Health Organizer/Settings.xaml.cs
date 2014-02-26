@@ -43,7 +43,8 @@ namespace Health_Organizer
         void SettingsFlyout1_BackClick(object sender, BackClickEventArgs e)
         {
             flyout_border.Child = null;
-            
+            SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
         }
 
         void SettingsFlyout1_Unloaded(object sender, RoutedEventArgs e)
@@ -52,6 +53,7 @@ namespace Health_Organizer
             {
                 _p.IsOpen = false;
             }
+            SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         void SettingsFlyout1_Tapped(object sender, TappedRoutedEventArgs e)
@@ -91,26 +93,33 @@ namespace Health_Organizer
         //sync functions 
         private async void SettingsSynClicked(object sender, RoutedEventArgs e)
         {
+            SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
             if (ExtraModules.IsInternet())
             {
                 string timestamp = await getTimeStamp();//"1/25/2014 3:34:06 AM";
                 string userid = await getUserId();
                 string auth_token = await getAuthToken();
-                string statements = await sendToServer(timestamp,userid);
+                string statements = await sendToServer(timestamp, userid);
                 var data = new List<KeyValuePair<string, string>>
                      {
                          new KeyValuePair<string, string>("userid",userid),
                          new KeyValuePair<string, string>("auth_token", auth_token),
                          new KeyValuePair<string, string>("updatestatements",statements)
                       };
-                  var datatorecieve = new List<KeyValuePair<string, string>>
+                var datatorecieve = new List<KeyValuePair<string, string>>
                      {
                          new KeyValuePair<string, string>("userid",userid),
                          new KeyValuePair<string, string>("auth_token", auth_token),
                          new KeyValuePair<string, string>("timestamp",timestamp)
                       };
-               await  Uploadtoserver(data);
-               await getfromserver(datatorecieve);
+                
+                await Uploadtoserver(data);
+                await getfromserver(datatorecieve);
+                SettingsWaitTextBlock.Text = "Done";
+            }
+            else
+            {
+                SettingsWaitTextBlock.Text = "Failed";
             }
         }
 
@@ -123,9 +132,9 @@ namespace Health_Organizer
                 var responseString = await response.Content.ReadAsStringAsync();
                 try
                 {
-                Debug.WriteLine("Sync Output" + responseString);
-                   // JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
-                   // string error = root.GetNamedString("error");
+                    Debug.WriteLine("Sync Output" + responseString);
+                    // JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
+                    // string error = root.GetNamedString("error");
                 }
                 catch (Exception ex)
                 {
@@ -137,7 +146,7 @@ namespace Health_Organizer
             {
                 Debug.WriteLine("Check internet Connection");
             }
-        }   
+        }
 
         private async Task<string> getfromserver(List<KeyValuePair<string, string>> values)
         {
@@ -162,14 +171,14 @@ namespace Health_Organizer
         {
             try
             {
-                string[] singleQuery =BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
-                for (int i = 0; i < singleQuery.Length;i++ )
+                string[] singleQuery = BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
+                for (int i = 0; i < singleQuery.Length; i++)
                 //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
                 {
                     Debug.WriteLine(singleQuery[i] + ";");
                     Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
                     statement.EnableColumnsProperty();
-                    await statement.StepAsync();                    
+                    await statement.StepAsync();
                 }
                 Debug.WriteLine("sync complete");
             }
@@ -180,7 +189,7 @@ namespace Health_Organizer
             }
         }
 
-        public async Task<string> sendToServer(string TimeStamp,string userid)
+        public async Task<string> sendToServer(string TimeStamp, string userid)
         {
             string[] tableNames = new string[] { "Patient", "MutableDetails", "MutableDetailsAllergy", 
                 "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
@@ -191,7 +200,7 @@ namespace Health_Organizer
                 for (int i = 0; i < tableNames.Length; i++)
                 {
                     string columnanmes = await getColumnames(tableNames[i]);
-                   Statement statement = await database.PrepareStatementAsync("SELECT "+ columnanmes +" from " + tableNames[i] + " where TimeStamp > '" + TimeStamp+"'");
+                    Statement statement = await database.PrepareStatementAsync("SELECT " + columnanmes + " from " + tableNames[i] + " where TimeStamp > '" + TimeStamp + "'");
                     statement.EnableColumnsProperty();
                     while (await statement.StepAsync())
                     {
@@ -204,7 +213,7 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ","+userid+");";
+                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + "," + userid + ");";
                     }
                 }
                 Debug.WriteLine("output: " + output);
@@ -243,34 +252,37 @@ namespace Health_Organizer
 
         private async Task<string> getUserId()
         {
-            String userid="";
-            try{
-            Statement statement = await database.PrepareStatementAsync("SELECT UserId FROM UserDetails");
-            statement.EnableColumnsProperty();
-             while (await statement.StepAsync())
-                    {
-                       userid=statement.Columns["UserId"];
-                    }
-        }
-              catch (Exception ex)
+            String userid = "";
+            try
+            {
+                Statement statement = await database.PrepareStatementAsync("SELECT UserId FROM UserDetails");
+                statement.EnableColumnsProperty();
+                while (await statement.StepAsync())
+                {
+                    userid = statement.Columns["UserId"];
+                }
+            }
+            catch (Exception ex)
             {
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                 Debug.WriteLine("Settings---getuserid" + "\n" + ex.Message + "\n" + result.ToString());
             }
-             return userid;
+            return userid;
         }
 
         private async Task<string> getAuthToken()
         {
             String auth_token = "";
-         try{
-            Statement statement = await database.PrepareStatementAsync("SELECT Auth_Token FROM UserDetails");
-            statement.EnableColumnsProperty();
-            while (await statement.StepAsync())
+            try
             {
-                auth_token = statement.Columns["Auth_Token"];
+                Statement statement = await database.PrepareStatementAsync("SELECT Auth_Token FROM UserDetails");
+                statement.EnableColumnsProperty();
+                while (await statement.StepAsync())
+                {
+                    auth_token = statement.Columns["Auth_Token"];
+                }
             }
-            } catch (Exception ex)
+            catch (Exception ex)
             {
                 var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
                 Debug.WriteLine("Settings---getAuthtoken" + "\n" + ex.Message + "\n" + result.ToString());
@@ -281,13 +293,14 @@ namespace Health_Organizer
         private async Task<string> getTimeStamp()
         {
             String timestamp = "";
-            try{
-            Statement statement = await database.PrepareStatementAsync("SELECT TimeStamp FROM UserDetails");
-            statement.EnableColumnsProperty();
-            while (await statement.StepAsync())
+            try
             {
-                timestamp = statement.Columns["TimeStamp"];
-            }
+                Statement statement = await database.PrepareStatementAsync("SELECT TimeStamp FROM UserDetails");
+                statement.EnableColumnsProperty();
+                while (await statement.StepAsync())
+                {
+                    timestamp = statement.Columns["TimeStamp"];
+                }
             }
             catch (Exception ex)
             {
@@ -299,12 +312,13 @@ namespace Health_Organizer
 
         private async void updateTimeStamp(String Userid)
         {
-            try{
-            String updateQuery = "Update UserDetails Set TimeStamp = @ts Where UserId = @userid";
-            Statement statement = await this.database.PrepareStatementAsync(updateQuery);
-            statement.BindTextParameterWithName("@userid",Userid);
-            statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
-            await statement.StepAsync();
+            try
+            {
+                String updateQuery = "Update UserDetails Set TimeStamp = @ts Where UserId = @userid";
+                Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+                statement.BindTextParameterWithName("@userid", Userid);
+                statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
+                await statement.StepAsync();
             }
             catch (Exception ex)
             {
@@ -312,10 +326,10 @@ namespace Health_Organizer
                 Debug.WriteLine("Settings---UPDATETIMESTAMP" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
-      
+
         private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
 
+        }
     }
-}
 }
