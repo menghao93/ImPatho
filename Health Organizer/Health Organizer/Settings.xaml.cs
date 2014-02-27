@@ -80,7 +80,7 @@ namespace Health_Organizer
 
             this.HorizontalAlignment = HorizontalAlignment.Right;
             b.Child = this;
-
+           
             _p.Child = b;
             _p.IsOpen = true;
         }
@@ -213,10 +213,10 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + "," + userid + ");";
+                        output += "REPLACE into " + tableNames[i].ToLower() + "( " + columnanmes + ",Userid) Values (" + values.ToString() + ","+userid+");";
                     }
                 }
-                Debug.WriteLine("output: " + output);
+                Debug.WriteLine("output: " + output.ToString());
                 return output;
             }
             catch (Exception ex)
@@ -326,10 +326,32 @@ namespace Health_Organizer
                 Debug.WriteLine("Settings---UPDATETIMESTAMP" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
-
-        private void SettingsLogoutClicked(object sender, RoutedEventArgs e)
+      
+        private async void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
-
+            Debug.WriteLine("<<<<<<<<<<<<<<<<<"+ await getOrganisationName()+">>>>>>>>>>>>>>>");
+    }
+        public  async Task<String> getOrganisationName()
+        {
+            this.database = App.database;
+            String organisation = "abc";
+            try
+            {
+                string query = "SELECT * FROM UserDetails WHERE Organisation Not LIKE '' Limit 1;";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    organisation = statement.Columns["Organisation"];
+                }
+                return organisation;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MAIN-PAGE---CHECK--LOGIN" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return organisation;
         }
     }
 }

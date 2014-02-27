@@ -17,10 +17,10 @@ SET time_zone = "+05:30";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `healthorganizerdb`
+-- Database: `healthorganize`
 --
-CREATE DATABASE IF NOT EXISTS `healthorganizerdb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `healthorganizerdb`;
+CREATE DATABASE IF NOT EXISTS `healthorganize` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `healthorganize`;
 
 -- --------------------------------------------------------
 
@@ -244,11 +244,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Auth_Token` varchar(100) NOT NULL,
   `Confirmation` varchar(10) NOT NULL DEFAULT 'false',
   PRIMARY KEY (`Userid`),
-  UNIQUE KEY `Username_2` (`Username`),
-  UNIQUE KEY `Email_2` (`Email`),
+  UNIQUE KEY `Username` (`Username`),
+  UNIQUE KEY `Email` (`Email`),
   UNIQUE KEY `Organisation` (`Organisation`),
   FULLTEXT KEY `Password` (`Password`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MYISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`
