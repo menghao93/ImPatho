@@ -102,30 +102,34 @@
                         </StackPanel>
                     </DataTemplate>-->
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Width="500" Height="130">
+                            <StackPanel Orientation="Horizontal" Width="500" Height="130" >
                                 <Border Height="110" Width="110" Margin="10,10,0,10">
                                     <Image Source="{Binding Image}" Stretch="UniformToFill"/>
                                 </Border>
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,0,0,10">
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="10,10,0,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" >
                                         <TextBlock Text="{Binding Name}" 
-                       Margin="10,0,0,0" Height="20" TextTrimming="WordEllipsis" />
+                        Height="20" TextTrimming="WordEllipsis" />
+                                        <TextBlock Text=" , " 
+                        Height="20" TextTrimming="WordEllipsis" />
                                         <TextBlock Text="{Binding City}" 
-                       Margin="20,0,0,0" Height="20" TextTrimming="WordEllipsis" />
+                        Height="20" TextTrimming="WordEllipsis" Margin="2,0,0,0"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,0,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" >
                                         <TextBlock Text="{Binding Occupation}" 
-                       Margin="10,2,0,0" Width="350" Height="14" TextTrimming="WordEllipsis" 
+                       Margin="0,2,0,0" Width="auto" Height="18" TextTrimming="WordEllipsis" 
                        HorizontalAlignment="Left" Opacity="0.49"/>
+                                        <TextBlock Text=" , " 
+                        Height="20" TextTrimming="WordEllipsis" />
                                         <TextBlock Text="{Binding Sex}" 
-                       Margin="10,2,0,0" Width="350" Height="14" TextTrimming="WordEllipsis" 
-                       HorizontalAlignment="Left" Opacity="0.49"/>
+                       Margin="2,2,0,0" Width="auto" Height="18" TextTrimming="WordEllipsis" 
+                       HorizontalAlignment="Left" Opacity="0.49" />
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
                                         <TextBlock Text="Family Background:" 
-                       Margin="10,2,0,0" Width="350" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+                       Margin="0,2,0,0" Width="350" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding FamilyBG}" 
-                       Margin="10,2,0,0" Width="350" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+                       Margin="0,2,0,0" Width="350" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
