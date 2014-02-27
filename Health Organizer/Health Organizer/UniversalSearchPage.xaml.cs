@@ -225,5 +225,13 @@ namespace Health_Organizer
                 NavigationHelper.GoBack();
             }
         }
+
+        private void universalGridViewClicked(object sender, ItemClickEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(CreateNewVisit), ((AnalysisSampleDataItem)e.ClickedItem).UniqueId);
+            }
+        }
     }
 }
