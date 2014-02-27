@@ -31,12 +31,28 @@ namespace Health_Organizer
         public MainPage()
         {
             this.InitializeComponent();
-            this.InitializeDB();
+            
             HomeScreenImageAnimation.Begin();
-            this.database = App.database;
+            call_Check_login();
+           
+            
         }
 
-        private async void InitializeDB()
+        private async void call_Check_login()
+        {
+            await this.InitializeDB();
+            this.database = App.database;
+             if (await checklogin())
+            {
+                 if (this.Frame != null)
+                    {
+                         this.Frame.Navigate(typeof(MainMenuPage));
+                    }
+            }
+        }
+      
+        
+        private async Task InitializeDB()
         {
             await App.InitializeDB();
         }
@@ -339,6 +355,30 @@ namespace Health_Organizer
             }
 
             return true;
+        }
+
+        private async Task<bool> checklogin()
+        {
+            String count = "";
+            try
+            {
+                string query = "SELECT Count(*) as Count FROM UserDetails WHERE Organisation Not LIKE '' ;";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    count = statement.Columns["Count"];
+                }
+                if(count != "0"){
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MAIN-PAGE---CHECK--LOGIN" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return false;
         }
 
         private async Task Insert_UserDetails_In_Database(string userid,string username,string org,string lts,string auth )
