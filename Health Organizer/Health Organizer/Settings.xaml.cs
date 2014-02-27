@@ -61,8 +61,10 @@ namespace Health_Organizer
             e.Handled = true;
         }
 
-        public void ShowCustom()
+        public async void ShowCustom()
         {
+            SettingsOrganizationName.Text = await getOrganisationName();
+            SettingsUserName.Text = await getUserName();
             _p = new Popup();
             Border b = new Border();
             flyout_border = b;
@@ -80,7 +82,7 @@ namespace Health_Organizer
 
             this.HorizontalAlignment = HorizontalAlignment.Right;
             b.Child = this;
-           
+
             _p.Child = b;
             _p.IsOpen = true;
         }
@@ -112,7 +114,7 @@ namespace Health_Organizer
                          new KeyValuePair<string, string>("auth_token", auth_token),
                          new KeyValuePair<string, string>("timestamp",timestamp)
                       };
-                
+
                 await Uploadtoserver(data);
                 await getfromserver(datatorecieve);
                 SettingsWaitTextBlock.Text = "Done";
@@ -213,7 +215,7 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i].ToLower() + "( " + columnanmes + ",Userid) Values (" + values.ToString() + ","+userid+");";
+                        output += "REPLACE into " + tableNames[i].ToLower() + "( " + columnanmes + ",Userid) Values (" + values.ToString() + "," + userid + ");";
                     }
                 }
                 Debug.WriteLine("output: " + output.ToString());
@@ -326,12 +328,12 @@ namespace Health_Organizer
                 Debug.WriteLine("Settings---UPDATETIMESTAMP" + "\n" + ex.Message + "\n" + result.ToString());
             }
         }
-      
+
         private async void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("<<<<<<<<<<<<<<<<<"+ await getOrganisationName()+">>>>>>>>>>>>>>>");
-    }
-        public  async Task<String> getOrganisationName()
+            Debug.WriteLine("<<<<<<<<<<<<<<<<<" + await getOrganisationName() + ">>>>>>>>>>>>>>>");
+        }
+        public async Task<String> getOrganisationName()
         {
             this.database = App.database;
             String organisation = "abc";
@@ -352,6 +354,28 @@ namespace Health_Organizer
                 Debug.WriteLine("MAIN-PAGE---CHECK--LOGIN" + "\n" + ex.Message + "\n" + result.ToString());
             }
             return organisation;
+        }
+        public async Task<String> getUserName()
+        {
+            this.database = App.database;
+            String username = "abc";
+            try
+            {
+                string query = "SELECT * FROM UserDetails WHERE Organisation Not LIKE '' Limit 1;";
+                Statement statement = await this.database.PrepareStatementAsync(query);
+                statement.EnableColumnsProperty();
+                if (await statement.StepAsync())
+                {
+                    username = statement.Columns["UserName"];
+                }
+                return username;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MAIN-PAGE---CHECK--LOGIN" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return username;
         }
     }
 }

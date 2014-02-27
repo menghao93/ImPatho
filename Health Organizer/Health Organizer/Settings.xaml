@@ -19,11 +19,11 @@
             <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,-10,0">
 
                 <!-- Section 1 header -->
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" />
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" Name="SettingsOrganizationName"/>
 
                 <!-- Section 1 body -->
 
-                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap" Text="Username"/>
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap" Text="Username" Name="SettingsUserName"/>
 
             </StackPanel>
             <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" HorizontalAlignment="Center" Icon="OtherUser"/>
