@@ -30,10 +30,11 @@ namespace Health_Organizer
 
         public MainPage()
         {
+            call_Check_login();
+    
             this.InitializeComponent();
             
             HomeScreenImageAnimation.Begin();
-            call_Check_login();
            
             
         }

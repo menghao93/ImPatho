@@ -163,13 +163,15 @@ namespace Health_Organizer
             try
             {
                 string[] singleQuery =BigQuery.Split(new string[] { ";" }, StringSplitOptions.None);
+                Statement statement;
                 for (int i = 0; i < singleQuery.Length;i++ )
                 //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
                 {
                     Debug.WriteLine(singleQuery[i] + ";");
-                    Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
+                    statement = await this.database.PrepareStatementAsync(singleQuery[i]);
                     statement.EnableColumnsProperty();
-                    await statement.StepAsync();                    
+                    await statement.StepAsync();
+                    statement.Reset();
                 }
                 Debug.WriteLine("sync complete");
             }
