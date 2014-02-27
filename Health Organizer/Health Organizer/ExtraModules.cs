@@ -17,7 +17,7 @@ namespace Health_Organizer
     class ExtraModules
     {
         public static string datePatt = @"yyyy-MM-d HH:mm:ss";
-        public static string domain_address = "http://localhost:63342/Ic2014";
+        public static string domain_address = "http://pharmassist.co.in/ic2k14";
         public static string RemoveStringSpace(String InputString)
         {
             String OutputString = "";

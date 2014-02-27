@@ -102,10 +102,10 @@ namespace Health_Organizer
             }
 
             //below code is to be commented when server is working
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(MainMenuPage));
-            }
+            //if (this.Frame != null)
+            //{
+            //    this.Frame.Navigate(typeof(MainMenuPage));
+            //}
 
             if (!error.Equals(""))
             {

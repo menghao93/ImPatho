@@ -204,10 +204,10 @@ namespace Health_Organizer
                         }
                         String values = String.Join(", ", temp);
 
-                        output += "REPLACE into " + tableNames[i] + "( " + columnanmes + ",Userid) values (" + values + ","+userid+");";
+                        output += "REPLACE into " + tableNames[i].ToLower() + "( " + columnanmes + ",Userid) Values (" + values.ToString() + ","+userid+");";
                     }
                 }
-                Debug.WriteLine("output: " + output);
+                Debug.WriteLine("output: " + output.ToString());
                 return output;
             }
             catch (Exception ex)

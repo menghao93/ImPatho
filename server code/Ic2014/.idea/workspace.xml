@@ -76,18 +76,18 @@
       <file leaf-file-name="connection.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/connection.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="3" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="442">
+            <state line="14" column="52" selection-start="282" selection-end="282" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="442">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="login.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="login.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/login.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="5" selection-start="678" selection-end="1182" vertical-scroll-proportion="0.0" vertical-offset="578" max-vertical-offset="782">
+            <state line="29" column="41" selection-start="1073" selection-end="1073" vertical-scroll-proportion="1.3694445" vertical-offset="0" max-vertical-offset="799">
               <folding>
-                <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+                <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
               </folding>
             </state>
           </provider>
@@ -106,20 +106,18 @@
         <entry file="file://$PROJECT_DIR$/getSynctime.php">
           <provider selected="true" editor-type-id="text-editor">
             <state line="11" column="19" selection-start="398" selection-end="413" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="527">
-              <folding>
-                <marker date="1389252888339" expanded="true" signature="313:390" placeholder="SELECT * FRO..users..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="updatetomachine.php" pinned="true" current="true" current-in-tab="true">
+      <file leaf-file-name="updatetomachine.php" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/updatetomachine.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="0" selection-start="2354" selection-end="2354" vertical-scroll-proportion="2.518732" vertical-offset="146" max-vertical-offset="1156">
+            <state line="55" column="1" selection-start="2027" selection-end="2027" vertical-scroll-proportion="0.0" vertical-offset="935" max-vertical-offset="1241">
               <folding>
-                <marker date="1390833363080" expanded="true" signature="222:299" placeholder="SELECT * FRO..users..." />
-                <marker date="1390833363080" expanded="true" signature="1844:2528" placeholder="Insert Or Re..." />
+                <marker date="1390842380744" expanded="true" signature="222:299" placeholder="SELECT * FRO..users..." />
+                <marker date="1390842380744" expanded="true" signature="1850:2534" placeholder="Insert Or Re..." />
               </folding>
             </state>
           </provider>
@@ -128,10 +126,8 @@
       <file leaf-file-name="UpdateServerdata.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UpdateServerdata.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="26" selection-start="429" selection-end="429" vertical-scroll-proportion="-1.3076923" vertical-offset="204" max-vertical-offset="816">
-              <folding>
-                <marker date="1390675639019" expanded="true" signature="287:358" placeholder="SELECT * FRO..users..." />
-              </folding>
+            <state line="14" column="26" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="816">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -170,13 +166,13 @@
         <option value="$PROJECT_DIR$/constants.php" />
         <option value="$PROJECT_DIR$/connection.php" />
         <option value="$PROJECT_DIR$/signupverification.php" />
-        <option value="$PROJECT_DIR$/login.php" />
         <option value="$PROJECT_DIR$/signup.php" />
         <option value="$PROJECT_DIR$/SendingMail.php" />
         <option value="$PROJECT_DIR$/getSynctime.php" />
         <option value="$PROJECT_DIR$/UpdateServerdata.php" />
         <option value="$PROJECT_DIR$/upload.php" />
         <option value="$PROJECT_DIR$/updatetomachine.php" />
+        <option value="$PROJECT_DIR$/login.php" />
       </list>
     </option>
   </component>
@@ -215,7 +211,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -236,6 +231,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -274,12 +270,12 @@
       <ConfigurationWrapper RunnerId="PhpRunner" />
       <method />
     </configuration>
+    <configuration default="true" type="openshift-deploy" factoryName="OpenShift Deployment">
+      <method />
+    </configuration>
     <configuration default="true" type="#org.osmorc.OsgiConfigurationType" factoryName="OSGi Bundles" vmParameters="" programParameters="" includeAllBundlesInClassPath="false" workingDir="" useAlternativeJre="false" alternativeJrePath="" frameworkStartLevel="1" defaultStartLevel="5" generateWorkingDir="false">
       <framework instance="" />
       <additinalProperties startConsole="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="openshift-deploy" factoryName="OpenShift Deployment">
       <method />
     </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
@@ -321,12 +317,12 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
-      <method />
-    </configuration>
     <configuration default="true" type="GoogleAppEngineDevServer" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
       <server-settings />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -343,6 +339,9 @@
       <method />
     </configuration>
     <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="cloudbees-deploy" factoryName="CloudBees Deployment">
       <method />
     </configuration>
     <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
@@ -378,9 +377,6 @@
       <option name="screenWidth" value="0" />
       <option name="url" value="http://" />
       <option name="usbDebugPort" value="7936" />
-      <method />
-    </configuration>
-    <configuration default="true" type="cloudbees-deploy" factoryName="CloudBees Deployment">
       <method />
     </configuration>
     <configuration default="true" type="cloudfoundry-deploy" factoryName="CloudFoundry Deployment">
@@ -580,14 +576,13 @@
       <option name="CONTEXT_PROVIDER" />
       <method />
     </configuration>
-    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails" singleton="true">
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
+      <setting name="path" value="" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
-      <setting name="depsClasspath" value="false" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="false" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="file://$PROJECT_DIR$" />
+      <setting name="debug" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
@@ -596,13 +591,14 @@
       <option name="PROGRAM_PARAMETERS" />
       <method />
     </configuration>
-    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails" singleton="true">
       <module name="" />
-      <setting name="path" value="" />
       <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="file://$PROJECT_DIR$" />
-      <setting name="debug" value="false" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -693,6 +689,7 @@
       <ExternalSystemSettings>
         <option name="externalProjectPath" />
         <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -787,14 +784,21 @@
       <workItem from="1390673350077" duration="13337000" />
       <workItem from="1390754305852" duration="2725000" />
       <workItem from="1390824284405" duration="3044000" />
+      <workItem from="1390842165056" duration="1493000" />
+      <workItem from="1390902627409" duration="149000" />
+      <workItem from="1390989930837" duration="136000" />
+      <workItem from="1390990280769" duration="594000" />
+      <workItem from="1392927080972" duration="1060000" />
+      <workItem from="1393177079020" duration="1202000" />
+      <workItem from="1393237411188" duration="761000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67633000" />
+    <option name="totallyTimeSpent" value="73028000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -817,7 +821,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24304539" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32025117" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32025117" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -827,7 +831,7 @@
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USERS">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
     </option>
   </component>
@@ -877,7 +881,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="28" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -892,9 +896,7 @@
     <entry file="file://$PROJECT_DIR$/getSynctime.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="0" selection-start="624" selection-end="624" vertical-scroll-proportion="0.0" vertical-offset="214" max-vertical-offset="799">
-          <folding>
-            <marker date="1389252888339" expanded="true" signature="313:390" placeholder="SELECT * FRO..users..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -938,7 +940,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="28" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -953,9 +955,7 @@
     <entry file="file://$PROJECT_DIR$/getSynctime.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="34" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="435" max-vertical-offset="816">
-          <folding>
-            <marker date="1389252888339" expanded="true" signature="313:390" placeholder="SELECT * FRO..users..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -992,7 +992,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="28" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -1037,7 +1037,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="56" selection-start="915" selection-end="915" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -1072,7 +1072,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="26" selection-start="397" selection-end="397" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -1100,7 +1100,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="92" selection-start="951" selection-end="951" vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="697">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -1128,7 +1128,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="122" selection-start="593" selection-end="678" vertical-scroll-proportion="0.0" vertical-offset="214" max-vertical-offset="714">
           <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
@@ -1150,22 +1150,6 @@
         <state line="353" column="12" selection-start="9366" selection-end="9373" vertical-scroll-proportion="0.33333334" vertical-offset="5537" max-vertical-offset="47787" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="442">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/login.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="5" selection-start="678" selection-end="1182" vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="782">
-          <folding>
-            <marker date="1389112019541" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/signup.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="93" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1666">
@@ -1183,19 +1167,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/constants.php">
+    <entry file="file://$PROJECT_DIR$/getSynctime.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="2" selection-start="175" selection-end="175" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="323">
+        <state line="11" column="19" selection-start="398" selection-end="413" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="527">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/getSynctime.php">
+    <entry file="file://$PROJECT_DIR$/UpdateServerdata.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="19" selection-start="398" selection-end="413" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="527">
-          <folding>
-            <marker date="1389252888339" expanded="true" signature="313:390" placeholder="SELECT * FRO..users..." />
-          </folding>
+        <state line="14" column="26" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="816">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1206,21 +1188,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UpdateServerdata.php">
+    <entry file="file://$PROJECT_DIR$/updatetomachine.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="429" selection-end="429" vertical-scroll-proportion="-1.3076923" vertical-offset="204" max-vertical-offset="816">
+        <state line="55" column="1" selection-start="2027" selection-end="2027" vertical-scroll-proportion="0.0" vertical-offset="935" max-vertical-offset="1241">
           <folding>
-            <marker date="1390675639019" expanded="true" signature="287:358" placeholder="SELECT * FRO..users..." />
+            <marker date="1390842380744" expanded="true" signature="222:299" placeholder="SELECT * FRO..users..." />
+            <marker date="1390842380744" expanded="true" signature="1850:2534" placeholder="Insert Or Re..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/updatetomachine.php">
+    <entry file="file://$PROJECT_DIR$/constants.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="0" selection-start="2354" selection-end="2354" vertical-scroll-proportion="2.518732" vertical-offset="146" max-vertical-offset="1156">
+        <state line="13" column="2" selection-start="175" selection-end="175" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="323">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="52" selection-start="282" selection-end="282" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="442">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="41" selection-start="1073" selection-end="1073" vertical-scroll-proportion="1.3694445" vertical-offset="0" max-vertical-offset="799">
           <folding>
-            <marker date="1390833363080" expanded="true" signature="222:299" placeholder="SELECT * FRO..users..." />
-            <marker date="1390833363080" expanded="true" signature="1844:2528" placeholder="Insert Or Re..." />
+            <marker date="1393177681727" expanded="true" signature="594:669" placeholder="Select * FRO..users..." />
           </folding>
         </state>
       </provider>
