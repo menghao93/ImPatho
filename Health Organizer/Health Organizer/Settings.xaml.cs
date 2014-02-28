@@ -96,6 +96,7 @@ namespace Health_Organizer
         private async void SettingsSynClicked(object sender, RoutedEventArgs e)
         {
             SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            SettingsSyncButton.IsEnabled = false;
             if (ExtraModules.IsInternet())
             {
                 string timestamp = await getTimeStamp();//"1/25/2014 3:34:06 AM";
@@ -123,6 +124,7 @@ namespace Health_Organizer
             {
                 SettingsWaitTextBlock.Text = "Failed";
             }
+            SettingsSyncButton.IsEnabled = true;
         }
 
         private async Task Uploadtoserver(List<KeyValuePair<string, string>> values)

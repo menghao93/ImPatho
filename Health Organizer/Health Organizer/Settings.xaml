@@ -6,34 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    IconSource="Assets/SmallLogo.png"
     Title="Settings"
     d:DesignWidth="360">
 
-    <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
-    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="288">
-
-        <!-- The StackPanel(s) below define individual content sections -->
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="316" Orientation="Vertical" Height="367">
         <StackPanel Orientation="Horizontal">
-            <!-- Content Section 1-->
-            <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,-10,0">
+        <StackPanel Orientation="Vertical" Width="132">
+            <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,0,0">
 
-                <!-- Section 1 header -->
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" Name="SettingsOrganizationName"/>
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" Name="SettingsOrganizationName" TextWrapping="Wrap"/>
 
-                <!-- Section 1 body -->
 
-                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap" Text="Username" Name="SettingsUserName"/>
+                    <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,0" TextWrapping="Wrap" Text="Username" Name="SettingsUserName" />
 
-            </StackPanel>
-            <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" HorizontalAlignment="Center" Icon="OtherUser"/>
+                </StackPanel>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Sync your data"  HorizontalAlignment="Left" Margin="0,50,0,0"/>
         </StackPanel>
-
-        <!-- Define more Content Sections below as necessary -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,-21,0">
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Sync your data" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,22,20"/>
-            <AppBarButton Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="Center" Width="87" Name="SettingsSyncButton"/>
-            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Name="SettingsWaitTextBlock" Text="Syncing" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,22,0" FontSize="13" Visibility="Collapsed"/>
+        <StackPanel Orientation="Vertical" Width="81" >
+            <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" Margin="0,0,0,0" HorizontalAlignment="Center" Icon="OtherUser"/>
+            <AppBarButton Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="left"  Name="SettingsSyncButton"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical">
+                <TextBlock Style="{StaticResource BaseTextBlockStyle}" Name="SettingsWaitTextBlock" Text="Syncing" Margin="10,105,0,0" FontSize="13" Visibility="Collapsed"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,30,20"/>

@@ -404,6 +404,21 @@ namespace Health_Organizer
             }
 
         }
+        //reset the password
+        private void ForgotPwdResetClickedCallisto(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ForgotPwdCancelClicked(object sender, RoutedEventArgs e)
+        {
+            MainPageForgotPasswordCustomDialog.IsOpen = false;
+        }
+
+        private void ForgotPwdClicked(object sender, TappedRoutedEventArgs e)
+        {
+            MainPageForgotPasswordCustomDialog.IsOpen = true;
+        }
 
     }
 }
