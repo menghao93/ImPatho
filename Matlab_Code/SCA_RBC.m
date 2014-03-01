@@ -22,7 +22,7 @@ function varargout = SCA_RBC(varargin)
 
 % Edit the above text to modify the response to help SCA_RBC
 
-% Last Modified by GUIDE v2.5 04-Dec-2013 09:34:20
+% Last Modified by GUIDE v2.5 28-Feb-2014 08:42:38
 
 % Begin initialization code - DO NOT EDIT
 
@@ -112,15 +112,27 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+    
 if isfield(handles, 'filePath')
+    if handles.filePath == 0
+        handles.error = 'Choose file';
+        guidata(hObject,handles);
+        errorText_CreateFcn(hObject, eventdata, handles)
+        return;
+    end
     filesDir = handles.filePath;
+    handles.error = '';
+    guidata(hObject,handles);
+    errorText_CreateFcn(hObject, eventdata, handles)
 else
+    handles.error = 'Choose file';
+    guidata(hObject,handles);
+    errorText_CreateFcn(hObject, eventdata, handles)
     display('Choose file');
     return;
 end
 
-srcFiles = dir(strcat(filesDir,'\','*jpg'));  % the folder in which ur images exists
+srcFiles = dir(strcat(filesDir,'\','*JPG'));  % the folder in which ur images exists
 
 % arrays to store result of test of each image
 imageFilesNames = [];
@@ -139,24 +151,43 @@ for i = 1 : length(srcFiles)
     %figure, imshow(K), title('Original');
 
     %reversing color for better view of objects
-    K = imcomplement(K);
+    %K = imcomplement(K);
     %figure, imshow(K);
 
-    threshold = graythresh(K);
-    bw = im2bw(K,threshold);
+    %bit reduction from an original 8-bit image to a 2-bit image to reduce
+    %brightness
+    %srcBitDepth = 8;
+    %dstBitDepth = 8;
+    %K = bitshift(K, dstBitDepth-srcBitDepth);
+    %figure, imshow(K), title('Original');
+    
+    %threshold = graythresh(K);
+    %bw = im2bw(K,threshold);
+    %bw = im2bw(K);
+    %figure, imshow(bw);
+    
+    %find the edges in the image in order to get shape of cells
+    bw = edge(K,'canny');
     %figure, imshow(bw);
 
-    %fill the holes 
+    %fill the holes
     bwFill = imfill(bw, 'holes');
     %figure, imshow(bwFill), title('binary image with filled holes');
+
+    %remove edges from image
+    se = strel('square',2);
+    bwFill = imopen(bwFill,se);
+    %figure, imshow(bwFill), title('binary image with removed edges');
 
     %remove border objects
     bwNObord = imclearborder(bwFill, 4);
     %figure, imshow(bwNObord), title('cleared border image');
 
-    % remove all object containing fewer than rmPixs pixels
-    rmPixs = 100; % depends on original image size
-    bw = bwareaopen(bwNObord,rmPixs);
+    % remove all object containing fewer than LB pixels and greater than UB
+    LB = 30;
+    UB = 80;
+    bw = xor(bwareaopen(bwNObord,LB),  bwareaopen(bwNObord,UB));
+    %bw = bwareaopen(bwNObord,rmPixs);
     %figure, imshow(bw), title('removed small objects');
 
     if isfield(handles,'eThreshold')
@@ -211,16 +242,24 @@ for i = 1 : length(srcFiles)
         testResults(length(testResults)+1) = 0; % 0 indicates test negative
     end
 
-    title(['Values closer to 1 indicate ',...
-       'sickel cell']);
-
 end
 
-stem(totalArray,countArray);
 display(countArray);
 display(totalArray);
 display(testResults);
-display(imageFilesNames);
+
+%setting values in text fields
+handles.count = mat2str(countArray);
+guidata(hObject,handles);
+countArray_CreateFcn(hObject, eventdata, handles)
+
+handles.total = mat2str(totalArray);
+guidata(hObject,handles);
+totalArray_CreateFcn(hObject, eventdata, handles)
+
+handles.resultVals = strcat(num2str((sum(testResults)*100)/size(testResults,2)),' % positive result');
+guidata(hObject,handles);
+result_CreateFcn(hObject, eventdata, handles)
 
 return;
 
@@ -361,3 +400,52 @@ ExPath = uigetdir;
 handles.filePath = ExPath;
 guidata(hObject,handles); %save data to handles
 edit1_Callback(hObject, eventdata, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function countArray_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to countArray (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+if isfield(handles,'count')
+    display(handles.count);
+    set(handles.countArray,'String',handles.count);
+else
+    set(hObject,'String','0');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function totalArray_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to totalArray (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+if isfield(handles,'total')
+    set(handles.totalArray,'String',handles.total);
+else
+    set(hObject,'String','0');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function result_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to result (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+if isfield(handles,'resultVals')
+    set(handles.result,'String',handles.resultVals);
+else
+    set(hObject,'String','0');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function errorText_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to errorText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+if isfield(handles,'error')
+    set(handles.errorText,'String',handles.error);
+else
+    set(hObject,'String','');
+end
