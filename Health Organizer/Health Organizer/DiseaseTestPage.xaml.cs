@@ -1,11 +1,14 @@
 ﻿using Health_Organizer.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -121,5 +124,38 @@ namespace Health_Organizer
             settings.Background = new SolidColorBrush(color);
             settings.ShowCustom();
         }
+
+        private async void runexe(object sender, RoutedEventArgs e)
+        {
+            DefaultLaunch();
+        }
+
+        public async void DefaultLaunch()
+        {
+
+            StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+            StorageFile batFile = await local.CreateFileAsync("command.bat", CreationCollisionOption.ReplaceExisting);
+            using (var outputStream = await batFile.OpenStreamForWriteAsync())
+            {
+                using (var sw = new StreamWriter(outputStream, Encoding.GetEncoding("us-ascii")))
+                {
+                    sw.Write("START " + local.Path+"/sca.exe");
+                    sw.Flush();
+                }
+            }
+            string command = "BatRT://" + batFile.Path;
+            bool success = await Windows.System.Launcher.LaunchUriAsync(new Uri(command));
+            if (success)
+            {
+                // batch file executed
+            }
+            else
+            {
+                // batch execution failed
+
+            }
+
+        }             
+      
     }
 }

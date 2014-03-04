@@ -50,6 +50,7 @@
             </Grid>
             
             <Grid Grid.Column="1">
+                <Button Name="exe" Click="runexe" ></Button>
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
 
