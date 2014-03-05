@@ -50,7 +50,6 @@
             </Grid>
             
             <Grid Grid.Column="1">
-                <Button Name="exe" Click="runexe" ></Button>
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
 
@@ -60,6 +59,17 @@
                 </StackPanel>
             </Grid>
             
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="30">
+            <Button Name="DiseaseTestPageRunTest" Click="DiseaseTestPageRunTestClicked">Run Test</Button>
+            <Button Name="DiseaseTestPageCamera" Click="DiseaseTestCameraClicked">Camera</Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="1" Name="ImagesStackPanel"/>
         </Grid>
     </Grid>
 </Page>

@@ -8,7 +8,11 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Imaging;
+using Windows.Media.Capture;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,6 +20,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
@@ -31,6 +36,7 @@ namespace Health_Organizer
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private SettingsFlyout1 settings;
+        int name = 0;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -125,7 +131,7 @@ namespace Health_Organizer
             settings.ShowCustom();
         }
 
-        private async void runexe(object sender, RoutedEventArgs e)
+        private async void DiseaseTestPageRunTestClicked(object sender, RoutedEventArgs e)
         {
             DefaultLaunch();
         }
@@ -155,7 +161,76 @@ namespace Health_Organizer
 
             }
 
-        }             
-      
+        }
+
+        private async void DiseaseTestCameraClicked(object sender, RoutedEventArgs e)
+        {
+            CameraCaptureUI cameraUI = new CameraCaptureUI();
+
+            cameraUI.PhotoSettings.AllowCropping = false;
+            cameraUI.PhotoSettings.MaxResolution = CameraCaptureUIMaxPhotoResolution.MediumXga;
+
+            Windows.Storage.StorageFile capturedMedia =
+                await cameraUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (capturedMedia != null)
+            {
+                using (var streamCamera = await capturedMedia.OpenAsync(FileAccessMode.Read))
+                {
+
+                    BitmapImage bitmapCamera = new BitmapImage();
+                    bitmapCamera.SetSource(streamCamera);
+                    // To display the image in a XAML image object, do this:
+                    // myImage.Source = bitmapCamera;
+
+                    // Convert the camera bitap to a WriteableBitmap object, 
+                    // which is often a more useful format.
+
+                    int width = bitmapCamera.PixelWidth;
+                    int height = bitmapCamera.PixelHeight;
+
+                    WriteableBitmap wBitmap = new WriteableBitmap(width, height);
+
+                    using (var stream = await capturedMedia.OpenAsync(FileAccessMode.Read))
+                    {
+                        wBitmap.SetSource(stream);
+                    }
+                 
+                        string FileName = "MyFile"+name;
+                        Guid BitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+                       
+                           
+                                FileName += ".jpeg";
+                                BitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+                                name++;
+                           
+                     
+
+                        var file = await Windows.Storage.ApplicationData.Current.TemporaryFolder.CreateFileAsync(FileName, CreationCollisionOption.GenerateUniqueName);
+                        using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                        {
+                            BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoderGuid, stream);
+                            Stream pixelStream = wBitmap.PixelBuffer.AsStream();
+                            byte[] pixels = new byte[pixelStream.Length];
+                            await pixelStream.ReadAsync(pixels, 0, pixels.Length);
+
+                            encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore,
+                                                (uint)wBitmap.PixelWidth,
+                                                (uint)wBitmap.PixelHeight,
+                                                96.0,
+                                                96.0,
+                                                pixels);
+                            await encoder.FlushAsync();
+                        }
+                        Image Img = new Image();
+                        Img.Height = 200;
+                        Img.Width = 200;
+                        Img.Source=wBitmap;
+                        ImagesStackPanel.Children.Add(Img);
+                    
+                }
+            }
+
+        }
     }
 }
