@@ -29,7 +29,7 @@ namespace Health_Organizer
     {
         Popup _p;
         static Border flyout_border;
-        private Database database;
+        private static Database database;
 
         public SettingsFlyout1()
         {
@@ -95,8 +95,10 @@ namespace Health_Organizer
         //sync functions 
         private async void SettingsSynClicked(object sender, RoutedEventArgs e)
         {
+            SettingsWaitTextBlock.Text = "Syncing";
             SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            SettingsSyncButton.IsEnabled = false;
+            SettingsSyncButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            settingsProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
             if (ExtraModules.IsInternet())
             {
                 string timestamp = await getTimeStamp();//"1/25/2014 3:34:06 AM";
@@ -125,6 +127,10 @@ namespace Health_Organizer
                 SettingsWaitTextBlock.Text = "Failed";
             }
             SettingsSyncButton.IsEnabled = true;
+            settingsProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            SettingsSyncButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            
+           // SettingsWaitTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private async Task Uploadtoserver(List<KeyValuePair<string, string>> values)
@@ -180,7 +186,7 @@ namespace Health_Organizer
                 //foreach (string singleQuery in BigQuery.Split(new string[] { ";" }, StringSplitOptions.None))
                 {
                     Debug.WriteLine(singleQuery[i] + ";");
-                    Statement statement = await this.database.PrepareStatementAsync(singleQuery[i]);
+                    Statement statement = await SettingsFlyout1.database.PrepareStatementAsync(singleQuery[i]);
                     statement.EnableColumnsProperty();
                     await statement.StepAsync();
                 }
@@ -319,7 +325,7 @@ namespace Health_Organizer
             try
             {
                 String updateQuery = "Update UserDetails Set TimeStamp = @ts Where UserId = @userid";
-                Statement statement = await this.database.PrepareStatementAsync(updateQuery);
+                Statement statement = await SettingsFlyout1.database.PrepareStatementAsync(updateQuery);
                 statement.BindTextParameterWithName("@userid", Userid);
                 statement.BindTextParameterWithName("@ts", DateTime.Now.ToString(ExtraModules.datePatt));
                 await statement.StepAsync();
@@ -335,14 +341,14 @@ namespace Health_Organizer
         {
             Debug.WriteLine("<<<<<<<<<<<<<<<<<" + await getOrganisationName() + ">>>>>>>>>>>>>>>");
         }
-        public async Task<String> getOrganisationName()
+        public static async Task<String> getOrganisationName()
         {
-            this.database = App.database;
+            SettingsFlyout1.database = App.database;
             String organisation = "abc";
             try
             {
                 string query = "SELECT * FROM UserDetails WHERE Organisation Not LIKE '' Limit 1;";
-                Statement statement = await this.database.PrepareStatementAsync(query);
+                Statement statement = await SettingsFlyout1.database.PrepareStatementAsync(query);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {
@@ -359,12 +365,12 @@ namespace Health_Organizer
         }
         public async Task<String> getUserName()
         {
-            this.database = App.database;
+            SettingsFlyout1.database = App.database;
             String username = "abc";
             try
             {
                 string query = "SELECT * FROM UserDetails WHERE Organisation Not LIKE '' Limit 1;";
-                Statement statement = await this.database.PrepareStatementAsync(query);
+                Statement statement = await SettingsFlyout1.database.PrepareStatementAsync(query);
                 statement.EnableColumnsProperty();
                 if (await statement.StepAsync())
                 {

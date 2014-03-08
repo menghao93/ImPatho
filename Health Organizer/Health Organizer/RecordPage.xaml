@@ -50,8 +50,8 @@
                 </Grid>
 
                 <Grid Grid.Column="1">
-                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
+                    <TextBlock x:Name="pageTitle" Text="" Style="{StaticResource HeaderTextBlockStyle}" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,0,0">
                         <AppBarButton Name="AddNewEntry" Label="New Patient" Icon="Add" Click="AddNewEntryForm" HorizontalAlignment="Center"/>

@@ -11,28 +11,29 @@
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="316" Orientation="Vertical" Height="367">
         <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Vertical" Width="132">
-            <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,0,0">
+            <StackPanel Orientation="Vertical" Width="132">
+                <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" Margin="0,20,0,0">
 
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" Name="SettingsOrganizationName" TextWrapping="Wrap"/>
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Organization Name" Name="SettingsOrganizationName" TextWrapping="Wrap" Foreground="White"/>
 
 
-                    <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,0" TextWrapping="Wrap" Text="Username" Name="SettingsUserName" />
+                    <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,0" TextWrapping="Wrap" Text="Username" Name="SettingsUserName" Foreground="White"/>
 
                 </StackPanel>
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Sync your data"  HorizontalAlignment="Left" Margin="0,50,0,0"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Width="81" >
-            <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" Margin="0,0,0,0" HorizontalAlignment="Center" Icon="OtherUser"/>
-            <AppBarButton Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="left"  Name="SettingsSyncButton"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical">
-                <TextBlock Style="{StaticResource BaseTextBlockStyle}" Name="SettingsWaitTextBlock" Text="Syncing" Margin="10,105,0,0" FontSize="13" Visibility="Collapsed"/>
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Sync your data"  HorizontalAlignment="Left" Margin="0,50,0,0" Foreground="White"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Width="81" >
+                <AppBarButton  Label="Logout" Click="SettingsLogoutClicked" Margin="0,0,0,0" HorizontalAlignment="Center" Icon="OtherUser" RequestedTheme="Dark" />
+                <AppBarButton Label="Sync" Icon="Sync" Click="SettingsSynClicked" VerticalAlignment="Center" HorizontalAlignment="left"  Name="SettingsSyncButton" RequestedTheme="Dark"/>
+                <ProgressRing RequestedTheme="Dark" Foreground="White" IsActive="True" Visibility="Collapsed" Name="settingsProgress" VerticalAlignment="Center" Margin="0,10,0,35" Height="43" Width="43"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Style="{StaticResource BaseTextBlockStyle}" Name="SettingsWaitTextBlock" Text="Syncing" Margin="10,105,0,0" FontSize="13" Foreground="White" Visibility="Collapsed"/>
             </StackPanel>
         </StackPanel>
         <StackPanel>
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,30,20"/>
-            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,0,0" FontSize="12"/>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,30,20" Foreground="White"/>
+            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="About Us" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,0,0" FontSize="12" Foreground="White"/>
         </StackPanel>
     </StackPanel>
 </SettingsFlyout>

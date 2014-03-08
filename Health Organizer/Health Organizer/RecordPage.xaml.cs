@@ -73,6 +73,7 @@ namespace Health_Organizer
             this.disableAppButtons();
 
             (SemanticZoomGrid.ZoomedOutView as ListViewBase).ItemsSource = groupedItemsViewSource.View.CollectionGroups;
+            pageTitle.Text = await SettingsFlyout1.getOrganisationName();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
