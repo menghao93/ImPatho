@@ -21,38 +21,71 @@ using Windows.UI.Popups;
 using Windows.UI;
 using SQLiteWinRT;
 using System.Globalization;
+using Health_Organizer.Data;
 
 namespace Health_Organizer
 {
     public sealed partial class MainPage : Page
     {
-        private Database database;
+        private Database database = null;
+        private NavigationHelper navigationHelper;
+        private string isDatabaseLoaded = "false";
+        public NavigationHelper NavigationHelper
+        {
+            get { return this.navigationHelper; }
+        }
 
         public MainPage()
         {
+            this.navigationHelper = new NavigationHelper(this);
+            this.navigationHelper.LoadState += navigationHelper_LoadState;
+            this.navigationHelper.SaveState += navigationHelper_SaveState;
+
             call_Check_login();
-    
             this.InitializeComponent();
-            
             HomeScreenImageAnimation.Begin();
-           
-            
+        }
+
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+        }
+
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            navigationHelper.OnNavigatedTo(e);
+            this.isDatabaseLoaded = (e.Parameter as string);
+            Debug.WriteLine("MAINMENUPGE---ONNAVIGATEDTO----value of databaseloaded"+this.isDatabaseLoaded);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            navigationHelper.OnNavigatedFrom(e);
+            this.isDatabaseLoaded = (e.Parameter as string);
+            Debug.WriteLine("MAINMENUPGE---ONNAVIGATEDFROM----value of databaseloaded" + this.isDatabaseLoaded);
         }
 
         private async void call_Check_login()
-        {
-            await this.InitializeDB();
-            this.database = App.database;
-             if (await checklogin())
+         {
+            if (this.database == null && this.isDatabaseLoaded == "false")
             {
-                 if (this.Frame != null)
+                await this.InitializeDB();
+
+                this.database = App.database;
+                if (await checklogin())
+                {
+                    if (this.Frame != null)
                     {
-                         this.Frame.Navigate(typeof(MainMenuPage));
+                        this.Frame.Navigate(typeof(MainMenuPage));
                     }
+                }
             }
         }
-      
-        
+
+
         private async Task InitializeDB()
         {
             await App.InitializeDB();
@@ -85,7 +118,8 @@ namespace Health_Organizer
         private async void SignIn()
         {
             string error = "";
-            try{
+            try
+            {
                 MainPageGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 MainPageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainPageProgressRingTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -130,7 +164,7 @@ namespace Health_Organizer
                 messageDialog.Commands.Add(new Windows.UI.Popups.UICommand("OK", null));
                 var dialogResult = await messageDialog.ShowAsync();
             }
-            
+
         }
 
 
@@ -165,7 +199,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync(ExtraModules.domain_address+"/login.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address + "/login.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("MainPage" + responseString);
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
@@ -269,7 +303,7 @@ namespace Health_Organizer
             if (ExtraModules.IsInternet())
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync(ExtraModules.domain_address+"/signup.php", new FormUrlEncodedContent(values));
+                var response = await httpClient.PostAsync(ExtraModules.domain_address + "/signup.php", new FormUrlEncodedContent(values));
                 var responseString = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("Signup Output" + responseString);
                 JsonObject root = Windows.Data.Json.JsonValue.Parse(responseString).GetObject();
@@ -370,7 +404,8 @@ namespace Health_Organizer
                 {
                     count = statement.Columns["Count"];
                 }
-                if(count != "0"){
+                if (count != "0")
+                {
                     return true;
                 }
             }
@@ -382,16 +417,16 @@ namespace Health_Organizer
             return false;
         }
 
-        private async Task Insert_UserDetails_In_Database(string userid,string username,string org,string lts,string auth )
+        private async Task Insert_UserDetails_In_Database(string userid, string username, string org, string lts, string auth)
         {
 
-             try
+            try
             {
                 string insertQuery = "INSERT INTO UserDetails (UserId,UserName,TimeStamp,Organisation,LoginTimeStamp,Auth_Token)VALUES (@userid, @username, @ts, @organisation, @logintimestamp, @authtoken)";
                 Statement statement = await this.database.PrepareStatementAsync(insertQuery);
 
-                statement.BindTextParameterWithName("@userid",userid);
-                statement.BindTextParameterWithName("@username", username );
+                statement.BindTextParameterWithName("@userid", userid);
+                statement.BindTextParameterWithName("@username", username);
                 statement.BindTextParameterWithName("@ts", "2011-01-01 12:00:00");
                 statement.BindTextParameterWithName("@organisation", org);
                 statement.BindTextParameterWithName("@logintimestamp", lts);

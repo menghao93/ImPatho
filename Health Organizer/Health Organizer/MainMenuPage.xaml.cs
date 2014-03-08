@@ -60,6 +60,7 @@ namespace Health_Organizer
         public MainMenuPage()
         {
             this.InitializeComponent();
+            this.database = App.database;
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
@@ -191,6 +192,38 @@ namespace Health_Organizer
             settings.HeaderBackground = new SolidColorBrush(color);
             settings.Background = new SolidColorBrush(color);
             settings.ShowCustom();
+        }
+
+        private async void LogOutTemp(object sender, RoutedEventArgs e)
+        {
+           await DeleteAll();
+           if (this.Frame != null)
+           {
+               this.Frame.Navigate(typeof(MainPage), "true");
+           }
+            
+        }
+        public async Task DeleteAll()
+        {
+            string[] tableNames = new string[] { "UserDetails","Patient", "MutableDetails", "MutableDetailsAllergy", 
+                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
+                "MedicalDetailsMedicine", "MedicalDetailsVaccine" };
+            try
+            {
+                for (int i = 0; i < tableNames.Length; i++)
+                {
+                    Statement statement = await database.PrepareStatementAsync("DELETE FROM " + tableNames[i]);
+                    await statement.StepAsync();
+                    statement.Reset();
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MAINMENUPAGE---SENDTOSERVER" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return;
         }
     }
 }

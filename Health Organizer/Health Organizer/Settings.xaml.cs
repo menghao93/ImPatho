@@ -339,7 +339,10 @@ namespace Health_Organizer
 
         private async void SettingsLogoutClicked(object sender, RoutedEventArgs e)
         {
+            await DeleteAll();
             Debug.WriteLine("<<<<<<<<<<<<<<<<<" + await getOrganisationName() + ">>>>>>>>>>>>>>>");
+            
+
         }
         public static async Task<String> getOrganisationName()
         {
@@ -385,5 +388,32 @@ namespace Health_Organizer
             }
             return username;
         }
+
+        public async Task DeleteAll()
+        {
+            string[] tableNames = new string[] { "UserDetails","Patient", "MutableDetails", "MutableDetailsAllergy", 
+                "MutableDetailsAddiction", "MutableDetailsOperation", "Address", "AddressZIP", "AddressCity", "AddressState", "MedicalDetails", 
+                "MedicalDetailsMedicine", "MedicalDetailsVaccine" };
+            try
+            {
+                for (int i = 0; i < tableNames.Length; i++)
+                {
+                    Statement statement = await database.PrepareStatementAsync("DELETE FROM " + tableNames[i] );
+                    statement.EnableColumnsProperty();
+                    while (await statement.StepAsync())
+                    {
+                        ;
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                var result = SQLiteWinRT.Database.GetSqliteErrorCode(ex.HResult);
+                Debug.WriteLine("MainMenuPage---sendtoserver" + "\n" + ex.Message + "\n" + result.ToString());
+            }
+            return;
+        }
+
     }
 }
