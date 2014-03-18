@@ -1,30 +1,4 @@
 function varargout = SCA_RBC(varargin)
-%SCA_RBC M-file for SCA_RBC.fig
-%      SCA_RBC, by itself, creates a new SCA_RBC or raises the existing
-%      singleton*.
-%
-%      H = SCA_RBC returns the handle to a new SCA_RBC or the handle to
-%      the existing singleton*.
-%
-%      SCA_RBC('Property','Value',...) creates a new SCA_RBC using the
-%      given property value pairs. Unrecognized properties are passed via
-%      varargin to SCA_RBC_OpeningFcn.  This calling syntax produces a
-%      warning when there is an existing singleton*.
-%
-%      SCA_RBC('CALLBACK') and SCA_RBC('CALLBACK',hObject,...) call the
-%      local function named CALLBACK in SCA_RBC.M with the given input
-%      arguments.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help SCA_RBC
-
-% Last Modified by GUIDE v2.5 28-Feb-2014 08:42:38
-
-% Begin initialization code - DO NOT EDIT
 
 handles.path = 'rbc_1.jpg';
 handles.eThreshold = 0.80 ;
@@ -166,6 +140,11 @@ for i = 1 : length(srcFiles)
     %bw = im2bw(K);
     %figure, imshow(bw);
     
+    %Zooming image by factor 2, this increases area between objects and
+    %helps in edge detection.
+    K = imresize(K,2);
+    figure, imshow(K);
+        
     %find the edges in the image in order to get shape of cells
     bw = edge(K,'canny');
     %figure, imshow(bw);
