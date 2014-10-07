@@ -7,32 +7,12 @@ ImPatho README
 
 - This software was a part of research project which was presented at an [`International IEEE conference`](http://ieeer10htc.org).
 
-You can report bugs and feedback at :- `anil_roy@daiict.ac.in`
-To know more you can also visit our website :- `http://intranet.daiict.ac.in/~anil_roy/impatho/`
-You can also find our extended paper(and abstract) at :- [`ImPatho Website!`](http://intranet.daiict.ac.in/~anil_roy/impatho/files/impatho.pdf) 
+You can report bugs and feedback at :- `anil_roy@daiict.ac.in`                                      
+To know more, visit our website :- `http://intranet.daiict.ac.in/~anil_roy/impatho/`                    
+You can also find our extended paper(and abstract) at :- [`ImPatho Website!`](http://intranet.daiict.ac.in/~anil_roy/impatho/files/impatho.pdf)                                   
 We have in process of applying for patent of this technology.
 
-**Copyright (C) 2013**
-
-Build Instructions
----------------------------------------------------------
-**a)Requirements**
-
-- Windows 8.1 Operating System
-
-- Visual Studio 2013 Ultimate
-
-- Math Work's Matlab
-
-
-**b)Extra Libraries**
-- `Callisto Metro UI Chart Library` - This library is required for displaying aesthetic visual apperance in Ananlysis part of application.
-
-- `SQLite for WinRT` - This library is required for storing the exhaustive DB on system.
-
-- `Send Mail WinRT` - This library is required for sending EMail directly from application.
-
-- `SyncClient SQLite` - This library is required as dependency for SQLite library.
+**Copyright (C)-2013**
 
 
 Folder Organisation
@@ -48,10 +28,52 @@ Folder Organisation
 **Note :- Please don't add WindowsApp/WindowsApp/Generated Files in Commits**
 
 
+Build Instructions
+---------------------------------------------------------
+**a)Requirements**
+
+- Windows 8.1 Operating System
+
+- Visual Studio 2013 Ultimate
+
+- Math Work's Matlab
+
+
+**b)Extra Libraries Required:-**
+
+- `Callisto Metro UI Chart Library` - This library is required for displaying aesthetic visual apperance in Ananlysis part of application.
+
+- `SQLite for WinRT` - This library is required for storing the exhaustive DB on system.
+
+- `Send Mail WinRT` - This library is required for sending EMail directly from application.
+
+- `SyncClient SQLite` - This library is required as dependency for SQLite library.
+
+**c)Build Steps:-**
+
+- Download the source code for the app by `downloading as zip file` or writing following line in terminal :- 
+
+        git clone https://github.com/shalinshah1993/ImPatho.git
+
+- Go to Health Organizer folder and double click on `.sln` file to open the project in Visual Studio 2013.
+
+- In the `Project Solution`, you'll have References containing all the dependencies. Remove the four libraries mentioned above. 
+
+- Add SQLite support by following steps mentioned at the end of this README. Please note that while adding dependecy folder for NuGet add `Dependencies` folder inside the project.
+
+- After installing SQLite support, now, open `NuGet Package Manager Console`, change the source to Dependencies folder, and write :- 
+
+        Install-Package <Package_Name>
+
+Please note that by pressing <TAB> a drop down list with Package_Name will appear.
+
+- After adding all the four libraries like this, clean the project and `Run it ON Local Machine`
+
+
 Detailed Steps for error messages
 -----------------------------------------------
 
-**a)Add SQLite Support:- **
+**a)Add SQLite Support:-**
 
  - Follow steps given on this blog post `http://syncwinrt.codeplex.com/wikipage?title=w81temp`
  - Now, go to References in Solution Explorer and then right click and select MANAGE NUGET PACKAGES.
