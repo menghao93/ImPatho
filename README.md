@@ -10,7 +10,7 @@ ImPatho README
 You can report bugs and feedback at :- `anil_roy@daiict.ac.in`                                      
 To know more, visit our website :- `http://intranet.daiict.ac.in/~anil_roy/impatho/`                    
 You can also find our extended paper(and abstract) at :- [`ImPatho Website!`](http://intranet.daiict.ac.in/~anil_roy/impatho/files/impatho.pdf)                                   
-We have in process of applying for patent of this technology.
+We are in process of applying for patent of this technology. Also, we are working on developing the mobile version of ImPatho.
 
 **Copyright (C)-2013**
 
