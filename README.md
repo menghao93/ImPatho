@@ -3,7 +3,7 @@ ImPatho README
 
 - `ImPatho` - it's the name of technology whose software part is this application. Hardware includes a cheap microscope cum USB camera for compatible with computer.
 
-- This software was developed by [`Shalin Shah`](www.guptalab.org/shalinshah), Vijay Dhameliya, Shantanu Jain, and Nihar Trivedi under the supervision and guidance of [`Prof. Anil K Roy`](http://intranet.daiict.ac.in/~anil_roy/). 
+- This software was developed by [`Shalin Shah`](http://www.guptalab.org/shalinshah), Vijay Dhameliya, Shantanu Jain, and Nihar Trivedi under the supervision and guidance of [`Prof. Anil K Roy`](http://intranet.daiict.ac.in/~anil_roy/). 
 
 - This software was a part of research project which was presented at an [`International IEEE conference`](http://ieeer10htc.org).
 
